@@ -16,6 +16,14 @@ module.exports = function (eleventyConfig) {
     return new CleanCSS({}).minify(code).styles;
   });
 
+  eleventyConfig.setDataDeepMerge(true);
+  
+  const MarkdownIt = require("markdown-it");
+  const mdRender = new MarkdownIt();
+  eleventyConfig.addFilter("markdownify", function(rawString) {
+    return mdRender.render(rawString);
+  });
+
   // Slugify
   eleventyConfig.addFilter("slugify", function (str) {
     return slugify(str, {

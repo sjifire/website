@@ -1,0 +1,25 @@
+---
+title: "Blog Posts"
+layout: base.njk
+permalink: "/blog/index.html"
+---
+
+<section>
+  <h1>
+    Blog Posts
+  </h1>
+
+  <ol>
+    {% for post in collections.posts | reverse %}
+      <li>
+        <a href="/blog/{{ post.data.date | yearOnly }}/{{ post.data.title | slugify }}/">
+            {{ post.data.title }}
+        </a>
+        <time datetime="{{ post.data.date }}" pubdate="pubdate">
+          {{ post.data.date | postDateTerse }}
+        </time>
+      </li>
+    {% endfor %}
+  </ol>
+</section>
+
