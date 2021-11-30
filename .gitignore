@@ -1,0 +1,20 @@
+# build artefacts
+/public
+
+# dev stuff
+_datacache
+
+# secrets and errors
+.env
+.log
+
+# macOS related files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# temp stuff
+_tmp/
+
+# node modules
+node_modules/
