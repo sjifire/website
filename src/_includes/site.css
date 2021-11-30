@@ -1,0 +1,19 @@
+.rap {
+  padding-left: 15px;
+  padding-right: 15px; }
+  @media screen and (min-width: 576px) {
+    .rap {
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: 0;
+      padding-right: 0;
+      max-width: 540px; } }
+  @media screen and (min-width: 768px) {
+    .rap {
+      max-width: 720px; } }
+  @media screen and (min-width: 992px) {
+    .rap {
+      max-width: 960px; } }
+  @media screen and (min-width: 1200px) {
+    .rap {
+      max-width: 1110px; } }

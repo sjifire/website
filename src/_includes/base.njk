@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {# preload font? #}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>{{ site.name if page.url === '/' else title }}</title>
+  {# meta-desc #}
+  {# icon tags #}
+  {# og #}
+  {#
+    <link rel="preconnect" href="//www.google-analytics.com">
+    <link rel="dns-prefetch" href="//www.google-analytics.com">
+    <link rel="preconnect" href="//www.datocms-assets.com/">
+    <link rel="dns-prefetch" href="//www.datocms-assets.com/">
+  #}
+  {% set css %}
+    {% include "site.css" %}
+  {% endset %}
+  <style>
+    {{ css | cssmin | safe }}
+  </style>
+</head>
+<body>
+  <header class="site-header" role="banner">
+    <div class="rap">
+      {% include "header.njk" %}
+    </div>
+  </header>
+
+  <main class="site-main" role="main">
+    <div class="rap">
+      {% block content %}
+        {{ content | safe }}
+      {% endblock %}
+    </div>
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="rap">
+      {% include "footer.njk" %}
+    </div>
+  </footer>
+
+  {% block script %}{% endblock %}
+</body>
+</html>
