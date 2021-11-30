@@ -1,3 +1,11 @@
+.site-header {
+  margin-bottom: 2rem;
+}
+
+.site-footer {
+  margin-top: 2rem;
+}
+
 .rap {
   padding-left: 15px;
   padding-right: 15px; }

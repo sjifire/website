@@ -3,305 +3,26 @@ backend:
   branch: main
 media_folder: "src/images/"
 public_folder: "/images/"
-site_url: "https://www.cartalk.com/car-donation/"
+site_url: "https://sjifr.org/"
 show_preview_links: false
 collections:
 
-
-  - name: "states"
-    label: "States"
-    label_singular: "State Page"
-    folder: "content/states/"
-    slug: "{{ slug }}"
-    extension: "json"
-    summary: "{{fields.name}}"
-    description: "Edit individual state pages"
-    editor:
-      preview: false
-    fields: # The fields for each document, usually in front matter
-      - label: Name
-        name: name
-        widget: string
-        required: true
-      - label: Nickname
-        name: nickname
-        widget: string
-        required: true
-      - label: Last Modified
-        name: lastmod
-        widget: hidden
-        required: false
-      - label: Page H1
-        name: pageH1
-        widget: string
-        required: false
-      - label: Meta Title
-        name: meta_title
-        widget: string
-        hint: Text that appears in search results, when shared on social media, etc.
-        required: true
-      - label: Meta Description
-        name: meta_description
-        widget: text
-        hint: Text that appears below title in search results and sometimes on social media. Google truncates around 160 characters.
-        required: true
-      - label: Preamble
-        name: preamble
-        widget: markdown
-        minimal: true
-        buttons: ['bold', 'italic', 'link']
-        editor_components: []
-        modes: [rich_text]
-        required: true
-        hint: This is the opening text -- the text that overlays the state shape.
-      - label: Page Sections (FAQ Groupings)
-        label_singular: section
-        name: sections
-        widget: list
-        allow_add: true
-        collapsed: true
-        minimize_collapsed: false
-        add_to_top: true
-        summary: '{{fields.question}}'
-        fields:
-          - label: Question part of FAQ (H2)
-            name: question
-            widget: string
-            hint: "This is the 'Question' part of the FAQ"
-            required: true
-          - label: Answer to FAQ question
-            name: answer
-            widget: markdown
-            minimal: true
-            buttons: ['bold', 'italic', 'link', 'heading-three', 'heading-four', 'heading-five', 'heading-six', 'quote', 'bulleted-list', 'numbered-list']
-            editor_components: []
-            modes: [rich_text]
-            required: true
-            hint: This is the 'Answer' part of the FAQ
-      - label: Resources Heading
-        name: resources_heading
-        widget: string
-        hint: Heading for section showcasing station partners and affiliates.
-        required: false
-      - label: Resources Blurb
-        name: resources_blurb
-        widget: markdown
-        minimal: true
-        buttons: ['bold', 'italic', 'link']
-        editor_components: []
-        modes: [rich_text]
-        hint: Blurb below "Resources Heading" introducing station partners and affiliates.
-        required: false
-      - label: Resources • Partner Stations
-        name: partner_stations
-        widget: relation
-        collection: stations
-        search_fields: ['name', 'state']
-        value_field: "{{name}}"
-        display_fields: ["{{name}} • {{state}}"]
-        multiple: true
-        required: false
-        hint: Start typing to search for one or more of our partner stations. The dropdown only displays a max of 20 at a time, so not all partners will appear by default.
-      - label: Resources • Affiliates by City
-        label_singular: affiliate
-        name: affiliates
-        widget: list
-        allow_add: true
-        collapsed: true
-        minimize_collapsed: false
-        add_to_top: true
-        summary: '{{fields.city}}'
-        fields:
-          - label: City
-            name: city
-            widget: string
-            hint: "Name of city or town in which affiliated station(s) is located."
-            required: true
-          - label: Stations
-            name: stations
-            widget: array
-            required: true
-            hint: List of stations located in this city. Separate stations with commas if there are more than one for a given city (e.g, "WNAN-FM (91.1), WNCK-FM (89.5)").
-    sortable_fields:
-      - name
-      - commit_date
-
-  - name: "stations"
-    label: "Stations"
-    label_singular: "Station Page"
-    folder: "content/stations/"
-    slug: "{{ slug }}"
-    extension: "json"
-    create: true # Allow users to create new items in this collection
-    delete: true # Allow users to delete items in this collection
-    summary: "{{fields.name}}"
-    description: "Edit individual station pages"
-    editor:
-      preview: false
-    fields: # The fields for each document, usually in front matter
-      - label: Name
-        name: name
-        widget: string
-        required: true
-      - label: Last Modified
-        name: lastmod
-        widget: hidden
-        required: false
-      - label: Alternate Name
-        name: alternate_name
-        widget: string
-        required: false
-        hint: Some stations have a more accepted name (e.g., "WBOI" is "Northeast Indiana Public Radio")
-      - label: Published?
-        name: published
-        widget: boolean
-        hint: Published = true (blue, switch toggled right). Draft = false (gray, switch toggled left).
-        default: false
-      - label: Meta Title
-        name: meta_title
-        widget: string
-        hint: Text that appears in search results, when shared on social media, etc.
-        required: true
-      - label: Meta Description
-        name: meta_description
-        widget: text
-        hint: Text that appears below title in search results and sometimes on social media. Google truncates around 160 characters.
-        required: true
-      - label: Address Title
-        name: address_title
-        widget: string
-        required: false
-        hint: Sometimes a delivery address has a modified title (e.g., "WBEZ" mail goes to "Chicago Public Media")
-      - label: Address Line 1
-        name: address1
-        widget: string
-        required: true
-        hint: First line of the station's address
-      - label: Address Line 2
-        name: address2
-        widget: string
-        required: false
-        hint: Second line of the station's address, if needed
-      - label: City
-        name: city
-        widget: string
-        required: true
-      - label: State
-        name: state
-        widget: select
-        options: ["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "DC", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"]
-        required: true
-      - label: Zip Code
-        name: zip_code
-        widget: string
-        required: true
-        hint: Either five or five plus four digits (e.g., "03301" or "80305-7243")
-      - label: Phone Number
-        name: phone
-        widget: string
-        required: false
-        hint: In a 10-digit format (e.g., "617-867-5309")
-      - label: Station Logo URL
-        name: logo_url
-        widget: image
-        allow_multiple: false
-        choose_url: false
-        media_folder: /src/images/partners/logos/
-        public_folder: ''
-      - label: Station Logo Width
-        name: logo_width
-        widget: string
-        required: false
-        hint: What is the natural ("intrinsic") width of this logo?
-      - label: Station Logo Height
-        name: logo_height
-        widget: string
-        required: false
-        hint: What is the natural ("intrinsic") height of this logo?
-      - label: Branding Permission?
-        name: branding_permission
-        widget: boolean
-        hint: Do we have permission to use the station's branding, as opposed to just text info? Switch toggled right (blue) means we do have permission. Switch toggled left (gray) means we do not.
-      - label: Preamble
-        name: preamble
-        widget: markdown
-        minimal: true
-        buttons: ['bold', 'italic', 'link']
-        editor_components: []
-        modes: [rich_text]
-        required: true
-        hint: The paragraph or two at the very top of the page describing the station.
-      - label: List of cities served
-        name: list_of_cities
-        widget: array
-        required: true
-        hint: List of cities served by this station.
-      - label: Donation Button URL
-        name: donation_url
-        widget: string
-        required: false
-        hint: Where the donation button should send folks.
-      - label: FAQs
-        label_singular: FAQ
-        name: faqs
-        widget: list
-        allow_add: true
-        collapsed: true
-        minimize_collapsed: true
-        add_to_top: true
-        summary: '{{fields.question}}'
-        fields:
-          - label: FAQ Question
-            name: question
-            widget: string
-            hint: "This is the 'Question' part of the FAQ"
-            required: true
-          - label: FAQ Answer
-            name: answer
-            widget: markdown
-            minimal: true
-            buttons: ['bold', 'italic', 'link', 'heading-three', 'heading-four', 'heading-five', 'heading-six', 'quote', 'bulleted-list', 'numbered-list']
-            editor_components: []
-            modes: [rich_text]
-            required: true
-            hint: This is the 'Answer' part of the FAQ
-      - label: Tile Image
-        name: tile_image
-        widget: image
-        allow_multiple: false
-        choose_url: false
-        media_folder: /src/images/partners/tiles/
-        public_folder: ''
-    sortable_fields:
-      - name
-      - commit_date
-
-  - name: "tips"
-    label: "Tips"
-    label_singular: "Tip"
-    folder: "content/tips/"
-    slug: "{{fields.date | date('YYYY-MM-DD')}}-{{slug}}"
-    extension: "json"
+  - name: "posts"
+    label: "Blog Posts"
+    label_singular: "Post"
+    folder: "blog/"
+    path: "{{year}}/{{slug}}"
+    slug: "{{fields.date | date('MM-DD')}}-{{slug}}"
+    extension: "md"
     create: true # Allow users to create new documents in this collection
     delete: true # Allow users to delete items in this collection
     summary: "{{fields.date | date('YYYY-MM-DD')}} • {{fields.title}}"
-    description: "Articles for the Tips & News section of the site."
-    preview_path: /tips/{{fields.category}}/{{ slug }}
+    description: "Blog posts / news on the site."
     fields: # The fields for each document, usually in front matter
       - label: Title
         name: title
         widget: string
         required: true
-      - label: Meta Title
-        name: meta_title
-        widget: string
-        hint: Text that appears in search results, when shared on social media, etc.
-        required: false
-      - label: Meta Description
-        name: meta_description
-        widget: text
-        hint: Text that appears below title in search results and sometimes on social media. Google truncates around 160 characters.
-        required: false
       - label: Date
         name: date
         widget: datetime
@@ -318,107 +39,28 @@ collections:
         hint: Published = true (blue, switch toggled right). Draft = false (gray, switch toggled left).
         default: false
       - label: Category
-        name: category
+        name: tags
         widget: select
         options: 
-          - { label: "Donations", value: "donations" }
-          - { label: "Cars", value: "cars" }
-          - { label: "Travel", value: "travel" }
+          - { label: "Announcement", value: "announcement" }
+          - { label: "Advisory", value: "advisory" }
+          - { label: "News", value: "news" }
         hint: Category this article should be filed under.
         required: true
-      - label: "Showcase Image"
-        name: "showcase"
-        widget: "object"
-        collapsed: true
-        hint: "Add a showcase image to the post. This will serve as the teaser thumbnail and graphic right below the article title."
-        fields:
-          - label: Image Upload
-            name: source
-            widget: image
-            allow_multiple: false
-            media_folder: /src/images/tips/
-            public_folder: ''
-          - label: Width
-            name: width
-            widget: number
-            hint: "What is the width of this image?"
-          - label: Height
-            name: height
-            widget: number
-            hint: "What is the height of this image"
-          - label: Alternative Text
-            name: alt
-            widget: string
-            hint: "Provide alternative ('alt') text for this image"
-            required: true
-          - label: Image Caption
-            name: caption
-            widget: string
-            hint: "Add a caption for the image (optional)"
       - label: Teaser (Lede)
         name: lede
         widget: text
         hint: Short snipped of text used in article teasers
         required: true
-      - sections:
-        name: "sections"
-        widget: "list"
-        collapsed: true
-        add_to_top: true
-        required: true
-        types:
-          - label: "Text Section"
-            name: "text"
-            widget: "object"
-            fields:
-              - label: Rich Text
-                name: copy
-                widget: markdown
-                minimal: false
-                buttons: ['bold', 'italic', 'link', 'heading-two', 'heading-three', 'heading-four', 'heading-five', 'heading-six', 'quote', 'bulleted-list', 'numbered-list']
-                editor_components: []
-                modes: [rich_text]
-                required: false
-                hint: "Add a chunk of text (rich text editor)"
-          - label: "Image"
-            name: "image"
-            widget: "object"
-            hint: "Add an image to the post, complete with 'alt' tag and, optionally, a caption"
-            fields:
-              - label: Image Upload
-                name: source
-                widget: image
-                allow_multiple: false
-                media_folder: /src/images/tips/
-                public_folder: ''
-              - label: Width
-                name: width
-                widget: number
-                hint: "What is the width of this image?"
-              - label: Height
-                name: height
-                widget: number
-                hint: "What is the height of this image"
-              - label: Alternative Text
-                name: alt
-                widget: string
-                hint: "Provide alternative ('alt') text for this image"
-              - label: Image Caption
-                name: caption
-                widget: string
-                hint: "Add a caption for the image (optional)"
-          - label: "YouTube Video"
-            name: "youtube"
-            widget: "object"
-            fields:
-              - label: YouTube Video Link
-                name: source
-                widget: string
-                hint: "Add a YouTube video player by copy-pasting the 'Share' link"
-              - label: Video Caption
-                name: caption
-                widget: string
-                hint: "Add a caption for the video (optional)"
+      - label: Body Content
+        name: body
+        widget: markdown
+        minimal: false
+        buttons: ['bold', 'italic', 'link', 'heading-two', 'heading-three', 'heading-four', 'heading-five', 'heading-six', 'quote', 'bulleted-list', 'numbered-list']
+        editor_components: []
+        modes: [rich_text]
+        required: false
+        hint: "Add a chunk of text (rich text editor)"
     sortable_fields:
       - date
       - commit_date
@@ -431,26 +73,6 @@ collections:
       - label: Published?
         field: published
 
-  # - name: pages
-  #   label: General Pages
-  #   label_singular: Page
-  #   description: "Where you can update the various bits of copy around the site."
-  #   files:
-  #     - name: fine-print
-  #       label: Fine Print
-  #       delete: false
-  #       file: src/pages/fineprint.md
-  #       slug: '{{slug}}'
-  #       preview_path: /
-  #       fields:
-  #         - label: Page Title (H1)
-  #           name: title
-  #           default: Fine Print
-  #         - label: Body
-  #           name: body
-  #           widget: markdown
-  #           buttons: ['bold', 'italic', 'link','heading-two', 'heading-three', 'heading-four', 'heading-five', 'heading-six', 'quote', 'bulleted-list', 'numbered-list']
-  #           editor_components: ['image']
 
   # - name: "site_info"
   #   label: "Site Settings"

@@ -8,5 +8,5 @@ main website for sjifire.org
 
 ## getting started
 1. clone repo
-2. npm install
-3. npm start 
+2. run `npm install`
+3. run `npm start`

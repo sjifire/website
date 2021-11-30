@@ -1,0 +1,33 @@
+---
+title: Home
+layout: base.njk
+permalink: /
+---
+
+<h1>
+  Hello World!
+</h1>
+
+<h2>
+  News
+</h2>
+
+<ul>
+  {% for post in collections.posts | reverse %}
+    <li>
+      <a href="/blog/{{ post.data.date | yearOnly }}/{{ post.data.title | slugify }}/">
+          {{ post.data.title }}
+      </a>
+      &nbsp;•&nbsp;
+      <time datetime="{{ post.data.date }}" pubdate="pubdate">
+        {{ post.data.date | postDateTerse }}
+      </time>
+{#
+      <p>
+        {{ post.data.lede }}
+      </p>
+#}
+    </li>
+  {% endfor %}
+</ul>
+
