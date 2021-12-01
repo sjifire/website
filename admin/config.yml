@@ -28,6 +28,11 @@ collections:
         widget: hidden
         default: post.njk
         required: false
+      - label: Post Type
+        name: post_type
+        widget: hidden
+        default: "news"
+        required: false
       - label: Date
         name: date
         widget: datetime
@@ -37,14 +42,6 @@ collections:
         picker_utc: true
         default: ''
         hint: Publication date
-        required: true
-      - label: Post Type
-        name: post_type
-        widget: select
-        options: 
-          - { label: "Advisory", value: "advisory" }
-          - { label: "News", value: "news" }
-        hint: The type of post will effect where it appears on the homepage.
         required: true
       - label: Teaser (Lede)
         name: lede
@@ -91,6 +88,11 @@ collections:
         widget: hidden
         default: post.njk
         required: false
+      - label: Post Type
+        name: post_type
+        widget: hidden
+        default: "advisory"
+        required: false
       - label: Date
         name: date
         widget: datetime
@@ -100,14 +102,6 @@ collections:
         picker_utc: true
         default: ''
         hint: Publication date
-        required: true
-      - label: Post Type
-        name: post_type
-        widget: select
-        options: 
-          - { label: "Advisory", value: "advisory" }
-          - { label: "News", value: "news" }
-        hint: The type of post will effect where it appears on the homepage.
         required: true
       - label: Teaser (Lede)
         name: lede
