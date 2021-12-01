@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CTVDP Admin Panel</title>
+    <title>SJIFR Admin Panel</title>
   </head>
   <body>
     <!-- Include the script that builds the page and powers Netlify CMS -->
@@ -48,15 +48,6 @@
         },
       };
       CMS.registerWidget("array", ArrayControl, ArrayPreview, schema);
-      CMS.registerEventListener({
-        name: 'preSave',
-        handler: ({ entry }) => {
-          if (entry.get('collection') === 'states' || entry.get('collection') === 'stations') {
-            const lastMod = new Date();
-            return entry.get('data').set('lastmod', lastMod);
-          }
-        },
-      });
     </script>
   </body>
 </html>

@@ -5,28 +5,47 @@ permalink: /
 ---
 
 <h1>
-  Hello World!
+  {{ site.name }}
 </h1>
+<p>
+  {{ homepage.preamble }}
+</p>
 
 <h2>
-  News
+  (Current? Recent?) Advisories
 </h2>
 
 <ul>
-  {% for post in collections.posts | reverse %}
+  {% for post in collections.advisories | reverse | limit(2) %}
     <li>
-      <a href="/blog/{{ post.data.date | yearOnly }}/{{ post.data.title | slugify }}/">
+      <a href="/blog/{{ post.data.date | htmlDateString }}-{{ post.data.title | slugify }}/">
           {{ post.data.title }}
       </a>
       &nbsp;•&nbsp;
       <time datetime="{{ post.data.date }}" pubdate="pubdate">
         {{ post.data.date | postDateTerse }}
       </time>
-{#
+    </li>
+  {% endfor %}
+</ul>
+
+<h2>
+  Latest News
+</h2>
+
+<ul>
+  {% for post in collections.news | reverse | limit(4) %}
+    <li>
+      <a href="/blog/{{ post.data.date | htmlDateString }}-{{ post.data.title | slugify }}/">
+          {{ post.data.title }}
+      </a>
+      &nbsp;•&nbsp;
+      <time datetime="{{ post.data.date }}" pubdate="pubdate">
+        {{ post.data.date | postDateTerse }}
+      </time>
       <p>
         {{ post.data.lede }}
       </p>
-#}
     </li>
   {% endfor %}
 </ul>

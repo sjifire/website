@@ -1,0 +1,36 @@
+---
+title: "Contact Us"
+layout: base.njk
+permalink: "/contact/index.html"
+---
+
+<h1>
+  {{ title }}
+</h1>
+{{ contact.preamble | markdownify | safe }}
+
+<form name="contact" method="POST" netlify-honeypot="bot-field" data-netlify="true" action="/thank-you/">
+  <p class="sr-only">
+    <label>Don’t fill this out if you’re human: <input name="bot-field" /></label>
+  </p>
+  <div style="margin-top:1.5rem;">
+    <label for="name">
+      Name
+    </label><br>
+    <input id="name" type="text" name="name" required><br><br>
+    <label for="email">
+      Email Address
+    </label><br>
+    <input id="email" type="email" name="email-address" required><br><br>
+    <label for="message" required>
+      Message
+    </label><br>
+    <textarea id="message" name="message" rows="5" required></textarea><br><br>
+  </div>
+  <div style="margin-top:1.5rem;">
+    <button type="submit">
+      Send
+    </button>
+  </div>
+</form>
+
