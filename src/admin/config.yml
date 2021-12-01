@@ -1,8 +1,8 @@
 backend:
   name: git-gateway
   branch: main
-media_folder: "src/images/"
-public_folder: "/images/"
+media_folder: "src/assets/"
+public_folder: "/assets/"
 site_url: "https://sjifr.org/"
 show_preview_links: false
 collections:
@@ -10,9 +10,9 @@ collections:
   - name: "posts"
     label: "Blog Posts"
     label_singular: "Post"
-    folder: "blog/"
-    path: "{{year}}/{{slug}}"
-    slug: "{{fields.date | date('MM-DD')}}-{{slug}}"
+    folder: "src/posts/"
+    path: '{{fields.post_type}}/'
+    slug: "{{fields.date}}-{{slug}}"
     extension: "md"
     create: true # Allow users to create new documents in this collection
     delete: true # Allow users to delete items in this collection
@@ -23,6 +23,11 @@ collections:
         name: title
         widget: string
         required: true
+      - label: Layout
+        name: layout
+        widget: hidden
+        default: post.njk
+        required: false
       - label: Date
         name: date
         widget: datetime
@@ -33,19 +38,13 @@ collections:
         default: ''
         hint: Publication date
         required: true
-      - label: Published?
-        name: published
-        widget: boolean
-        hint: Published = true (blue, switch toggled right). Draft = false (gray, switch toggled left).
-        default: false
-      - label: Category
-        name: tags
+      - label: Post Type
+        name: post_type
         widget: select
         options: 
-          - { label: "Announcement", value: "announcement" }
           - { label: "Advisory", value: "advisory" }
           - { label: "News", value: "news" }
-        hint: Category this article should be filed under.
+        hint: The type of post will effect where it appears on the homepage.
         required: true
       - label: Teaser (Lede)
         name: lede
@@ -57,7 +56,7 @@ collections:
         widget: markdown
         minimal: false
         buttons: ['bold', 'italic', 'link', 'heading-two', 'heading-three', 'heading-four', 'heading-five', 'heading-six', 'quote', 'bulleted-list', 'numbered-list']
-        editor_components: []
+        editor_components: [image]
         modes: [rich_text]
         required: false
         hint: "Add a chunk of text (rich text editor)"
@@ -68,42 +67,119 @@ collections:
       - label: Year
         field: date
         pattern: \d{4}
-      - label: Category
-        field: category
-      - label: Published?
-        field: published
+      - label: Post Type
+        field: post_type
 
 
-  # - name: "site_info"
-  #   label: "Site Settings"
-  #   description: "Set global variables here."
-  #   files:
-  #     - label: "Meta"
-  #       name: "meta"
-  #       delete: false
-  #       editor:
-  #         preview: false
-  #       file: "src/_data/site.json"
-  #       fields:
-  #         - label: Site Title
-  #           name: title
-  #           widget: string
-  #           hint: 'Text that appears in search results, when shared on social media, etc.'
-  #         - label: Site Description
-  #           name: description
-  #           widget: text
-  #           hint: >-
-  #             Text that appears below title in search results and sometimes on social
-  #             media. Google truncates around 160 characters.
-  #           pattern:
-  #             - '.{1,160}'
-  #             - Should be 160 characters or less.
-  #         - label: Site Url
-  #           name: url
-  #           widget: string
-  #         - label: Social Share Image
-  #           name: og_img
-  #           widget: image
-  #           allow_multiple: false
-  #           media_folder: /src/images/social/
-
+  - name: pages
+    label: "Pages"
+    description: "Edit pages across the site."
+    files:
+      - label: "Homepage"
+        name: "homepage"
+        delete: false
+        editor:
+          preview: false
+        file: "src/_data/homepage.json"
+        fields:
+          - label: Preamble
+            name: preamble
+            widget: text
+            hint: >-
+              Text that appears under the main heading.
+      - label: "About"
+        name: "about"
+        delete: false
+        editor:
+          preview: false
+        file: "src/_data/about.json"
+        fields:
+          - label: Preamble
+            name: preamble
+            widget: markdown
+            minimal: false
+            buttons: ['bold', 'italic', 'link', 'heading-two', 'heading-three', 'heading-four', 'heading-five', 'heading-six', 'quote', 'bulleted-list', 'numbered-list']
+            editor_components: [image]
+            modes: [rich_text]
+            required: false
+            hint: "Add a chunk of text (rich text editor)"
+      - label: "Governance"
+        name: "governance"
+        delete: false
+        editor:
+          preview: false
+        file: "src/_data/governance.json"
+        fields:
+          - label: Preamble
+            name: preamble
+            widget: markdown
+            minimal: false
+            buttons: ['bold', 'italic', 'link', 'heading-two', 'heading-three', 'heading-four', 'heading-five', 'heading-six', 'quote', 'bulleted-list', 'numbered-list']
+            editor_components: [image]
+            modes: [rich_text]
+            required: false
+            hint: "Add a chunk of text (rich text editor)"
+      - label: "Service"
+        name: "service"
+        delete: false
+        editor:
+          preview: false
+        file: "src/_data/service.json"
+        fields:
+          - label: Preamble
+            name: preamble
+            widget: markdown
+            minimal: false
+            buttons: ['bold', 'italic', 'link', 'heading-two', 'heading-three', 'heading-four', 'heading-five', 'heading-six', 'quote', 'bulleted-list', 'numbered-list']
+            editor_components: [image]
+            modes: [rich_text]
+            required: false
+            hint: "Add a chunk of text (rich text editor)"
+      - label: "Contact"
+        name: "contact"
+        delete: false
+        editor:
+          preview: false
+        file: "src/_data/contact.json"
+        fields:
+          - label: Preamble
+            name: preamble
+            widget: markdown
+            minimal: false
+            buttons: ['bold', 'italic', 'link', 'heading-two', 'heading-three', 'heading-four', 'heading-five', 'heading-six', 'quote', 'bulleted-list', 'numbered-list']
+            editor_components: [image]
+            modes: [rich_text]
+            required: false
+            hint: "Add a chunk of text (rich text editor)"
+      - label: "Thank You"
+        name: "thank_you"
+        delete: false
+        editor:
+          preview: false
+        file: "src/_data/thank_you.json"
+        fields:
+          - label: Preamble
+            name: preamble
+            widget: markdown
+            minimal: false
+            buttons: ['bold', 'italic', 'link', 'heading-two', 'heading-three', 'heading-four', 'heading-five', 'heading-six', 'quote', 'bulleted-list', 'numbered-list']
+            editor_components: [image]
+            modes: [rich_text]
+            required: false
+            hint: "Add a chunk of text (rich text editor)"
+      - label: "404 Error - Page Not Found"
+        name: "error_404"
+        delete: false
+        editor:
+          preview: false
+        file: "src/_data/error_404.json"
+        fields:
+          - label: Preamble
+            name: preamble
+            widget: markdown
+            minimal: false
+            buttons: ['bold', 'italic', 'link', 'heading-two', 'heading-three', 'heading-four', 'heading-five', 'heading-six', 'quote', 'bulleted-list', 'numbered-list']
+            editor_components: [image]
+            modes: [rich_text]
+            required: false
+            hint: "Add a chunk of text (rich text editor)"

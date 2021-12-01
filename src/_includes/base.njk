@@ -4,7 +4,7 @@
   {# preload font? #}
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>{{ site.name if page.url === '/' else title }}</title>
+  <title>{{ site.name if page.url === '/' else title + ' | ' + site.name }}</title>
   {# meta-desc #}
   {# icon tags #}
   {# og #}
@@ -14,9 +14,9 @@
     <link rel="preconnect" href="//www.datocms-assets.com/">
     <link rel="dns-prefetch" href="//www.datocms-assets.com/">
   #}
-  {% set css %}
+  {%- set css -%}
     {% include "site.css" %}
-  {% endset %}
+  {%- endset -%}
   <style>
     {{ css | cssmin | safe }}
   </style>
