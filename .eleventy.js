@@ -6,7 +6,8 @@ const slugify = require("slugify");
 module.exports = function (eleventyConfig) {
   require("dotenv").config();
 
-  eleventyConfig.addPassthroughCopy("./src/assets/");
+  eleventyConfig.addPassthroughCopy("src/assets/");
+  eleventyConfig.addPassthroughCopy("src/admin/");
 
   eleventyConfig.addFilter("limit", function (arr, limit) {
     return arr.slice(0, limit);
