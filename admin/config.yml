@@ -3,7 +3,7 @@ backend:
   branch: main
 media_folder: "src/assets/"
 public_folder: "/assets/"
-site_url: "https://sjifr.org/"
+site_url: "https://sjifire.org/"
 show_preview_links: false
 collections:
 
