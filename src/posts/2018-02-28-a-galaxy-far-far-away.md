@@ -4,9 +4,7 @@ layout: post.njk
 date: 2018-02-28
 published: true
 post_type: news
-lede: At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis
-  praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias
-  excepturi.
+lede: At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiispraesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi.
 ---
 At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti *quos dolores* et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia [deserunt mollitia anim](https://google.com)i, id est laborum et dolorum fuga.
 

@@ -16,7 +16,7 @@ permalink: /
 </h2>
 
 <ul>
-  {% for post in collections.advisories | reverse | limit(2) %}
+  {% for post in collections.posts | pluck('advisory', 'post_type') | reverse | limit(2) %}
     <li>
       <a href="/blog/{{ post.data.date | htmlDateString }}-{{ post.data.title | slugify }}/">
           {{ post.data.title }}
@@ -30,11 +30,11 @@ permalink: /
 </ul>
 
 <h2>
-  Latest News
+  4 Latest Posts (Excluding Advisories)
 </h2>
 
 <ul>
-  {% for post in collections.news | reverse | limit(4) %}
+  {% for post in collections.posts | pluck('news', 'post_type') | reverse | limit(4) %}
     <li>
       <a href="/blog/{{ post.data.date | htmlDateString }}-{{ post.data.title | slugify }}/">
           {{ post.data.title }}
