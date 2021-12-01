@@ -7,7 +7,7 @@ site_url: "https://sjifr.org/"
 show_preview_links: false
 collections:
 
-  - name: "posts"
+  - name: "news_posts"
     label: "Post: News"
     label_singular: "News Post"
     folder: "src/posts/"
@@ -70,7 +70,7 @@ collections:
       - label: Post Type
         field: post_type
 
-  - name: "posts"
+  - name: "advisory_posts"
     label: "Post: Advisory"
     label_singular: "Advisory Post"
     folder: "src/posts/"
