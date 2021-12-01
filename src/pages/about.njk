@@ -8,3 +8,22 @@ permalink: "/about/index.html"
   {{ title }}
 </h1>
 {{ about.preamble | markdownify | safe }}
+
+<hr>
+
+<h1>
+  Blog Posts
+</h1>
+
+<ol>
+  {% for post in collections.posts | reverse %}
+    <li>
+      <a href="/blog/{{ post.data.date | htmlDateString }}-{{ post.data.title | slugify }}/">
+          {{ post.data.title }}
+      </a>
+      <time datetime="{{ post.data.date }}" pubdate="pubdate">
+        {{ post.data.date | postDateTerse }}
+      </time>
+    </li>
+  {% endfor %}
+</ol>

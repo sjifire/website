@@ -8,16 +8,79 @@ show_preview_links: false
 collections:
 
   - name: "posts"
-    label: "Blog Posts"
-    label_singular: "Post"
+    label: "Post: News"
+    label_singular: "News Post"
     folder: "src/posts/"
-    path: '{{fields.post_type}}/'
+    filter: {field: "post_type", value: "news"}
     slug: "{{fields.date}}-{{slug}}"
     extension: "md"
     create: true # Allow users to create new documents in this collection
     delete: true # Allow users to delete items in this collection
     summary: "{{fields.date | date('YYYY-MM-DD')}} • {{fields.title}}"
-    description: "Blog posts / news on the site."
+    description: "News posts on the site."
+    fields: # The fields for each document, usually in front matter
+      - label: Title
+        name: title
+        widget: string
+        required: true
+      - label: Layout
+        name: layout
+        widget: hidden
+        default: post.njk
+        required: false
+      - label: Date
+        name: date
+        widget: datetime
+        date_format: "YYYY-MM-DD"
+        time_format: false
+        format: "YYYY-MM-DD"
+        picker_utc: true
+        default: ''
+        hint: Publication date
+        required: true
+      - label: Post Type
+        name: post_type
+        widget: select
+        options: 
+          - { label: "Advisory", value: "advisory" }
+          - { label: "News", value: "news" }
+        hint: The type of post will effect where it appears on the homepage.
+        required: true
+      - label: Teaser (Lede)
+        name: lede
+        widget: text
+        hint: Short snipped of text used in article teasers
+        required: true
+      - label: Body Content
+        name: body
+        widget: markdown
+        minimal: false
+        buttons: ['bold', 'italic', 'link', 'heading-two', 'heading-three', 'heading-four', 'heading-five', 'heading-six', 'quote', 'bulleted-list', 'numbered-list']
+        editor_components: [image]
+        modes: [rich_text]
+        required: false
+        hint: "Add a chunk of text (rich text editor)"
+    sortable_fields:
+      - date
+      - commit_date
+    view_groups:
+      - label: Year
+        field: date
+        pattern: \d{4}
+      - label: Post Type
+        field: post_type
+
+  - name: "posts"
+    label: "Post: Advisory"
+    label_singular: "Advisory Post"
+    folder: "src/posts/"
+    filter: {field: "post_type", value: "advisory"}
+    slug: "{{fields.date}}-{{slug}}"
+    extension: "md"
+    create: true # Allow users to create new documents in this collection
+    delete: true # Allow users to delete items in this collection
+    summary: "{{fields.date | date('YYYY-MM-DD')}} • {{fields.title}}"
+    description: "Advisory posts on the site."
     fields: # The fields for each document, usually in front matter
       - label: Title
         name: title
