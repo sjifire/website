@@ -176,12 +176,12 @@ collections:
             modes: [rich_text]
             required: false
             hint: "Add a chunk of text (rich text editor)"
-      - label: "Service"
-        name: "service"
+      - label: "Services"
+        name: "services"
         delete: false
         editor:
           preview: false
-        file: "src/_data/service.json"
+        file: "src/_data/services.json"
         fields:
           - label: Preamble
             name: preamble
