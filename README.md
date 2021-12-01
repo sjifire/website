@@ -1,3 +1,5 @@
+[![Netlify Status](https://api.netlify.com/api/v1/badges/eddbc020-5ace-4e62-a21a-cae8b59bab1c/deploy-status)](https://app.netlify.com/sites/loving-feynman-5e8f60/deploys)
+
 # website
 main website for sjifire.org
 
