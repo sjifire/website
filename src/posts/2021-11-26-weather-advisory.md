@@ -10,7 +10,7 @@ lede: Record breaking rain continues today throughout the San Juan Islands,
 ---
 Wind will be out of the south, 25 to 35 knots becoming 30 to 40 knots in the afternoon with heavy rain.
 
-WATCH for standing water on roads. Some roads maybe flooded. DO NOT DRIVE THROUGH FLOOD WATER. Do not drive through standing or rushing water. Do not pass any signs or barriers that show that a road is blocked.
+WATCH for standing water on roads. Some roads maybe flooded. **DO NOT DRIVE THROUGH FLOOD WATER**. Do not drive through standing or rushing water. Do not pass any signs or barriers that show that a road is blocked.
 
 There will be more blowing debris and with softened ground, be aware of the possibility of downed trees.
 
