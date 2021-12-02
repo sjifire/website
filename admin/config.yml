@@ -161,6 +161,22 @@ collections:
             modes: [rich_text]
             required: false
             hint: "Add a chunk of text (rich text editor)"
+      - label: "Disclaimer"
+        name: "disclaimer"
+        delete: false
+        editor:
+          preview: false
+        file: "src/_data/disclaimer.json"
+        fields:
+          - label: Preamble
+            name: preamble
+            widget: markdown
+            minimal: false
+            buttons: ['bold', 'italic', 'link', 'heading-two', 'heading-three', 'heading-four', 'heading-five', 'heading-six', 'quote', 'bulleted-list', 'numbered-list']
+            editor_components: [image]
+            modes: [rich_text]
+            required: false
+            hint: "Add a chunk of text (rich text editor)"
       - label: "Governance"
         name: "governance"
         delete: false
