@@ -1,5 +1,5 @@
 ---
-title: Become a Volunteer Emergency Responder with San Juan Island Fire and Rescue
+title: "Become a Volunteer Emergency Responder "
 layout: post.njk
 post_type: news
 date: 2021-11-10
