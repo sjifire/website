@@ -49,7 +49,10 @@ collections:
         required: true
       - label: Teaser (Lede)
         name: lede
-        widget: text
+        widget: markdown
+        minimal: false
+        buttons: ['bold', 'italic', 'link', 'quote']
+        modes: [rich_text]
         hint: Short snipped of text used in article teasers
         required: true
       - label: Body Content
@@ -112,7 +115,10 @@ collections:
         required: true
       - label: Teaser (Lede)
         name: lede
-        widget: text
+        widget: markdown
+        minimal: false
+        buttons: ['bold', 'italic', 'link', 'quote']
+        modes: [rich_text]
         hint: Short snipped of text used in article teasers
         required: true
       - label: Body Content
