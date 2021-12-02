@@ -2,7 +2,7 @@
 title: Upcoming Firefighter Training Class!
 layout: post.njk
 post_type: advisory
-date: 2021-11-05
+date: 2021-11-10
 lede: >-
   Our SJIF&R volunteer Firefighter/ EMTs s train hard and are committed to serve
   you. No matter what time of the day. No matter what the weather.
