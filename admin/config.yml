@@ -31,9 +31,10 @@ collections:
         required: false
       - label: Post Type
         name: post_type
-        widget: hidden
-        default: "news"
-        required: false
+        widget: "select"
+        multiple: false
+        options: ["Advisory", "News"]
+        default: ["Advisory"]
       - label: Date
         name: date
         widget: datetime
@@ -91,9 +92,11 @@ collections:
         required: false
       - label: Post Type
         name: post_type
-        widget: hidden
-        default: "advisory"
-        required: false
+        widget: "select"
+        multiple: false
+        options: ["Advisory", "News"]
+        default: ["Advisory"]
+        required: true
       - label: Date
         name: date
         widget: datetime
