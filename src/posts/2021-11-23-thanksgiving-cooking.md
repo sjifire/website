@@ -15,3 +15,5 @@ Once you are ready to turn the stove on, it's very important to stay in the kitc
 Enjoy your Thanksgiving celebrations and please stay safe and well.
 
 Thank you always for your help and support.
+
+![](/assets/260303934_4402827853161971_1841692622216886850_n.png)
