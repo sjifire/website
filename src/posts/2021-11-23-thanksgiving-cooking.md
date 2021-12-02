@@ -16,4 +16,4 @@ Enjoy your Thanksgiving celebrations and please stay safe and well.
 
 Thank you always for your help and support.
 
-![](https://www.facebook.com/SJIFire/photos/a.510795482365247/4402827859828637/?__cft__[0]=AZVyEqBS0apY_LUl9zDOv5wun6CEki5saa2S1IIFkFHUtaizxBgcdnc-4InTs4GLkJy2mJpC7_m1I4vEINWfJCKqhT44Jva6iihj1tRf8egT-X_9jZ45_ykS7pHVZoj-pxqUDbE_Xun4cLhrhKpCJVkU&__tn__=EH-R)
+![](/assets/260303934_4402827853161971_1841692622216886850_n.png)
