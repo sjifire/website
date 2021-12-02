@@ -53,6 +53,7 @@ collections:
         minimal: false
         buttons: ['bold', 'italic', 'link', 'quote']
         modes: [rich_text]
+        editor_components: []
         hint: Short snipped of text used in article teasers
         required: true
       - label: Body Content
@@ -119,6 +120,7 @@ collections:
         minimal: false
         buttons: ['bold', 'italic', 'link', 'quote']
         modes: [rich_text]
+        editor_components: []
         hint: Short snipped of text used in article teasers
         required: true
       - label: Body Content
