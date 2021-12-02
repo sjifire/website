@@ -32,9 +32,11 @@ collections:
       - label: Post Type
         name: post_type
         widget: "select"
-        multiple: false
-        options: ["Advisory", "News"]
-        default: ["Advisory"]
+        options:
+          - { label: "News", value: "news" }
+          - { label: "Advisory", value: "advisory" }
+        default: "news"
+        required: true
       - label: Date
         name: date
         widget: datetime
@@ -93,9 +95,10 @@ collections:
       - label: Post Type
         name: post_type
         widget: "select"
-        multiple: false
-        options: ["Advisory", "News"]
-        default: ["Advisory"]
+        options:
+          - { label: "News", value: "news" }
+          - { label: "Advisory", value: "advisory" }
+        default: "advisory"
         required: true
       - label: Date
         name: date
