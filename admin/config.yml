@@ -1,7 +1,6 @@
 backend:
-  name: github
-  branch: sjifire/website
-  repo: main
+  name: git-gateway
+  branch: main
 media_folder: "src/assets/"
 public_folder: "/assets/"
 site_url: "https://sjifire.org/"
