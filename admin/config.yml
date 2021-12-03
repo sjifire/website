@@ -9,7 +9,7 @@ publish_mode: editorial_workflow
 collections:
 
   - name: "news_posts"
-    label: "Post: News"
+    label: "Posts"
     label_singular: "News Post"
     folder: "src/posts/"
     slug: "{{fields.date}}-{{slug}}"
