@@ -11,7 +11,7 @@ San Juan Island Fire and Rescue (SJIF&R) is dedicated to providing our residents
 
 ![San Juan Island Fire and Rescue Chief Norvin Collins](/assets/chief-photo-3-1-1152x1536.jpeg "San Juan Island Fire and Rescue Chief Norvin Collins")
 
-We are here to serve you and provide education, fire prevention tools and when needed, emergency response. SJIF&R trains extensively, year-round and we are prepared to serve our islands’ communities 24-hours a day, 7 days a week.
+We are here to serve you and provide education, fire prevention tools and when needed, emergency response. SJIF&R trains extensively, year-round and we are prepared to serve our islands’ communities 24-hours a day, 7 days a week. 
 
 Our elected Board of Commissioners have regularly scheduled public meetings and I encourage you to attend our meetings or to review meeting minutes and actions on this website. You will find this under the Governance tab. Our district and all activities – governance, financial and operational activities are always available for review and discussion.
 
