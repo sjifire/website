@@ -13,8 +13,7 @@ collections:
     label_singular: "News Post"
     folder: "src/posts/"
     slug: "{{fields.date}}-{{slug}}"
-    extension: "md"
-    # extension: "json"
+    extension: "json"
     create: true # Allow users to create new documents in this collection
     delete: true # Allow users to delete items in this collection
     summary: "{{fields.date | date('YYYY-MM-DD')}} • {{fields.title}}"
@@ -28,8 +27,13 @@ collections:
         name: post_type
         widget: "select"
         options:
-          - { label: "News", value: "news" }
           - { label: "Advisory", value: "advisory" }
+          - { label: "Announcement", value: "announcement" }
+          - { label: "Dept. Highlight", value: "dept_highlight" }
+          - { label: "Fact Check", value: "fact_check" }
+          - { label: "General News", value: "news" }
+          - { label: "Member Profile", value: "member_profile" }
+          - { label: "Response Moment", value: "response_moment" }
         default: "news"
         required: true
       - label: Date

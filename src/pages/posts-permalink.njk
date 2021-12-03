@@ -47,10 +47,12 @@ permalink: "/posts/{{ post.date | htmlDateStringISO }}-{{ post.title | slugify }
   {% endfor %}
 </article>
 
-<hr>
-{% if pagination.href.previous %}
-  <a href="{{ pagination.href.previous | url }}" class="btn btn-pagination">« Next</a>
-{% endif %}
-{% if pagination.href.next %}
-  <a href="{{ pagination.href.next | url }}" class="btn btn-pagination">Prev »</a>
-{% endif %}
+<div style="border-top:1px solid #a1a5a9;margin-top:1.5rem;padding-top:1.5rem;text-align:center">
+  {% if pagination.href.previous %}
+    <a href="{{ pagination.href.previous | url }}">« Next</a>
+  {% endif %}
+    &nbsp;<a href="/posts/">All</a>&nbsp;
+  {% if pagination.href.next %}
+    <a href="{{ pagination.href.next | url }}">Prev »</a>
+  {% endif %}
+</div>
