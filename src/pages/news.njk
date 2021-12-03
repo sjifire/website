@@ -1,0 +1,22 @@
+---
+title: "News"
+layout: base.njk
+permalink: "/news/index.html"
+---
+
+<ol>
+  {% for post in collections.posts | reverse %}
+    <li style="margin-bottom:1.5rem;">
+      <a href="/news/{{ post.data.date | htmlDateString }}-{{ post.data.title | slugify }}/">
+          {{ post.data.title }}
+      </a>
+      &nbsp;•&nbsp;
+      <time datetime="{{ post.data.date }}" pubdate="pubdate">
+        {{ post.data.date | postDateTerse }}
+      </time>
+      <p style="margin:0.35rem 0 0;">
+        {{ post.data.lede }}
+      </p>
+    </li>
+  {% endfor %}
+</ol>
