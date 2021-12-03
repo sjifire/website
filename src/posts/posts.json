@@ -2,5 +2,5 @@
   "tags": [
     "posts"
   ],
-  "permalink": "/blog/{{ date | htmlDateString }}-{{ title | slugify }}/index.html"
+  "permalink": "/news/{{ date | htmlDateString }}-{{ title | slugify }}/index.html"
 }

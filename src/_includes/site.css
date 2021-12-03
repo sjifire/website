@@ -1,13 +1,175 @@
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "Roboto", "Arial", "Helvetica Neue", "Helvetica", sans-serif;
+/* Box sizing rules */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
-.site-header {
-  margin-bottom: 4rem;
+/* Remove default padding */
+ul[class],
+ol[class] {
+  padding: 0;
+}
+
+/* Remove default margin */
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+ul[class],
+ol[class],
+li,
+figure,
+figcaption,
+blockquote,
+dl,
+dd {
+  margin: 0;
+}
+
+/* Set core body defaults */
+body {
+  min-height: 100vh;
+  scroll-behavior: smooth;
+  text-rendering: optimizeSpeed;
+  line-height: 1.5;
+}
+
+/* Remove list styles on ul, ol elements with a class attribute */
+ul[class],
+ol[class] {
+  list-style: none;
+}
+
+/* A elements that don't have a class get default styles */
+a:not([class]) {
+  text-decoration-skip-ink: auto;
+}
+
+/* Make images easier to work with */
+img {
+  max-width: 100%;
+  display: block;
+  height: auto;
+}
+
+/* Natural flow and rhythm in articles by default */
+article > * + * {
+  margin-top: 1em;
+}
+
+/* Inherit fonts for inputs and buttons */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+nav ul {
+  list-style: none;
+  margin: 0;
+}
+
+/* Remove all animations and transitions for people that prefer not to see them */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+
+:root {
+  --ff-sans: -apple-system, BlinkMacSystemFont, "Roboto", "Arial", "Helvetica Neue", "Helvetica", sans-serif;
+  --dk-gray: #141414;
+  --yellow: #FFE039;
+  --dk-red: #9B2500;
+  --md-gray: #515559;
+}
+
+body {
+  font-family: var(--ff-sans);
+}
+
+.site-header aside {
+  background-color: var(--dk-gray);
+  color: #fff;
+  padding: 0.75rem 0;
+  text-align: right;
+}
+
+.site-header aside em {
+  display: inline-block;
+  padding: 0.1rem 0.35rem;
+  background-color: var(--yellow);
+  color: var(--dk-gray);
+  font-style: normal;
+  font-weight: 600;
+}
+
+.site-header nav {
+  background-color: #fff;
+  /* padding: 0.5rem 0; */
+}
+
+.site-header nav .rap {
+  display: grid;
+  gap: 1rem;
+  align-items: center;
+}
+
+@media (min-width: 40rem) {
+  .site-header nav .rap {
+    grid-template-columns: 1fr auto;
+    gap: 0;
+  }
+}
+
+.site-header .site-logo img {
+  display: block;
+  max-width: 120px;
+  /* transform: translateY(1rem); */
+}
+
+.site-header nav ul {
+  display: grid;
+  grid-template-columns: repeat(4, auto);
+  gap: 2rem;
+}
+
+.site-header nav ul li a {
+  text-decoration: none;
+  color: var(--dk-gray);
+  font-weight: 500;
+}
+
+.page-header {
+  padding: 3rem 0;
+  background-color: var(--dk-red);
+  color: #fff;
+  text-align: center;;
+}
+
+.site-main {
+  padding: 2rem 0;
 }
 
 .site-footer {
-  margin-top: 4rem;
+  padding: 2rem 0;
+  text-align: center;
+  background-color: var(--md-gray);
+  color: #fff;
+}
+
+.site-footer a {
+  display: block;
+  margin-top: 0.25rem;
+  color: #fff;
 }
 
 .rap {
@@ -43,14 +205,4 @@ body {
   position: absolute !important;
   width: 1px !important;
   white-space: nowrap !important;            /* 3 */
-}
-
-.rap img {
-  display: inline-block;
-  max-width: 100%;
-  height: auto;
-}
-
-.rap figure {
-  margin: 0;
 }
