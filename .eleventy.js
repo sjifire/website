@@ -1,6 +1,7 @@
 const { DateTime } = require("luxon");
 const CleanCSS = require("clean-css");
 const util = require("util");
+const TurndownService = require('turndown')
 const slugify = require("slugify");
 
 module.exports = function (eleventyConfig) {
@@ -21,7 +22,7 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addFilter("pluck", function (arr, selections, attr) {
     // Assumes this is receiving a collection, hence the `data`
     // If custom array such as from _data, update accordingly
-    return arr.filter((item) => selections.includes(item.data[attr]));
+    return arr.filter((item) => selections.includes(item[attr]));
   });
 
   const MarkdownIt = require("markdown-it");
@@ -39,32 +40,29 @@ module.exports = function (eleventyConfig) {
     });
   });
 
-  eleventyConfig.addFilter("postDateTerse", (dateObj) => {
-    return DateTime.fromJSDate(dateObj).toLocaleString(DateTime.DATE_MED);
+  eleventyConfig.addFilter("postDateTerseISO", (dateObj) => {
+    return DateTime.fromISO(dateObj, {zone: 'utc'}).toLocaleString(DateTime.DATE_MED);
   });
   
-  eleventyConfig.addFilter("postDateVerbose", (dateObj) => {
-    return DateTime.fromJSDate(dateObj).toLocaleString(DateTime.DATE_HUGE);
+  eleventyConfig.addFilter("postDateVerboseISO", (dateObj) => {
+    return DateTime.fromISO(dateObj, {zone: 'utc'}).toLocaleString(DateTime.DATE_HUGE);
   });
 
-  eleventyConfig.addFilter("machineDate", (dateObj) => {
-    return DateTime.fromJSDate(dateObj).toISO(DateTime.DATE_FULL);
+  eleventyConfig.addFilter("htmlDateStringISO", (dateObj) => {
+    return DateTime.fromISO(dateObj, {zone: 'utc'}).toFormat('yyyy-LL-dd');
   });
-
-  eleventyConfig.addFilter("htmlDateString", (dateObj) => {
-    return DateTime.fromJSDate(dateObj).toFormat('yyyy-LL-dd');
-  });
-
-  eleventyConfig.addFilter("yearOnly", (dateObj) => {
-    return DateTime.fromJSDate(dateObj).toFormat('yyyy');
-  });
-
-  eleventyConfig.addFilter("timeJSSimple", (dateObj) => {
-    return DateTime.fromJSDate(dateObj).toLocaleString(DateTime.TIME_SIMPLE);
+  
+  eleventyConfig.addFilter("yearOnlyJS", (dateObj) => {
+    return DateTime.fromJSDate(dateObj, {zone: 'utc'}).toFormat('yyyy');
   });
 
   eleventyConfig.addFilter("dump", (obj) => {
     return util.inspect(obj);
+  });
+
+  const turndownService = new TurndownService()
+  eleventyConfig.addFilter('turndown', obj => {
+    return turndownService.turndown(obj).trim()
   });
 
   return {

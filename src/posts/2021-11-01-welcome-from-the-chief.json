@@ -1,0 +1,21 @@
+{
+  "title": "Welcome from the Chief",
+  "post_type": "news",
+  "date": "2021-11-01",
+  "lede": "On behalf of the San Juan County Fire District #3 Board of Commissioners and all of our dedicated staff and volunteers – welcome to the new website for San Juan Island Fire and Rescue.",
+  "sections": [
+    {
+      "type": "text",
+      "copy": "San Juan Island Fire and Rescue (SJIF&amp;R) is dedicated to providing our residents and islands’ visitors professional, competent and compassionate emergency services."
+    },
+    {
+      "type": "image",
+      "source": "chief-photo-3-1-1152x1536.jpeg",
+      "caption": "San Juan Island Fire and Rescue Chief Norvin Collins"
+    },
+    {
+      "type": "text",
+      "copy": "We are here to serve you and provide education, fire prevention tools and when needed, emergency response. SJIF&amp;R trains extensively, year-round and we are prepared to serve our islands’ communities 24-hours a day, 7 days a week.\n\nOur elected Board of Commissioners have regularly scheduled public meetings and I encourage you to attend our meetings or to review meeting minutes and actions on this website. You will find this under the Governance tab. Our district and all activities – governance, financial and operational activities are always available for review and discussion.\n\nWe strive to provide emergency service response in a way that is sustainable and affordable, to meet the needs of our citizens and taxpayers. I always welcome your ideas, and feedback. Please let us know how we are doing as we strive to constantly improve our service.\n\nAll of us at SJIF&amp;R are dedicated to always doing the right thing for our islands’ residents, being ready to respond to any emergency and we are always proud and honored to be at your service. We live in a unique environment with many rewards and challenges. As neighbors in our wonderful islands’ communities, we are all in this together.\n\nThank you always for your support.\n\n_Chief Norvin Collins holds a B.S. in Fire Administration, an M.S. in Psychology, and EFO credentials through the National Fire Academy. He holds numerous fire and medical operational certifications as well as having published papers and articles on various fire service topics._"
+    }
+  ]
+}

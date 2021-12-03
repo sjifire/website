@@ -1,0 +1,26 @@
+---
+layout: base.njk
+title: Posts Archive
+pagination:
+  data: posts
+  size: 4
+  alias: post
+permalink: "/posts/{% if pagination.pageNumber > 0 %}page-{{ pagination.pageNumber + 1 }}/{% endif %}index.html"
+---
+
+<ul>
+  {% for post in posts | reverse %}
+    <li style="margin-bottom:1.5rem;">
+      <a href="/posts/{{ post.date | htmlDateStringISO }}-{{ post.title | slugify }}/">
+          {{ post.title }}
+      </a>
+      &nbsp;•&nbsp;
+      <time datetime="{{ post.date }}" pubdate="pubdate">
+        {{ post.date | postDateTerseISO }}
+      </time>
+      <p style="margin:0.35rem 0 0;">
+        {{ post.lede }}
+      </p>
+    </li>
+  {% endfor %}
+</ul>

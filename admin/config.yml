@@ -8,26 +8,22 @@ show_preview_links: false
 publish_mode: editorial_workflow
 collections:
 
-  - name: "news_posts"
+  - name: "posts"
     label: "Posts"
     label_singular: "News Post"
     folder: "src/posts/"
     slug: "{{fields.date}}-{{slug}}"
     extension: "md"
+    # extension: "json"
     create: true # Allow users to create new documents in this collection
     delete: true # Allow users to delete items in this collection
     summary: "{{fields.date | date('YYYY-MM-DD')}} • {{fields.title}}"
-    description: "News posts on the site."
+    description: "Add posts on the site."
     fields: # The fields for each document, usually in front matter
       - label: Title
         name: title
         widget: string
         required: true
-      - label: Layout
-        name: layout
-        widget: hidden
-        default: post.njk
-        required: false
       - label: Post Type
         name: post_type
         widget: "select"
@@ -55,15 +51,66 @@ collections:
         editor_components: []
         hint: Short snipped of text used in article teasers
         required: true
-      - label: Body Content
-        name: body
-        widget: markdown
-        minimal: false
-        buttons: ['bold', 'italic', 'link', 'heading-two', 'heading-three', 'heading-four', 'heading-five', 'heading-six', 'quote', 'bulleted-list', 'numbered-list']
-        editor_components: [image]
-        modes: [rich_text]
-        required: false
-        hint: "Add a chunk of text (rich text editor)"
+      - sections:
+        name: "sections"
+        widget: "list"
+        collapsed: true
+        add_to_top: true
+        hint: "Add discrete sections of content to this page. The sections you can choose from: 'text', 'image', 'youtube'."
+        required: true
+        types:
+          - label: "Text Section"
+            name: "text"
+            widget: "object"
+            fields:
+              - label: Rich Text
+                name: copy
+                widget: markdown
+                minimal: false
+                buttons: ['bold', 'italic', 'link', 'heading-two', 'heading-three', 'heading-four', 'heading-five', 'heading-six', 'quote', 'bulleted-list', 'numbered-list']
+                editor_components: []
+                modes: [rich_text]
+                required: false
+                hint: "Add a chunk of text (rich text editor)"
+          - label: "Image"
+            name: "image"
+            widget: "object"
+            hint: "Add an image to the post, complete with 'alt' tag and, optionally, a caption"
+            fields:
+              - label: Image Upload
+                name: source
+                widget: image
+                allow_multiple: false
+                choose_url: false
+                public_folder: ''
+              - label: Width
+                name: width
+                widget: number
+                hint: "What is the width of this image?"
+              - label: Height
+                name: height
+                widget: number
+                hint: "What is the height of this image"
+              - label: Alternative Text
+                name: alt
+                widget: string
+                hint: "Provide alternative ('alt') text for this image"
+              - label: Image Caption
+                name: caption
+                widget: string
+                hint: "Add a caption for the image (optional)"
+          - label: "YouTube Video"
+            name: "youtube"
+            widget: "object"
+            fields:
+              - label: YouTube Video Link
+                name: source
+                widget: string
+                hint: "Add a YouTube video player by copy-pasting the 'Share' link"
+              - label: Video Caption
+                name: caption
+                widget: string
+                hint: "Add a caption for the video (optional)"
     sortable_fields:
       - date
       - commit_date

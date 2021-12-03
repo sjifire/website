@@ -1,0 +1,56 @@
+---
+layout: base.njk
+pagination:
+  data: posts
+  size: 1
+  alias: post
+permalink: "/posts/{{ post.date | htmlDateStringISO }}-{{ post.title | slugify }}/index.html"
+---
+
+<article>
+  <header style="margin-bottom:2rem;">
+    <h1 style="font-size: 32px;margin-bottom:0.5rem;">
+      {{ post.title }}
+    </h1>
+    <time datetime="{{ post.date | htmlDateStringISO }}" pubdate="pubdate" style="margin-bottom:0;font-size:12px;text-transform:uppercase;letter-spacing:0.15rem;color:#777;">
+      {{ post.date | postDateVerboseISO }}
+    </time>
+    <p style="margin:0.5rem 0 0;font-size:21px;line-height:1.2">
+      {{ post.lede | markdownify | safe }}
+    </p>
+  </header>
+  {% for section in post.sections %}
+    {% if section.type === 'text' %}
+      {{ section.copy | markdownify | safe }}
+    {% elif section.type === 'image' %}
+      <figure>
+        <img src="{{ 'https://res.cloudinary.com/san-juan-fire-district-3/image/fetch/f_auto,q_auto:good,c_limit,w_1200,h_800/' + site.rootUrl if site.env === 'production' }}/assets/images/{{ section.source }}" alt="{{ section.alt }}" width="{{ section.width }}" height="{{ section.height }}" loading="lazy">
+        {% if section.caption %}
+          <figcaption>
+            {{ section.caption }}
+          </figcaption>
+        {% endif %}
+      </figure>
+    {% elif section.type === 'youtube' %}
+      {% set video_id = section.source.split('/').pop() %}
+      <figure>
+        <div class="embed-responsive embed-responsive-16by9">
+          <iframe src="https://www.youtube.com/embed/{{ video_id }}" loading="lazy"></iframe>
+        </div>
+        {% if section.caption %}
+          <figcaption>
+            {{ section.caption }}
+          </figcaption>
+        {% endif %}
+      </figure>
+    {% endif %}
+  {% endfor %}
+</article>
+
+<hr>
+{% if pagination.href.previous %}
+  <a href="{{ pagination.href.previous | url }}" class="btn btn-pagination">« Next</a>
+{% endif %}
+{% if pagination.href.next %}
+  <a href="{{ pagination.href.next | url }}" class="btn btn-pagination">Prev »</a>
+{% endif %}
