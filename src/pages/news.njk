@@ -15,7 +15,7 @@ permalink: "/news/index.html"
         {{ post.data.date | postDateTerse }}
       </time>
       <p style="margin:0.35rem 0 0;">
-        {{ post.data.lede }}
+        {{ post.data.lede | markdownify | safe }}
       </p>
     </li>
   {% endfor %}
