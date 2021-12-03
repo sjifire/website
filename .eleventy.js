@@ -25,10 +25,10 @@ module.exports = function (eleventyConfig) {
     return arr.filter((item) => selections.includes(item[attr]));
   });
 
-  eleventyConfig.addFilter("skip", function (arr, selections, attr) {
+  eleventyConfig.addFilter("exclude", function (arr, selections, attr) {
     // Assumes this is receiving a collection, hence the `data`
     // If custom array such as from _data, update accordingly
-    return arr.filter((item) => !selections.includes(item.data[attr]));
+    return arr.filter((item) => !selections.includes(item[attr]));
   });
 
   const MarkdownIt = require("markdown-it");

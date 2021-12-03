@@ -37,7 +37,7 @@
         </p>
       {% elif page.fileSlug === 'posts-permalink' %}
         <h2>
-          {{ post.post_type | capitalize }}{{ ': ' + post.date | postDateTerseISO if post.post_type === 'advisory' }}
+          {{ post.post_type }}{{ ': ' + post.date | postDateTerseISO if post.post_type === 'Advisory' }}
         </h2>
       {% else %}
         <h1>
