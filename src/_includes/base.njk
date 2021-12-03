@@ -35,10 +35,10 @@
         <p>
           {{ homepage.preamble }}
         </p>
-      {% elif page.filePathStem.includes('/posts/') %}
-        <h1>
-          {{ post_type | capitalize }}{{ ': ' + date | postDateTerse if post_type === 'advisory' }}
-        </h1>
+      {% elif page.fileSlug === 'posts-permalink' %}
+        <h2>
+          {{ post.post_type | capitalize }}{{ ': ' + post.date | postDateTerseISO if post.post_type === 'advisory' }}
+        </h2>
       {% else %}
         <h1>
           {{ title }}

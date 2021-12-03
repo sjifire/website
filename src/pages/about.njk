@@ -4,8 +4,6 @@ layout: base.njk
 permalink: "/about/index.html"
 ---
 
-
-
 {% for section in about.sections %}
   {% if section.type === 'text' %}
     {{ section.copy | markdownify | safe }}

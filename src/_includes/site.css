@@ -90,10 +90,12 @@ nav ul {
   --yellow: #FFE039;
   --dk-red: #9B2500;
   --md-gray: #515559;
+  --lt-gray: #f1f5f9;
 }
 
 body {
   font-family: var(--ff-sans);
+  background-color: var(--md-gray);
 }
 
 .site-header aside {
@@ -150,13 +152,14 @@ body {
 
 .page-header {
   padding: 3rem 0;
-  background-color: var(--dk-red);
-  color: #fff;
+  background-color: var(--lt-gray);
+  color: var(--dk-gray);
   text-align: center;;
 }
 
 .site-main {
   padding: 2rem 0;
+  background-color: #fff;
 }
 
 .site-footer {
