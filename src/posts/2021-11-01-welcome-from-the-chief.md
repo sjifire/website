@@ -9,7 +9,7 @@ lede: "On behalf of the San Juan County Fire District #3 Board of Commissioners
 ---
 San Juan Island Fire and Rescue (SJIF&R) is dedicated to providing our residents and islands’ visitors professional, competent and compassionate emergency services.
 
-![San Juan Island Fire and Rescue Chief Norvin Collins](/assets/chief-photo-3-1-1152x1536.jpeg "San Juan Island Fire and Rescue Chief Norvin Collins")
+![San Juan Island Fire and Rescue Chief Norvin Collins](/assets/images/chief-photo-3-1-1152x1536.jpeg "San Juan Island Fire and Rescue Chief Norvin Collins")
 
 We are here to serve you and provide education, fire prevention tools and when needed, emergency response. SJIF&R trains extensively, year-round and we are prepared to serve our islands’ communities 24-hours a day, 7 days a week. 
 
