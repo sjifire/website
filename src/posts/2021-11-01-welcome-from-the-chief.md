@@ -1,7 +1,7 @@
 ---
 title: Welcome from the Chief
 layout: post.njk
-post_type: news
+post_type: announcement
 date: 2021-11-01
 lede: "On behalf of the San Juan County Fire District #3 Board of Commissioners
   and all of our dedicated staff and volunteers – welcome to the new website for

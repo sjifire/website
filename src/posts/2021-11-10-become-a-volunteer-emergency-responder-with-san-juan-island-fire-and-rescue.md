@@ -1,7 +1,7 @@
 ---
 title: "Become a Volunteer Emergency Responder "
 layout: post.njk
-post_type: news
+post_type: announcement
 date: 2021-11-10
 lede: San Juan Island Fire and Rescue (SJIF&R) is seeking volunteers to join our
   comprehensive emergency services agency, in a number of roles to serve our

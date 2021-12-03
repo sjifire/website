@@ -1,7 +1,7 @@
 ---
 title: "Emergency Response Moments: Boat Rescue"
 layout: post.njk
-post_type: news
+post_type: response_moment
 date: 2021-12-01
 lede: "This is the first in a series of stories about the people of our islands
   - your neighbors and friends that work and volunteer as members of San Juan

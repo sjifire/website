@@ -32,8 +32,13 @@ collections:
         name: post_type
         widget: "select"
         options:
-          - { label: "News", value: "news" }
           - { label: "Advisory", value: "advisory" }
+          - { label: "Announcement", value: "announcement" }
+          - { label: "Dept. Highlight", value: "dept_highlight" }
+          - { label: "Fact Check", value: "fact_check" }
+          - { label: "General News", value: "news" }
+          - { label: "Member Profile", value: "member_profile" }
+          - { label: "Response Moment", value: "response_moment" }
         default: "news"
         required: true
       - label: Date
