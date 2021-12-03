@@ -1,7 +1,7 @@
 ---
 title: Burn Ban Lifted!
 layout: post.njk
-post_type: advisory
+post_type: announcement
 date: 2021-10-01
 lede: "Burn permits are available!  Please visit the Fire Marshal's website to
   purchase a residential or commercial burn permit.  "
