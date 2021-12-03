@@ -27,7 +27,7 @@ permalink: /
 </h2>
 
 <ul>
-  {% for post in posts | skip('advisory', 'post_type') | reverse | limit(4) %}
+  {% for post in posts | pluck('news', 'post_type') | reverse | limit(4) %}
     <li style="margin-bottom:1.5rem;">
       <a href="/posts/{{ post.date | htmlDateStringISO }}-{{ post.title | slugify }}/">
           {{ post.title }}
