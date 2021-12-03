@@ -29,6 +29,8 @@ permalink: "/posts/{% if pagination.pageNumber > 0 %}page-{{ pagination.pageNumb
 <nav style="border-top:1px solid #a1a5a9;margin-top:1.5rem;padding-top:1.5rem;text-align:center">
   {% if pagination.href.previous %}
     <a href="{{ pagination.href.previous | url }}">«</a>
+  {% else %}
+    «
   {% endif %}
 {%- for pageEntry in pagination.pages %}
   {% if page.url == pagination.hrefs[ loop.index0 ] %}
@@ -39,5 +41,7 @@ permalink: "/posts/{% if pagination.pageNumber > 0 %}page-{{ pagination.pageNumb
 {%- endfor %}
   {% if pagination.href.next %}
     <a href="{{ pagination.href.next | url }}">»</a>
+  {% else %}
+    »
   {% endif %}
 </nav>
