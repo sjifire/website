@@ -1,15 +1,8 @@
 ---
-title: Home
+title: San Juan Island Fire and Rescue
 layout: base.njk
 permalink: /
 ---
-
-<h1>
-  {{ site.name }}
-</h1>
-<p>
-  {{ homepage.preamble }}
-</p>
 
 <h2>
   (Current? Recent?) Advisories
@@ -18,7 +11,7 @@ permalink: /
 <ul>
   {% for post in collections.posts | pluck('advisory', 'post_type') | reverse | limit(2) %}
     <li>
-      <a href="/blog/{{ post.data.date | htmlDateString }}-{{ post.data.title | slugify }}/">
+      <a href="/news/{{ post.data.date | htmlDateString }}-{{ post.data.title | slugify }}/">
           {{ post.data.title }}
       </a>
       &nbsp;•&nbsp;
@@ -36,7 +29,7 @@ permalink: /
 <ul>
   {% for post in collections.posts | pluck('news', 'post_type') | reverse | limit(4) %}
     <li style="margin-bottom:1.5rem;">
-      <a href="/blog/{{ post.data.date | htmlDateString }}-{{ post.data.title | slugify }}/">
+      <a href="/news/{{ post.data.date | htmlDateString }}-{{ post.data.title | slugify }}/">
           {{ post.data.title }}
       </a>
       &nbsp;•&nbsp;

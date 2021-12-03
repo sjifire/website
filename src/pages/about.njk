@@ -4,16 +4,14 @@ layout: base.njk
 permalink: "/about/index.html"
 ---
 
-<h1>
-  {{ title }}
-</h1>
+
 
 {% for section in about.sections %}
   {% if section.type === 'text' %}
     {{ section.copy | markdownify | safe }}
   {% elif section.type === 'image' %}
     <figure>
-      <img src="{{ 'https://res.cloudinary.com/san-juan-fire-district-3/image/fetch/f_auto,q_auto:good,c_limit,w_1200,h_800/' + site.rootUrl if site.env === 'production' }}{{ '/assets/images/' }}{{ section.source }}" alt="{{ section.alt }}" width="{{ section.width }}" height="{{ section.height }}" loading="lazy">
+      <img src="{{ 'https://res.cloudinary.com/san-juan-fire-district-3/image/fetch/f_auto,q_auto:good,c_limit,w_1200,h_800/' + site.rootUrl if site.env === 'production' }}/assets/images/{{ section.source }}" alt="{{ section.alt }}" width="{{ section.width }}" height="{{ section.height }}" loading="lazy">
       {% if section.caption %}
         <figcaption>
           {{ section.caption }}
@@ -34,26 +32,3 @@ permalink: "/about/index.html"
     </figure>
   {% endif %}
 {% endfor %}
-
-<hr>
-
-<h1>
-  Advisories & News
-</h1>
-
-<ol>
-  {% for post in collections.posts | reverse %}
-    <li style="margin-bottom:1.5rem;">
-      <a href="/blog/{{ post.data.date | htmlDateString }}-{{ post.data.title | slugify }}/">
-          {{ post.data.title }}
-      </a>
-      &nbsp;•&nbsp;
-      <time datetime="{{ post.data.date }}" pubdate="pubdate">
-        {{ post.data.date | postDateTerse }}
-      </time>
-      <p style="margin:0.35rem 0 0;">
-        {{ post.data.lede }}
-      </p>
-    </li>
-  {% endfor %}
-</ol>
