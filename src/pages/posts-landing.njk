@@ -13,7 +13,7 @@ permalink: "/posts/{% if pagination.pageNumber > 0 %}page-{{ pagination.pageNumb
   {% for post in pagination.items %}
     <li style="margin-bottom:1.5rem;">
       <a href="/posts/{{ post.date | htmlDateStringISO }}-{{ post.title | slugify }}/">
-          {{ post.title }}
+          {{ post.title | safe }}
       </a>
       &nbsp;•&nbsp;
       <time datetime="{{ post.date }}" pubdate="pubdate">
