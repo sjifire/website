@@ -1,2 +1,2 @@
-&copy; {{ site.buildTime | yearOnlyJS }} {{ site.name }}
+&copy; {{ helpers.buildTime | yearOnlyJS }} {{ site.name | safe }}
 <small><a href="/disclaimer/">Disclaimer</a></small>
