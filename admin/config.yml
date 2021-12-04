@@ -318,7 +318,6 @@ collections:
           preview: false
         file: "src/_data/governance.json"
         fields:
-        fields:
           - sections:
             name: "sections"
             widget: "list"
@@ -397,7 +396,6 @@ collections:
         editor:
           preview: false
         file: "src/_data/services.json"
-        fields:
         fields:
           - sections:
             name: "sections"
