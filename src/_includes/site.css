@@ -196,6 +196,12 @@ body {
       max-width: 1110px; } 
 }
 
+.contact-page-grid {
+  display: grid;
+  grid-template-columns: 1fr 33%;
+  gap: 3rem;
+}
+
 .sr-only {
   border: 0 !important;
   clip: rect(1px, 1px, 1px, 1px) !important; /* 1 */
@@ -244,4 +250,8 @@ article img {
 
 .embed-responsive-16by9::before {
   padding-top: 56.25%;
+}
+
+.embed-responsive-1by1::before {
+  padding-top: 100%;
 }

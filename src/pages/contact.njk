@@ -4,34 +4,44 @@ layout: base.njk
 permalink: "/contact/index.html"
 ---
 
-
-{{ contact.preamble | markdownify | safe }}
-
-<form name="contact" method="POST" netlify-honeypot="bot-field" data-netlify="true" action="/thank-you/">
-  <p class="sr-only">
-    <label>Don’t fill this out if you’re human: <input name="bot-field" /></label>
-  </p>
-  <div style="margin-top:1.5rem;">
-    <label for="name">
-      Name
-    </label><br>
-    <input id="name" type="text" name="name" required><br><br>
-    <label for="email">
-      Email Address
-    </label><br>
-    <input id="email" type="email" name="email-address" required><br><br>
-    <label for="message" required>
-      Message
-    </label><br>
-    <textarea id="message" name="message" rows="5" required></textarea><br><br>
-  </div>
-  <div style="margin-top:1.5rem;">
-    <button type="submit">
-      Send
-    </button>
-  </div>
-</form>
-
-
-<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4248.38934322883!2d-123.02445167834331!3d48.523208538641285!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x548f7eed6a631a9f%3A0x943116e04dc9aac3!2sSan%20Juan%20Fire%20Protection%20District!5e0!3m2!1sen!2sus!4v1633656761107!5m2!1sen!2sus" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-
+<div class="contact-page-grid">
+  <article>
+    {{ contact.preamble | markdownify | safe }}
+    <form name="contact" method="POST" netlify-honeypot="bot-field" data-netlify="true" action="/thank-you/">
+      <p class="sr-only">
+        <label>Don’t fill this out if you’re human: <input name="bot-field" /></label>
+      </p>
+      <div style="margin-top:1.5rem;">
+        <label for="name">
+          Name
+        </label><br>
+        <input id="name" type="text" name="name" required><br><br>
+        <label for="email">
+          Email Address
+        </label><br>
+        <input id="email" type="email" name="email-address" required><br><br>
+        <label for="message" required>
+          Message
+        </label><br>
+        <textarea id="message" name="message" rows="5" required></textarea><br><br>
+      </div>
+      <div style="margin-top:1.5rem;">
+        <button type="submit">
+          Send
+        </button>
+      </div>
+    </form>
+  </article>
+  <aside>
+    <p>
+      San Juan County Fire District 3 is located at:
+    </p>
+    <address>
+      {{ site.address.street }}<br>
+      {{ site.address.city }}, {{ site.address.state }} {{ site.address.zip }}
+    </address>
+    <div class="embed-responsive embed-responsive-1by1">
+      <iframe src="{{ site.address.map }}" loading="lazy"></iframe>
+    </div>
+  </aside>
+</div>

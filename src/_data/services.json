@@ -1,3 +1,8 @@
 {
-  "preamble": "## Trainings offered\n\n* Basic First Aid\n* CPR\n* Extinguisher\n* Member recruit classes\n\n## Services provided (add a bit of detail to each)\n\n* EMERGENCY:\n\n  * BLS\n  * wildland firefighting\n  * structural firefighting\n  * Marine\n  * Search & Rescue\n  * Rope Rescue\n  * Vehicle Extrication\n  * Basic Hazmat\n* Non-Emergency\n\n  * Firewise\n  * community risk reduction (specify)\n\n    * Smoke Detector\n  * Inspections\n\n## Mutual Aid Relationships\n\n* other county agencies\n* US Coast Guard\n* DNR"
+  "sections": [
+    {
+      "type": "text",
+      "copy": "## Trainings offered\n\n* Basic First Aid\n* CPR\n* Extinguisher\n* Member recruit classes\n\n## Services provided (add a bit of detail to each)\n\n* EMERGENCY:\n\n  * BLS\n  * wildland firefighting\n  * structural firefighting\n  * Marine\n  * Search & Rescue\n  * Rope Rescue\n  * Vehicle Extrication\n  * Basic Hazmat\n* Non-Emergency\n\n  * Firewise\n  * community risk reduction (specify)\n\n    * Smoke Detector\n  * Inspections\n\n## Mutual Aid Relationships\n\n* other county agencies\n* US Coast Guard\n* DNR"
+    }
+  ]
 }

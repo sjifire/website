@@ -13,12 +13,9 @@
       "copy": "San Juan Fire District #3, the special district overseeing San Juan Island Fire and Rescue, encompasses all of San Juan Island, including the Town of Friday Harbor; as well as all of Brown, Henry, Johns, Pearl, Spieden and Stuart Islands. San Juan Island is the second-largest and most populous of the San Juan Islands.  The Town of Friday Harbor, on San Juan Island, is the only incorporated town and it is the county seat."
     },
     {
-      "type": "image",
-      "source": "SJFireDistrict3.png",
-      "width": 545,
-      "height": 643,
-      "alt": "District Map",
-      "caption": "District Map"
+      "type": "gmap",
+      "source": "https://www.google.com/maps/d/embed?mid=1nXNMqwagMcA3r_gfxBkgf1By9m8A6RLM&ehbc=2E312F",
+      "caption": ""
     },
     {
       "type": "text",
