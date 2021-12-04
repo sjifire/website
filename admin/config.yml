@@ -239,7 +239,6 @@ collections:
           preview: false
         file: "src/_data/disclaimer.json"
         fields:
-        fields:
           - sections:
             name: "sections"
             widget: "list"
