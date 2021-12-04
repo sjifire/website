@@ -231,7 +231,7 @@ collections:
                   - label: Map Caption
                     name: caption
                     widget: string
-                    hint: "Add a caption for the video (optional)"
+                    hint: "Add a caption for the map"
       - label: "Disclaimer"
         name: "disclaimer"
         delete: false
@@ -310,7 +310,7 @@ collections:
                   - label: Map Caption
                     name: caption
                     widget: string
-                    hint: "Add a caption for the video (optional)"
+                    hint: "Add a caption for the map"
       - label: "Governance"
         name: "governance"
         delete: false
@@ -389,7 +389,7 @@ collections:
                   - label: Map Caption
                     name: caption
                     widget: string
-                    hint: "Add a caption for the video (optional)"
+                    hint: "Add a caption for the map"
       - label: "Services"
         name: "services"
         delete: false
@@ -468,7 +468,7 @@ collections:
                   - label: Map Caption
                     name: caption
                     widget: string
-                    hint: "Add a caption for the video (optional)"
+                    hint: "Add a caption for the map"
       - label: "Contact"
         name: "contact"
         delete: false
