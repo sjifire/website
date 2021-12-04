@@ -228,7 +228,7 @@ collections:
                     name: source
                     widget: string
                     hint: "Add a YouTube video player by copy-pasting the 'Share' link"
-                  - label: Video Caption
+                  - label: Map Caption
                     name: caption
                     widget: string
                     hint: "Add a caption for the video (optional)"
@@ -307,7 +307,7 @@ collections:
                     name: source
                     widget: string
                     hint: "Add a YouTube video player by copy-pasting the 'Share' link"
-                  - label: Video Caption
+                  - label: Map Caption
                     name: caption
                     widget: string
                     hint: "Add a caption for the video (optional)"
@@ -386,7 +386,7 @@ collections:
                     name: source
                     widget: string
                     hint: "Add a YouTube video player by copy-pasting the 'Share' link"
-                  - label: Video Caption
+                  - label: Map Caption
                     name: caption
                     widget: string
                     hint: "Add a caption for the video (optional)"
@@ -465,7 +465,7 @@ collections:
                     name: source
                     widget: string
                     hint: "Add a YouTube video player by copy-pasting the 'Share' link"
-                  - label: Video Caption
+                  - label: Map Caption
                     name: caption
                     widget: string
                     hint: "Add a caption for the video (optional)"
