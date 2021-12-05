@@ -29,28 +29,28 @@ permalink: "/contact/index.html"
 {% endif %}
 
 {% block content %}
-  <article class="post__body">
+  <article class="post__copy">
     {{ contact.preamble | markdownify | safe }}
     <form name="contact" method="POST" netlify-honeypot="bot-field" data-netlify="true" action="/thank-you/">
       <p class="sr-only">
         <label>Don’t fill this out if you’re human: <input name="bot-field" /></label>
       </p>
-      <div style="margin-top:1.5rem;">
+      <div>
         <label for="name">
           Name
-        </label><br>
-        <input id="name" type="text" name="name" required><br><br>
-        <label for="email">
+        </label>
+        <input id="name" type="text" name="name" class="form-control" required>
+        <label for="email" style="margin-top:1.5rem;">
           Email Address
-        </label><br>
-        <input id="email" type="email" name="email-address" required><br><br>
-        <label for="message" required>
+        </label>
+        <input id="email" type="email" name="email-address" class="form-control" required>
+        <label for="message" required style="margin-top:1.5rem;">
           Message
-        </label><br>
-        <textarea id="message" name="message" rows="5" required></textarea><br><br>
+        </label>
+        <textarea id="message" name="message" rows="5" class="form-control" required></textarea>
       </div>
       <div style="margin-top:1.5rem;">
-        <button type="submit">
+        <button type="submit" class="btn btn-primary">
           Send
         </button>
       </div>
