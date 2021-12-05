@@ -3,15 +3,20 @@
   "post_type": "Advisory",
   "date": "2021-11-23",
   "lede": "We hope your week is off to a great start. If you are planning on hosting Thanksgiving or cooking to bring something along with you, please remember that while it might not be in the recipe, cooking always requires your attention.",
+  "featured_media": [
+    {
+      "type": "image",
+      "source": "260303934_4402827853161971_1841692622216886850_n.png",
+      "width": 1024,
+      "height": 512,
+      "alt": "",
+      "caption": ""
+    }
+  ],
   "sections": [
     {
       "type": "text",
       "copy": "We hope your week is off to a great start. If you are planning on hosting Thanksgiving or cooking to bring something along with you, please remember that while it might not be in the recipe, cooking always requires your attention.\n\nOnce you are ready to turn the stove on, it&#39;s very important to stay in the kitchen and remain focused. Kitchen fires are very common and are very preventable.\n\nEnjoy your Thanksgiving celebrations and please stay safe and well.\n\nThank you always for your help and support."
-    },
-    {
-      "type": "image",
-      "source": "260303934_4402827853161971_1841692622216886850_n.png",
-      "caption": ""
     }
   ]
 }

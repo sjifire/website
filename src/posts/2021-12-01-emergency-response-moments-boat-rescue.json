@@ -3,6 +3,16 @@
   "post_type": "Response Moment",
   "date": "2021-12-01",
   "lede": "This is the first in a series of stories about the people of our islands - your neighbors and friends that work and volunteer as members of San Juan Island Fire and Rescue. These are actual events – stories about emergency responses in and around our islands.",
+  "featured_media": [
+    {
+      "type": "image",
+      "source": "2-fb-1-february-2020-.jpg",
+      "width": 800,
+      "height": 528,
+      "alt": "FB sentinel",
+      "caption": ""
+    }
+  ],
   "sections": [
     {
       "type": "text",
@@ -10,16 +20,15 @@
     },
     {
       "type": "image",
-      "copy": "The kids had managed to steer out of the current and land their paddleboard, but were unable to scale the rocky cliff because they were cold, damp, and barefoot. One of the parents had climbed down to them with a blanket, which they were able to huddle under while they waited for more help. The two rescue technicians from San Juan Fire were put ashore to the east; one climbed over to the kids while the other moved uphill to coordinate with the on-scene deputy.\n\nThe boat was able to approach near the kids, and the experienced pilot kept the vessel in position against wind and waves as the children and their parent were helped aboard. The crew checked the kids for signs of hypothermia and transported them to the boat ramp, where they were met by Lopez Fire and Rescue for further evaluation and then released. Everyone was relieved to have a safe outcome to a very dangerous situation.\n\nWhy was San Juan Fire & Rescue responding to an emergency on Lopez, you might wonder? Our district includes not only San Juan Island but also Brown, Henry, Johns, Pearl, Stuart, and Spieden Islands. While our primary mission is protecting our district’s islands’ residents and visitors, we train and are prepared to assist our neighbors when the need arises. Over the last year, SJIF&R crews have responded and helped island residents, visitors, and neighboring emergency services agencies, throughout the region, including Skagit county and Center, Decatur, Henry, Lopez, Orcas, Patos, Shaw, Stuart, Sucia, and Waldron Islands .\n\nSan Juan Fire also fulfills formal contracts with agencies like the Washington State Department of Natural Resources to provide both pre-hospital care and fire coverage to outer islands in our archipelago, or informal arrangements such as responding in support of the US Coast Guard Bellingham Station when they get busy. The San Juan Fire boat is the only vessel available 24/7 for fire, medical, and search and rescue operations in a multi-county region. When smoke, fog, snow or storms prevent medical transports by air, we provide one of the only ways patients in our county can to get to the big hospitals on the mainland. Your fire boat and trained crews are critical to emergency services throughout our islands.\n\nThe SJIF&R crew of four that responded for the Lopez paddleboard rescue has thousands of hours of training between them—as nationally certified medical technicians, as a Coast Guard-certified Captain, as rescue technicians and marine specialists, and also as wildland and structural firefighters. Most emergencies require multiple skill sets and are a little more complicated because we live on islands. Your first responders need to be equipped with broad competency and special skill sets. We aim to bring the best of our teamwork and training to every call, whether it’s stranded boaters, a medical emergency, or a fire.",
-      "source": "2-fb-1-february-2020-.jpg",
-      "width": 800,
-      "height": 528,
-      "alt": "FB sentinel",
-      "caption": "Fireboat on a different emergency call, during calmer weather"
+      "source": "img_7028.jpg",
+      "width": 3024,
+      "height": 4027,
+      "alt": "Lt. Dodd training on the Fireboat",
+      "caption": "Lt. Kyle Dodd training on the Fireboat."
     },
     {
       "type": "text",
-      "copy": "The kids had managed to steer out of the current and land their paddleboard, but were unable to scale the rocky cliff because they were cold, damp, and barefoot. One of the parents had climbed down to them with a blanket, which they were able to huddle under while they waited for more help. The two rescue technicians from San Juan Fire were put ashore to the east; one climbed over to the kids while the other moved uphill to coordinate with the on-scene deputy.\n\nThe boat was able to approach near the kids, and the experienced pilot kept the vessel in position against wind and waves as the children and their parent were helped aboard. The crew checked the kids for signs of hypothermia and transported them to the boat ramp, where they were met by Lopez Fire and Rescue for further evaluation and then released. Everyone was relieved to have a safe outcome to a very dangerous situation.\n\nWhy was San Juan Fire & Rescue responding to an emergency on Lopez, you might wonder? Our district includes not only San Juan Island but also Brown, Henry, Johns, Pearl, Stuart, and Spieden Islands. While our primary mission is protecting our district’s islands’ residents and visitors, we train and are prepared to assist our neighbors when the need arises. Over the last year, SJIF&R crews have responded and helped  residents, visitors, and emergency services agencies, outside of our district 23 times in the past year, including to Skagit county and Center, Decatur, Henry, Lopez, Orcas, Patos, Shaw, Stuart, Sucia, and Waldron Islands."
+      "copy": "The kids had managed to steer out of the current and land their paddleboard, but were unable to scale the rocky cliff because they were cold, damp, and barefoot. One of the parents had climbed down to them with a blanket, which they were able to huddle under while they waited for more help. The two rescue technicians from San Juan Fire were put ashore to the east; one climbed over to the kids while the other moved uphill to coordinate with the on-scene deputy.\n\nThe boat was able to approach near the kids, and the experienced pilot kept the vessel in position against wind and waves as the children and their parent were helped aboard. The crew checked the kids for signs of hypothermia and transported them to the boat ramp, where they were met by Lopez Fire and Rescue for further evaluation and then released. Everyone was relieved to have a safe outcome to a very dangerous situation."
     },
     {
       "type": "image",
@@ -31,15 +40,7 @@
     },
     {
       "type": "text",
-      "copy": "San Juan Fire also fulfills formal contracts with agencies like the Washington State Department of Natural Resources to provide both pre-hospital care and fire coverage to outer islands in our archipelago, or informal arrangements such as responding in support of the US Coast Guard Bellingham Station when they get busy. The San Juan Fire boat is the only vessel available 24/7 for fire, medical, and search and rescue operations in a multi-county region. When smoke, fog, snow or storms prevent medical transports by air, we provide one of the only ways patients in our county can to get to the big hospitals on the mainland. Your fire boat and trained crews are critical to emergency services throughout our islands.\n\nThe SJIF&R crew of four that responded for the Lopez paddleboard rescue has thousands of hours of training between them—as nationally certified medical technicians, as a Coast Guard-certified Captain, as rescue technicians and marine specialists, and also as wildland and structural firefighters. Most emergencies require multiple skill sets and are a little more complicated because we live on islands. Your first responders need to be equipped with broad competency and special skill sets. We aim to bring the best of our teamwork and training to every call, whether it’s stranded boaters, a medical emergency, or a fire."
-    },
-    {
-      "type": "image",
-      "source": "img_7028.jpg",
-      "width": 3024,
-      "height": 4027,
-      "alt": "Lt. Dodd training on the Fireboat",
-      "caption": "Lt. Kyle Dodd training on the Fireboat."
+      "copy": "Why was San Juan Fire & Rescue responding to an emergency on Lopez, you might wonder? Our district includes not only San Juan Island but also Brown, Henry, Johns, Pearl, Stuart, and Spieden Islands. While our primary mission is protecting our district’s islands’ residents and visitors, we train and are prepared to assist our neighbors when the need arises. Over the last year, SJIF&R crews have responded and helped  residents, visitors, and emergency services agencies, outside of our district 23 times in the past year, including to Skagit county and Center, Decatur, Henry, Lopez, Orcas, Patos, Shaw, Stuart, Sucia, and Waldron Islands."
     },
     {
       "type": "image",
@@ -48,6 +49,10 @@
       "height": 4028,
       "alt": "Kathleen and John Salinas on the Fireboat",
       "caption": "Kathleen and John Salinas during a drill on the fireboat."
+    },
+    {
+      "type": "text",
+      "copy": "San Juan Fire also fulfills formal contracts with agencies like the Washington State Department of Natural Resources to provide both pre-hospital care and fire coverage to outer islands in our archipelago, or informal arrangements such as responding in support of the US Coast Guard Bellingham Station when they get busy. The San Juan Fire boat is the only vessel available 24/7 for fire, medical, and search and rescue operations in a multi-county region. When smoke, fog, snow or storms prevent medical transports by air, we provide one of the only ways patients in our county can to get to the big hospitals on the mainland. Your fire boat and trained crews are critical to emergency services throughout our islands.\n\nThe SJIF&R crew of four that responded for the Lopez paddleboard rescue has thousands of hours of training between them—as nationally certified medical technicians, as a Coast Guard-certified Captain, as rescue technicians and marine specialists, and also as wildland and structural firefighters. Most emergencies require multiple skill sets and are a little more complicated because we live on islands. Your first responders need to be equipped with broad competency and special skill sets. We aim to bring the best of our teamwork and training to every call, whether it’s stranded boaters, a medical emergency, or a fire."
     }
   ]
 }
