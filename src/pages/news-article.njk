@@ -27,28 +27,13 @@
   </div>
 {% endblock %}
 
-{% block page_hero %}
-  {% for media in post.featured_media %}
-    {% if media.type === 'image' %}
-      <figure class="featured__media">
-        <img src="{{ 'https://res.cloudinary.com/san-juan-fire-district-3/image/fetch/f_auto,q_auto:good,c_limit,w_800,h_500/' + site.rootUrl if helpers.env === 'production' }}/assets/images/{{ media.source }}" alt="{{ media.alt }}" width="{{ media.width }}" height="{{ media.height }}" loading="lazy">
-      </figure>
-    {% elif media.type === 'youtube' %}
-      {% set video_id = media.source.split('/').pop() %}
-      <figure class="featured__media">
-        <div class="embed-responsive embed-responsive-16by9">
-          <iframe src="https://www.youtube.com/embed/{{ video_id }}" loading="lazy"></iframe>
-        </div>
-      </figure>
-    {% elif media.type === 'gmap' %}
-      <figure class="featured__media">
-        <div class="embed-responsive embed-responsive-16by9">
-          <iframe src="{{ media.source }}" loading="lazy"></iframe>
-        </div>
-      </figure>
-    {% endif %}
-  {% endfor %}
-{% endblock %}
+{% if post.featured %}
+  {% block page_hero %}
+    <figure class="featured__media">
+      <img src="{{ 'https://res.cloudinary.com/san-juan-fire-district-3/image/fetch/f_auto,q_auto:good,c_limit,w_900,h_500/' + site.rootUrl if helpers.env === 'production' }}/assets/images/{{ post.featured.image }}" alt="{{ post.featured.alt }}" width="{{ post.featured.width }}" height="{{ post.featured.height }}" loading="eager">
+    </figure>
+  {% endblock %}
+{% endif %}
 
 {% block content %}
   <article class="post">

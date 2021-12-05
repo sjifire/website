@@ -49,11 +49,6 @@ a:not([class]) {
   color: var(--link-blue);
 }
 
-/* Natural flow and rhythm in articles by default */
-article > * + * {
-  margin-top: 1em;
-}
-
 /* Inherit fonts for inputs and buttons */
 input,
 button,
@@ -223,13 +218,28 @@ body {
       max-width: 1110px; } 
 }
 
-
 .page-hero {
-  background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0,var(--dk-gray)),color-stop(50%,var(--dk-gray)),color-stop(50%,hsla(0,0%,100%,0)),to(hsla(0,0%,100%,0)));
-  background-image: linear-gradient(to bottom,var(--dk-gray) 0,var(--dk-gray) 50%,hsla(0,0%,100%,0) 50%,hsla(0,0%,100%,0) 100%);
+  padding-block: 60px;
+  background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0,var(--dk-gray)),color-stop(75%,var(--dk-gray)),color-stop(75%,hsla(0,0%,100%,0)),to(hsla(0,0%,100%,0)));
+  background-image: linear-gradient(to bottom,var(--dk-gray) 0,var(--dk-gray) 75%,hsla(0,0%,100%,0) 75%,hsla(0,0%,100%,0) 100%);
 }
 
-.featured__media > * {
+@media (min-width: 768px) {
+  .page-hero {
+    padding-block: 0;
+    background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0,var(--dk-gray)),color-stop(50%,var(--dk-gray)),color-stop(50%,hsla(0,0%,100%,0)),to(hsla(0,0%,100%,0)));
+    background-image: linear-gradient(to bottom,var(--dk-gray) 0,var(--dk-gray) 50%,hsla(0,0%,100%,0) 50%,hsla(0,0%,100%,0) 100%);
+  }
+}
+
+.featured__media > img {
+  display: block;
+  max-width: 900px;
+  max-height: 500px;
+  width: auto;
+  height: auto;
+  margin-left: auto;
+  margin-right: auto;
   box-shadow: 1px 2px 8px rgba(0,0,0, 0.15);
 }
 
@@ -238,7 +248,8 @@ body {
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  justify-content: center;
   gap: 60px;
 }
 
@@ -248,8 +259,39 @@ body {
   box-shadow: 1px 2px 8px rgba(0,0,0, 0.15);
 }
 
+.alert__icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  background-color: var(--yellow);
+  border-radius: 50%;
+}
+
+.alert__icon svg {
+  width: 80%;
+  height: auto;
+  fill: var(--dk-red);
+}
+
 .alert__body, .alert__footer {
   padding: 20px;
+}
+
+.alert__body {
+  display: grid;
+  gap: 20px;
+}
+
+.alert__body h2 {
+  line-height: 1.2;
+}
+
+@media (min-width: 992px) {
+  .alert__body {
+    grid-template-columns: auto 1fr;
+  }
 }
 
 .alert__footer {
@@ -280,7 +322,7 @@ body {
   line-height: 1.4;
 }
 
-.post__media > img, .page-hero img {
+.post__media > img {
   display: block;
   max-width: 100%;
   height: auto;

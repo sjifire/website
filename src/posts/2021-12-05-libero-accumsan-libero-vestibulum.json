@@ -8,13 +8,11 @@
     }
   ],
   "lede": "Nulla facilisi. Ut vitae massa non arcu pharetra ornare. Proin euismod placerat placerat. Nulla facilisi.",
-  "featured_media": [
-    {
-      "type": "image",
-      "source": "Vols-2-edited-1-scaled.jpg",
-      "width": 2560,
-      "height": 1441
-    }
-  ],
+  "featured": {
+    "image": "Vols-2-edited-1-scaled.jpg",
+    "width": 2560,
+    "height": 1441,
+    "alt": ""
+  },
   "title": "Libero accumsan libero vestibulum"
 }

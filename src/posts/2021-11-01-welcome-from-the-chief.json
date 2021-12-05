@@ -3,16 +3,12 @@
   "post_type": "News",
   "date": "2021-11-01",
   "lede": "On behalf of the San Juan County Fire District #3 Board of Commissioners and all of our dedicated staff and volunteers – welcome to the new website for San Juan Island Fire and Rescue.",
-  "featured_media": [
-    {
-      "type": "image",
-      "source": "chief-photo-3.jpg",
-      "width": 1716,
-      "height": 2281,
-      "alt": "Chief Norvin Collins",
-      "caption": ""
-    }
-  ],
+  "featured": {
+    "image": "chief-photo-3.jpg",
+    "width": 1716,
+    "height": 2281,
+    "alt": ""
+  },
   "sections": [
     {
       "type": "text",
