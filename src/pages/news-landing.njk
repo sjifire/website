@@ -1,18 +1,18 @@
 ---
 layout: base.njk
-title: News Archive
+title: News
 pagination:
   data: posts
   size: 4
   alias: post
   reverse: true
-permalink: "/posts/{% if pagination.pageNumber > 0 %}page-{{ pagination.pageNumber + 1 }}/{% endif %}index.html"
+permalink: "/news/{% if pagination.pageNumber > 0 %}page-{{ pagination.pageNumber + 1 }}/{% endif %}index.html"
 ---
 
 <ul>
   {% for post in pagination.items %}
     <li style="margin-bottom:1.5rem;">
-      <a href="/posts/{{ post.date | htmlDateStringISO }}-{{ post.title | slugify }}/">
+      <a href="/news/{{ post.date | htmlDateStringISO }}-{{ post.title | slugify }}/">
           {{ post.title | safe }}
       </a>
       &nbsp;•&nbsp;

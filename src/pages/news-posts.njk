@@ -1,0 +1,81 @@
+---js
+{
+  pagination: {
+    data: "posts",
+    size: 1,
+    alias: "post",
+    reverse: true
+  },
+  permalink: "/news/{{ post.date | htmlDateStringISO }}-{{ post.title | slugify }}/index.html",
+  eleventyComputed: {
+    title: "{{ post.title | safe }}"
+  }
+}
+---
+
+{% extends 'base.njk' %}
+
+{% block page_header %}
+  <h1 style="font-size: 32px;margin-bottom:0.5rem;">
+    {{ post.title | safe }}
+  </h1>
+  <time datetime="{{ post.date | htmlDateStringISO }}" pubdate="pubdate" style="margin-bottom:0;font-size:12px;text-transform:uppercase;letter-spacing:0.15rem;color:#777;">
+    {{ post.date | postDateVerboseISO }}
+  </time>
+  <div class="lede">
+    {{ post.lede | markdownify | safe }}
+  </div>
+{% endblock %}
+
+{% block page_hero %}
+  <img src="/assets/images/2-fb-1-february-2020-.jpg" alt="FB sentinel" loading="lazy" width="800" height="528">
+{% endblock %}
+
+{% block content %}
+  <article class="post">
+    <header class="post__header">
+    </header>
+    {% for section in post.sections %}
+      {% if section.type === 'text' %}
+        <div class="post__copy">
+          {{ section.copy | markdownify | safe }}
+        </div>
+      {% elif section.type === 'image' %}
+        <figure class="post__media">
+          <img src="{{ 'https://res.cloudinary.com/san-juan-fire-district-3/image/fetch/f_auto,q_auto:good,c_limit,w_1200,h_800/' + site.rootUrl if helpers.env === 'production' }}/assets/images/{{ section.source }}" alt="{{ section.alt }}" width="{{ section.width }}" height="{{ section.height }}" loading="lazy">
+          {% if section.caption %}
+            <figcaption>
+              {{ section.caption }}
+            </figcaption>
+          {% endif %}
+        </figure>
+      {% elif section.type === 'youtube' %}
+        {% set video_id = section.source.split('/').pop() %}
+        <figure class="post__media">
+          <div class="embed-responsive embed-responsive-16by9">
+            <iframe src="https://www.youtube.com/embed/{{ video_id }}" loading="lazy"></iframe>
+          </div>
+          {% if section.caption %}
+            <figcaption>
+              {{ section.caption }}
+            </figcaption>
+          {% endif %}
+        </figure>
+      {% endif %}
+    {% endfor %}
+  </article>
+
+  <div style="border-top:1px solid #a1a5a9;margin-top:1.5rem;padding-top:1.5rem;text-align:center">
+    {% if pagination.href.previous %}
+      <a href="{{ pagination.href.previous | url }}">« Next</a>
+    {% else %}
+      « Next
+    {% endif %}
+      &nbsp;<a href="/news/">All</a>&nbsp;
+    {% if pagination.href.next %}
+      <a href="{{ pagination.href.next | url }}">Prev »</a>
+    {% else %}
+      Prev »
+    {% endif %}
+  </div>
+{% endblock %}

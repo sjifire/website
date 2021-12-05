@@ -1,45 +1,64 @@
 ---
 title: San Juan Island Fire and Rescue
-layout: base.njk
 permalink: /
 ---
 
-<h2>
-  (Current? Recent?) Advisories
-</h2>
+{% extends 'base.njk' %}
 
-<ul>
-  {% for post in posts | pluck('Advisory', 'post_type') | reverse | limit(2) %}
-    <li>
-      <a href="/posts/{{ post.date | htmlDateStringISO }}-{{ post.title | slugify }}/">
-          {{ post.title | safe }}
-      </a>
-      &nbsp;•&nbsp;
-      <time datetime="{{ post.date }}" pubdate="pubdate">
-        {{ post.date | postDateTerseISO }}
-      </time>
-    </li>
-  {% endfor %}
-</ul>
+{% block page_header %}
+  <h1>
+    {{ title }}
+  </h1>
+  <p class="lede">
+    {{ homepage.preamble }}
+  </p>
+{% endblock %}
 
-<h2>
-  4 Latest Posts (Excluding Advisories)
-</h2>
+{% block page_hero %}
+  <ul class="home-alerts">
+    {% for post in posts | pluck('Advisory', 'post_type') | reverse | limit(2) %}
+      <li class="alert">
+        <article class="alert__body">
+          <h2>
+            {{ post.title | safe }}
+          </h2>
+          <time datetime="{{ post.date }}" pubdate="pubdate">
+            {{ post.date | postDateTerseISO }}
+          </time>
+          <p>
+            {{ post.lede | markdownify | safe }}
+          </p>
+        </article>
+        <footer class="alert__footer">
+          <a href="/news/{{ post.date | htmlDateStringISO }}-{{ post.title | slugify }}/">
+            Details
+          </a>
+        </footer>
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}
 
-<ul>
-  {% for post in posts | exclude('Advisory', 'post_type') | reverse | limit(4) %}
-    <li style="margin-bottom:1.5rem;">
-      <a href="/posts/{{ post.date | htmlDateStringISO }}-{{ post.title | slugify }}/">
-          {{ post.title | safe }}
-      </a>
-      &nbsp;•&nbsp;
-      <time datetime="{{ post.date }}" pubdate="pubdate">
-        {{ post.date | postDateTerseISO }}
-      </time>
-      <p style="margin:0.35rem 0 0;">
-        {{ post.lede | markdownify | safe }}
-      </p>
-    </li>
-  {% endfor %}
-</ul>
+{% block content %}
 
+  <h2>
+    4 Latest Posts (Excluding Advisories)
+  </h2>
+
+  <ul>
+    {% for post in posts | exclude('Advisory', 'post_type') | reverse | limit(4) %}
+      <li style="margin-bottom:1.5rem;">
+        <a href="/news/{{ post.date | htmlDateStringISO }}-{{ post.title | slugify }}/">
+            {{ post.title | safe }}
+        </a>
+        &nbsp;•&nbsp;
+        <time datetime="{{ post.date }}" pubdate="pubdate">
+          {{ post.date | postDateTerseISO }}
+        </time>
+        <p style="margin:0.35rem 0 0;">
+          {{ post.lede | markdownify | safe }}
+        </p>
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}
