@@ -12,7 +12,7 @@ collections:
     label: "Posts"
     label_singular: "News Post"
     folder: "src/posts/"
-    slug: "{{fields.date}}-{{slug}}"
+    slug: "{{fields.date | date('YYYY-MM-DD')}}-{{slug}}"
     extension: "json"
     create: true # Allow users to create new documents in this collection
     delete: true # Allow users to delete items in this collection
@@ -41,7 +41,7 @@ collections:
         widget: datetime
         date_format: "YYYY-MM-DD"
         time_format: false
-        format: "YYYY-MM-DD HH:mm Z"
+        format: "YYYY-MM-DDTHH:mm"
         picker_utc: true
         default: ''
         hint: Publication date
