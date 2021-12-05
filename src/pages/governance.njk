@@ -1,43 +1,65 @@
 ---
 title: "Governance"
-layout: base.njk
 permalink: "/governance/index.html"
 ---
 
-{% for section in governance.sections %}
-  {% if section.type === 'text' %}
-    {{ section.copy | markdownify | safe }}
-  {% elif section.type === 'image' %}
-    <figure>
-      <img src="{{ 'https://res.cloudinary.com/san-juan-fire-district-3/image/fetch/f_auto,q_auto:good,c_limit,w_1200,h_800/' + site.rootUrl if helpers.env === 'production' }}/assets/images/{{ section.source }}" alt="{{ section.alt }}" width="{{ section.width }}" height="{{ section.height }}" loading="lazy">
-      {% if section.caption %}
-        <figcaption>
-          {{ section.caption }}
-        </figcaption>
-      {% endif %}
+{% extends 'base.njk' %}
+
+{% block page_header %}
+  <h1>
+    {{ title | safe }}
+  </h1>
+  <div class="lede">
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent ligula risus, egestas in malesuada posuere, ultrices nec tellus. Nam hendrerit arcu vulputate condimentum eleifend.
+    </p>
+  </div>
+{% endblock %}
+
+{% if post.featured %}
+  {% block page_hero %}
+    <figure class="featured__media">
+      <img src="{{ 'https://res.cloudinary.com/san-juan-fire-district-3/image/fetch/f_auto,q_auto:good,c_limit,w_900,h_500/' + site.rootUrl if helpers.env === 'production' }}/assets/images/chief-photo-2-.jpg" alt="Chief Norvin Collins at a community meeting" width="429" height="572" loading="eager">
     </figure>
-  {% elif section.type === 'youtube' %}
-    {% set video_id = section.source.split('/').pop() %}
-    <figure>
-      <div class="embed-responsive embed-responsive-16by9">
-        <iframe src="https://www.youtube.com/embed/{{ video_id }}" loading="lazy"></iframe>
-      </div>
-      {% if section.caption %}
-        <figcaption>
-          {{ section.caption }}
-        </figcaption>
-      {% endif %}
-    </figure>
-  {% elif section.type === 'gmap' %}
-    <figure>
-      <div class="embed-responsive embed-responsive-16by9">
-        <iframe src="{{ section.source }}" loading="lazy"></iframe>
-      </div>
-      {% if section.caption %}
-        <figcaption>
-          {{ section.caption }}
-        </figcaption>
-      {% endif %}
-    </figure>
-  {% endif %}
-{% endfor %}
+  {% endblock %}
+{% endif %}
+
+{% block content %}
+  {% for section in governance.sections %}
+    {% if section.type === 'text' %}
+      {{ section.copy | markdownify | safe }}
+    {% elif section.type === 'image' %}
+      <figure>
+        <img src="{{ 'https://res.cloudinary.com/san-juan-fire-district-3/image/fetch/f_auto,q_auto:good,c_limit,w_1200,h_800/' + site.rootUrl if helpers.env === 'production' }}/assets/images/{{ section.source }}" alt="{{ section.alt }}" width="{{ section.width }}" height="{{ section.height }}" loading="lazy">
+        {% if section.caption %}
+          <figcaption>
+            {{ section.caption }}
+          </figcaption>
+        {% endif %}
+      </figure>
+    {% elif section.type === 'youtube' %}
+      {% set video_id = section.source.split('/').pop() %}
+      <figure>
+        <div class="embed-responsive embed-responsive-16by9">
+          <iframe src="https://www.youtube.com/embed/{{ video_id }}" loading="lazy"></iframe>
+        </div>
+        {% if section.caption %}
+          <figcaption>
+            {{ section.caption }}
+          </figcaption>
+        {% endif %}
+      </figure>
+    {% elif section.type === 'gmap' %}
+      <figure>
+        <div class="embed-responsive embed-responsive-16by9">
+          <iframe src="{{ section.source }}" loading="lazy"></iframe>
+        </div>
+        {% if section.caption %}
+          <figcaption>
+            {{ section.caption }}
+          </figcaption>
+        {% endif %}
+      </figure>
+    {% endif %}
+  {% endfor %}
+{% endblock %}
