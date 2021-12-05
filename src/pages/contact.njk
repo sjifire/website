@@ -20,16 +20,8 @@ permalink: "/contact/index.html"
   </div>
 {% endblock %}
 
-{% if post.featured %}
-  {% block page_hero %}
-    <div class="embed-responsive embed-responsive-21by9">
-      <iframe src="{{ site.address.map }}" loading="lazy"></iframe>
-    </div>
-  {% endblock %}
-{% endif %}
-
 {% block content %}
-  <article class="post__copy">
+  <div class="post__copy">
     {{ contact.preamble | markdownify | safe }}
     <form name="contact" method="POST" netlify-honeypot="bot-field" data-netlify="true" action="/thank-you/">
       <p class="sr-only">
@@ -55,5 +47,8 @@ permalink: "/contact/index.html"
         </button>
       </div>
     </form>
-  </article>
+    <div class="embed-responsive embed-responsive-16by9">
+      <iframe src="{{ site.address.map }}" loading="lazy"></iframe>
+    </div>
+  </div>
 {% endblock %}
