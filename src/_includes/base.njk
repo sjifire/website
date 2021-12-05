@@ -3,6 +3,7 @@
 <head>
   {# preload font? #}
   <meta charset="utf-8">
+  <meta name="format-detection" content="telephone=no">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>{{ site.name if page.url === '/' else title + ' | ' + site.name }}</title>
   {# meta-desc #}
@@ -28,22 +29,15 @@
 
   <header class="page-header">
     <div class="rap">
-      {% if page.url === '/' %}
-        <h1>
-          {{ title }}
-        </h1>
-        <p>
-          {{ homepage.preamble }}
-        </p>
-      {% elif page.fileSlug === 'posts-permalink' %}
-        <h2>
-          {{ post.post_type }}{{ ': ' + post.date | postDateTerseISO if post.post_type === 'Advisory' }}
-        </h2>
-      {% else %}
-        <h1>
-          {{ title }}
-        </h1>
-      {% endif %}
+      <article class="page-header__copy">
+        {% block page_header %}{% endblock %}
+      </article>
+    </div>
+  </header>
+
+  <header class="page-hero">
+    <div class="rap">
+      {% block page_hero %}{% endblock %}
     </div>
   </header>
 

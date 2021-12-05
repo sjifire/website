@@ -41,7 +41,7 @@ collections:
         widget: datetime
         date_format: "YYYY-MM-DD"
         time_format: false
-        format: "YYYY-MM-DD"
+        format: "YYYY-MM-DD HH:mm Z"
         picker_utc: true
         default: ''
         hint: Publication date

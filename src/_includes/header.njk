@@ -8,17 +8,17 @@
     <a href="/" class="site-logo">
       <img src="{{ 'https://res.cloudinary.com/san-juan-fire-district-3/image/fetch/f_auto/' + site.rootUrl if helpers.env === 'production' }}/assets/sjifire-logo-clear.png" width="320" height="317" alt="San Juan Island Fire and Rescue">
     </a>
-    <ul>
-      <li>
+    <ul class="main-nav">
+      <li{{ ' class=active' if page.url.includes('/about/') }}>
         <a href="/about/">About</a>
       </li>
-      <li>
-        <a href="/posts/">News</a>
+      <li{{ ' class=active' if page.url.includes('/news/') }}>
+        <a href="/news/">News</a>
       </li>
-      <li>
+      <li{{ ' class=active' if page.url.includes('/governance/') }}>
         <a href="/governance/">Governance</a>
       </li>
-      <li>
+      <li{{ ' class=active' if page.url === '/contact/' }}>
         <a href="/contact/">Contact</a>
       </li>
     </ul>
