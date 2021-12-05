@@ -267,7 +267,7 @@ body {
 }
 
 .alert__icon svg {
-  width: 80%;
+  width: 60%;
   height: auto;
   fill: var(--dk-red);
 }
