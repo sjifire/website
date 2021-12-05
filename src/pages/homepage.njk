@@ -21,13 +21,16 @@ permalink: /
         <article class="alert__body">
           <div class="alert__icon">
             <svg>
-              <use xlink:href="#rescue" />
+              <use xlink:href="#alert" />
             </svg>
           </div>
           <div>
             <h2>
               {{ post.title | safe }}
             </h2>
+            <div>
+              {{ post.post_type }}
+            </div>
             <time datetime="{{ post.date }}" pubdate="pubdate">
               {{ post.date | postDateTerseISO }}
             </time>
