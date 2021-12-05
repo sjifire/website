@@ -14,15 +14,10 @@ permalink: "/thank-you/index.html"
   </div>
 {% endblock %}
 
-{% if post.featured %}
-  {% block page_hero %}
-    <figure class="featured__media">
-      <img src="{{ 'https://res.cloudinary.com/san-juan-fire-district-3/image/fetch/f_auto,q_auto:good,c_limit,w_900,h_500/' + site.rootUrl if helpers.env === 'production' }}/assets/images/SJIFR-Ladder-314-2020-Graduation-Crew-768x576.jpg" alt="SJIFire Graduation Crew" width="768" height="576" loading="eager">
-    </figure>
-  {% endblock %}
-{% endif %}
-
 {% block content %}
+  <figure class="post__media">
+    <img src="{{ 'https://res.cloudinary.com/san-juan-fire-district-3/image/fetch/f_auto,q_auto:good,c_limit,w_900,h_500/' + site.rootUrl if helpers.env === 'production' }}/assets/images/SJIFR-Ladder-314-2020-Graduation-Crew-768x576.jpg" alt="SJIFire Graduation Crew" width="768" height="576" loading="eager">
+  </figure>
   {% for section in thank_you.sections %}
     {% if section.type === 'text' %}
       <article class="post__copy">

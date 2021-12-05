@@ -1,6 +1,5 @@
 ---
-layout: base.njk
-title: News
+title: News & Announcements
 pagination:
   data: posts
   size: 4
@@ -9,39 +8,54 @@ pagination:
 permalink: "/news/{% if pagination.pageNumber > 0 %}page-{{ pagination.pageNumber + 1 }}/{% endif %}index.html"
 ---
 
-<ul>
-  {% for post in pagination.items %}
-    <li style="margin-bottom:1.5rem;">
-      <a href="/news/{{ post.date | htmlDateStringISO }}-{{ post.title | slugify }}/">
-          {{ post.title | safe }}
-      </a>
-      &nbsp;•&nbsp;
-      <time datetime="{{ post.date }}" pubdate="pubdate">
-        {{ post.date | postDateTerseISO }}
-      </time>
-      <p style="margin:0.35rem 0 0;">
-        {{ post.lede | markdownify | safe }}
-      </p>
-    </li>
-  {% endfor %}
-</ul>
+{% extends 'base.njk' %}
 
-<nav style="border-top:1px solid #a1a5a9;margin-top:1.5rem;padding-top:1.5rem;text-align:center">
-  {% if pagination.href.previous %}
-    <a href="{{ pagination.href.previous | url }}">«</a>
-  {% else %}
-    «
-  {% endif %}
-{%- for pageEntry in pagination.pages %}
-  {% if page.url == pagination.hrefs[ loop.index0 ] %}
-    <span class="btn btn-pagination active">{{ loop.index }}</span>
-  {% else %}
-    <a href="{{ pagination.hrefs[ loop.index0 ] | url }}">{{ loop.index }}</a>
-  {% endif %}
-{%- endfor %}
-  {% if pagination.href.next %}
-    <a href="{{ pagination.href.next | url }}">»</a>
-  {% else %}
-    »
-  {% endif %}
-</nav>
+{% block page_header %}
+  <h1>
+    {{ title | safe }}
+  </h1>
+  <div class="lede">
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent ligula risus, egestas in malesuada posuere, ultrices nec tellus. Nam hendrerit arcu vulputate condimentum eleifend.
+    </p>
+  </div>
+{% endblock %}
+
+{% block content %}
+  <ul>
+    {% for post in pagination.items %}
+      <li style="margin-bottom:1.5rem;">
+        <a href="/news/{{ post.date | htmlDateStringISO }}-{{ post.title | slugify }}/">
+            {{ post.title | safe }}
+        </a>
+        &nbsp;•&nbsp;
+        <time datetime="{{ post.date }}" pubdate="pubdate">
+          {{ post.date | postDateTerseISO }}
+        </time>
+        <p style="margin:0.35rem 0 0;">
+          {{ post.lede | markdownify | safe }}
+        </p>
+      </li>
+    {% endfor %}
+  </ul>
+
+  <nav style="border-top:1px solid #a1a5a9;margin-top:1.5rem;padding-top:1.5rem;text-align:center">
+    {% if pagination.href.previous %}
+      <a href="{{ pagination.href.previous | url }}">«</a>
+    {% else %}
+      «
+    {% endif %}
+  {%- for pageEntry in pagination.pages %}
+    {% if page.url == pagination.hrefs[ loop.index0 ] %}
+      <span class="btn btn-pagination active">{{ loop.index }}</span>
+    {% else %}
+      <a href="{{ pagination.hrefs[ loop.index0 ] | url }}">{{ loop.index }}</a>
+    {% endif %}
+  {%- endfor %}
+    {% if pagination.href.next %}
+      <a href="{{ pagination.href.next | url }}">»</a>
+    {% else %}
+      »
+    {% endif %}
+  </nav>
+{% endblock %}
