@@ -3,15 +3,17 @@
   "post_type": "Announcement",
   "date": "2021-11-10",
   "lede": "San Juan Island Fire and Rescue (SJIF&amp;R) is seeking volunteers to join our comprehensive emergency services agency, in a number of roles to serve our islands’ communities.",
-  "sections": [
-    {
-      "type": "text",
-      "copy": "Become part of an emergency services organization with a culture of teamwork and camaraderie, focused on our communities’ needs. We are seeking volunteers to participate in upcoming training academies."
-    },
+  "featured_media": [
     {
       "type": "image",
       "source": "SJIFR-Ladder-314-2020-Graduation-Crew-768x576.jpg",
       "caption": ""
+    }
+  ],
+  "sections": [
+    {
+      "type": "text",
+      "copy": "Become part of an emergency services organization with a culture of teamwork and camaraderie, focused on our communities’ needs. We are seeking volunteers to participate in upcoming training academies."
     },
     {
       "type": "text",

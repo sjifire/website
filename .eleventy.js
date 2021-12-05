@@ -62,6 +62,10 @@ module.exports = function (eleventyConfig) {
     return DateTime.fromJSDate(dateObj, {zone: 'utc'}).toFormat('yyyy');
   });
 
+  eleventyConfig.addFilter("postDateTerseJS", (dateObj) => {
+    return DateTime.fromJSDate(dateObj, {zone: 'utc'}).toLocaleString(DateTime.DATE_MED);
+  });
+  
   eleventyConfig.addFilter("dump", (obj) => {
     return util.inspect(obj);
   });

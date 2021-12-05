@@ -23,7 +23,7 @@ permalink: /
             {{ post.title | safe }}
           </h2>
           <time datetime="{{ post.date }}" pubdate="pubdate">
-            {{ post.date | postDateTerseISO }}
+            {{ post.date | postDateTerseJS }}
           </time>
           <p>
             {{ post.lede | markdownify | safe }}
