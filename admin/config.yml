@@ -59,7 +59,7 @@ collections:
         name: featured_media
         widget: list
         collapsed: true
-        allow_add: false
+        max: 1
         hint: "Media to feature just below the page header. The sections you can choose from: 'text', 'image', 'youtube'."
         required: false
         types:
