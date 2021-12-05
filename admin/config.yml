@@ -55,49 +55,25 @@ collections:
         editor_components: []
         hint: Short snipped of text used in article teasers
         required: true
-      - featured_media:
-        name: featured_media
-        widget: list
-        collapsed: true
-        max: 1
-        hint: "Media to feature just below the page header. The sections you can choose from: 'text', 'image', 'youtube'."
-        required: false
-        types:
-          - label: "Image"
-            name: "image"
-            widget: "object"
-            hint: "Add an image to the post, complete with 'alt' tag and, optionally, a caption"
-            fields:
-              - label: Image Upload
-                name: source
-                widget: image
-                allow_multiple: false
-                choose_url: false
-                public_folder: ''
-              - label: Width
-                name: width
-                widget: number
-                hint: "What is the width of this image?"
-              - label: Height
-                name: height
-                widget: number
-                hint: "What is the height of this image"
-          - label: "YouTube Video"
-            name: "youtube"
-            widget: "object"
-            fields:
-              - label: YouTube Video Link
-                name: source
-                widget: string
-                hint: "Add a YouTube video player by copy-pasting the 'Share' link"
-          - label: "Google Map"
-            name: "gmap"
-            widget: "object"
-            fields:
-              - label: Google Map Link
-                name: source
-                widget: string
-                hint: "Add a YouTube video player by copy-pasting the 'Share' link"
+      - label: "Featured Image"
+        name: "featured_image"
+        widget: "object"
+        hint: "Featured image that appears at the top of the post, complete with 'alt' tag and, optionally, a caption"
+        fields:
+          - label: Image Upload
+            name: source
+            widget: image
+            allow_multiple: false
+            choose_url: false
+            public_folder: ''
+          - label: Width
+            name: width
+            widget: number
+            hint: "What is the width of this image?"
+          - label: Height
+            name: height
+            widget: number
+            hint: "What is the height of this image"
       - sections:
         name: "sections"
         widget: "list"

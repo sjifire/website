@@ -19,15 +19,22 @@ permalink: /
     {% for post in posts | pluck('Advisory', 'post_type') | reverse | limit(2) %}
       <li class="alert">
         <article class="alert__body">
-          <h2>
-            {{ post.title | safe }}
-          </h2>
-          <time datetime="{{ post.date }}" pubdate="pubdate">
-            {{ post.date | postDateTerseISO }}
-          </time>
-          <p>
-            {{ post.lede | markdownify | safe }}
-          </p>
+          <div class="alert__icon">
+            <svg>
+              <use xlink:href="#rescue" />
+            </svg>
+          </div>
+          <div>
+            <h2>
+              {{ post.title | safe }}
+            </h2>
+            <time datetime="{{ post.date }}" pubdate="pubdate">
+              {{ post.date | postDateTerseISO }}
+            </time>
+            <p>
+              {{ post.lede | markdownify | safe }}
+            </p>
+          </div>
         </article>
         <footer class="alert__footer">
           <a href="/news/{{ post.date | htmlDateStringISO }}-{{ post.title | slugify }}/">
