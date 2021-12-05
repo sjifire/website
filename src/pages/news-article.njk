@@ -40,7 +40,7 @@
       </figure>
     {% elif media.type === 'youtube' %}
       {% set video_id = media.source.split('/').pop() %}
-      <figure class="post__media">
+      <figure class="featured__media">
         <div class="embed-responsive embed-responsive-16by9">
           <iframe src="https://www.youtube.com/embed/{{ video_id }}" loading="lazy"></iframe>
         </div>
@@ -51,7 +51,7 @@
         {% endif %}
       </figure>
     {% elif media.type === 'gmap' %}
-      <figure>
+      <figure class="featured__media">
         <div class="embed-responsive embed-responsive-16by9">
           <iframe src="{{ media.source }}" loading="lazy"></iframe>
         </div>
