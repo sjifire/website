@@ -1,11 +1,35 @@
 ---
 title: "Contact Us"
-layout: base.njk
 permalink: "/contact/index.html"
 ---
 
-<div class="contact-page-grid">
-  <article>
+{% extends 'base.njk' %}
+
+{% block page_header %}
+  <h1>
+    {{ title | safe }}
+  </h1>
+  <div class="lede">
+    <p>
+      San Juan County Fire District 3 is located at:
+    </p>
+    <address>
+      {{ site.address.street }}<br>
+      {{ site.address.city }}, {{ site.address.state }} {{ site.address.zip }}
+    </address>
+  </div>
+{% endblock %}
+
+{% if post.featured %}
+  {% block page_hero %}
+    <div class="embed-responsive embed-responsive-21by9">
+      <iframe src="{{ site.address.map }}" loading="lazy"></iframe>
+    </div>
+  {% endblock %}
+{% endif %}
+
+{% block content %}
+  <article class="post__body">
     {{ contact.preamble | markdownify | safe }}
     <form name="contact" method="POST" netlify-honeypot="bot-field" data-netlify="true" action="/thank-you/">
       <p class="sr-only">
@@ -32,16 +56,4 @@ permalink: "/contact/index.html"
       </div>
     </form>
   </article>
-  <aside>
-    <p>
-      San Juan County Fire District 3 is located at:
-    </p>
-    <address>
-      {{ site.address.street }}<br>
-      {{ site.address.city }}, {{ site.address.state }} {{ site.address.zip }}
-    </address>
-    <div class="embed-responsive embed-responsive-1by1">
-      <iframe src="{{ site.address.map }}" loading="lazy"></iframe>
-    </div>
-  </aside>
-</div>
+{% endblock %}

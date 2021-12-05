@@ -19,7 +19,7 @@
   <h1 style="font-size: 32px;margin-bottom:0.5rem;">
     {{ post.title | safe }}
   </h1>
-  <time datetime="{{ post.date | htmlDateStringISO }}" pubdate="pubdate" style="margin-bottom:0;font-size:12px;text-transform:uppercase;letter-spacing:0.15rem;color:#777;">
+  <time datetime="{{ post.date | htmlDateStringISO }}" pubdate="pubdate">
     {{ post.date | postDateVerboseISO }}
   </time>
   <div class="lede">

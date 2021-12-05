@@ -171,7 +171,8 @@ body {
 }
 
 .page-header h1 {
-  font-size: 36px;
+  margin-bottom: 0.5rem;
+  font-size: 32px;
 }
 
 .page-header .lede {
@@ -232,10 +233,9 @@ body {
   }
 }
 
-.featured__media > img {
+.featured__media img {
   display: block;
-  max-width: 900px;
-  max-height: 500px;
+  max-width: 100%;
   width: auto;
   height: auto;
   margin-left: auto;
@@ -379,6 +379,10 @@ body {
 
 .embed-responsive-16by9::before {
   padding-top: 56.25%;
+}
+
+.embed-responsive-21by9::before {
+  padding-top: 42.85714286%;
 }
 
 .embed-responsive-1by1::before {
