@@ -32,11 +32,6 @@
     {% if media.type === 'image' %}
       <figure class="featured__media">
         <img src="{{ 'https://res.cloudinary.com/san-juan-fire-district-3/image/fetch/f_auto,q_auto:good,c_limit,w_800,h_500/' + site.rootUrl if helpers.env === 'production' }}/assets/images/{{ media.source }}" alt="{{ media.alt }}" width="{{ media.width }}" height="{{ media.height }}" loading="lazy">
-        {% if media.caption %}
-          <figcaption>
-            {{ media.caption }}
-          </figcaption>
-        {% endif %}
       </figure>
     {% elif media.type === 'youtube' %}
       {% set video_id = media.source.split('/').pop() %}
@@ -44,22 +39,12 @@
         <div class="embed-responsive embed-responsive-16by9">
           <iframe src="https://www.youtube.com/embed/{{ video_id }}" loading="lazy"></iframe>
         </div>
-        {% if media.caption %}
-          <figcaption>
-            {{ media.caption }}
-          </figcaption>
-        {% endif %}
       </figure>
     {% elif media.type === 'gmap' %}
       <figure class="featured__media">
         <div class="embed-responsive embed-responsive-16by9">
           <iframe src="{{ media.source }}" loading="lazy"></iframe>
         </div>
-        {% if media.caption %}
-          <figcaption>
-            {{ media.caption }}
-          </figcaption>
-        {% endif %}
       </figure>
     {% endif %}
   {% endfor %}
