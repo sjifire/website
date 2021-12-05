@@ -140,23 +140,20 @@ body {
   gap: 2rem;
 }
 
-.main-nav li {
+.main-nav li a {
   padding-block: .75rem;
   border-bottom: 3px solid transparent;
-}
-
-.main-nav li:hover, .main-nav li:focus {
-  border-bottom-color: var(--md-gray);
-}
-
-.main-nav li.active {
-  border-bottom-color: var(--yellow);
-}
-
-.main-nav li a {
   text-decoration: none;
   color: rgba(255,255,255, 0.65);
   font-weight: 500;
+}
+
+.main-nav li a:hover, .main-nav li a:focus {
+  border-bottom-color: var(--md-gray);
+}
+
+.main-nav li.active a {
+  border-bottom-color: var(--yellow);
 }
 
 .main-nav li.active a, .main-nav li:hover a, .main-nav li:focus a {
