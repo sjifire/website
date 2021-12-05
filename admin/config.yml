@@ -12,7 +12,7 @@ collections:
     label: "Posts"
     label_singular: "News Post"
     folder: "src/posts/"
-    slug: "{{fields.date | date('YYYY-MM-DD')}}-{{slug}}"
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     extension: "json"
     create: true # Allow users to create new documents in this collection
     delete: true # Allow users to delete items in this collection
@@ -82,10 +82,6 @@ collections:
                 name: height
                 widget: number
                 hint: "What is the height of this image"
-              - label: Image Caption
-                name: caption
-                widget: string
-                hint: "Add a caption for the image (optional)"
           - label: "YouTube Video"
             name: "youtube"
             widget: "object"
@@ -94,10 +90,6 @@ collections:
                 name: source
                 widget: string
                 hint: "Add a YouTube video player by copy-pasting the 'Share' link"
-              - label: Video Caption
-                name: caption
-                widget: string
-                hint: "Add a caption for the video (optional)"
           - label: "Google Map"
             name: "gmap"
             widget: "object"
@@ -106,10 +98,6 @@ collections:
                 name: source
                 widget: string
                 hint: "Add a YouTube video player by copy-pasting the 'Share' link"
-              - label: Video Caption
-                name: caption
-                widget: string
-                hint: "Add a caption for the video (optional)"
       - sections:
         name: "sections"
         widget: "list"
