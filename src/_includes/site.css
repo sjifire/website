@@ -256,7 +256,27 @@ body {
   box-shadow: 1px 2px 8px rgba(0,0,0, 0.15);
 }
 
+
+.alert__body {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-areas:  "alert__icon alert__header"
+                        "alert__blurb alert__blurb";
+  gap: 20px;
+}
+         
+@media (min-width: 992px) {
+  .alert__body {
+    grid-template-areas:  "alert__icon alert__header"
+                          "alert__icon alert__blurb";
+  }
+}
+.alert__header {
+  grid-area: alert__header;
+}
+
 .alert__icon {
+  grid-area: alert__icon;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -272,14 +292,14 @@ body {
   fill: var(--dk-red);
 }
 
+.alert__blurb {
+  grid-area: alert__blurb;
+}
+
 .alert__body, .alert__footer {
   padding: 20px;
 }
 
-.alert__body {
-  display: grid;
-  gap: 20px;
-}
 
 .alert__body h2 {
   line-height: 1.2;
