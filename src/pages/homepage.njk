@@ -14,40 +14,6 @@ permalink: /
   </p>
 {% endblock %}
 
-{% block page_hero %}
-  <ul class="home-alerts">
-    {% for post in posts | pluck('Advisory', 'post_type') | reverse | limit(2) %}
-      <li class="alert">
-        <article class="alert__body">
-          <div class="alert__icon">
-            <svg>
-              <use xlink:href="#alert" />
-            </svg>
-          </div>
-          <div class="alert__header">
-            <h2>
-              {{ post.title | safe }}
-            </h2>
-            <time datetime="{{ post.date }}" pubdate="pubdate">
-              {{ post.date | postDateVerboseISO }}
-            </time>
-          </div>
-          <div class="alert__blurb">
-            <p>
-              {{ post.lede | markdownify | safe }}
-            </p>
-          </div>
-        </article>
-        <footer class="alert__footer">
-          <a href="/news/{{ post.date | htmlDateStringISO }}-{{ post.title | slugify }}/">
-            Details
-          </a>
-        </footer>
-      </li>
-    {% endfor %}
-  </ul>
-{% endblock %}
-
 {% block content %}
 
   <section class="page-section">
