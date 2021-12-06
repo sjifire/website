@@ -29,7 +29,7 @@ permalink: /
               {{ post.title | safe }}
             </h2>
             <time datetime="{{ post.date }}" pubdate="pubdate">
-              {{ post.date | postDateTerseISO }}
+              {{ post.date | postDateVerboseISO }}
             </time>
           </div>
           <div class="alert__blurb">
@@ -50,24 +50,26 @@ permalink: /
 
 {% block content %}
 
-  <h2>
-    4 Latest Posts (Excluding Advisories)
-  </h2>
+  <section class="page-section">
+    <h2 class="page-section__heading">
+      News
+    </h2>
+    <ul class="post-cards">
+      {% for post in posts | exclude('Advisory', 'post_type') | reverse | limit(4) %}
+        <li style="margin-bottom:1.5rem;">
+          <a href="/news/{{ post.date | htmlDateStringISO }}-{{ post.title | slugify }}/">
+              {{ post.title | safe }}
+          </a>
+          &nbsp;•&nbsp;
+          <time datetime="{{ post.date }}" pubdate="pubdate">
+            {{ post.date | postDateTerseISO }}
+          </time>
+          <p style="margin:0.35rem 0 0;">
+            {{ post.lede | markdownify | safe }}
+          </p>
+        </li>
+      {% endfor %}
+    </ul>
+  </section>
 
-  <ul>
-    {% for post in posts | exclude('Advisory', 'post_type') | reverse | limit(4) %}
-      <li style="margin-bottom:1.5rem;">
-        <a href="/news/{{ post.date | htmlDateStringISO }}-{{ post.title | slugify }}/">
-            {{ post.title | safe }}
-        </a>
-        &nbsp;•&nbsp;
-        <time datetime="{{ post.date }}" pubdate="pubdate">
-          {{ post.date | postDateTerseISO }}
-        </time>
-        <p style="margin:0.35rem 0 0;">
-          {{ post.lede | markdownify | safe }}
-        </p>
-      </li>
-    {% endfor %}
-  </ul>
 {% endblock %}
