@@ -1,44 +1,59 @@
 ---
 title: "Disclaimer"
-layout: base.njk
 permalink: "/disclaimer/index.html"
 ---
 
-{% for section in disclaimer.sections %}
-  {% if section.type === 'text' %}
-    {{ section.copy | markdownify | safe }}
-  {% elif section.type === 'image' %}
-    <figure>
-      <img src="{{ 'https://res.cloudinary.com/san-juan-fire-district-3/image/fetch/f_auto,q_auto:good,c_limit,w_1200,h_800/' + site.rootUrl if helpers.env === 'production' }}/assets/images/{{ section.source }}" alt="{{ section.alt }}" width="{{ section.width }}" height="{{ section.height }}" loading="lazy">
-      {% if section.caption %}
-        <figcaption>
-          {{ section.caption }}
-        </figcaption>
-      {% endif %}
-    </figure>
-  {% elif section.type === 'youtube' %}
-    {% set video_id = section.source.split('/').pop() %}
-    <figure>
-      <div class="embed-responsive embed-responsive-16by9">
-        <iframe src="https://www.youtube.com/embed/{{ video_id }}" loading="lazy"></iframe>
-      </div>
-      {% if section.caption %}
-        <figcaption>
-          {{ section.caption }}
-        </figcaption>
-      {% endif %}
-    </figure>
-  {% elif section.type === 'gmap' %}
-    <figure>
-      <div class="embed-responsive embed-responsive-16by9">
-        <iframe src="{{ section.source }}" loading="lazy"></iframe>
-      </div>
-      {% if section.caption %}
-        <figcaption>
-          {{ section.caption }}
-        </figcaption>
-      {% endif %}
-    </figure>
-  {% endif %}
-{% endfor %}
+{% extends 'base.njk' %}
 
+{% block page_header %}
+  <h1>
+    {{ title | safe }}
+  </h1>
+  <div class="lede">
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent ligula risus, egestas in malesuada posuere, ultrices nec tellus. Nam hendrerit arcu vulputate condimentum eleifend.
+    </p>
+  </div>
+{% endblock %}
+
+{% block content %}
+  {% for section in disclaimer.sections %}
+    {% if section.type === 'text' %}
+      <div class="post__copy">
+        {{ section.copy | markdownify | safe }}
+      </div>
+    {% elif section.type === 'image' %}
+      <figure>
+        <img src="{{ 'https://res.cloudinary.com/san-juan-fire-district-3/image/fetch/f_auto,q_auto:good,c_limit,w_1200,h_800/' + site.rootUrl if helpers.env === 'production' }}/assets/images/{{ section.source }}" alt="{{ section.alt }}" width="{{ section.width }}" height="{{ section.height }}" loading="lazy">
+        {% if section.caption %}
+          <figcaption>
+            {{ section.caption }}
+          </figcaption>
+        {% endif %}
+      </figure>
+    {% elif section.type === 'youtube' %}
+      {% set video_id = section.source.split('/').pop() %}
+      <figure>
+        <div class="embed-responsive embed-responsive-16by9">
+          <iframe src="https://www.youtube.com/embed/{{ video_id }}" loading="lazy"></iframe>
+        </div>
+        {% if section.caption %}
+          <figcaption>
+            {{ section.caption }}
+          </figcaption>
+        {% endif %}
+      </figure>
+    {% elif section.type === 'gmap' %}
+      <figure>
+        <div class="embed-responsive embed-responsive-16by9">
+          <iframe src="{{ section.source }}" loading="lazy"></iframe>
+        </div>
+        {% if section.caption %}
+          <figcaption>
+            {{ section.caption }}
+          </figcaption>
+        {% endif %}
+      </figure>
+    {% endif %}
+  {% endfor %}
+{% endblock %}
