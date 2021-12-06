@@ -24,16 +24,15 @@ permalink: /
               <use xlink:href="#alert" />
             </svg>
           </div>
-          <div>
+          <div class="alert__header">
             <h2>
               {{ post.title | safe }}
             </h2>
-            <div>
-              {{ post.post_type }}
-            </div>
             <time datetime="{{ post.date }}" pubdate="pubdate">
               {{ post.date | postDateTerseISO }}
             </time>
+          </div>
+          <div class="alert__blurb">
             <p>
               {{ post.lede | markdownify | safe }}
             </p>
