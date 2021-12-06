@@ -1,10 +1,46 @@
 
-{% if post.featured != "" %}
+{% if page.fileSlug === 'news-article' and post.featured != "" %}
   <section class="page-hero">
     <div class="rap">
       <figure class="featured__media">
         <img src="{{ 'https://res.cloudinary.com/san-juan-fire-district-3/image/fetch/f_auto,q_auto:good,c_limit,w_900,h_500/' + site.rootUrl if helpers.env === 'production' }}/assets/images/{{ post.featured.image }}" alt="{{ post.featured.alt }}" width="{{ post.featured.width }}" height="{{ post.featured.height }}" loading="eager">
       </figure>
+    </div>
+  </section>
+{% elif page.url === '/' %}
+  <section class="page-hero">
+    <div class="rap">
+      <ul class="home-alerts">
+        {% for post in posts | pluck('Advisory', 'post_type') | reverse | limit(2) %}
+          <li class="alert">
+            <article class="alert__body">
+              <div class="alert__icon">
+                <svg>
+                  <use xlink:href="#alert" />
+                </svg>
+              </div>
+              <div class="alert__header">
+                <h2>
+                  {{ post.title | safe }}
+                </h2>
+                <time datetime="{{ post.date }}" pubdate="pubdate">
+                  {{ post.date | postDateVerboseISO }}
+                </time>
+              </div>
+              <div class="alert__blurb">
+                <p>
+                  {{ post.lede | markdownify | safe }}
+                </p>
+              </div>
+            </article>
+            <footer class="alert__footer">
+              <a href="/news/{{ post.date | htmlDateStringISO }}-{{ post.title | slugify }}/">
+                Details
+              </a>
+            </footer>
+          </li>
+        {% endfor %}
+      </ul>
     </div>
   </section>
 {% endif %}
