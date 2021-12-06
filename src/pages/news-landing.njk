@@ -2,7 +2,7 @@
 title: News & Announcements
 pagination:
   data: posts
-  size: 4
+  size: 24
   alias: post
   reverse: true
 permalink: "/news/{% if pagination.pageNumber > 0 %}page-{{ pagination.pageNumber + 1 }}/{% endif %}index.html"
@@ -22,40 +22,51 @@ permalink: "/news/{% if pagination.pageNumber > 0 %}page-{{ pagination.pageNumbe
 {% endblock %}
 
 {% block content %}
-  <ul>
-    {% for post in pagination.items %}
-      <li style="margin-bottom:1.5rem;">
-        <a href="/news/{{ post.date | htmlDateStringISO }}-{{ post.title | slugify }}/">
-            {{ post.title | safe }}
-        </a>
-        &nbsp;•&nbsp;
-        <time datetime="{{ post.date }}" pubdate="pubdate">
-          {{ post.date | postDateTerseISO }}
-        </time>
-        <p style="margin:0.35rem 0 0;">
-          {{ post.lede | markdownify | safe }}
-        </p>
-      </li>
-    {% endfor %}
-  </ul>
+  <section class="page-section">
+    <ul class="news-grid">
+      {% for post in pagination.items %}
+        <li class="news-grid__item">
+          <a href="/news/{{ post.date | htmlDateStringISO }}-{{ post.title | slugify }}/">
+            <div class="news__type">
+              {{ post.post_type }}
+            </div>
+            <h3 class="news__headline">
+              {{ post.title | safe }}
+            </h3>
+            <time datetime="{{ post.date | htmlDateStringISO }}" pubdate="pubdate" class="news__date">
+              {{ post.date | postDateVerboseISO }}
+            </time>
+            <div class="news__lede">
+              {{ post.lede | markdownify | safe }}
+            </div>
+            <span class="news__readmore">
+              Read more
+            </span>
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
 
-  <nav style="border-top:1px solid #a1a5a9;margin-top:1.5rem;padding-top:1.5rem;text-align:center">
-    {% if pagination.href.previous %}
-      <a href="{{ pagination.href.previous | url }}">«</a>
-    {% else %}
-      «
+    {% if pagination.href.previous or pagination.href.next %}
+      <nav class="pagination">
+        {% if pagination.href.previous %}
+          <a href="{{ pagination.href.previous | url }}">«</a>
+        {% else %}
+          <span>«</span>
+        {% endif %}
+      {%- for pageEntry in pagination.pages %}
+        {% if page.url == pagination.hrefs[ loop.index0 ] %}
+          <span>{{ loop.index }}</span>
+        {% else %}
+          <a href="{{ pagination.hrefs[ loop.index0 ] | url }}">{{ loop.index }}</a>
+        {% endif %}
+      {%- endfor %}
+        {% if pagination.href.next %}
+          <a href="{{ pagination.href.next | url }}">»</a>
+        {% else %}
+          <span>»</span>
+        {% endif %}
+      </nav>
     {% endif %}
-  {%- for pageEntry in pagination.pages %}
-    {% if page.url == pagination.hrefs[ loop.index0 ] %}
-      <span class="btn btn-pagination active">{{ loop.index }}</span>
-    {% else %}
-      <a href="{{ pagination.hrefs[ loop.index0 ] | url }}">{{ loop.index }}</a>
-    {% endif %}
-  {%- endfor %}
-    {% if pagination.href.next %}
-      <a href="{{ pagination.href.next | url }}">»</a>
-    {% else %}
-      »
-    {% endif %}
-  </nav>
+  </section>
 {% endblock %}

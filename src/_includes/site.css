@@ -317,7 +317,7 @@ body {
   font-size: 12px;
 }
 
-.home-news-grid {
+.news-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 60px;
@@ -478,6 +478,24 @@ body {
   }
 }
 
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 60px;
+  border-top: 2px solid var(--rule-gray);
+  padding-top: 20px;
+}
+
+.pagination > * {
+  padding: 0 0.5rem;
+  color: var(--md-gray);
+}
+
+.pagination a:hover, .pagination a:focus {
+  text-decoration: none;
+  color: var(--dk-red);
+}
 
 .text-center {
   text-align: center;
