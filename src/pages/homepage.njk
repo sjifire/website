@@ -51,22 +51,37 @@ permalink: /
 {% block content %}
 
   <section class="page-section">
-    <h2 class="page-section__heading">
-      News
-    </h2>
-    <ul class="post-cards">
-      {% for post in posts | exclude('Advisory', 'post_type') | reverse | limit(4) %}
-        <li style="margin-bottom:1.5rem;">
+    <ul class="home-news-grid">
+      <li class="news-grid__item news-grid__item--heading">
+        <h2>
+          Latest News
+        </h2>
+        <a href="/news/">
+          Archive
+          <svg>
+            <use xlink:href="#right_arrow" />
+          </svg>
+        </a>
+      </li>
+      {% for post in posts | exclude('Advisory', 'post_type') | reverse | limit(5) %}
+        <li class="news-grid__item">
           <a href="/news/{{ post.date | htmlDateStringISO }}-{{ post.title | slugify }}/">
+            <div class="news__type">
+              {{ post.post_type }}
+            </div>
+            <h3 class="news__headline">
               {{ post.title | safe }}
+            </h3>
+            <time datetime="{{ post.date | htmlDateStringISO }}" pubdate="pubdate" class="news__date">
+              {{ post.date | postDateVerboseISO }}
+            </time>
+            <div class="news__lede">
+              {{ post.lede | markdownify | safe }}
+            </div>
+            <span class="news__readmore">
+              Read more
+            </span>
           </a>
-          &nbsp;•&nbsp;
-          <time datetime="{{ post.date }}" pubdate="pubdate">
-            {{ post.date | postDateTerseISO }}
-          </time>
-          <p style="margin:0.35rem 0 0;">
-            {{ post.lede | markdownify | safe }}
-          </p>
         </li>
       {% endfor %}
     </ul>
