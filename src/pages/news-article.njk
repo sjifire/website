@@ -69,17 +69,17 @@
     {% endfor %}
   </article>
 
-  <div style="border-top:1px solid #a1a5a9;margin-top:1.5rem;padding-top:1.5rem;text-align:center">
+  <nav class="pagination">
     {% if pagination.href.previous %}
       <a href="{{ pagination.href.previous | url }}">« Next</a>
     {% else %}
-      « Next
+      <span>« Next</span>
     {% endif %}
-      &nbsp;<a href="/news/">All</a>&nbsp;
+      <a href="/news/">All</a>
     {% if pagination.href.next %}
       <a href="{{ pagination.href.next | url }}">Prev »</a>
     {% else %}
-      Prev »
+      <span>Prev »</span>
     {% endif %}
-  </div>
+  </nav>
 {% endblock %}

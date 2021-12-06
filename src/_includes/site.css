@@ -145,6 +145,7 @@ body {
 }
 
 .main-nav li a {
+  display: block;
   padding-block: .75rem;
   border-bottom: 3px solid transparent;
   text-decoration: none;
