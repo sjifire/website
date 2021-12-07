@@ -1,8 +1,9 @@
+const htmlmin = require("html-minifier");
 const { DateTime } = require("luxon");
 const CleanCSS = require("clean-css");
 const util = require("util");
-const TurndownService = require('turndown')
 const slugify = require("slugify");
+const isProduction = process.env.ELEVENTY_ENV === `production`;
 
 module.exports = function (eleventyConfig) {
   require("dotenv").config();
@@ -49,22 +50,6 @@ module.exports = function (eleventyConfig) {
       .filter(hideFutureItems)
   });
 
-  // eleventyConfig.addCollection("customDataCollection", (collection) => {
-  //   const allItems = collection.getAll()[0].data.customData;
-  
-  //   // Filter or use another method to select the items you want
-  //   // for the collection
-  //   return allItems.filter((item) => {
-  //     // ...
-  //   });
-  // });
-
-  // eleventyConfig.addShortcode("meetingsByYear2", (data=[], year="") => {
-  //   return data.filter(event => new Date(event.date).getFullYear() === parseInt(year, 10))
-  //     .map(event => `<div><p>${event.title} at ${event.date}</p></div>`)
-  //     .join("\n");
-  // });
-
   const MarkdownIt = require("markdown-it");
   const mdRender = new MarkdownIt();
   eleventyConfig.addFilter("markdownify", function(rawString) {
@@ -100,9 +85,18 @@ module.exports = function (eleventyConfig) {
     return util.inspect(obj);
   });
 
-  const turndownService = new TurndownService()
-  eleventyConfig.addFilter('turndown', obj => {
-    return turndownService.turndown(obj).trim()
+  // Minify HTML Output
+  eleventyConfig.addTransform("htmlmin", function(content, outputPath) {
+    // Eleventy 1.0+: use this.inputPath and this.outputPath instead
+    if( isProduction && outputPath && outputPath.endsWith(".html") ) {
+      let minified = htmlmin.minify(content, {
+        useShortDoctype: true,
+        removeComments: true,
+        collapseWhitespace: true
+      });
+      return minified;
+    }
+    return content;
   });
 
   return {
