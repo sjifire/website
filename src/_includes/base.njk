@@ -8,6 +8,7 @@
   <title>{{ site.name if page.url === '/' else title + ' | ' + site.name }}</title>
   {# meta-desc #}
   {# icon tags #}
+    <link rel="icon" type="image/png" href="{{ 'https://res.cloudinary.com/san-juan-fire-district-3/image/fetch/f_auto/' + site.rootUrl if helpers.env === 'production' }}/assets/sjifire-logo-clear.png">
   {# og #}
   {#
     <link rel="preconnect" href="//www.google-analytics.com">
