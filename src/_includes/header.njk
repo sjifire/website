@@ -3,7 +3,7 @@
     In case of emergency, call <em>911</em>
   </div>
 </aside>
-<nav>
+{# <nav>
   <div class="rap">
     <a href="/" class="site-logo">
       <img src="{{ 'https://res.cloudinary.com/san-juan-fire-district-3/image/fetch/f_auto/' + site.rootUrl if helpers.env === 'production' }}/assets/sjifire-logo-clear.png" width="320" height="317" alt="San Juan Island Fire and Rescue Logo">
@@ -23,4 +23,36 @@
       </li>
     </ul>
   </div>
-</nav>
+</nav> #}
+
+
+<div class="rap">
+  <nav class="navbar">
+    <div class="brand-title">
+      <a href="/" class="site-logo">
+        <img src="{{ 'https://res.cloudinary.com/san-juan-fire-district-3/image/fetch/f_auto/' + site.rootUrl if helpers.env === 'production' }}/assets/sjifire-logo-clear.png" width="320" height="317" alt="San Juan Island Fire and Rescue Logo">
+      </a>
+    </div>
+    <a href="#" class="toggle-button">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </a>
+    <div class="navbar-links">
+      <ul>
+        <li{{ ' class=active' if page.url.includes('/about/') }}>
+          <a href="/about/">About</a>
+        </li>
+        <li{{ ' class=active' if page.url.includes('/news/') }}>
+          <a href="/news/">News</a>
+        </li>
+        <li{{ ' class=active' if page.url.includes('/governance/') }}>
+          <a href="/governance/">Governance</a>
+        </li>
+        <li{{ ' class=active' if page.url === '/contact/' }}>
+          <a href="/contact/">Contact</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</div>

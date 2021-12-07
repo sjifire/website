@@ -124,56 +124,115 @@ body {
   font-weight: 600;
 }
 
-.site-header nav {
-  /* background-color: #fff; */
-  /* padding: 0.5rem 0; */
-}
 
-.site-header nav .rap {
-  display: grid;
-  gap: 1rem;
+.navbar {
+  display: flex;
+  position: relative;
+  justify-content: space-between;
   align-items: center;
+  color: white;
 }
 
-@media (min-width: 40rem) {
-  .site-header nav .rap {
-    grid-template-columns: 1fr auto;
-    gap: 0;
-  }
-}
-
-.site-header .site-logo img {
+.site-logo img {
   display: block;
   max-width: 120px;
   height: auto;
   transform: translateY(-1rem);
 }
 
-.main-nav {
-  display: grid;
-  grid-template-columns: repeat(4, auto);
-  gap: 2rem;
+.navbar-links {
+  /* height: 100%; */
 }
 
-.main-nav li a {
+.navbar-links ul {
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar-links li {
+  list-style: none;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.navbar-links li a {
   display: block;
-  padding-block: .75rem;
   border-bottom: 3px solid transparent;
   text-decoration: none;
-  color: rgba(255,255,255, 0.65);
-  font-weight: 500;
+  color: white;
+  padding: 1rem 0;
 }
 
-.main-nav li a:hover, .main-nav li a:focus {
+.navbar-links li a:hover  {
   border-bottom-color: var(--md-gray);
 }
 
-.main-nav li.active a {
+.navbar-links li.active a {
   border-bottom-color: var(--yellow);
 }
 
-.main-nav li.active a, .main-nav li:hover a, .main-nav li:focus a {
-  color: #fff;
+.toggle-button {
+  position: absolute;
+  top: 1rem;
+  bottom: 0;
+  left: 100%;
+  right: 0;
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 21px;
+  transform: translate(-30px, 21px);
+}
+
+.toggle-button .bar {
+  height: 3px;
+  width: 100%;
+  background-color: white;
+  border-radius: 10px;
+}
+
+@media (max-width: 800px) {
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .toggle-button {
+    display: flex;
+  }
+
+  .navbar-links {
+    display: none;
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+  }
+
+  .navbar-links ul {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .navbar-links ul li {
+    padding: 0;
+    margin: 0;
+    text-align: center;
+  }
+  
+  .navbar-links ul li a {
+    display: block;;
+    padding: 1rem;
+    border-bottom: none;
+  }
+  
+  .navbar-links li.active a {
+    background-color: var(--yellow);
+  }
+
+  .navbar-links.active {
+      display: flex;
+  }
 }
 
 .page-header {
