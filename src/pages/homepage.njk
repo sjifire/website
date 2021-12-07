@@ -9,9 +9,9 @@ permalink: /
   <h1>
     {{ title }}
   </h1>
-  <p class="lede">
+  <div class="lede">
     {{ homepage.preamble }}
-  </p>
+  </div>
 {% endblock %}
 
 {% block content %}
@@ -19,7 +19,7 @@ permalink: /
   <section class="page-section">
     <ul class="news-grid">
       <li class="news-grid__item news-grid__item--heading">
-        <h2>
+        <h2 class="special-heading">
           Latest News
         </h2>
         <a href="/news/">
@@ -39,7 +39,7 @@ permalink: /
               {{ post.title | safe }}
             </h3>
             <time datetime="{{ post.date | htmlDateStringISO }}" pubdate="pubdate" class="news__date">
-              {{ post.date | postDateVerboseISO }}
+              {{ post.date | postDateTerseISO }}
             </time>
             <div class="news__lede">
               {{ post.lede | markdownify | safe }}

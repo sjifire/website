@@ -56,4 +56,63 @@ permalink: "/governance/index.html"
       </figure>
     {% endif %}
   {% endfor %}
+  <section class="page-section">
+    <header>
+      <h2 class="special-heading">
+        Board Documents
+      </h2>
+    </header>
+    <ul class="document-list">
+      <li>
+        <h3>Upcoming Meetings</h3>
+        <ul class="news-grid">
+          {% for meeting in meetings | limit(2) %}
+            <li class="news-grid__item">
+              <time class="news__type">
+                {{ meeting.date | postDateTerseISO }}
+              </time>
+              <div class="news__headline">
+                <p>{{ meeting.title }}</p>
+              </div>
+              <ul class="news__list">
+                {% for doc in meeting.documents %}
+                  <li>
+                    <a href="/assets/docs/{{ doc.filename }}">
+                      {{ doc.title }}
+                    </a>
+                  </li>
+                {% endfor %}
+              </ul>
+            </li>
+          {% endfor %}
+        </ul>
+      </li>
+      {% for year, set in meetings | groupby('year') | dictsort | reverse %}
+        <li>
+          <h3>{{ year }} Meetings</h3>
+          <ul class="news-grid">
+            {% for meeting in set %}
+              <li class="news-grid__item">
+                <time class="news__type">
+                  {{ meeting.date | postDateTerseISO }}
+                </time>
+                <div class="news__lede">
+                  <p>{{ meeting.title }}</p>
+                </div>
+                <ul class="news__list">
+                  {% for doc in meeting.documents %}
+                    <li>
+                      <a href="/assets/docs/{{ doc.filename }}">
+                        {{ doc.title }}
+                      </a>
+                    </li>
+                  {% endfor %}
+                </ul>
+              </li>
+            {% endfor %}
+          </ul>
+        </li>
+      {% endfor %}
+    </ul>
+  </section>
 {% endblock %}
