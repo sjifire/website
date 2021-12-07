@@ -77,7 +77,7 @@ collections:
         name: "sections"
         widget: "list"
         collapsed: true
-        add_to_top: true
+        add_to_top: false
         hint: "Add discrete sections of content to this post. The sections you can choose from: 'text', 'image', 'youtube'."
         required: true
         types:
@@ -117,6 +117,7 @@ collections:
                 name: caption
                 widget: string
                 hint: "Add a caption for the image (optional)"
+                required: false
           - label: "YouTube Video"
             name: "youtube"
             widget: "object"
