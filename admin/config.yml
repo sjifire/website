@@ -565,6 +565,8 @@ collections:
         widget: "list"
         summary: '{{fields.filename}}'
         hint: "Add pre-meeting docs (e.g. 'Agenda') and post-meeting docs (e.g. 'Minutes')."
+        allow_add: true
+        add_to_top: true
         fields:
           - label: Title
             name: title
@@ -575,6 +577,6 @@ collections:
             widget: file
             allow_multiple: false
             choose_url: false
-            media_folder: './src/assets/docs/'
+            media_folder: '/src/assets/docs/'
             public_folder: '/assets/docs'
 
