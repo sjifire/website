@@ -5,7 +5,6 @@ media_folder: "src/assets/images"
 public_folder: "/assets/images"
 site_url: "https://sjifire.org/"
 show_preview_links: false
-publish_mode: editorial_workflow
 collections:
 
   - name: "posts"
