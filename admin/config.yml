@@ -532,3 +532,45 @@ collections:
             modes: [rich_text]
             required: false
             hint: "Add a chunk of text (rich text editor)"
+
+  - name: "meetings"
+    label: "Meetings"
+    label_singular: "Meeting"
+    folder: "src/meetings/"
+    slug: "{{fields.date}}-{{slug}}"
+    extension: "json"
+    create: true # Allow users to create new documents in this collection
+    delete: true # Allow users to delete items in this collection
+    summary: "{{fields.date | date('YYYY-MM-DD')}} • {{fields.title}}"
+    description: "Add meetings to the site."
+    fields: # The fields for each document, usually in front matter
+      - label: Title
+        name: title
+        widget: string
+        required: true
+      - label: Date
+        name: date
+        widget: datetime
+        date_format: "YYYY-MM-DD"
+        time_format: false
+        format: "YYYY-MM-DD"
+        picker_utc: true
+        default: ''
+        hint: Meeting date
+        required: true
+      - label: "Documents"
+        name: "documents"
+        widget: "object"
+        hint: "Documents prior to meeting and after meeting."
+        fields:
+          - label: Title
+            name: title
+            widget: string
+            required: true
+          - label: File
+            name: filename
+            widget: file
+            allow_multiple: false
+            choose_url: false
+            media_folder: 'src/assets/docs/'
+            public_folder: ''
