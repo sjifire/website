@@ -1,0 +1,13 @@
+name: Trigger Netlify Build
+on:
+  schedule:
+    # Customize schedule expression at crontab.guru
+    # At minute 0 past every 12th hour
+    - cron: "0 */12 * * *"
+jobs:
+  build:
+    name: Trigger deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Curl request
+        run: curl -X POST -d {} ${{ secrets.NETLIFY_BUILD_URL }}
