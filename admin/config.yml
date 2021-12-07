@@ -560,8 +560,9 @@ collections:
         required: true
       - label: "Documents"
         name: "documents"
-        widget: "object"
-        hint: "Documents prior to meeting and after meeting."
+        widget: "list"
+        summary: '{{fields.filename}}'
+        hint: "Add pre-meeting docs (e.g. 'Agenda') and post-meeting docs (e.g. 'Minutes')."
         fields:
           - label: Title
             name: title
@@ -574,3 +575,4 @@ collections:
             choose_url: false
             media_folder: 'src/assets/docs/'
             public_folder: ''
+
