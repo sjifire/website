@@ -27,6 +27,44 @@ module.exports = function (eleventyConfig) {
     return arr.filter((item) => !selections.includes(item[attr]));
   });
 
+  const now = new Date().getTime();
+  const hidePastItems = (event) => {
+    if (now < new Date(event.date).getTime()) return false;
+    return true;
+  }
+  const hideFutureItems = (event) => {
+    if (now > new Date(event.date).getTime()) return false;
+    return true;
+  }
+  eleventyConfig.addCollection("pastMeetings", (collection) => {
+    const allMeetings = collection.getAll()[0].data.meetings;
+    return allMeetings
+      .filter(hidePastItems)
+      .reverse();
+  });
+
+  eleventyConfig.addCollection("futureMeetings", (collection) => {
+    const allMeetings = collection.getAll()[0].data.meetings;
+    return allMeetings
+      .filter(hideFutureItems)
+  });
+
+  // eleventyConfig.addCollection("customDataCollection", (collection) => {
+  //   const allItems = collection.getAll()[0].data.customData;
+  
+  //   // Filter or use another method to select the items you want
+  //   // for the collection
+  //   return allItems.filter((item) => {
+  //     // ...
+  //   });
+  // });
+
+  // eleventyConfig.addShortcode("meetingsByYear2", (data=[], year="") => {
+  //   return data.filter(event => new Date(event.date).getFullYear() === parseInt(year, 10))
+  //     .map(event => `<div><p>${event.title} at ${event.date}</p></div>`)
+  //     .join("\n");
+  // });
+
   const MarkdownIt = require("markdown-it");
   const mdRender = new MarkdownIt();
   eleventyConfig.addFilter("markdownify", function(rawString) {
