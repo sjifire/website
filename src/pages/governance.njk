@@ -139,6 +139,8 @@ permalink: "/governance/index.html"
       return temp.toLocaleDateString();
   };
 
-  var el = document.getElementById('next-board-meeting');
-  el.innerHTML = nextSecondTuesday();
+  window.onload = function() {
+    var el = document.getElementById('next-board-meeting');
+    el.innerHTML = nextSecondTuesday();
+  };
 </script>
