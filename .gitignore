@@ -1,5 +1,6 @@
 # build artefacts
 /public
+/_site
 
 # dev stuff
 _datacache
