@@ -537,13 +537,19 @@ body {
 }
 
 
-.post__header {
-  margin-bottom: 2rem;
+.post__media + .post__media, .post__media + .post__copy, .post__copy + .post__media {
+  margin-block: 1.55rem;
 }
 
-.post__header .lede {
-  font-size: 21px;
-  line-height: 1.4;
+.post__copy > * + * {
+  margin-block: 1.25rem;
+}
+
+.post__media figcaption {
+  margin-top: 0.5rem;
+  font-size: 13px;
+  text-transform: uppercase;
+  color: var(--muted-gray);
 }
 
 .post__media > img {
@@ -562,9 +568,6 @@ body {
   font-size: 1rem;
 }
 
-.post__copy > * + * {
-  margin-block: 1.5rem;
-}
 
 @media (min-width: 992px) {
   .post__copy, .page-header__copy {
