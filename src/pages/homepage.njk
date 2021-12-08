@@ -10,7 +10,7 @@ permalink: /
     {{ title }}
   </h1>
   <div class="lede">
-    {{ homepage.preamble }}
+    {{ homepage.preamble | markdownify | safe }}
   </div>
 {% endblock %}
 
