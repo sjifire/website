@@ -534,8 +534,8 @@ collections:
             hint: "Add a chunk of text (rich text editor)"
 
   - name: "meetings"
-    label: "Meetings"
-    label_singular: "Meeting"
+    label: "BoardMeetings"
+    label_singular: "Board Meeting"
     folder: "src/meetings/"
     slug: "{{fields.date}}-{{slug}}"
     extension: "json"
