@@ -91,7 +91,7 @@ permalink: "/governance/index.html"
               {% endfor %}
             </ul>
           {% else %}
-            <p>Next regular scheduled board meeting is on <span id='next-board-meeting'></span> at 3pm at the Fire District headquarters, located at Fire Station #31 1011 Mullis Street in Friday Harbor</p>
+            <p>Next regular scheduled board meeting is on <span id='next-board-meeting'>{% nextBoardMeetingDate %}</span> at 3pm at the Fire District headquarters, located at Fire Station #31 1011 Mullis Street in Friday Harbor</p>
           {% endif %}
       </li>
       {% for year, set in collections.pastMeetings | groupby('year') | dictsort | reverse %}
@@ -123,24 +123,3 @@ permalink: "/governance/index.html"
     </ul>
   </section>
 {% endblock %}
-
-<script>
-  function nextSecondTuesday(month = new Date().getMonth()){
-    var temp = new Date();
-    temp.setMonth(month);
-    var d = temp.getDate();
-    var n = 1;
-      while(temp.getDay()!= 2) temp.setDate(++n);
-      temp.setDate(n+7);
-      if(d>temp.getDate()){
-        var nextMonth=temp.getMonth()+1;
-        return nextSecondMonday(nextMonth);
-      }
-      return temp.toLocaleDateString();
-  };
-
-  window.onload = function() {
-    var el = document.getElementById('next-board-meeting');
-    el.innerHTML = nextSecondTuesday();
-  };
-</script>

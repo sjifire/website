@@ -86,17 +86,37 @@ module.exports = function (eleventyConfig) {
     return util.inspect(obj);
   });
 
+  function nextSecondTuesday(month = new Date().getMonth()){
+    var temp = new Date();
+    temp.setMonth(month);
+    var d = temp.getDate();
+    var n = 1;
+      while(temp.getDay()!= 2) temp.setDate(++n);
+      temp.setDate(n+7);
+      if(d>temp.getDate()){
+        var nextMonth=temp.getMonth()+1;
+        return nextSecondTuesday(nextMonth);
+      }
+      return temp.toLocaleDateString();
+  };
+  eleventyConfig.addShortcode("nextBoardMeetingDate", function () {
+    return nextSecondTuesday();
+  });
+
+
+
+
   // Minify HTML Output
   eleventyConfig.addTransform("htmlmin", function(content, outputPath) {
     // Eleventy 1.0+: use this.inputPath and this.outputPath instead
-    // if( isProduction && outputPath && outputPath.endsWith(".html") ) {
-    //   let minified = htmlmin.minify(content, {
-    //     useShortDoctype: true,
-    //     removeComments: true,
-    //     collapseWhitespace: true
-    //   });
-    //   return minified;
-    // }
+    if( isProduction && outputPath && outputPath.endsWith(".html") ) {
+      let minified = htmlmin.minify(content, {
+        useShortDoctype: true,
+        removeComments: true,
+        collapseWhitespace: true
+      });
+      return minified;
+    }
     return content;
   });
 
