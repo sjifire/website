@@ -96,7 +96,7 @@ permalink: "/governance/index.html"
       </li>
       {% for year, set in collections.pastMeetings | groupby('year') | dictsort | reverse %}
         <li>
-          <h3>{{ year }} Meetings</h3>
+          <h3>Past Meetings: {{ year }}</h3>
           <ul class="news-grid">
             {% for meeting in set %}
               <li class="news-grid__item">

@@ -28,13 +28,14 @@ module.exports = function (eleventyConfig) {
     return arr.filter((item) => !selections.includes(item[attr]));
   });
 
-  const now = new Date().getTime();
+  const now = new Date();
+  const nowPlus24 = now.setHours(now.getHours()-29);
   const hidePastItems = (event) => {
-    if (now < new Date(event.date).getTime()) return false;
+    if (nowPlus24 < new Date(event.date).getTime()) return false; //.setHours(datetime.getHours()+1)
     return true;
   }
   const hideFutureItems = (event) => {
-    if (now > new Date(event.date).getTime()) return false;
+    if (nowPlus24 > new Date(event.date).getTime()) return false;
     return true;
   }
   eleventyConfig.addCollection("pastMeetings", (collection) => {
