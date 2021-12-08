@@ -3,7 +3,7 @@ on:
   schedule:
     # Customize schedule expression at crontab.guru
     # At minutes 45 past 08h and 20h
-    - cron: "45 8,20 * * *"
+    - cron: "0 4,16 * * *"
 jobs:
   build:
     name: Trigger deploy
