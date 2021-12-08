@@ -91,7 +91,7 @@ permalink: "/governance/index.html"
               {% endfor %}
             </ul>
           {% else %}
-            <p>Next regular scheduled board meeting is on <span id='next-board-meeting'>{% nextBoardMeetingDate %}</span> at 3pm at the Fire District headquarters, located at Fire Station #31 1011 Mullis Street in Friday Harbor</p>
+            <p>Next regular scheduled board meeting is on <span id='next-board-meeting'>{% nextBoardMeetingDate %}</span></p>
           {% endif %}
       </li>
       {% for year, set in collections.pastMeetings | groupby('year') | dictsort | reverse %}
