@@ -13,6 +13,9 @@ permalink: "/thank-you/index.html"
     We'll get back to you as soon as possible!
   </div>
 {% endblock %}
+  <div class="post__copy">
+    {{ thank_you.preamble | markdownify | safe }}
+  </div>
 
 {% block content %}
   {% for section in thank_you.sections %}
