@@ -16,8 +16,7 @@
         window.netlifyIdentity.on("init", user => {
           if (!user) {
             window.netlifyIdentity.on("login", () => {
-              window.location.reload();
-              // document.location.href = "/#";  //redirect to the admin screen
+              window.location.reload(); //force refresh, which will show admin screen
             });
           }
         });
