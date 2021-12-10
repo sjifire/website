@@ -1,0 +1,17 @@
+{
+  "post_type": "Advisory",
+  "date": "2021-12-10T12:43",
+  "title": "Blustery Weekend Ahead",
+  "lede": "Good Morning and happy Friday! \n\nThe National Weather Service has issued a high wind warning is in effect along the coast and for Admiralty Inlet, the San Juan Islands, and the North Interior. Wind advisories are in effect for the remainder of the lowlands.",
+  "featured_image": {
+    "source": "266327989_4457065524404870_1422050587981996370_n.png",
+    "width": 680,
+    "height": 535
+  },
+  "sections": [
+    {
+      "type": "text",
+      "copy": "Small craft advisory is in effect from this afternoon . Gale warning in effect from this afternoon through Saturday. \n\nPrepare for possible power outages and be on the lookout for blowing debris. Slow down and be safe out there!"
+    }
+  ]
+}
