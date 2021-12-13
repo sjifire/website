@@ -1,7 +1,8 @@
 [build]
   base    = '.'
-  publish = "public"
-  command = "npm run build"
+# NOTE: cannot use with admin/ in its own folder; this overwrites the admin build commands set in the GUI
+#  publish = "public"
+#  command = "npm run build"
 [context.production]
   environment = { ELEVENTY_ENV = "production" }
 
