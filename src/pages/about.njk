@@ -10,9 +10,7 @@ permalink: "/about/index.html"
     {{ title | safe }}
   </h1>
   <div class="lede">
-    <p>
-      {{ about.preamble | markdownify | safe }}
-    </p>
+    {{ about.preamble | markdownify | safe }}
   </div>
 {% endblock %}
 

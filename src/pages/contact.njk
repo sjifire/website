@@ -10,9 +10,7 @@ permalink: "/contact/index.html"
     {{ title | safe }}
   </h1>
   <div class="lede">
-    <p>
-      {{ contact.preamble | markdownify | safe }}
-    </p>
+    {{ contact.preamble | markdownify | safe }}
   </div>
 {% endblock %}
 
