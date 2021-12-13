@@ -41,3 +41,15 @@ permalink: "/services/index.html"
     </figure>
   {% endif %}
 {% endfor %}
+
+{% extends 'base.njk' %}
+
+{% block page_header %}
+  <h1>
+    {{ title | safe }}
+  </h1>
+  <div class="lede">
+    {{ services.preamble | markdownify | safe }}
+  </div>
+{% endblock %}
+
