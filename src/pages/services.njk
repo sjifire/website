@@ -4,43 +4,6 @@ layout: base.njk
 permalink: "/services/index.html"
 ---
 
-{% for section in services.sections %}
-  {% if section.type === 'text' %}
-    {{ section.copy | markdownify | safe }}
-  {% elif section.type === 'image' %}
-    <figure>
-      <img src="{{ 'https://res.cloudinary.com/san-juan-fire-district-3/image/fetch/f_auto,q_auto:good,c_limit,w_1200,h_800/' + site.rootUrl if helpers.env === 'production' }}/assets/images/{{ section.source }}" alt="{{ section.alt }}" width="{{ section.width }}" height="{{ section.height }}" loading="lazy">
-      {% if section.caption %}
-        <figcaption>
-          {{ section.caption }}
-        </figcaption>
-      {% endif %}
-    </figure>
-  {% elif section.type === 'youtube' %}
-    {% set video_id = section.source.split('/').pop() %}
-    <figure>
-      <div class="embed-responsive embed-responsive-16by9">
-        <iframe src="https://www.youtube.com/embed/{{ video_id }}" loading="lazy"></iframe>
-      </div>
-      {% if section.caption %}
-        <figcaption>
-          {{ section.caption }}
-        </figcaption>
-      {% endif %}
-    </figure>
-  {% elif section.type === 'gmap' %}
-    <figure>
-      <div class="embed-responsive embed-responsive-16by9">
-        <iframe src="{{ section.source }}" loading="lazy"></iframe>
-      </div>
-      {% if section.caption %}
-        <figcaption>
-          {{ section.caption }}
-        </figcaption>
-      {% endif %}
-    </figure>
-  {% endif %}
-{% endfor %}
 
 {% extends 'base.njk' %}
 
@@ -53,3 +16,7 @@ permalink: "/services/index.html"
   </div>
 {% endblock %}
 
+{% block content %}
+  {% set baseSections = services.sections %}
+  {% include "sections_block.njk" %}
+{% endblock %}
