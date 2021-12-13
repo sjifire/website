@@ -165,7 +165,10 @@ collections:
         fields:
           - label: Preamble
             name: preamble
-            widget: text
+            widget: markdown
+            buttons: ['bold', 'italic', 'link']
+            editor_components: []
+            modes: [rich_text]
             hint: >-
               Text that appears under the main heading.
       - label: "About"
@@ -178,7 +181,9 @@ collections:
           - label: Preamble
             name: preamble
             widget: markdown
-            buttons: ['bold', 'italic', 'link', 'heading-two', 'heading-three', 'heading-four']
+            buttons: ['bold', 'italic', 'link']
+            editor_components: []
+            modes: [rich_text]
             hint: >-
               Text that appears under the main heading.
           - sections:
@@ -342,7 +347,9 @@ collections:
           - label: Preamble
             name: preamble
             widget: markdown
-            buttons: ['bold', 'italic', 'link', 'heading-two', 'heading-three', 'heading-four']
+            buttons: ['bold', 'italic', 'link']
+            editor_components: []
+            modes: [rich_text]
             hint: >-
               Text that appears under the main heading.
           - sections:
