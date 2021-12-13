@@ -3,13 +3,13 @@ backend:
   branch: main
 media_folder: "src/assets/images"
 public_folder: "/assets/images"
-site_url: "https://sjifire.org/"
+site_url: "https://www.sjifire.org/"
 show_preview_links: false
 collections:
 
   - name: "posts"
     label: "Posts"
-    label_singular: "News Post"
+    label_singular: "Post"
     folder: "src/posts/"
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     extension: "json"
