@@ -1,20 +1,28 @@
+{% set pageTitle = site.name if page.url === '/' else title + ' | ' + site.name %}
+{% set pageTitle = pageTitle | safe %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
   {# preload font? #}
   <meta charset="utf-8">
-  <meta name="format-detection" content="telephone=no">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>{{ site.name if page.url === '/' else title + ' | ' + site.name }}</title>
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+  <title>{{ pageTitle }}</title>
   {# meta-desc #}
+    <meta name="description" content="{{ pageTitle }}" />
   {# icon tags #}
-    <link rel="icon" type="image/png" href="{{ 'https://res.cloudinary.com/san-juan-fire-district-3/image/fetch/f_auto/' + site.rootUrl if helpers.env === 'production' }}/assets/sjifire-logo-clear.png">
+    <link rel="icon" type="image/png" href="{{ 'https://res.cloudinary.com/san-juan-fire-district-3/image/fetch/f_auto/' + site.rootUrl if helpers.env === 'production' }}/assets/sjifire-logo-clear.png" />
   {# og #}
+    <meta property="og:url" content="{{ site.prodUrl + page.url}}"" key="ogurl" />
+    <!-- <meta property="og:image" content={previewImage} key="ogimage" /> -->
+    <meta property="og:site_name" content="{{site.name}}" key="ogsitename" />
+    <meta property="og:title" content="{{pageTitle}}" key="ogtitle" />
+    <meta property="og:description" content="{{description}}" key="ogdesc" />
   {#
-    <link rel="preconnect" href="//www.google-analytics.com">
-    <link rel="dns-prefetch" href="//www.google-analytics.com">
-    <link rel="preconnect" href="//www.datocms-assets.com/">
-    <link rel="dns-prefetch" href="//www.datocms-assets.com/">
+    <link rel="preconnect" href="//www.google-analytics.com" />
+    <link rel="dns-prefetch" href="//www.google-analytics.com" />
+    <link rel="preconnect" href="//www.datocms-assets.com/ "/>
+    <link rel="dns-prefetch" href="//www.datocms-assets.com/" />
   #}
   {%- set css -%}
     {% include "site.css" %}
