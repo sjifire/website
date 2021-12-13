@@ -1,5 +1,7 @@
 {
   "name": "San Juan Island Fire and Rescue",
+  "formalName": "San Juan County Fire District #3",
+  "prodUrl": "https://www.sjifire.org",
   "rootUrl": "https://sjifire.netlify.app",
   "address": {
     "street": "1011 Mullis Street",
