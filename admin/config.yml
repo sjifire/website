@@ -513,6 +513,14 @@ collections:
           - label: Preamble
             name: preamble
             widget: markdown
+            buttons: ['bold', 'italic', 'link']
+            editor_components: []
+            modes: [rich_text]
+            hint: >-
+              Text that appears under the main heading.
+          - label: Copy
+            name: copy
+            widget: markdown
             minimal: false
             buttons: ['bold', 'italic', 'link', 'heading-two', 'heading-three', 'heading-four', 'heading-five', 'heading-six', 'quote', 'bulleted-list', 'numbered-list']
             editor_components: [image]

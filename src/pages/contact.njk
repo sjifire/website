@@ -11,18 +11,14 @@ permalink: "/contact/index.html"
   </h1>
   <div class="lede">
     <p>
-      San Juan County Fire District 3 is located at:
+      {{ contact.preamble | markdownify | safe }}
     </p>
-    <address>
-      {{ site.address.street }}<br>
-      {{ site.address.city }}, {{ site.address.state }} {{ site.address.zip }}
-    </address>
   </div>
 {% endblock %}
 
 {% block content %}
   <div class="post__copy">
-    {{ contact.preamble | markdownify | safe }}
+    {{ contact.copy | markdownify | safe }}
     <form name="contact" method="POST" netlify-honeypot="bot-field" data-netlify="true" action="/thank-you/">
       <p class="sr-only">
         <label>Don’t fill this out if you’re human: <input name="bot-field" /></label>
