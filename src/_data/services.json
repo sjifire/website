@@ -1,4 +1,5 @@
 {
+  "preamble": "Nice text summary about services",
   "sections": [
     {
       "type": "text",
