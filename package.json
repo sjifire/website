@@ -13,6 +13,7 @@
   "dependencies": {
     "@11ty/eleventy": "^0.12.1",
     "@netlify/plugin-sitemap": "^v0.8",
+    "@netlify/plugin-lighthouse": "^v2.1",
     "dotenv": "^10.0.0"
   },
   "devDependencies": {
