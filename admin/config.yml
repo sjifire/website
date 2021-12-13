@@ -339,6 +339,12 @@ collections:
           preview: false
         file: "src/_data/governance.json"
         fields:
+          - label: Preamble
+            name: preamble
+            widget: markdown
+            buttons: ['bold', 'italic', 'link', 'heading-two', 'heading-three', 'heading-four']
+            hint: >-
+              Text that appears under the main heading.
           - sections:
             name: "sections"
             widget: "list"
