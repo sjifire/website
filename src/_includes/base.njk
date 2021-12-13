@@ -1,5 +1,5 @@
-{% set pageTitle = site.name if page.url === '/' else title + ' | ' + site.name %}
-{% set pageTitle = pageTitle | safe %}
+{% set pageTitle = (site.name if page.url === '/' else title + ' | ' + site.name) | safe %}
+{% set pageDsc = (description or site.description) | safe %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,7 +9,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
   <title>{{ pageTitle }}</title>
   {# meta-desc #}
-    <meta name="description" content="{{ pageTitle }}" />
+    <meta name="description" content="{{ pageDsc }}" />
   {# icon tags #}
     <link rel="icon" type="image/png" href="{{ 'https://res.cloudinary.com/san-juan-fire-district-3/image/fetch/f_auto/' + site.rootUrl if helpers.env === 'production' }}/assets/sjifire-logo-clear.png" />
   {# og #}
@@ -17,7 +17,7 @@
     <!-- <meta property="og:image" content={previewImage} key="ogimage" /> -->
     <meta property="og:site_name" content="{{site.name}}" key="ogsitename" />
     <meta property="og:title" content="{{pageTitle}}" key="ogtitle" />
-    <meta property="og:description" content="{{description}}" key="ogdesc" />
+    <meta property="og:description" content="{{ pageDsc }}" key="ogdesc" />
   {#
     <link rel="preconnect" href="//www.google-analytics.com" />
     <link rel="dns-prefetch" href="//www.google-analytics.com" />
