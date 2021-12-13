@@ -10,7 +10,7 @@ permalink: "/404.html"
     {{ title | safe }}
   </h1>
   <div class="lede">
-    We apologize for the inconvenience.
+    {{ error_404.preamble | markdownify | safe }}
   </div>
 {% endblock %}
 
