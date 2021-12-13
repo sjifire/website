@@ -1,4 +1,9 @@
-
+[build]
+  base    = '.'
+  publish = "public"
+  command = "npm run build"
+[context.production]
+  environment = { ELEVENTY_ENV = "production" }
 
 [[plugins]]
 package = "@netlify/plugin-sitemap"
