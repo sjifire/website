@@ -15,9 +15,17 @@ permalink: "/governance/index.html"
 {% endblock %}
 
 {% block content %}
-  {% set baseSections = governance.sections %}
-  {% include "sections_block.njk" %}
-
+  <div class="post__copy">
+    {{ governance.about | markdownify | safe }}
+  </div>
+  <div class="post__copy">
+    <header>
+      <h2 class="special-heading">
+        Board of Commissioners
+      </h2>
+    </header>
+    {{ governance.commission | markdownify | safe }}
+  </div>
   <section class="page-section">
     <header>
       <h2 class="special-heading">
@@ -50,7 +58,7 @@ permalink: "/governance/index.html"
               {% endfor %}
             </ul>
           {% else %}
-            <p>Next regular scheduled board meeting is on <span id='next-board-meeting'>{% nextBoardMeetingDate %}</span>.</p>
+            <p>Next regular scheduled board meeting is tentatively on <span id='next-board-meeting'>{% nextBoardMeetingDate %}</span>.</p>
           {% endif %}
       </li>
       {% for year, set in collections.pastMeetings | groupby('year') | dictsort | reverse %}
