@@ -15,7 +15,7 @@ permalink: "/news/{% if pagination.pageNumber > 0 %}page-{{ pagination.pageNumbe
     {{ title | safe }}
   </h1>
   <div class="lede">
-    Check back often for the lastest information.
+    {{ news.preamble | markdownify | safe }}
   </div>
 {% endblock %}
 

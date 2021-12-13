@@ -171,6 +171,21 @@ collections:
             modes: [rich_text]
             hint: >-
               Text that appears under the main heading.
+      - label: "News"
+        name: "news"
+        delete: false
+        editor:
+          preview: false
+        file: "src/_data/news.json"
+        fields:
+          - label: Preamble
+            name: preamble
+            widget: markdown
+            buttons: ['bold', 'italic', 'link']
+            editor_components: []
+            modes: [rich_text]
+            hint: >-
+              Text that appears under the main heading.
       - label: "About"
         name: "about"
         delete: false
