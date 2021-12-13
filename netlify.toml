@@ -1,0 +1,9 @@
+
+
+[[plugins]]
+package = "@netlify/plugin-sitemap"
+
+  [plugins.inputs]
+  exclude = [
+    './public/services/*'
+  ]
