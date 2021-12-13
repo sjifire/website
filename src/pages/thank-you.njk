@@ -10,12 +10,12 @@ permalink: "/thank-you/index.html"
     {{ title | safe }}
   </h1>
   <div class="lede">
-    We'll get back to you as soon as possible!
+    {{ thank_you.preamble | markdownify | safe }}
   </div>
 {% endblock %}
 
 {% block content %}
   <div class="post__copy">
-    {{ thank_you.preamble | markdownify | safe }}
+    {{ thank_you.copy | markdownify | safe }}
   </div>
 {% endblock %}
