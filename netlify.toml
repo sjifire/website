@@ -12,8 +12,20 @@
     X-Frame-Options = "SAMEORIGIN"
     X-XSS-Protection = "1; mode=block"
     X-Content-Type-Options = "nosniff"
-    Content-Security-Policy = "default-src 'self' *.cloudinary.com *.clarity.ms *.googletagmanager.com *.google.com; frame-ancestors 'self';"
+#    Content-Security-Policy-Report-Only = "default-src 'self' *.cloudinary.com *.clarity.ms *.googletagmanager.com *.google.com;"
+#    Content-Security-Policy = "default-src 'self' *.cloudinary.com *.clarity.ms *.googletagmanager.com *.google.com;"
 
+# [[plugins]]
+#  package = "netlify-plugin-csp-generator"
+#  [plugins.inputs]
+#   buildDir = "{public,admin}"
+#    buildDir = "public"
+#  [plugins.inputs.policies]
+#    defaultSrc = "'self' *.google.com"
+#    scriptSrc  = "'self' *.googletagmanager.com *.clarity.ms"
+#    imgSrc     = "'self' *.cloudinary.com"
+#   reportOnly = true
+#    reportURI = "/report-csp-violations-to-this-uri"
 
 [[plugins]]
   package = "@netlify/plugin-sitemap"
