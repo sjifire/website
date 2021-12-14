@@ -6,6 +6,15 @@
 [context.production]
   environment = { ELEVENTY_ENV = "production" }
 
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Content-Security-Policy = "default-src 'self' *.cloudinary.com *.clarity.ms *.googletagmanager.com *.google.com; frame-ancestors 'self';"
+
+
 [[plugins]]
   package = "@netlify/plugin-sitemap"
   [plugins.inputs]
