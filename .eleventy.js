@@ -101,6 +101,7 @@ module.exports = function (eleventyConfig) {
   };
   eleventyConfig.addShortcode("nextBoardMeetingDate", function () {
     // return nextSecondTuesday();
+    return "1/11/22"
   });
 
 
