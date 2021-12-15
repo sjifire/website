@@ -86,18 +86,20 @@ module.exports = function (eleventyConfig) {
     return util.inspect(obj);
   });
 
-  function nextSecondTuesday(month = new Date().getMonth()){
+  function nextSecondTuesday(month = new Date().getMonth(), day = new Date().getDate()){
     var temp = new Date();
-    temp.setMonth(month);
-    var d = temp.getDate();
+    temp.setMonth(month, day);
     var n = 1;
-      while(temp.getDay()!= 2) temp.setDate(++n);
-      temp.setDate(n+7);
-      if(d>temp.getDate()){
-        var nextMonth=temp.getMonth()+1;
-        return nextSecondTuesday(nextMonth);
-      }
-      return temp.toLocaleDateString();
+    while(temp.getDay()!= 2) temp.setDate(++n);
+    temp.setDate(n+7);
+    if(day>temp.getDate()){
+      var nextMonth=temp.getMonth()+1;
+      // everything is zero-indexed EXCEPT date; that starts with 1
+      // as the first of the month.  If you set this to 0, it goes to
+      // the last day of the previous month
+      return nextSecondTuesday(nextMonth, 1);
+    }
+    return temp.toLocaleDateString();
   };
   eleventyConfig.addShortcode("nextBoardMeetingDate", function () {
     // return nextSecondTuesday();
