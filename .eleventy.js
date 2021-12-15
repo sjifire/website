@@ -100,7 +100,7 @@ module.exports = function (eleventyConfig) {
       return temp.toLocaleDateString();
   };
   eleventyConfig.addShortcode("nextBoardMeetingDate", function () {
-    return nextSecondTuesday();
+    // return nextSecondTuesday();
   });
 
 
