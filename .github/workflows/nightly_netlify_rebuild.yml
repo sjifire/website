@@ -2,8 +2,8 @@ name: Trigger Netlify Build
 on:
   schedule:
     # Customize schedule expression at crontab.guru
-    # At minutes 45 past 08h and 20h
-    - cron: "0 2,14 * * *"
+    # currently running at 4am
+    - cron: "0 4 * * *"
 jobs:
   build:
     name: Trigger deploy
