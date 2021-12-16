@@ -13,8 +13,6 @@
   "dependencies": {
     "@11ty/eleventy": "^0.12.1",
     "@netlify/plugin-sitemap": "^v0.8",
-    "@netlify/plugin-lighthouse": "^v2.1",
-    "netlify-plugin-csp-generator": "v1.5",
     "dotenv": "^10.0.0"
   },
   "devDependencies": {
@@ -27,5 +25,8 @@
   },
   "engines": {
     "node": "16.x"
+  },
+  "comments": {
+    "dependencies": "currently not using '@netlify/plugin-lighthouse' and 'netlify-plugin-csp-generator'"
   }
 }
