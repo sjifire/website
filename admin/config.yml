@@ -541,7 +541,24 @@ collections:
             modes: [rich_text]
             hint: >-
               Text that appears under the main heading.
-
+      - label: "Stat Settings"
+        name: "Stat Settings"
+        extension: "json"
+        delete: false
+        editor:
+          preview: false
+        file: "src/_data/stats.json"
+        fields:
+          - name: stats
+            label: Stats
+            widget: list
+            fields:
+            - name: stat pairs
+              label: Stat Pairs
+              widget: list
+              fields:
+                - {name: key, widget: "string"}
+                - {name: value, widget: "string"}
   - name: "meetings"
     label: "Board Meetings"
     label_singular: "Board Meeting"
@@ -595,3 +612,4 @@ collections:
       - label: Year
         field: date
         pattern: \d{4}
+
