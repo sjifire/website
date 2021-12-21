@@ -7,8 +7,8 @@ on:
     # currently running at 4am
     - cron: "0 4 * * *"
 jobs:
-  if: ${{ false }}
   build:
+    if: false
     name: Trigger deploy
     runs-on: ubuntu-latest
     steps:

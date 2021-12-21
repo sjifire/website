@@ -10,7 +10,7 @@ on:
 
 jobs:
   lighthouse:
-    if: ${{ false }}
+    if: false
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
