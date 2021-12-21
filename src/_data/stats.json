@@ -1,1 +1,48 @@
-{}
+{
+  "updated_at": "2021-12-21T23:02:19.183Z",
+  "time_stats": {
+    "reaction": {
+      "mean": 82.92424242424242
+    },
+    "on_scene": {
+      "mean": 3216.939393939394
+    }
+  },
+  "personnel_stats": {
+    "time_on_incident": {
+      "sum": 304350,
+      "mean": 4611.363636363636
+    },
+    "number_per_incident": {
+      "mean": 2.5606060606060606,
+      "min": 2,
+      "max": 10
+    }
+  },
+  "region_stats": {
+    "central": {
+      "travel": {
+        "mean": 334.1363636363636
+      }
+    },
+    "south": {
+      "travel": {
+        "mean": 709.0909090909091
+      }
+    },
+    "north": {
+      "travel": {
+        "mean": 1142.25
+      }
+    }
+  },
+  "call_stats": {
+    "medical_rescue": 54,
+    "fire": 6,
+    "total": 66,
+    "downgraded": 6,
+    "cancelled": 0,
+    "other": 0,
+    "overlapping_num_calls": 8
+  }
+}
