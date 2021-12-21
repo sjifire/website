@@ -7,6 +7,7 @@ const USERNAME = process.env.ESO_REPORT_USERNAME;
 const PASSWORD = process.env.ESO_REPORT_PASSWORD;
 const AGENCY   = 'sjifr';
 const REPORT_NAME   = 'website-2';
+const OUTPUT_JSON_FILENAME = './src/_data/stats.json'
 
 const SOUTH_STATIONS   = ["32", "33"];
 const CENTRAL_STATIONS = ["31", "36"];
@@ -274,11 +275,15 @@ const findMedian = arr => {
 
 
 (async function(){
+  console.log("retrieving CSV report from ESO")
   let csvPath = await retrieveCSVReport();
+  console.log("parsing CSV report")
   let records = parseCSV(csvPath);
   let raw_values   = processRecords(records);
+  console.log("generating stats")
   let stats_output = createStats(raw_values);
-
-  console.log(JSON.stringify(stats_output, null, 2))
+  console.log(`outputing json file to ${OUTPUT_JSON_FILENAME}`)
+  let json = JSON.stringify(stats_output, null, 2);
+  fs.writeFileSync(OUTPUT_JSON_FILENAME, json)
 })()
 

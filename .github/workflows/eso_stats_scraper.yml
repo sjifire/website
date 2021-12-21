@@ -1,18 +1,30 @@
-name: Scrap Stats from ESO
+name: ESO_scraper
 on:
   schedule:
     # Customize schedule expression at crontab.guru
     # currently running at 3am
     - cron: "0 3 * * *"
+  workflow_dispatch:
+    #  allow manual updating
+
 jobs:
-  build:
-    name: Trigger scraper
+  scraper:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+          check-latest: true
+          cache: 'npm'
+      - run: npm install
       - run: npx playwright install-deps chromium
-      - shell: bash
-        run: ./bin/eso_stats_scraper.js
+      - run: ./bin/eso_stats_scraper.js
         env:
           ESO_REPORT_USERNAME: ${{ secrets.ESO_REPORT_USERNAME }}
           ESO_REPORT_PASSWORD: ${{ secrets.ESO_REPORT_PASSWORD }}
 
+      - name: Add & Commit updated stats.json
+        uses: EndBug/add-and-commit@v7.5.0
+        with:
+          push: true
