@@ -1,0 +1,18 @@
+name: Scrap Stats from ESO
+on:
+  schedule:
+    # Customize schedule expression at crontab.guru
+    # currently running at 3am
+    - cron: "0 3 * * *"
+jobs:
+  build:
+    name: Trigger scraper
+    runs-on: ubuntu-latest
+    steps:
+      - run: npx playwright install-deps chromium
+      - shell: bash
+        run: ./bin/eso_stats_scraper.js
+        env:
+          ESO_REPORT_USERNAME: ${{ secrets.ESO_REPORT_USERNAME }}
+          ESO_REPORT_PASSWORD: ${{ secrets.ESO_REPORT_PASSWORD }}
+
