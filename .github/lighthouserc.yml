@@ -3,6 +3,8 @@ ci:
     # collect options here
     staticDistDir: ./public
     isSinglePageApplication: false
+    settings:
+      chromeFlags: "--disable-gpu --no-sandbox"
   assert:
     # assert options here
 
