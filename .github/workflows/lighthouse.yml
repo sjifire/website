@@ -1,36 +1,21 @@
-# disable for now!  WE need to figure out how to run this on a local site,
-# not the published previous version!
-name: Lighthouse
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    # The branches below must be a subset of the branches above
-    branches: [ main ]
-
+name: Lighthouse CI
+on: [push, workflow_dispatch]
 jobs:
-  lighthouse:
-    if: false
+  lighthouseci:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
-    - run: mkdir ${{ github.workspace }}/tmp/artifacts
-    - name: Lighthouse
-      uses: foo-software/lighthouse-check-action@master
-      with:
-        urls: 'https://www.sjifire.org'
-        outputDirectory: ${{ github.workspace }}/tmp/artifacts
-    - name: Upload artifacts
-      uses: actions/upload-artifact@master
-      with:
-        name: Lighthouse reports
-        path: ${{ github.workspace }}/tmp/artifacts
-    - name: Verify Lighthouse Check results
-      uses: foo-software/lighthouse-check-status-action@master
-      with:
-        lighthouseCheckResults: ${{ steps.lighthouseCheck.outputs.lighthouseCheckResults }}
-        minAccessibilityScore: "80"
-        minBestPracticesScore: "90"
-        minPerformanceScore: "90"
-        # minProgressiveWebAppScore: "50"
-        minSeoScore: "90"
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 15.x
+      - name: npm install, build
+        run: |
+          npm install
+          npm run build
+      - name: run Lighthouse CI
+        run: |
+          npm install -g @lhci/cli@0.8.x
+          lhci healthcheck --config='.github/lighthouserc.json' --fatal
+          lhci autorun --config='.github/lighthouserc.json'
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}

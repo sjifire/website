@@ -16,7 +16,7 @@
     {% set video_id = section.source.split('/').pop() %}
     <figure class="post__media">
       <div class="embed-responsive embed-responsive-16by9">
-        <iframe src="https://www.youtube.com/embed/{{ video_id }}" loading="lazy"></iframe>
+        <iframe title="{{ section.caption }} youtube" src="https://www.youtube.com/embed/{{ video_id }}" loading="lazy"></iframe>
       </div>
       {% if section.caption %}
         <figcaption>
@@ -27,7 +27,7 @@
   {% elif section.type === 'gmap' %}
     <figure class="post__media">
       <div class="embed-responsive embed-responsive-16by9">
-        <iframe src="{{ section.source }}" loading="lazy"></iframe>
+        <iframe title="{{ section.caption }} google map" src="{{ section.source }}" loading="lazy"></iframe>
       </div>
       {% if section.caption %}
         <figcaption>
