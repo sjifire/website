@@ -23,4 +23,4 @@ jobs:
           cache: 'npm'
       - run: npm ci && npm install -g @lhci/cli@0.8.x
       - run: npm run build --if-present
-      - run: lhci autorun --config=.github/workflows/lighthouserc.yml
+      - run: lhci autorun --config=.github/lighthouserc.yml
