@@ -2,6 +2,7 @@
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
+process.env.TZ = 'UTC';
 
 const SOUTH_STATIONS   = ["32", "33"];
 const CENTRAL_STATIONS = ["31", "36"];
@@ -13,7 +14,7 @@ const CANCELLED_TYPES  = ['61']
 const DOWNGRADE_TYPES  = ['6', '7']
 
 const DAYTIME_RANGE   = [6,7,8,9,10,11,12,13,14,15,16,17];
-const NIGHTTIME_RANGE = [18,19,20,21,22,23,0,1,2,3,4,5,6];
+const NIGHTTIME_RANGE = [18,19,20,21,22,23,0,1,2,3,4,5];
 
 const ESO_TIMEOUT   = 600000; //the report can take a LONG time to generate;
 const ESO_LOGIN_URL = 'https://www.esosuite.net/login';
@@ -68,9 +69,9 @@ const parseCSV = function(csvPath){
 
   // cleanup record oddities
   records.forEach(record => {
-    let d = record['Incident Date'].replace(' 12:00:00 AM', '')
-    // record['Incident Date'] = new Date(record['Incident Date'])
-    record['Last Unit Cleared Date'] = new Date(record['Last Unit Cleared Date'])
+    let d = record['Incident Date'].replace(' 12:00:00 AM', '');
+    record['Incident Date'] = new Date(d);
+    record['Last Unit Cleared Date'] = new Date(record['Last Unit Cleared Date']);
     // record['Is Cancelled Prior To Arrival'] = record['Is Cancelled Prior To Arrival'] !== 'NA';
     Object.keys(record).forEach((key)=>{
       if(key.toLocaleLowerCase().endsWith(" date") && typeof(record[key]) === 'string'){
