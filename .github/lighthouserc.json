@@ -3,12 +3,14 @@
     "collect": {
       "staticDistDir": "./public",
       "isSinglePageApplication": false,
+      "numberOfRuns": 1,
+      "maxAutodiscoverUrls": 0,
       "settings":{
         "chromeFlags": "--disable-gpu --no-sandbox"
       }
     },
     "assert": {
-      "preset": "lighthouse:recommended",
+      "preset": "lighthouse:no-pwa",
       "assertions": {
         "categories:performance": ["error", {"minScore": 0.90}],
         "categories:accessibility": ["error", {"minScore": 0.80}],
