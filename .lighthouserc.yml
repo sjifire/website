@@ -7,7 +7,7 @@ ci:
       chromeFlags: "--disable-gpu --no-sandbox"
   assert:
     # assert options here
-
+    preset: 'lighthouse:recommended'
   upload:
     # upload options here
 
