@@ -1,5 +1,8 @@
 {
   "ci": {
+    "upload": {
+      "target": "temporary-public-storage",
+    },
     "collect": {
       "staticDistDir": "./public",
       "isSinglePageApplication": false,
@@ -15,7 +18,13 @@
         "categories:performance": ["warn", {"minScore": 0.90}],
         "categories:accessibility": ["warn", {"minScore": 0.80}],
         "categories:best-practices": ["warn", {"minScore": 0.92}],
-        "categories:seo": ["warn", {"minScore": 0.90}]
+        "categories:seo": ["warn", {"minScore": 0.90}],
+        "unused-javascript": "off",
+        "link-name": "off",
+        "uses-responsive-images": "off",
+        "modern-image-formats": "off",
+        "csp-xss": "off",
+        "uses-long-cache-ttl": "off"
       }
     }
   }
