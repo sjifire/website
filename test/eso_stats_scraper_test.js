@@ -18,16 +18,16 @@ describe('parseCSV', function(){
   });
   describe("record within array", function(){
     it('should contain a "Dispatched Date"', function(){
-      assert.deepStrictEqual(records[0]['Dispatched Date'], new Date('2021-01-01T09:48:04.000Z'))
+      assert.deepStrictEqual(records[0]['Dispatched Date'], new Date('2021-01-01T01:48:04.000Z'))
     });
     it('should contain a "En Route Date"', function(){
-      assert.deepStrictEqual(records[0]['En Route Date'], new Date('2021-01-01T09:50:04.000Z'))
+      assert.deepStrictEqual(records[0]['En Route Date'], new Date('2021-01-01T01:50:04.000Z'))
     });
     it('should contain a "Arrival Date"', function(){
-      assert.deepStrictEqual(records[0]['Arrival Date'], new Date('2021-01-01T09:54:22.000Z'))
+      assert.deepStrictEqual(records[0]['Arrival Date'], new Date('2021-01-01T01:54:22.000Z'))
     });
     it('should contain a "Last Unit Cleared Date"', function(){
-      assert.deepStrictEqual(records[0]['Last Unit Cleared Date'], new Date('2021-01-01T10:13:53.000Z'))
+      assert.deepStrictEqual(records[0]['Last Unit Cleared Date'], new Date('2021-01-01T02:13:53.000Z'))
     });
 
     it('should contain a "EMS Personnel Count"', function(){
@@ -70,13 +70,13 @@ describe('generateStats', function(){
   });
   it('should return expected call_stats', function(){
     let expectedCallStats = {
-          cancelled: 0,
-          daytime_calls: 44,
-          downgraded: 6,
-          fire: 6,
           medical_rescue: 54,
-          nighttime_calls: 22,
+          fire: 6,
+          downgraded: 6,
+          cancelled: 0,
           other: 0,
+          daytime_calls: 45,
+          nighttime_calls: 21,
           overlapping_num_calls: 8,
           total: 66
         }
