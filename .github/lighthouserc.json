@@ -22,7 +22,9 @@
         "unused-javascript": "warn",
         "link-name": "warn",
         "uses-responsive-images": "off",
+        "uses-optimized-images": "off",
         "modern-image-formats": "off",
+        "uses-rel-preconnect": "warn",
         "csp-xss": "warn",
         "uses-long-cache-ttl": "warn",
         "max-potential-fid": "warn",
@@ -30,7 +32,9 @@
         "heading-order": "warn",
         "font-display": "warn",
         "unsized-images": "warn",
-        "unused-css-rules": "warn"
+        "unused-css-rules": "warn",
+        "total-byte-weight": "warn"
+
       }
     }
   }
