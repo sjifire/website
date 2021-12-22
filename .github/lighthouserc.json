@@ -6,7 +6,7 @@
     "collect": {
       "staticDistDir": "./public",
       "isSinglePageApplication": false,
-      "numberOfRuns": 1,
+      "numberOfRuns": 3,
       "maxAutodiscoverUrls": 0,
       "settings":{
         "chromeFlags": "--disable-gpu --no-sandbox"
@@ -33,7 +33,9 @@
         "font-display": "warn",
         "unsized-images": "warn",
         "unused-css-rules": "warn",
-        "total-byte-weight": "warn"
+        "total-byte-weight": "warn",
+        "uses-passive-event-listeners": "warn",
+        "uses-text-compression": "warn"
 
       }
     }
