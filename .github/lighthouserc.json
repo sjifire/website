@@ -4,7 +4,7 @@
       "staticDistDir": "./public",
       "isSinglePageApplication": false,
       "numberOfRuns": 1,
-      "maxAutodiscoverUrls": 0,
+      "maxAutodiscoverUrls": 8,
       "settings":{
         "chromeFlags": "--disable-gpu --no-sandbox"
       }
