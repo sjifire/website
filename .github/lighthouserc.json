@@ -1,5 +1,8 @@
 {
   "ci": {
+    "upload": {
+      "target": "temporary-public-storage"
+    },
     "collect": {
       "staticDistDir": "./public",
       "isSinglePageApplication": false,
@@ -34,6 +37,7 @@
         "uses-passive-event-listeners": "warn",
         "uses-text-compression": "warn",
         "tap-targets": "warn"
+
       }
     }
   }
