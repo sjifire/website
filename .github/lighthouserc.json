@@ -19,12 +19,18 @@
         "categories:accessibility": ["warn", {"minScore": 0.80}],
         "categories:best-practices": ["warn", {"minScore": 0.92}],
         "categories:seo": ["warn", {"minScore": 0.90}],
-        "unused-javascript": "off",
-        "link-name": "off",
+        "unused-javascript": "warn",
+        "link-name": "warn",
         "uses-responsive-images": "off",
         "modern-image-formats": "off",
-        "csp-xss": "off",
-        "uses-long-cache-ttl": "off"
+        "csp-xss": "warn",
+        "uses-long-cache-ttl": "warn",
+        "max-potential-fid": "warn",
+        "color-contrast": "warn",
+        "heading-order": "warn",
+        "font-display": "warn",
+        "unsized-images": "warn",
+        "unused-css-rules": "warn"
       }
     }
   }
