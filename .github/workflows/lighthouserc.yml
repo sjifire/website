@@ -1,0 +1,16 @@
+ci:
+  collect:
+    # collect options here
+    staticDistDir: ./public
+    isSinglePageApplication: false
+  assert:
+    # assert options here
+
+  upload:
+    # upload options here
+
+  server:
+    # server options here
+
+  wizard:
+    # wizard options here
