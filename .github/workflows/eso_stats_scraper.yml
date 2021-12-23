@@ -20,10 +20,11 @@ jobs:
       - run: npm ci
       - run: npm run build --if-present
       - run: npx playwright install-deps chromium
-      - run: ./bin/eso_stats_scraper.js  --headless -o ./src/_data/stats.json
+      - run: ./bin/eso_stats_scraper.js  --headless -o ./src/_data/stats.json -r website-2
         env:
           ESO_REPORT_USERNAME: ${{ secrets.ESO_REPORT_USERNAME }}
           ESO_REPORT_PASSWORD: ${{ secrets.ESO_REPORT_PASSWORD }}
+          ESO_REPORT_AGENCY:   ${{ secrets.ESO_REPORT_AGENCY }}
 
       - name: Add & Commit updated stats.json
         uses: EndBug/add-and-commit@v7.5.0

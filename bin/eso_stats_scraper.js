@@ -8,15 +8,17 @@ const esoScraper = require( "../src/modules/eso_scraper" );
 
 const USERNAME = process.env.ESO_REPORT_USERNAME;
 const PASSWORD = process.env.ESO_REPORT_PASSWORD;
-const AGENCY   = 'sjifr';
-const REPORT_NAME   = 'website-2';
-// const OUTPUT_JSON_FILENAME = './src/_data/stats.json'
+const AGENCY = process.env.ESO_REPORT_AGENCY;
 
 var argv = require('yargs/yargs')(hideBin(process.argv))
     .usage('Usage: $0 -o [file path]')
     .option('output', {
         alias: 'o',
         description: 'JSON output file path'
+    })
+    .option('report_name', {
+        alias: 'r',
+        description: 'ESO Report Name'
     })
     .option('csv_output', {
         alias: 'c',
@@ -35,7 +37,7 @@ var argv = require('yargs/yargs')(hideBin(process.argv))
 
 (async function(){
   console.log("retrieving CSV report from ESO")
-  let csvPath = await esoScraper.retrieveCSVReport(USERNAME, PASSWORD, AGENCY, REPORT_NAME, argv.h);
+  let csvPath = await esoScraper.retrieveCSVReport(USERNAME, PASSWORD, AGENCY, argv.r, argv.h);
   console.log("parsing CSV report")
   if(argv.c){
     console.log(`outputing csv file to ${argv.c}`)
