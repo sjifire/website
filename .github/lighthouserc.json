@@ -1,12 +1,9 @@
 {
   "ci": {
-    "upload": {
-      "target": "temporary-public-storage"
-    },
     "collect": {
       "staticDistDir": "./public",
       "isSinglePageApplication": false,
-      "numberOfRuns": 3,
+      "numberOfRuns": 2,
       "maxAutodiscoverUrls": 0,
       "settings":{
         "chromeFlags": "--disable-gpu --no-sandbox"

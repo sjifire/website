@@ -17,5 +17,11 @@ jobs:
           npm install -g @lhci/cli@0.8.x
           lhci healthcheck --config='.github/lighthouserc.json' --fatal
           lhci autorun --config='.github/lighthouserc.json'
-        env:
-          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+        # env:
+        #   LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+      - name: Save results
+        uses: actions/upload-artifact@v2
+        with:
+          name: lighthouse-results
+          path: '.lighthouseci'
+
