@@ -1,4 +1,19 @@
 "use strict";
+/**
+ * MODULE:
+ * Helper methods to retrieve and process an ESO report
+ * into a stats JSON file.
+ *
+ *
+ * WARNINGS & TODOs:
+ *  - This module is tightly coupled with the needs
+ *    of SJIF&R, such as the stats computed from
+ *    the raw data.
+ *  - this is tightly coupled to the report columns and
+ *    one incident per row
+ *  - tightly coupled to quirks of SJIF&R, such as
+ *    zones (south, north, central), and types
+ */
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
@@ -8,7 +23,7 @@ const SOUTH_STATIONS   = ["32", "33"];
 const CENTRAL_STATIONS = ["31", "36"];
 const NORTH_STATIONS   = ["34", "35"];
 
-const MEDICAL_TYPES    = ['3']; // Medical & Rescue
+const MEDICAL_TYPES    = ['3'];           // Medical & Rescue
 const FIRE_TYPE        = ['1', '4', '5']; // fire, hazard, backfill
 const CANCELLED_TYPES  = ['61']
 const DOWNGRADE_TYPES  = ['6', '7']
@@ -35,6 +50,7 @@ const retrieveCSVReport = async function(username, password, agency, reportName,
   await page.fill('input[name="agency"]',  agency)
   await page.click('button[type="submit"]');
 
+  // go to ad-hoc reporting engine and run report
   await page.click('text=Ad-Hoc');
 
   const [reportPage] = await Promise.all([
@@ -43,13 +59,13 @@ const retrieveCSVReport = async function(username, password, agency, reportName,
   ])
   //wait for report to finish displaying
   await reportPage.waitForLoadState('networkidle', {timeout: ESO_TIMEOUT});
+  // download CSV of the report.
   const [ download ] = await Promise.all([
     // Start waiting for the download
     reportPage.waitForEvent('download', {timeout: ESO_TIMEOUT}),
     // Perform the action that initiates download
     reportPage.click('#CSV', {timeout: ESO_TIMEOUT})
   ]);
-  // Wait for the download process to complete
   let csvPath = await download.path();
   context.close();
   return csvPath;
@@ -86,6 +102,16 @@ const parseCSV = function(csvPath){
   records.sort((a, b) => (a['Dispatched Date'] > b['Dispatched Date']) ? 1 : -1)
   return records;
 };
+
+const generateStats = (records) => {
+  let raw_values = processRecords(records);
+  return createStats(raw_values);
+};
+
+
+/**
+ * Private helper methods
+ */
 
 const processRecords = function(records){
   let raw_values={
@@ -263,14 +289,9 @@ const createStats = function(raw_values){
   return stats_output;
 };
 
-const generateStats = function(records){
-  let raw_values   = processRecords(records);
-  return createStats(raw_values);
-};
-
 
 //TODO: if the time is < 2 seconds, then there was a mistake!
-const processTime = function(date1, date2, addToArr){
+const processTime = (date1, date2, addToArr) => {
   let dateDiff = (date1 - date2)/1000;
   if(dateDiff <= 2) dateDiff = null;
   // if(max_limit && dateDiff >= ) dateDiff = null;
@@ -278,7 +299,7 @@ const processTime = function(date1, date2, addToArr){
 }
 
 const sum  = arr => arr.reduce((a,b) => a + b, 0);
-const mean = arr => arr.reduce((a,b) => a + b, 0) / arr.length;
+const mean = arr => sum(arr) / arr.length;
 const max  = arr => Math.max(...arr);
 const min  = arr => Math.min.apply(Math, arr.map(function(v) { return v == null ? Infinity : v; }));
 const median = arr => {
