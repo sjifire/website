@@ -1,5 +1,10 @@
 #!/usr/bin/env node
 'use strict';
+/**
+ * script which logs in and retrieves data from an
+ * ESO report, then parses into a stats JSON file.
+ *
+ */
 const fs = require('fs');
 const yargs = require('yargs');
 const path = require('path');
@@ -8,7 +13,7 @@ const esoScraper = require( "../src/modules/eso_scraper" );
 
 const USERNAME = process.env.ESO_REPORT_USERNAME;
 const PASSWORD = process.env.ESO_REPORT_PASSWORD;
-const AGENCY = process.env.ESO_REPORT_AGENCY;
+const AGENCY   = process.env.ESO_REPORT_AGENCY;
 
 var argv = require('yargs/yargs')(hideBin(process.argv))
     .usage('Usage: $0 -o [file path]')
@@ -29,7 +34,7 @@ var argv = require('yargs/yargs')(hideBin(process.argv))
         type: 'boolean',
         default: false
     })
-    .demandOption(['o'])
+    .demandOption(['o','r'])
     .help()
     .alias('help', 'h')
     .argv;
