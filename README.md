@@ -9,9 +9,27 @@ main website for sjifire.org
 - static site generator: [Eleventy](https://www.11ty.dev/)
 - cms: [NetlifyCMS](https://www.netlifycms.org/)
 - host: [Netlify](https://www.netlify.com/)
-- code: [Github](https://www.github.com)
+- code/CI/Job hosting: [Github](https://www.github.com)
+
 
 ## getting started (local)
 1. clone repo
 2. run `npm install`
 3. run `npm start`
+
+## getting started (production)
+1. setup a cloudinary account and get a URL secret
+2. setup Netlify account
+    * link to your github repo (netlify will build from every git push by default)
+    * modify Publish directory to `public`
+    * Add 2 environment variables: 
+       * `CLOUDINARY_URL`: set to your cloudinary url secret
+       * `ELEVENTY_ENV`: set to `production`
+
+3. setup ESO Report: used to produce daily stats updates
+    * add 3 github repository secrets at `Settings -> Secrets`
+       * `ESO_REPORT_USERNAME`
+       * `ESO_REPORT_PASSWORD`
+       * `ESO_REPORT_AGENCY`
+    * modify `.github/workflows/eso_stats_scraper.yml` configuration and report_name as needed
+
