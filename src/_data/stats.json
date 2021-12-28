@@ -1,21 +1,21 @@
 {
-  "updated_at": "2021-12-27T17:13:23.004Z",
+  "updated_at": "2021-12-28T09:09:58.682Z",
   "comment": "auto generated",
   "time_stats": {
     "reaction": {
-      "mean": 85.84375
+      "mean": 87.66153846153846
     },
     "on_scene": {
-      "mean": 3310.890625
+      "mean": 3240.9692307692308
     }
   },
   "personnel_stats": {
     "time_on_incident": {
-      "sum": 299540,
-      "mean": 4680.3125
+      "sum": 745950,
+      "mean": 11476.153846153846
     },
     "number_per_incident": {
-      "mean": 2.609375,
+      "mean": 2.646153846153846,
       "min": 2,
       "max": 10
     }
@@ -23,29 +23,29 @@
   "region_stats": {
     "central": {
       "travel": {
-        "mean": 313.6279069767442
-      }
-    },
-    "south": {
-      "travel": {
-        "mean": 694.9
+        "mean": 310.6136363636364
       }
     },
     "north": {
       "travel": {
         "mean": 1150
       }
+    },
+    "south": {
+      "travel": {
+        "mean": 721.8
+      }
     }
   },
   "call_stats": {
-    "medical_rescue": 54,
+    "medical_rescue": 53,
     "fire": 6,
-    "total": 64,
-    "downgraded": 4,
+    "total": 65,
+    "downgraded": 6,
     "cancelled": 0,
     "other": 0,
-    "daytime_calls": 45,
-    "nighttime_calls": 19,
+    "daytime_calls": 47,
+    "nighttime_calls": 18,
     "overlapping_num_calls": 8
   }
 }
