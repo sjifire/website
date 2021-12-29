@@ -8,7 +8,7 @@
     "build:eleventy": "eleventy",
     "start": "npm-run-all clean watch:*",
     "build": "npm-run-all clean build:*",
-    "test" : "mocha",
+    "test": "mocha",
     "clean": "rimraf public"
   },
   "dependencies": {
@@ -16,7 +16,8 @@
     "@netlify/plugin-sitemap": "^v0.8",
     "csv-parse": "^5.0.3",
     "dotenv": "^10.0.0",
-    "playwright": "^1.17.1"
+    "playwright": "^1.17.1",
+    "underscore": "^1.13.2"
   },
   "devDependencies": {
     "clean-css": "^5.1.3",

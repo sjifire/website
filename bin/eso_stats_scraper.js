@@ -29,6 +29,9 @@ var argv = require('yargs/yargs')(hideBin(process.argv))
         alias: 'c',
         description: 'CSV output file path'
     })
+    .option('csv_input', {
+        description: 'CSV input file path'
+    })
     .option('headless', {
         description: 'run in headless mode',
         type: 'boolean',
@@ -42,7 +45,10 @@ var argv = require('yargs/yargs')(hideBin(process.argv))
 
 (async function(){
   console.log("retrieving CSV report from ESO")
-  let csvPath = await esoScraper.retrieveCSVReport(USERNAME, PASSWORD, AGENCY, argv.r, argv.h);
+  let csvPath = argv.csv_input;
+  if(csvPath === undefined){
+    csvPath = await esoScraper.retrieveCSVReport(USERNAME, PASSWORD, AGENCY, argv.r, argv.h);
+  }
   console.log("parsing CSV report")
   if(argv.c){
     console.log(`outputing csv file to ${argv.c}`)
