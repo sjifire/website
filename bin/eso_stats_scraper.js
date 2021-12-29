@@ -47,7 +47,7 @@ var argv = require('yargs/yargs')(hideBin(process.argv))
   console.log("retrieving CSV report from ESO")
   let csvPath = argv.csv_input;
   if(csvPath === undefined){
-    csvPath = await esoScraper.retrieveCSVReport(USERNAME, PASSWORD, AGENCY, argv.r, argv.h);
+    csvPath = await esoScraper.retrieveCSVReport(USERNAME, PASSWORD, AGENCY, argv.r, argv.headless);
   }
   console.log("parsing CSV report")
   if(argv.c){
