@@ -278,7 +278,7 @@ collections:
         delete: false
         editor:
           preview: false
-        file: "src/_data/about_key_information.json"
+        file: "src/_data/key_information.json"
         fields:
           - label: Preamble
             name: preamble
