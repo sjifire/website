@@ -190,7 +190,7 @@ collections:
         name: "about"
         delete: false
         editor:
-          preview: false
+          preview: true
         file: "src/_data/about.json"
         fields:
           - label: Preamble
@@ -277,7 +277,7 @@ collections:
         name: "key_information"
         delete: false
         editor:
-          preview: false
+          preview: true
         file: "src/_data/key_information.json"
         fields:
           - label: Preamble
@@ -285,6 +285,7 @@ collections:
             widget: markdown
             buttons: ['bold', 'italic', 'link']
             editor_components: []
+            required: false
             hint: >-
               Text that appears under the main heading.
           - sections:
