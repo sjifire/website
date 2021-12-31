@@ -113,7 +113,6 @@ const generateStats = (records) => {
 /**
  * Private helper methods
  */
-
 const processRecords = function(records){
   // stats for the day range from most recent record:
   let mostRecentRecordDate = _.last(records)['Dispatched Date']
@@ -493,9 +492,6 @@ const findFirst = (vals, fromCol, toCol) => {
   });
   return sortedVals[0] ? sortedVals[0] : {};
 }
-
-
-
 
 const sum  = arr => arr.reduce((a,b) => a + b, 0);
 const mean = arr => sum(arr) / arr.length;
