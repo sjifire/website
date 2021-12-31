@@ -7,7 +7,11 @@
  */
 const fs = require('fs');
 const yargs = require('yargs');
-const path = require('path');
+const logger = require('../src/modules/logger')
+const _ = require('lodash');
+
+
+// const path = require('path');
 const { hideBin } = require('yargs/helpers')
 const esoScraper = require( "../src/modules/eso_scraper" );
 
@@ -29,29 +33,48 @@ var argv = require('yargs/yargs')(hideBin(process.argv))
         alias: 'c',
         description: 'CSV output file path'
     })
+    .option('csv_input', {
+        description: 'CSV input file path'
+    })
     .option('headless', {
         description: 'run in headless mode',
         type: 'boolean',
         default: false
     })
+    .count('verbose')
+    .alias('v', 'verbose')
     .demandOption(['o','r'])
     .help()
     .alias('help', 'h')
     .argv;
 
+  switch(argv.verbose) {
+    case 0:
+      logger.level = 'info';
+      break;
+    case 1:
+      logger.level = 'verbose';
+      break;
+    default:
+      logger.level = 'debug';
+    }
 
 (async function(){
-  console.log("retrieving CSV report from ESO")
-  let csvPath = await esoScraper.retrieveCSVReport(USERNAME, PASSWORD, AGENCY, argv.r, argv.h);
-  console.log("parsing CSV report")
+
+  let csvPath = argv.csv_input;
+  if(_.isUndefined(csvPath)){
+    logger.info("retrieving CSV report from ESO")
+    csvPath = await esoScraper.retrieveCSVReport(USERNAME, PASSWORD, AGENCY, argv.r, argv.headless);
+  }
   if(argv.c){
-    console.log(`outputing csv file to ${argv.c}`)
+    logger.info(`outputing csv file to ${argv.c}`)
     fs.copyFileSync(csvPath, argv.c);
   }
+  logger.info("parsing CSV report")
   let records = esoScraper.parseCSV(csvPath);
   let statsOutput = esoScraper.generateStats(records);
-  console.log(`outputing json file to ${argv.o}`)
   let json = JSON.stringify(statsOutput, null, 2);
+  logger.info(`outputing json file to ${argv.o}`)
   fs.writeFileSync(argv.o, json)
 })()
 
