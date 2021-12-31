@@ -20,7 +20,7 @@ jobs:
       - run: npm ci
       - run: npm run build --if-present
       - run: npx playwright install-deps chromium
-      - run: ./bin/eso_stats_scraper.js  --headless -o ./src/_data/stats.json -r website-2
+      - run: ./bin/eso_stats_scraper.js  --headless -o ./src/_data/stats.json -r website-DEV
         env:
           ESO_REPORT_USERNAME: ${{ secrets.ESO_REPORT_USERNAME }}
           ESO_REPORT_PASSWORD: ${{ secrets.ESO_REPORT_PASSWORD }}
