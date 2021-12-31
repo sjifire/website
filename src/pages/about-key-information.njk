@@ -1,0 +1,20 @@
+---
+title: "About/Key Information"
+permalink: "/about/key-information/index.html"
+---
+
+{% extends 'base.njk' %}
+
+{% block page_header %}
+  <h1>
+    {{ title | safe }}
+  </h1>
+  <div class="lede">
+    {{ key_information.preamble | markdownify | safe }}
+  </div>
+{% endblock %}
+
+{% block content %}
+  {% set baseSections = key_information.sections %}
+  {% include "sections_block.njk" %}
+{% endblock %}
