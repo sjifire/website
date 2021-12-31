@@ -15,8 +15,11 @@
  *    zones (south, north, central), and types
  */
 const fs = require('fs');
-const _ = require('underscore');
+const _ = require('lodash');
+const logger = require('./logger')
+
 process.env.TZ = 'UTC';
+
 
 const DETAILED_STATS_DAY_RANGE = 30;
 
@@ -28,6 +31,7 @@ const MEDICAL_TYPES    = ['3'];           // Medical & Rescue
 const FIRE_TYPE        = ['1', '4', '5']; // fire, hazard, backfill
 const CANCELLED_TYPES  = ['61']
 const DOWNGRADE_TYPES  = ['6', '7']
+const BACKFILL_TYPES   = ['571']
 
 const DAYTIME_RANGE   = [6,7,8,9,10,11,12,13,14,15,16,17];
 const NIGHTTIME_RANGE = [18,19,20,21,22,23,0,1,2,3,4,5];
@@ -37,6 +41,7 @@ const ESO_LOGIN_URL = 'https://www.esosuite.net/login';
 
 
 const retrieveCSVReport = async function(username, password, agency, reportName, headless){
+
   const os = require('os');
   const path = require('path');
   const userDataDir = fs.mkdtempSync(path.join(os.tmpdir(), 'chromium'));
@@ -136,12 +141,12 @@ const processRecords = function(records){
     personnel_times: [],
     apparatus:    [],
     call_regions: [],
-    call_types:   [],
+    incident_types:   [],
     overlapping_calls_num: 0,
     daytime_calls:         0,
     nighttime_calls:       0,
     in_range_calls:   _.size(byIncidentInRange),
-    total_calls:      _.uniq(records, true, 'Incident Number').length,
+    total_calls:      _.uniqBy(records, 'Incident Number').length,
     date_range_from: dateCutoff,
     date_range_to:   mostRecentRecordDate
   }
@@ -152,15 +157,28 @@ const processRecords = function(records){
   }
 
   let prevCallEnd = null;
+  let inOverlappingCalls = false;
   incidentsInDispatchedDateOrder.forEach(incidentID => {
     raw_values.incident_ids.push(incidentID);
     let incidentRecords = byIncidentInRange[incidentID];
     //baseRecord is used for all columns that are the same within the incidentID grouping
     let baseRecord      = incidentRecords[0];
     let dispatchedDate  = baseRecord['Dispatched Date'];
+    let incidentTypeCall = baseRecord['Incident Type Code'].toString();
     raw_values.calls_per_day[dispatchedDate.toLocaleDateString()]++;
+
     if(prevCallEnd && prevCallEnd > dispatchedDate){
-      raw_values.overlapping_calls_num += 1
+      if (!BACKFILL_TYPES.some(v => incidentTypeCall.startsWith(v))){
+        raw_values.overlapping_calls_num += 1
+        if(!inOverlappingCalls){
+          // we didn't catch the first call that overlaps this one;
+          // lets make sure it is counted!
+          raw_values.overlapping_calls_num += 1
+          inOverlappingCalls = true
+        }
+      }
+    }else{
+      inOverlappingCalls = false
     }
     prevCallEnd = baseRecord['Last Unit Cleared Date'];
 
@@ -169,35 +187,85 @@ const processRecords = function(records){
     }else{
       raw_values.daytime_calls += 1;
     }
-
-    let firstEnRouteUnit = findFirst(incidentRecords, 'Dispatched Date', 'En Route Date');
+    let incidentUnitRecords = _.chain(incidentRecords)
+                               .map((r) => _.omit(r, 'User Login ID'))
+                               .filter((r, loc, allRecords) => (loc === 0) ? true : !_.isEqual(r, allRecords[loc-1]))
+                               .value();
+    // COMPUTE times based upon the Unit/Apparatus time, NOT each individual time
+    let firstEnRouteUnit = findFirst(incidentUnitRecords, 'Dispatched Date', 'En Route Date');
     let reactionTime     = (firstEnRouteUnit['En Route Date'] - dispatchedDate)/1000;
     if(_.isNaN(reactionTime)) reactionTime = null;
-    let firstArrivedUnit = findFirst(incidentRecords, 'Arrival Date');
-    let travelTime = avgTime(incidentRecords, 'En Route Date', 'Arrival Date');
-    let toSceneTime = avgTime(incidentRecords, 'Dispatched Date', 'Arrival Date')
-    let onSceneTime = (baseRecord['Last Unit Cleared Date'] - firstArrivedUnit['Arrival Date'])/1000;
-    if(_.isNaN(travelTime)){
-      travelTime = null;
-      toSceneTime      = null
-      firstArrivedUnit = null;
-      onSceneTime = null;
+    let firstArrivedUnit = findFirst(incidentUnitRecords, 'Arrival Date');
+    let travelTimes      = extractTimes(incidentUnitRecords, 'En Route Date', 'Arrival Date');
+    let toSceneTimes     = extractTimes(incidentUnitRecords, 'Dispatched Date', 'Arrival Date')
+    // let onSceneTime   = (baseRecord['Last Unit Cleared Date'] - firstArrivedUnit['Arrival Date'])/1000;
+    let onSceneTimes     = extractTimes(incidentUnitRecords, 'Arrival Date', 'Clear Date')
+    if(_.isEmpty(_.compact(travelTimes))){
+      logger.debug(`${incidentID} has empty travel times`)
+      // travelTimes      = null;
+      // toSceneTimes     = null
+      // firstArrivedUnit = null;
+      // onSceneTimes     = null;
     }
-    let incidentTime = (baseRecord['Last Unit Cleared Date'] - dispatchedDate)/1000;
+    if(_.isEmpty(_.compact(onSceneTimes))) logger.debug(`${incidentID} has empty on-scene times`)
 
+    let incidentTime = (baseRecord['Last Unit Cleared Date'] - dispatchedDate)/1000;
+    if(_.isNull(reactionTime)) logger.verbose(`${incidentID} has no reaction time`)
+    if(_.isNull(reactionTime)) logger.verbose(`${incidentID} has no reaction time`)
     raw_values.reaction_times.push(reactionTime);
-    raw_values.travel_times.push(travelTime);
-    raw_values.to_scene_times.push(toSceneTime);
-    raw_values.on_scene_times.push(onSceneTime);
+    raw_values.travel_times.push(travelTimes);
+    raw_values.to_scene_times.push(toSceneTimes);
+    raw_values.on_scene_times.push(onSceneTimes);
     raw_values.incident_times.push(incidentTime);
 
-    let personnel_times = _.map(incidentRecords,function(v){
-      return (v['Clear Date'] - v['Dispatched Date'])/1000;
-    });
-    let personnel = _.map(incidentRecords, function(v){
-      return (v['User Login ID']);
-    });
-    personnel = _.uniq(personnel);
+    let personnel_times = _.map(incidentRecords,(v) => (v['Clear Date'] - v['Dispatched Date'])/1000);
+    let personnel       = _.map(incidentRecords, (v) => v['User Login ID']);
+    let uniqPersonnel   = _.uniq(personnel);
+    if(uniqPersonnel.length !== personnel.length){
+      // we have duplicate entries; this can happen if a rig is
+      // assigned and a user hops into a different rig (e.g. FB)
+      // while the first rig is cleared..
+      // ACTION: remove dup users; use the longest time that they have
+      //   1) remove all duplicate names and times
+      //   2) find the locatin of the max time for that person
+      //   3) insert one name and max time back into respective arrays
+      _.each(uniqPersonnel, (p) => {
+        var fromIndex = -1
+        let foundIndexes = []
+        while((fromIndex = _.findIndex(personnel, _.matches(p), fromIndex+1)) > -1){
+          foundIndexes.push(fromIndex);
+        }
+        if(foundIndexes.length <= 1) return;  // no DUPS!  continue to next
+        var removedPersonnel = [];
+        var removedTimes     = [];
+        _.each(foundIndexes, (i) => {
+          // we can't delete/splice because then the indexing will be messed up.
+          removedPersonnel.push(personnel[i]);
+          personnel[i] = null;
+          removedTimes.push(personnel_times[i]);
+          personnel_times[i] = null;
+        })
+        personnel.push(removedPersonnel[0]);
+        // lets find the earliest they were on scene, and the latest they left
+        // and use that range.
+        // vs find the largest time; sometimes a user will pop to a different
+        // unit and be in two units for the duratin (which is incorrect); and sometimes
+        // they will be in multiple units in a serial manner (go get one apparatus, return, get a different one, etc)
+        let personnelRecords =  _.filter(incidentRecords, (v) => v['User Login ID'] == p);
+        let earliestDispatchDate = _.sortBy(personnelRecords, 'Dispatched Date')[0]['Dispatched Date'];
+        let latestClearDate = _.reverse(_.sortBy(personnelRecords, 'Clear Date'))[0]['Clear Date'];
+        let newPersonnelTime = (latestClearDate - earliestDispatchDate)/1000;
+        personnel_times.push(newPersonnelTime);
+        // use earliest to latest and NOT the largest pre-computed time
+        // personnel_times.push(_.max(removedTimes));
+
+        // do a bit of cleanup!  we need to remove the nulled values because the
+        // length is used to for various counts
+        personnel = _.compact(personnel);
+        personnel_times = _.compact(personnel_times);
+      })
+    }
+
     let apparatus = _.map(incidentRecords, function(v){
       return (v['Apparatus Name']);
     });
@@ -217,72 +285,78 @@ const processRecords = function(records){
     }
 
     //NOTE: order matters; cancelled type is very specific, while downgrade is broad
-    let incidentTypeCall = baseRecord['Incident Type Code'].toString();
     if (MEDICAL_TYPES.some(v => incidentTypeCall.startsWith(v))){
-      raw_values.call_types.push('medical_rescue');
+      raw_values.incident_types.push('medical_rescue');
     }else if(FIRE_TYPE.some(v => incidentTypeCall.startsWith(v))){
-      raw_values.call_types.push('fire');
+      raw_values.incident_types.push('fire');
     }else if(CANCELLED_TYPES.some(v => incidentTypeCall.startsWith(v))){
-      raw_values.call_types.push('cancelled');
+      raw_values.incident_types.push('cancelled');
     }else if(DOWNGRADE_TYPES.some(v => incidentTypeCall.startsWith(v))){
-      raw_values.call_types.push('downgraded');
+      raw_values.incident_types.push('downgraded');
     }else{
-      raw_values.call_types.push('other'); // TODO: in district or out of district?
+      raw_values.incident_types.push('other'); // TODO: in district or out of district?
     }
   });
+  logger.debug("processRecords", raw_values)
   return raw_values;
 };
 
 const createStats = function(raw_values){
-// console.log(raw_values)
-  let calls_per_day = _.values(raw_values.calls_per_day);
+  let callsPerDay = _.values(raw_values.calls_per_day);
+  let incidentTimes = _.chain(raw_values.incident_times).flatten().compact().value();
   let stats_output = {
     updated_at: new Date(),
     date_range_from: raw_values.date_range_from,
     date_range_to:   raw_values.date_range_to,
     comment: 'auto generated; do not manually modify',
-    time_stats: {},
+    unit_time_stats: {},
     personnel_stats: {},
     region_stats: {},
-    call_stats: {
-      total_calls_last_365_days: raw_values.total_calls,
-      total_calls: raw_values.in_range_calls,
-      daytime_calls: raw_values.daytime_calls,
-      nighttime_calls: raw_values.nighttime_calls,
+    incident_stats: {
+      types: {},
+      num_incidents_last_365_days: raw_values.total_calls,
+      num_incidents: raw_values.in_range_calls,
+      num_daytime_incidents: raw_values.daytime_calls,
+      num_nighttime_incidents: raw_values.nighttime_calls,
+      incident_times:{
+        sum: sum(incidentTimes),
+        mean: mean(incidentTimes),
+        median: median(incidentTimes),
+        min: min(incidentTimes),
+        max: max(incidentTimes)
+      },
       // TODO: see if we can start to get accurate data from dispatch!
       // marine: 0,
       // in_district: 0,
       // out_district: 0,
-      overlapping_num_calls: raw_values.overlapping_calls_num,
-      per_day: {
-        mean: sum(calls_per_day),
-        mean: mean(calls_per_day),
-        median: median(calls_per_day),
-        min: min(calls_per_day),
-        max: max(calls_per_day)
+      num_overlapping_incidents: raw_values.overlapping_calls_num,
+      num_per_day: {
+        mean: sum(callsPerDay),
+        mean: mean(callsPerDay),
+        median: median(callsPerDay),
+        min: min(callsPerDay),
+        max: max(callsPerDay)
       }
     }
   }
 
-  let defaultCallStats = {
+  let defaultIncidentTypes = {
     medical_rescue: 0,
     fire: 0,
-    total: 0,
     downgraded: 0,
     cancelled: 0,
     other: 0
   }
-  let callStats = {}
-  Object.assign(callStats, defaultCallStats, stats_output.call_stats, _.countBy(raw_values.call_types));
-  stats_output.call_stats = callStats;
+  let typeStats = {}
+  Object.assign(typeStats, defaultIncidentTypes, stats_output.incident_stats.types, _.countBy(raw_values.incident_types));
+  stats_output.incident_stats.types = typeStats;
   new Map([
-    ['reaction', _.compact(raw_values.reaction_times)],
-    ['travel', _.compact(raw_values.travel_times)],
-    ['to_scene', _.compact(raw_values.to_scene_times)],
-    ['on_scene', _.compact(raw_values.on_scene_times)],
-    ['total_incident', _.compact(raw_values.incident_times)]
+    ['first_unit_reaction', _.chain(raw_values.reaction_times).flatten().compact().value()],
+    ['travel',   _.chain(raw_values.travel_times).flatten().compact().value()],
+    ['to_scene', _.chain(raw_values.to_scene_times).flatten().compact().value()],
+    ['on_scene', _.chain(raw_values.on_scene_times).flatten().compact().value()],
   ]).forEach((arr,k)=>{
-    stats_output.time_stats[k] = {
+    stats_output.unit_time_stats[k] = {
       sum:  sum(arr),
       mean: mean(arr),
       median: median(arr),
@@ -302,57 +376,60 @@ const createStats = function(raw_values){
     min: min(collapsedPersonnelTimes),
     max: max(collapsedPersonnelTimes)
   };
-  stats_output.personnel_stats['time_on_incident'] = incident;
-  let personnelCount = _.map(raw_values.personnel_times, function(pt){
+  stats_output.personnel_stats['time_on_incidents'] = incident;
+  let personnelCount = _.map(raw_values.personnel, function(pt){
     return pt.length;
   });
-  stats_output.personnel_stats['number_per_incident'] = {
+  stats_output.personnel_stats['num_per_incidents'] = {
     mean: mean(personnelCount),
     median: median(personnelCount),
     // min: min(personnelCount),
     max: max(personnelCount)
   }
-  stats_output.personnel_stats['number_unique_responders'] = _.uniq(_.flatten(raw_values.personnel)).length
+  stats_output.personnel_stats['num_unique_responders'] = _.uniq(_.flatten(raw_values.personnel)).length
 
   let apparatusCount = _.map(raw_values.apparatus, function(a){
     return a.length;
   });
   stats_output.apparatus_stats = {
-    number_per_incident: {
+    num_per_incident: {
       mean: mean(apparatusCount),
       median: median(apparatusCount),
       min: min(apparatusCount),
       max: max(apparatusCount)
     },
-    number_used: _.without(_.uniq(_.flatten(raw_values.apparatus)), 'POV').length
+    num_unique_used: _.without(_.uniq(_.flatten(raw_values.apparatus)), 'POV').length
   }
 
   let raw_regions = {
     north: [],
     south: [],
-    central: []
+    central: [],
+    other: []
   }
   raw_values.call_regions.forEach((region, i) => {
-    let callType = raw_values.call_types[i];
+    let callType = raw_values.incident_types[i];
     if (!stats_output.region_stats[region]){
       stats_output.region_stats[region] = {}
     }
-    if (!stats_output.region_stats[region]['call_types']){
-      stats_output.region_stats[region]['call_types'] = {}
-      Object.assign(stats_output.region_stats[region]['call_types'], defaultCallStats)
+    if (!stats_output.region_stats[region]['incident_types']){
+      stats_output.region_stats[region]['incident_types'] = {}
+      stats_output.region_stats[region]['num_incidents'] = 0
+      Object.assign(stats_output.region_stats[region]['incident_types'], defaultIncidentTypes)
     }
-    stats_output.region_stats[region]['call_types'][callType] += 1
-    stats_output.region_stats[region]['call_types']['total'] += 1
+    stats_output.region_stats[region]['incident_types'][callType] += 1
+    stats_output.region_stats[region]['num_incidents'] += 1
     if(raw_values.travel_times[i]) raw_regions[region].push(raw_values.travel_times[i]);
   })
-
   Object.keys(raw_regions).forEach(region => {
-    stats_output.region_stats[region]['travel'] = {
-      sum:  sum(raw_regions[region]),
-      mean: mean(raw_regions[region]),
-      median: median(raw_regions[region]),
-      min: min(raw_regions[region]),
-      max: max(raw_regions[region])
+    if(!stats_output.region_stats[region]) return;  // go to next if there are no stats for this region
+    let compactedArr = _.chain(raw_regions[region]).flatten().compact().value();
+    stats_output.region_stats[region]['unit_travel_time'] = {
+      sum:  sum(compactedArr),
+      mean: mean(compactedArr),
+      median: median(compactedArr),
+      min: min(compactedArr),
+      max: max(compactedArr)
     };
   });
   return stats_output;
@@ -367,13 +444,36 @@ Date.prototype.addDays = function(days) {
 };
 
 //TODO: if the time is < 2 seconds, then there was a mistake!
-const avgTime = (records, fromCol, toCol) => {
+// const avgTime = (records, fromCol, toCol) => {
+//   let times = _.map(records, function(r){
+//     let dateDiff = (r[toCol] - r[fromCol])/1000;
+//     return (dateDiff < 2) ? null : dateDiff;
+//   });
+//   times = _.compact(times);
+//   return sum(times)/times.length;
+// }
+
+const extractTimes = (records, fromCol, toCol) => {
+  let fromColIsArr = _.isArray(fromCol);
   let times = _.map(records, function(r){
-    let dateDiff = (r[toCol] - r[fromCol])/1000;
+    let fromVal = null
+    if(fromColIsArr){
+      _.every(fromCol, function(f){
+        if(r[f]){
+          fromVal = r[f];
+          return false; //break loop; _.every will stop if a false is returned
+        }
+      })
+    }else{
+      fromVal = r[fromCol];
+    }
+    if(!fromVal) return null;
+    let dateDiff = (r[toCol] - fromVal)/1000;
     return (dateDiff < 2) ? null : dateDiff;
   });
-  times = _.compact(times);
-  return sum(times)/times.length;
+  return times;
+  // times = _.compact(times);
+  // return sum(times)/times.length;
 }
 
 const findFirst = (vals, fromCol, toCol) => {
