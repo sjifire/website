@@ -490,7 +490,7 @@ collections:
             widget: markdown
             buttons: ['bold', 'italic', 'link']
             editor_components: []
-            require: false
+            required: false
             hint: >-
               Text that appears under the main heading.
           - sections:
