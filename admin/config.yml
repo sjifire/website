@@ -478,6 +478,91 @@ collections:
                     name: caption
                     widget: string
                     hint: "Add a caption for the map"
+      - label: "Emergency Services"
+        name: "emergency_services"
+        delete: false
+        editor:
+          preview: true
+        file: "src/_data/emergency_services.json"
+        fields:
+          - label: Preamble
+            name: preamble
+            widget: markdown
+            buttons: ['bold', 'italic', 'link']
+            editor_components: []
+            required: false
+            hint: >-
+              Text that appears under the main heading.
+          - sections:
+            name: "sections"
+            widget: "list"
+            collapsed: true
+            add_to_top: true
+            hint: "Add discrete sections of content to this page. The sections you can choose from: 'text', 'image', 'youtube'."
+            required: true
+            types:
+              - label: "Text Section"
+                name: "text"
+                widget: "object"
+                fields:
+                  - label: Rich Text
+                    name: copy
+                    widget: markdown
+                    minimal: false
+                    buttons: ['bold', 'italic', 'link', 'heading-two', 'heading-three', 'heading-four', 'heading-five', 'heading-six', 'quote', 'bulleted-list', 'numbered-list']
+                    required: false
+                    hint: "Add a chunk of text (rich text editor)"
+              - label: "Image"
+                name: "image"
+                widget: "object"
+                hint: "Add an image to the post, complete with 'alt' tag and, optionally, a caption"
+                fields:
+                  - label: Image Upload
+                    name: source
+                    widget: image
+                    allow_multiple: false
+                    choose_url: false
+                    public_folder: ''
+                  - label: Width
+                    name: width
+                    widget: number
+                    hint: "What is the width of this image?"
+                  - label: Height
+                    name: height
+                    widget: number
+                    hint: "What is the height of this image"
+                  - label: Alternative Text
+                    name: alt
+                    widget: string
+                    hint: "Provide alternative ('alt') text for this image"
+                  - label: Image Caption
+                    name: caption
+                    widget: string
+                    hint: "Add a caption for the image (optional)"
+              - label: "YouTube Video"
+                name: "youtube"
+                widget: "object"
+                fields:
+                  - label: YouTube Video Link
+                    name: source
+                    widget: string
+                    hint: "Add a YouTube video player by copy-pasting the 'Share' link"
+                  - label: Video Caption
+                    name: caption
+                    widget: string
+                    hint: "Add a caption for the video (optional)"
+              - label: "Google Map"
+                name: "gmap"
+                widget: "object"
+                fields:
+                  - label: Google Map Link
+                    name: source
+                    widget: string
+                    hint: "Add a YouTube video player by copy-pasting the 'Share' link"
+                  - label: Map Caption
+                    name: caption
+                    widget: string
+                    hint: "Add a caption for the map"
       - label: "Contact"
         name: "contact"
         delete: false
