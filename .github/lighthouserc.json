@@ -21,6 +21,7 @@
         "uses-responsive-images": "off",
         "uses-optimized-images": "off",
         "modern-image-formats": "off",
+        "image-size-responsive": "warn",
         "uses-rel-preconnect": "warn",
         "csp-xss": "warn",
         "uses-long-cache-ttl": "warn",
