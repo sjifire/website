@@ -882,24 +882,36 @@ collections:
             modes: [rich_text]
             hint: >-
               Text that appears under the main heading.
-      - label: "Stat Settings"
-        name: "Stat Settings"
+      - label: "Config Settings"
+        name: "Config Settings"
         extension: "json"
         delete: false
         editor:
           preview: false
-        file: "src/_data/stats.json"
+        file: "src/_data/configs.json"
         fields:
-          - name: stats
-            label: Stats
-            widget: list
-            fields:
-            - name: stat pairs
-              label: Stat Pairs
-              widget: list
-              fields:
-                - {name: key, widget: "string"}
-                - {name: value, widget: "string"}
+          - name: "Burn Ban Status"
+            label: "burn ban status"
+            widget: "select"
+            options: ["Open", "Restricted", "Closed"]
+          - name: "Commercial Burn Ban Status"
+            label: "commercial burn ban status"
+            widget: "select"
+            options: ["Open", "Restricted", "Closed"]
+          - name: "Fire Danger Status"
+            label: "fire danger status"
+            widget: "select"
+            options: ["Low", "Moderate", "High", "Very High", "Extreme"]
+          - name: "Recreational Campfire Status"
+            label: "recreational campfire status"
+            widget: "select"
+            options: ["Open", "Restricted", "Closed"]
+          - name: "Site Name"
+            label: "site name"
+            widget: "string"
+          - name: "Default Site Description"
+            label: "default site description"
+            widget: "string"
   - name: "meetings"
     label: "Board Meetings"
     label_singular: "Board Meeting"
