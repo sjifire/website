@@ -1,0 +1,20 @@
+---
+title: "Incidents"
+permalink: "/about/incidents/index.html"
+---
+
+{% extends 'base.njk' %}
+
+{% block page_header %}
+  <h1>
+    {{ title | safe }}
+  </h1>
+  <div class="lede">
+    {{ incidents.preamble | markdownify | safe }}
+  </div>
+{% endblock %}
+
+{% block content %}
+  {% set baseSections = incidents.sections %}
+  {% include "sections_block.njk" %}
+{% endblock %}

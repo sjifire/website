@@ -166,6 +166,11 @@ const processRecords = function(records){
     let incidentTypeCall = baseRecord['Incident Type Code'].toString();
     raw_values.calls_per_day[dispatchedDate.toLocaleDateString()]++;
 
+    // lets check some times
+    if(dispatchedDate - baseRecord['Alarm Date'] < 2) logger.verbose(`${incidentID} has incorrect Alarm & Dispatch times`)
+    if(incidentTypeCall == '571' && (_.isDate(baseRecord['En Route Date'] || _.isDate(baseRecord['Arrival Date'])) logger.verbose(`${incidentID} is a standby yet has en route or arrival dates set`)
+
+
     if(prevCallEnd && prevCallEnd > dispatchedDate){
       if (!BACKFILL_TYPES.some(v => incidentTypeCall.startsWith(v))){
         raw_values.overlapping_calls_num += 1
