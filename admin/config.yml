@@ -479,7 +479,7 @@ collections:
                     widget: string
                     hint: "Add a caption for the map"
       - label: "Knoxbox"
-        name: "about"
+        name: "knoxbox"
         delete: false
         editor:
           preview: true
