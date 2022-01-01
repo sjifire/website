@@ -9,12 +9,15 @@ permalink: "/about/incidents/index.html"
   <h1>
     {{ title | safe }}
   </h1>
-  <div class="lede">
-    {{ incidents.preamble | markdownify | safe }}
-  </div>
+  {% if incidents.preamble %}
+    <div class="lede">
+      {{ incidents.preamble | markdownify | safe }}
+    </div>
+  {% endif %}
 {% endblock %}
 
 {% block content %}
-  {% set baseSections = incidents.sections %}
-  {% include "sections_block.njk" %}
+  <div class="post__copy">
+    {{ incidents.body | markdownify | safe }}
+  </div>
 {% endblock %}
