@@ -1,8 +1,28 @@
 {
-  "updated_at": "2022-01-01T09:10:57.602Z",
-  "date_range_from": "2021-12-02T00:00:00.000Z",
-  "date_range_to": "2021-12-31T16:08:43.000Z",
-  "comment": "auto generated; do not manually modify",
+  "personnel_stats": {
+    "time_on_incidents": {
+      "sum": 435490,
+      "mean": 5512.53164556962,
+      "median": 4456,
+      "min": 60,
+      "max": 20624
+    },
+    "num_per_incidents": {
+      "mean": 2.3164556962025316,
+      "median": 2,
+      "max": 6
+    },
+    "num_unique_responders": 21
+  },
+  "apparatus_stats": {
+    "num_per_incident": {
+      "mean": 1.1898734177215189,
+      "median": 1,
+      "min": 1,
+      "max": 5
+    },
+    "num_unique_used": 8
+  },
   "unit_time_stats": {
     "first_unit_reaction": {
       "sum": 8867,
@@ -33,20 +53,33 @@
       "max": 8718
     }
   },
-  "personnel_stats": {
-    "time_on_incidents": {
-      "sum": 435490,
-      "mean": 5512.53164556962,
-      "median": 4456,
-      "min": 60,
-      "max": 20624
+  "date_range_to": "2021-12-31T16:08:43.000Z",
+  "incident_stats": {
+    "types": {
+      "medical_rescue": 53,
+      "fire": 9,
+      "downgraded": 8,
+      "cancelled": 9,
+      "other": 0
     },
-    "num_per_incidents": {
-      "mean": 2.3164556962025316,
+    "num_incidents_last_365_days": 1007,
+    "num_incidents": 79,
+    "num_daytime_incidents": 55,
+    "num_nighttime_incidents": 24,
+    "incident_times": {
+      "sum": 186816,
+      "mean": 2364.759493670886,
+      "median": 2119,
+      "min": 30,
+      "max": 9089
+    },
+    "num_overlapping_incidents": 10,
+    "num_per_day": {
+      "mean": 2.6333333333333333,
       "median": 2,
+      "min": 0,
       "max": 6
-    },
-    "num_unique_responders": 21
+    }
   },
   "region_stats": {
     "central": {
@@ -101,40 +134,17 @@
       }
     }
   },
-  "incident_stats": {
-    "types": {
-      "medical_rescue": 53,
-      "fire": 9,
-      "downgraded": 8,
-      "cancelled": 9,
-      "other": 0
-    },
-    "num_incidents_last_365_days": 1007,
-    "num_incidents": 79,
-    "num_daytime_incidents": 55,
-    "num_nighttime_incidents": 24,
-    "incident_times": {
-      "sum": 186816,
-      "mean": 2364.759493670886,
-      "median": 2119,
-      "min": 30,
-      "max": 9089
-    },
-    "num_overlapping_incidents": 10,
-    "num_per_day": {
-      "mean": 2.6333333333333333,
-      "median": 2,
-      "min": 0,
-      "max": 6
+  "updated_at": "2022-01-01T09:10:57.602Z",
+  "date_range_from": "2021-12-02T00:00:00.000Z",
+  "stats": [
+    {
+      "stat pairs": [
+        {
+          "key": "key1",
+          "value": "value1"
+        }
+      ]
     }
-  },
-  "apparatus_stats": {
-    "num_per_incident": {
-      "mean": 1.1898734177215189,
-      "median": 1,
-      "min": 1,
-      "max": 5
-    },
-    "num_unique_used": 8
-  }
+  ],
+  "comment": "auto generated; do not manually modify"
 }
