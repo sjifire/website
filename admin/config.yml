@@ -1,6 +1,8 @@
 backend:
   name: git-gateway
   branch: main
+local_backend: true
+
 media_folder: "src/assets/images"
 public_folder: "/assets/images"
 site_url: "https://www.sjifire.org/"
@@ -616,6 +618,26 @@ collections:
                     name: caption
                     widget: string
                     hint: "Add a caption for the map"
+      - label: "Firewise"
+        name: "firewise"
+        delete: false
+        editor:
+          preview: true
+        extension: "json"
+        file: "src/_data/firewise.json"
+        fields:
+          - label: Preamble
+            name: preamble
+            widget: markdown
+            buttons: ['bold', 'italic', 'link']
+            editor_components: []
+            required: false
+            hint: >-
+              Text that appears under the main heading.
+          - label: Body
+            name: body
+            widget: markdown
+            required: false
       - label: "Knoxbox"
         name: "knoxbox"
         delete: false
