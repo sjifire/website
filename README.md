@@ -18,6 +18,10 @@ main website for sjifire.org
 1. run `npm test`
 1. run `npm start`
 
+### Admin access
+1. check url from `npm start`, which will probably be `http://localhost:8080`
+1. for login access, use site `https://web-admin.sjifire.org/`
+
 ## getting started (production)
 1. setup a cloudinary account and get a URL secret
 1. setup Netlify account
