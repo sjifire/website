@@ -156,6 +156,39 @@ collections:
     label: "Pages"
     description: "Edit pages across the site."
     files:
+      - label: "Config Settings"
+        name: "Config Settings"
+        extension: "json"
+        delete: false
+        editor:
+          preview: false
+        file: "src/_data/configs.json"
+        fields:
+          - name: "fire_status"
+            label: "Fire Danger Status"
+            widget: "select"
+            options: ["Low", "Moderate", "High", "Very High", "Extreme"]
+          - name: "burn_ban_status"
+            label: "Burn Ban Status"
+            widget: "select"
+            options: ["Open", "Restricted", "Closed"]
+          - name: "commercial_burn_ban_status"
+            label: "Commercial Burn Ban Status"
+            widget: "select"
+            options: ["Open", "Restricted", "Closed"]
+          - name: "rec_campfire_status"
+            label: "Recreational Campfire Status"
+            widget: "select"
+            options: ["Open", "Restricted", "Closed"]
+          - name: "site_name"
+            label: "Site Name"
+            widget: "string"
+          - name: "formal_site_name"
+            label: "Formal Site Name"
+            widget: "string"
+          - name: "site_desc"
+            label: "Site Description"
+            widget: "string"
       - label: "Homepage"
         name: "homepage"
         delete: false
@@ -293,180 +326,6 @@ collections:
             name: body
             widget: markdown
             required: false
-      - label: "Burn Permits"
-        name: "burn_permits"
-        delete: false
-        editor:
-          preview: true
-        file: "src/_data/burn_permits.json"
-        fields:
-          - label: Preamble
-            name: preamble
-            widget: markdown
-            buttons: ['bold', 'italic', 'link']
-            editor_components: []
-            modes: [rich_text]
-            required: false
-            hint: >-
-              Text that appears under the main heading.
-          - sections:
-            name: "sections"
-            widget: "list"
-            collapsed: true
-            add_to_top: true
-            hint: "Add discrete sections of content to this page. The sections you can choose from: 'text', 'image', 'youtube'."
-            required: true
-            types:
-              - label: "Text Section"
-                name: "text"
-                widget: "object"
-                fields:
-                  - label: Rich Text
-                    name: copy
-                    widget: markdown
-                    minimal: false
-                    buttons: ['bold', 'italic', 'link', 'heading-two', 'heading-three', 'heading-four', 'heading-five', 'heading-six', 'quote', 'bulleted-list', 'numbered-list']
-                    editor_components: []
-                    required: false
-                    hint: "Add a chunk of text (rich text editor)"
-              - label: "Image"
-                name: "image"
-                widget: "object"
-                hint: "Add an image to the post, complete with 'alt' tag and, optionally, a caption"
-                fields:
-                  - label: Image Upload
-                    name: source
-                    widget: image
-                    allow_multiple: false
-                    choose_url: false
-                    public_folder: ''
-                  - label: Width
-                    name: width
-                    widget: number
-                    hint: "What is the width of this image?"
-                  - label: Height
-                    name: height
-                    widget: number
-                    hint: "What is the height of this image"
-                  - label: Alternative Text
-                    name: alt
-                    widget: string
-                    hint: "Provide alternative ('alt') text for this image"
-                  - label: Image Caption
-                    name: caption
-                    widget: string
-                    hint: "Add a caption for the image (optional)"
-              - label: "YouTube Video"
-                name: "youtube"
-                widget: "object"
-                fields:
-                  - label: YouTube Video Link
-                    name: source
-                    widget: string
-                    hint: "Add a YouTube video player by copy-pasting the 'Share' link"
-                  - label: Video Caption
-                    name: caption
-                    widget: string
-                    hint: "Add a caption for the video (optional)"
-              - label: "Google Map"
-                name: "gmap"
-                widget: "object"
-                fields:
-                  - label: Google Map Link
-                    name: source
-                    widget: string
-                    hint: "Add a YouTube video player by copy-pasting the 'Share' link"
-                  - label: Map Caption
-                    name: caption
-                    widget: string
-                    hint: "Add a caption for the map"
-      - label: "Disclaimer"
-        name: "disclaimer"
-        delete: false
-        editor:
-          preview: false
-        file: "src/_data/disclaimer.json"
-        fields:
-          - label: Preamble
-            name: preamble
-            widget: markdown
-            buttons: ['bold', 'italic', 'link']
-            editor_components: []
-            modes: [rich_text]
-            hint: >-
-              Text that appears under the main heading.
-          - sections:
-            name: "sections"
-            widget: "list"
-            collapsed: true
-            add_to_top: true
-            hint: "Add discrete sections of content to this page. The sections you can choose from: 'text', 'image', 'youtube'."
-            required: true
-            types:
-              - label: "Text Section"
-                name: "text"
-                widget: "object"
-                fields:
-                  - label: Rich Text
-                    name: copy
-                    widget: markdown
-                    minimal: false
-                    buttons: ['bold', 'italic', 'link', 'heading-two', 'heading-three', 'heading-four', 'heading-five', 'heading-six', 'quote', 'bulleted-list', 'numbered-list']
-                    editor_components: []
-                    modes: [rich_text]
-                    required: false
-                    hint: "Add a chunk of text (rich text editor)"
-              - label: "Image"
-                name: "image"
-                widget: "object"
-                hint: "Add an image to the post, complete with 'alt' tag and, optionally, a caption"
-                fields:
-                  - label: Image Upload
-                    name: source
-                    widget: image
-                    allow_multiple: false
-                    choose_url: false
-                    public_folder: ''
-                  - label: Width
-                    name: width
-                    widget: number
-                    hint: "What is the width of this image?"
-                  - label: Height
-                    name: height
-                    widget: number
-                    hint: "What is the height of this image"
-                  - label: Alternative Text
-                    name: alt
-                    widget: string
-                    hint: "Provide alternative ('alt') text for this image"
-                  - label: Image Caption
-                    name: caption
-                    widget: string
-                    hint: "Add a caption for the image (optional)"
-              - label: "YouTube Video"
-                name: "youtube"
-                widget: "object"
-                fields:
-                  - label: YouTube Video Link
-                    name: source
-                    widget: string
-                    hint: "Add a YouTube video player by copy-pasting the 'Share' link"
-                  - label: Video Caption
-                    name: caption
-                    widget: string
-                    hint: "Add a caption for the video (optional)"
-              - label: "Google Map"
-                name: "gmap"
-                widget: "object"
-                fields:
-                  - label: Google Map Link
-                    name: source
-                    widget: string
-                    hint: "Add a YouTube video player by copy-pasting the 'Share' link"
-                  - label: Map Caption
-                    name: caption
-                    widget: string
-                    hint: "Add a caption for the map"
       - label: "Governance"
         name: "governance"
         delete: false
@@ -532,91 +391,6 @@ collections:
                     buttons: ['bold', 'italic', 'link', 'heading-two', 'heading-three', 'heading-four', 'heading-five', 'heading-six', 'quote', 'bulleted-list', 'numbered-list']
                     editor_components: []
                     modes: [rich_text]
-                    required: false
-                    hint: "Add a chunk of text (rich text editor)"
-              - label: "Image"
-                name: "image"
-                widget: "object"
-                hint: "Add an image to the post, complete with 'alt' tag and, optionally, a caption"
-                fields:
-                  - label: Image Upload
-                    name: source
-                    widget: image
-                    allow_multiple: false
-                    choose_url: false
-                    public_folder: ''
-                  - label: Width
-                    name: width
-                    widget: number
-                    hint: "What is the width of this image?"
-                  - label: Height
-                    name: height
-                    widget: number
-                    hint: "What is the height of this image"
-                  - label: Alternative Text
-                    name: alt
-                    widget: string
-                    hint: "Provide alternative ('alt') text for this image"
-                  - label: Image Caption
-                    name: caption
-                    widget: string
-                    hint: "Add a caption for the image (optional)"
-              - label: "YouTube Video"
-                name: "youtube"
-                widget: "object"
-                fields:
-                  - label: YouTube Video Link
-                    name: source
-                    widget: string
-                    hint: "Add a YouTube video player by copy-pasting the 'Share' link"
-                  - label: Video Caption
-                    name: caption
-                    widget: string
-                    hint: "Add a caption for the video (optional)"
-              - label: "Google Map"
-                name: "gmap"
-                widget: "object"
-                fields:
-                  - label: Google Map Link
-                    name: source
-                    widget: string
-                    hint: "Add a YouTube video player by copy-pasting the 'Share' link"
-                  - label: Map Caption
-                    name: caption
-                    widget: string
-                    hint: "Add a caption for the map"
-      - label: "Knoxbox"
-        name: "knoxbox"
-        delete: false
-        editor:
-          preview: true
-        file: "src/_data/knoxbox.json"
-        fields:
-          - label: Preamble
-            name: preamble
-            widget: markdown
-            buttons: ['bold', 'italic', 'link']
-            editor_components: []
-            required: false
-            hint: >-
-              Text that appears under the main heading.
-          - sections:
-            name: "sections"
-            widget: "list"
-            collapsed: true
-            add_to_top: true
-            hint: "Add discrete sections of content to this page. The sections you can choose from: 'text', 'image', 'youtube'."
-            required: true
-            types:
-              - label: "Text Section"
-                name: "text"
-                widget: "object"
-                fields:
-                  - label: Rich Text
-                    name: copy
-                    widget: markdown
-                    minimal: false
-                    buttons: ['bold', 'italic', 'link', 'heading-two', 'heading-three', 'heading-four', 'heading-five', 'heading-six', 'quote', 'bulleted-list', 'numbered-list']
                     required: false
                     hint: "Add a chunk of text (rich text editor)"
               - label: "Image"
@@ -755,6 +529,178 @@ collections:
                     name: caption
                     widget: string
                     hint: "Add a caption for the map"
+      - label: "Burn Permits"
+        name: "burn_permits"
+        delete: false
+        editor:
+          preview: true
+        file: "src/_data/burn_permits.json"
+        fields:
+          - label: Preamble
+            name: preamble
+            widget: markdown
+            buttons: ['bold', 'italic', 'link']
+            editor_components: []
+            modes: [rich_text]
+            required: false
+            hint: >-
+              Text that appears under the main heading.
+          - sections:
+            name: "sections"
+            widget: "list"
+            collapsed: true
+            add_to_top: true
+            hint: "Add discrete sections of content to this page. The sections you can choose from: 'text', 'image', 'youtube'."
+            required: true
+            types:
+              - label: "Text Section"
+                name: "text"
+                widget: "object"
+                fields:
+                  - label: Rich Text
+                    name: copy
+                    widget: markdown
+                    minimal: false
+                    buttons: ['bold', 'italic', 'link', 'heading-two', 'heading-three', 'heading-four', 'heading-five', 'heading-six', 'quote', 'bulleted-list', 'numbered-list']
+                    editor_components: []
+                    required: false
+                    hint: "Add a chunk of text (rich text editor)"
+              - label: "Image"
+                name: "image"
+                widget: "object"
+                hint: "Add an image to the post, complete with 'alt' tag and, optionally, a caption"
+                fields:
+                  - label: Image Upload
+                    name: source
+                    widget: image
+                    allow_multiple: false
+                    choose_url: false
+                    public_folder: ''
+                  - label: Width
+                    name: width
+                    widget: number
+                    hint: "What is the width of this image?"
+                  - label: Height
+                    name: height
+                    widget: number
+                    hint: "What is the height of this image"
+                  - label: Alternative Text
+                    name: alt
+                    widget: string
+                    hint: "Provide alternative ('alt') text for this image"
+                  - label: Image Caption
+                    name: caption
+                    widget: string
+                    hint: "Add a caption for the image (optional)"
+              - label: "YouTube Video"
+                name: "youtube"
+                widget: "object"
+                fields:
+                  - label: YouTube Video Link
+                    name: source
+                    widget: string
+                    hint: "Add a YouTube video player by copy-pasting the 'Share' link"
+                  - label: Video Caption
+                    name: caption
+                    widget: string
+                    hint: "Add a caption for the video (optional)"
+              - label: "Google Map"
+                name: "gmap"
+                widget: "object"
+                fields:
+                  - label: Google Map Link
+                    name: source
+                    widget: string
+                    hint: "Add a YouTube video player by copy-pasting the 'Share' link"
+                  - label: Map Caption
+                    name: caption
+                    widget: string
+                    hint: "Add a caption for the map"
+      - label: "Knoxbox"
+        name: "knoxbox"
+        delete: false
+        editor:
+          preview: true
+        file: "src/_data/knoxbox.json"
+        fields:
+          - label: Preamble
+            name: preamble
+            widget: markdown
+            buttons: ['bold', 'italic', 'link']
+            editor_components: []
+            required: false
+            hint: >-
+              Text that appears under the main heading.
+          - sections:
+            name: "sections"
+            widget: "list"
+            collapsed: true
+            add_to_top: true
+            hint: "Add discrete sections of content to this page. The sections you can choose from: 'text', 'image', 'youtube'."
+            required: true
+            types:
+              - label: "Text Section"
+                name: "text"
+                widget: "object"
+                fields:
+                  - label: Rich Text
+                    name: copy
+                    widget: markdown
+                    minimal: false
+                    buttons: ['bold', 'italic', 'link', 'heading-two', 'heading-three', 'heading-four', 'heading-five', 'heading-six', 'quote', 'bulleted-list', 'numbered-list']
+                    required: false
+                    hint: "Add a chunk of text (rich text editor)"
+              - label: "Image"
+                name: "image"
+                widget: "object"
+                hint: "Add an image to the post, complete with 'alt' tag and, optionally, a caption"
+                fields:
+                  - label: Image Upload
+                    name: source
+                    widget: image
+                    allow_multiple: false
+                    choose_url: false
+                    public_folder: ''
+                  - label: Width
+                    name: width
+                    widget: number
+                    hint: "What is the width of this image?"
+                  - label: Height
+                    name: height
+                    widget: number
+                    hint: "What is the height of this image"
+                  - label: Alternative Text
+                    name: alt
+                    widget: string
+                    hint: "Provide alternative ('alt') text for this image"
+                  - label: Image Caption
+                    name: caption
+                    widget: string
+                    hint: "Add a caption for the image (optional)"
+              - label: "YouTube Video"
+                name: "youtube"
+                widget: "object"
+                fields:
+                  - label: YouTube Video Link
+                    name: source
+                    widget: string
+                    hint: "Add a YouTube video player by copy-pasting the 'Share' link"
+                  - label: Video Caption
+                    name: caption
+                    widget: string
+                    hint: "Add a caption for the video (optional)"
+              - label: "Google Map"
+                name: "gmap"
+                widget: "object"
+                fields:
+                  - label: Google Map Link
+                    name: source
+                    widget: string
+                    hint: "Add a YouTube video player by copy-pasting the 'Share' link"
+                  - label: Map Caption
+                    name: caption
+                    widget: string
+                    hint: "Add a caption for the map"
       - label: "Contact"
         name: "contact"
         delete: false
@@ -803,6 +749,93 @@ collections:
             modes: [rich_text]
             required: false
             hint: "Add a chunk of text (rich text editor)"
+      - label: "Disclaimer"
+        name: "disclaimer"
+        delete: false
+        editor:
+          preview: false
+        file: "src/_data/disclaimer.json"
+        fields:
+          - label: Preamble
+            name: preamble
+            widget: markdown
+            buttons: ['bold', 'italic', 'link']
+            editor_components: []
+            modes: [rich_text]
+            hint: >-
+              Text that appears under the main heading.
+          - sections:
+            name: "sections"
+            widget: "list"
+            collapsed: true
+            add_to_top: true
+            hint: "Add discrete sections of content to this page. The sections you can choose from: 'text', 'image', 'youtube'."
+            required: true
+            types:
+              - label: "Text Section"
+                name: "text"
+                widget: "object"
+                fields:
+                  - label: Rich Text
+                    name: copy
+                    widget: markdown
+                    minimal: false
+                    buttons: ['bold', 'italic', 'link', 'heading-two', 'heading-three', 'heading-four', 'heading-five', 'heading-six', 'quote', 'bulleted-list', 'numbered-list']
+                    editor_components: []
+                    modes: [rich_text]
+                    required: false
+                    hint: "Add a chunk of text (rich text editor)"
+              - label: "Image"
+                name: "image"
+                widget: "object"
+                hint: "Add an image to the post, complete with 'alt' tag and, optionally, a caption"
+                fields:
+                  - label: Image Upload
+                    name: source
+                    widget: image
+                    allow_multiple: false
+                    choose_url: false
+                    public_folder: ''
+                  - label: Width
+                    name: width
+                    widget: number
+                    hint: "What is the width of this image?"
+                  - label: Height
+                    name: height
+                    widget: number
+                    hint: "What is the height of this image"
+                  - label: Alternative Text
+                    name: alt
+                    widget: string
+                    hint: "Provide alternative ('alt') text for this image"
+                  - label: Image Caption
+                    name: caption
+                    widget: string
+                    hint: "Add a caption for the image (optional)"
+              - label: "YouTube Video"
+                name: "youtube"
+                widget: "object"
+                fields:
+                  - label: YouTube Video Link
+                    name: source
+                    widget: string
+                    hint: "Add a YouTube video player by copy-pasting the 'Share' link"
+                  - label: Video Caption
+                    name: caption
+                    widget: string
+                    hint: "Add a caption for the video (optional)"
+              - label: "Google Map"
+                name: "gmap"
+                widget: "object"
+                fields:
+                  - label: Google Map Link
+                    name: source
+                    widget: string
+                    hint: "Add a YouTube video player by copy-pasting the 'Share' link"
+                  - label: Map Caption
+                    name: caption
+                    widget: string
+                    hint: "Add a caption for the map"
       - label: "404 Error - Page Not Found"
         name: "error_404"
         delete: false
@@ -818,39 +851,6 @@ collections:
             modes: [rich_text]
             hint: >-
               Text that appears under the main heading.
-      - label: "Config Settings"
-        name: "Config Settings"
-        extension: "json"
-        delete: false
-        editor:
-          preview: false
-        file: "src/_data/configs.json"
-        fields:
-          - name: "fire_status"
-            label: "Fire Danger Status"
-            widget: "select"
-            options: ["Low", "Moderate", "High", "Very High", "Extreme"]
-          - name: "burn_ban_status"
-            label: "Burn Ban Status"
-            widget: "select"
-            options: ["Open", "Restricted", "Closed"]
-          - name: "commercial_burn_ban_status"
-            label: "Commercial Burn Ban Status"
-            widget: "select"
-            options: ["Open", "Restricted", "Closed"]
-          - name: "rec_campfire_status"
-            label: "Recreational Campfire Status"
-            widget: "select"
-            options: ["Open", "Restricted", "Closed"]
-          - name: "site_name"
-            label: "Site Name"
-            widget: "string"
-          - name: "formal_site_name"
-            label: "Formal Site Name"
-            widget: "string"
-          - name: "site_desc"
-            label: "Site Description"
-            widget: "string"
   - name: "meetings"
     label: "Board Meetings"
     label_singular: "Board Meeting"
