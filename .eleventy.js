@@ -51,8 +51,12 @@ module.exports = function (eleventyConfig) {
       .filter(hideFutureItems)
   });
 
-  const MarkdownIt = require("markdown-it");
-  const mdRender = new MarkdownIt();
+  // const MarkdownIt = require("markdown-it");
+
+  const mdRender = require('markdown-it')({linkify: true})
+  .use(require('markdown-it-attrs'), {allowedAttributes: ['id', 'class']})
+
+  // const mdRender = new MarkdownIt();
   eleventyConfig.addFilter("markdownify", function(rawString) {
     return mdRender.render(rawString);
   });
