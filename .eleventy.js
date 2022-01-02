@@ -52,9 +52,11 @@ module.exports = function (eleventyConfig) {
   });
 
   // const MarkdownIt = require("markdown-it");
-
+  //FIXME: Remark is not easily supported in 11ty at the moment
+  //       once it is, lets move to Remark as that is what the Netlify CMS
+  //       uses, so we can make sure we're using the same parser
   const mdRender = require('markdown-it')({linkify: true})
-  .use(require('markdown-it-attrs'), {allowedAttributes: ['id', 'class']})
+  .use(require('markdown-it-attrs'))
 
   // const mdRender = new MarkdownIt();
   eleventyConfig.addFilter("markdownify", function(rawString) {
