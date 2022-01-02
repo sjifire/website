@@ -19,7 +19,8 @@ main website for sjifire.org
 1. run `npm start`
 
 ### Admin access
-1. check url from `npm start`, which will probably be `http://localhost:8080`
+1. `npm install -g http-server`
+1. `cd admin; http-server -o -a localhost`
 1. for login access, use site `https://web-admin.sjifire.org/`
 
 ## getting started (production)
