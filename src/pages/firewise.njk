@@ -1,0 +1,23 @@
+---
+title: "Firewise"
+permalink: "/services/firewise/index.html"
+---
+
+{% extends 'base.njk' %}
+
+{% block page_header %}
+  <h1>
+    {{ title | safe }}
+  </h1>
+  {% if firewise.preamble %}
+    <div class="lede">
+      {{ firewise.preamble | markdownify | safe }}
+    </div>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  <div class="post__copy">
+    {{ firewise.body | markdownify | safe }}
+  </div>
+{% endblock %}
