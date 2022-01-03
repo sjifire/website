@@ -152,7 +152,6 @@ collections:
         pattern: \d{4}
       - label: Post Type
         field: post_type
-
   - name: pages
     label: "Pages"
     description: "Edit pages across the site."
@@ -737,6 +736,49 @@ collections:
             choose_url: false
             media_folder: '/src/assets/docs/'
             public_folder: ''
+    sortable_fields:
+      - date
+      - commit_date
+    view_groups:
+      - label: Year
+        field: date
+        pattern: \d{4}
+  - name: "Media Releases"
+    label: "Media Releases"
+    label_singular: "Media Release"
+    folder: "src/media_releases/"
+    slug: "{{fields.date}}-{{slug}}"
+    preview_path_date_field: "date"
+    extension: "json"
+    create: true # Allow users to create new documents in this collection
+    delete: true # Allow users to delete items in this collection
+    editor:
+      preview: false
+    summary: "{{fields.date | date('YYYY-MM-DD')}} • {{fields.title}}"
+    description: "Add media releases to the site."
+    fields: # The fields for each document, usually in front matter
+      - label: Title
+        name: title
+        widget: string
+        required: true
+      - label: Date
+        name: date
+        widget: datetime
+        date_format: "YYYY-MM-DD"
+        time_format: false
+        format: "YYYY-MM-DD"
+        picker_utc: true
+        default: ''
+        hint: release date
+        required: true
+      - label: "Documents"
+        name: "documents"
+        widget: file
+        allow_multiple: false
+        choose_url: false
+        required: true
+        media_folder: "/src/assets/media_releases/{{year}}"
+        public_folder: ''
     sortable_fields:
       - date
       - commit_date
