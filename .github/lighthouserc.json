@@ -34,6 +34,7 @@
         "total-byte-weight": "warn",
         "uses-passive-event-listeners": "warn",
         "uses-text-compression": "warn",
+        "link-text": "warn",
         "tap-targets": "warn"
 
       }
