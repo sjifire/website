@@ -469,7 +469,7 @@ collections:
         delete: false
         editor:
           preview: true
-        file: "src/_data/burn_permits.json"
+        file: "src/_data/burn_permits.yml"
         fields:
           - label: Preamble
             name: preamble

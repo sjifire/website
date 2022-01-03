@@ -1,12 +1,16 @@
-const htmlmin = require("html-minifier");
+const htmlmin      = require("html-minifier");
 const { DateTime } = require("luxon");
-const CleanCSS = require("clean-css");
-const util = require("util");
-const slugify = require("slugify");
+const CleanCSS     = require("clean-css");
+const util         = require("util");
+const slugify      = require("slugify");
+const yaml         = require("js-yaml");
+
 const isProduction = process.env.ELEVENTY_ENV === `production`;
 
 module.exports = function (eleventyConfig) {
   require("dotenv").config();
+
+  eleventyConfig.addDataExtension("yml", contents => yaml.load(contents));
 
   eleventyConfig.addPassthroughCopy("src/assets/");
 
