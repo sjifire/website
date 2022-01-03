@@ -8,7 +8,7 @@ winston = require('winston');
 // winston.level = 'debug'
 // and it will become quite verbose
 
-const esoScraper = require( "../src/modules/eso_scraper" );
+const esoScrapper = require( "../src/modules/eso_scrapper" );
 const sampleCSVPath = `${__dirname}/files/sample_report.csv`;
 // const sampleJSONPath = `${__dirname}/sample_stats.json`;
 // const sampleJSON = fs.readFileSync('sample_stats.json', "utf8");
@@ -18,7 +18,7 @@ describe('parseCSV', function(){
   let record  = null
 
   before(() => {
-    records = esoScraper.parseCSV(sampleCSVPath);
+    records = esoScrapper.parseCSV(sampleCSVPath);
     record  = records[0];
   });
 
@@ -93,8 +93,8 @@ describe('generateStats', function(){
   let stubbedStats = null;
   let parsedStats  = null;
   before(() => {
-    records = esoScraper.parseCSV(sampleCSVPath);
-    parsedStats = esoScraper.generateStats(records);
+    records = esoScrapper.parseCSV(sampleCSVPath);
+    parsedStats = esoScrapper.generateStats(records);
   });
   it('should return expected high-level keys', function(){
     let keys = Object.keys(parsedStats);
@@ -119,8 +119,8 @@ describe('generateStats', function(){
     //   we do the best we can and
     // * lots of units coming and going at different times
     let sampleBuildingFireCSV = `${__dirname}/files/sample_building_fire.csv`;
-    let records = esoScraper.parseCSV(sampleBuildingFireCSV);
-    let parsedStats = esoScraper.generateStats(records);
+    let records = esoScrapper.parseCSV(sampleBuildingFireCSV);
+    let parsedStats = esoScrapper.generateStats(records);
     //Only grabs the first due unit reactions time
     assert.deepEqual(parsedStats.unit_time_stats.first_unit_reaction, { sum: 199, mean: 199, median: 199, min: 199, max: 199 });
     assert.deepEqual(parsedStats.unit_time_stats.travel, { sum: 5601, mean: 800.1428571428571, median: 931, min: 329, max: 1063 });
@@ -150,8 +150,8 @@ describe('generateStats', function(){
     // but is paged AFTER 21-021223; so E31 leaves on x223 while L31 leaves 10 min or so later for x224
     // Testing for quick reaction from E31 but slower reaction for L31 as it wasn't staffed with oncall
     let samplePath = `${__dirname}/files/sample_call_dispatched_before_previous_call.csv`;
-    let records = esoScraper.parseCSV(samplePath);
-    let parsedStats = esoScraper.generateStats(records);
+    let records = esoScrapper.parseCSV(samplePath);
+    let parsedStats = esoScrapper.generateStats(records);
     assert.deepEqual(parsedStats.unit_time_stats.first_unit_reaction, { sum: 645, mean: 322.5, median: 322.5, min: 57, max: 588 });
     assert.deepEqual(parsedStats.unit_time_stats.travel, { sum: 1887, mean: 943.5, median: 943.5, min: 781, max: 1106 });
     assert.deepEqual(parsedStats.unit_time_stats.on_scene, { sum: 2954, mean: 1477, median: 1477, min: 874, max: 2080 });
@@ -184,8 +184,8 @@ describe('generateStats', function(){
     //    so incorrectly this may not be worth fixing as it could cause other problems
     // * do NOT log a standby/cover as an overlapping call
     let samplePath = `${__dirname}/files/sample_date_entry_mistake_under_pov.csv`;
-    let records = esoScraper.parseCSV(samplePath);
-    let parsedStats = esoScraper.generateStats(records);
+    let records = esoScrapper.parseCSV(samplePath);
+    let parsedStats = esoScrapper.generateStats(records);
     //only have one as the standby unit doesn't have a reaction time
     assert.deepEqual(parsedStats.unit_time_stats.first_unit_reaction,  { sum: 107, mean: 107, median: 107, min: 107, max: 107 });
     // lots of travel times from ONLY the first call
@@ -221,8 +221,8 @@ describe('generateStats', function(){
     // * make sure the travel and on scene times for the 2nd call don't exist
     // * make sure both are flagged as overlapping incidents!
     let samplePath = `${__dirname}/files/sample_different_call_triggered_during_incident_but_cancelled_en_route.csv`;
-    let records = esoScraper.parseCSV(samplePath);
-    let parsedStats = esoScraper.generateStats(records);
+    let records = esoScrapper.parseCSV(samplePath);
+    let parsedStats = esoScrapper.generateStats(records);
     //both have reaction times
     assert.deepEqual(parsedStats.unit_time_stats.first_unit_reaction,  { sum: 353, mean: 176.5, median: 176.5, min: 112, max: 241 });
     // lots of travel times from ONLY the first call
@@ -253,8 +253,8 @@ describe('generateStats', function(){
     //  * incident times should take into account the delayed response on the 2nd call
     //  * make sure both are flagged as overlapping incidents!
     let samplePath = `${__dirname}/files/sample_overlapping_calls_one_response_unit.csv`;
-    let records = esoScraper.parseCSV(samplePath);
-    let parsedStats = esoScraper.generateStats(records);
+    let records = esoScrapper.parseCSV(samplePath);
+    let parsedStats = esoScrapper.generateStats(records);
     //both have reaction times, but the 2nd one is notably slower
     assert.deepEqual(parsedStats.unit_time_stats.first_unit_reaction, { sum: 1256, mean: 628, median: 628, min: 66, max: 1190 });
     assert.deepEqual(parsedStats.unit_time_stats.travel, { sum: 1300, mean: 650, median: 650, min: 293, max: 1007 });
@@ -293,8 +293,8 @@ describe('generateStats', function(){
     //  * only the 1st and last incidents have an on-scene time
     //  * make sure these are not logged as overlapping calls because one of them is a standby
     let samplePath = `${__dirname}/files/sample_long_call_standby.csv`;
-    let records = esoScraper.parseCSV(samplePath);
-    let parsedStats = esoScraper.generateStats(records);
+    let records = esoScrapper.parseCSV(samplePath);
+    let parsedStats = esoScrapper.generateStats(records);
 
     //both have reaction times, but the 2nd one is notably slower
     assert.deepEqual(parsedStats.unit_time_stats.first_unit_reaction, { sum: 129, mean: 64.5, median: 64.5, min: 38, max: 91 });
@@ -325,8 +325,8 @@ describe('generateStats', function(){
     //   this is why we don't show multiple reaction times and the standby unit is not included in travel times
     // * make sure both are flagged as overlapping incidents!
     let samplePath = `${__dirname}/files/sample_incident_with_standby_call.csv`;
-    let records = esoScraper.parseCSV(samplePath);
-    let parsedStats = esoScraper.generateStats(records);
+    let records = esoScrapper.parseCSV(samplePath);
+    let parsedStats = esoScrapper.generateStats(records);
 
     assert.deepEqual(parsedStats.unit_time_stats.first_unit_reaction, { sum: 107, mean: 107, median: 107, min: 107, max: 107 });
     assert.deepEqual(parsedStats.unit_time_stats.travel, { sum: 2651, mean: 662.75, median: 497, min: 440, max: 1217 });
@@ -351,8 +351,8 @@ describe('generateStats', function(){
 
   it('should handle missing arrival dates', function(){
     let samplePath = `${__dirname}/files/sample_missing_arrival_date.csv`;
-    let records = esoScraper.parseCSV(samplePath);
-    let parsedStats = esoScraper.generateStats(records);
+    let records = esoScrapper.parseCSV(samplePath);
+    let parsedStats = esoScrapper.generateStats(records);
 
     assert.deepEqual(parsedStats.unit_time_stats.first_unit_reaction, { sum: 147, mean: 147, median: 147, min: 147, max: 147 });
     assert.deepEqual(parsedStats.unit_time_stats.travel, { sum: 2521, mean: 840.3333333333334, median: 833, min: 719, max: 969 });

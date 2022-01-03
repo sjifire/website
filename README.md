@@ -63,5 +63,5 @@ main website for sjifire.org
         * `ESO_REPORT_USERNAME`
         * `ESO_REPORT_PASSWORD`
         * `ESO_REPORT_AGENCY`
-      * modify `.github/workflows/eso_stats_scraper.yml` configuration and report_name as needed
+      * modify `.github/workflows/eso_stats_scrapper.yml` configuration and report_name as needed
 
