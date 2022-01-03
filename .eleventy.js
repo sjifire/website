@@ -56,7 +56,9 @@ module.exports = function (eleventyConfig) {
   //       once it is, lets move to Remark as that is what the Netlify CMS
   //       uses, so we can make sure we're using the same parser
   const mdRender = require('markdown-it')({linkify: true})
-  .use(require('markdown-it-attrs'))
+  .use(require('markdown-it-attrs'), {
+    allowedAttributes: ['id', 'class', 'width', 'height', 'sizes']
+  });
 
   // const mdRender = new MarkdownIt();
   eleventyConfig.addFilter("markdownify", function(rawString) {
