@@ -159,7 +159,6 @@ collections:
     files:
       - label: "Config Settings"
         name: "Config Settings"
-        extension: "json"
         delete: false
         editor:
           preview: false
@@ -313,7 +312,7 @@ collections:
         editor:
           preview: true
         extension: "json"
-        file: "src/_data/incidents.json"
+        file: "src/_data/incidents.yml"
         fields:
           - label: Preamble
             name: preamble
@@ -363,7 +362,7 @@ collections:
         delete: false
         editor:
           preview: false
-        file: "src/_data/services.json"
+        file: "src/_data/services.yml"
         fields:
           - label: Preamble
             name: preamble
@@ -450,7 +449,7 @@ collections:
         delete: false
         editor:
           preview: true
-        file: "src/_data/emergency_services.json"
+        file: "src/_data/emergency_services.yml"
         fields:
           - label: Preamble
             name: preamble
@@ -489,7 +488,7 @@ collections:
         editor:
           preview: true
         extension: "json"
-        file: "src/_data/firewise.json"
+        file: "src/_data/firewise.yml"
         fields:
           - label: Preamble
             name: preamble
@@ -509,7 +508,7 @@ collections:
         editor:
           preview: true
         extension: "json"
-        file: "src/_data/fire_alarms.json"
+        file: "src/_data/fire_alarms.yml"
         fields:
           - label: Preamble
             name: preamble
@@ -528,7 +527,7 @@ collections:
         delete: false
         editor:
           preview: true
-        file: "src/_data/knoxbox.json"
+        file: "src/_data/knoxbox.yml"
         fields:
           - label: Preamble
             name: preamble
