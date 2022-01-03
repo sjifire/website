@@ -9,12 +9,15 @@ permalink: "/services/burn-permits/index.html"
   <h1>
     {{ title | safe }}
   </h1>
-  <div class="lede">
-    {{ burn_permits.preamble | markdownify | safe }}
-  </div>
+  {% if burn_permits.preamble %}
+    <div class="lede">
+      {{ burn_permits.preamble | markdownify | safe }}
+    </div>
+  {% endif %}
 {% endblock %}
 
 {% block content %}
-  {% set baseSections = burn_permits.sections %}
-  {% include "sections_block.njk" %}
+  <div class="post__copy">
+    {{ burn_permits.body | markdownify | safe }}
+  </div>
 {% endblock %}
