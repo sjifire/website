@@ -638,6 +638,26 @@ collections:
             name: body
             widget: markdown
             required: false
+      - label: "Smoke & CO Alarms"
+        name: "smoke & CO alarms"
+        delete: false
+        editor:
+          preview: true
+        extension: "json"
+        file: "src/_data/fire_alarms.json"
+        fields:
+          - label: Preamble
+            name: preamble
+            widget: markdown
+            buttons: ['bold', 'italic', 'link']
+            editor_components: []
+            required: false
+            hint: >-
+              Text that appears under the main heading.
+          - label: Body
+            name: body
+            widget: markdown
+            required: false
       - label: "Knoxbox"
         name: "knoxbox"
         delete: false
