@@ -18,10 +18,11 @@ main website for sjifire.org
 1. run `npm test`
 1. run `npm start`
 
-### Admin access
+#### Admin access
 1. `npm install -g http-server`
 1. `cd admin; http-server -o -a localhost`
 1. for login access, use site `https://web-admin.sjifire.org/`
+1. for saving admin locally, you need to run a proxy.  See [Netlify docs](https://www.netlifycms.org/docs/beta-features/#working-with-a-local-git-repository) for details
 
 ## getting started (production)
 1. setup a cloudinary account and get a URL secret
