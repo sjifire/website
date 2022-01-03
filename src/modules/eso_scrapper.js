@@ -386,8 +386,8 @@ const createStats = function(raw_values){
     return pt.length;
   });
   stats_output.personnel_stats['num_per_incidents'] = {
-    mean: _.round(mean(personnelCount)),
-    median: _.round(median(personnelCount)),
+    mean: _.round(mean(personnelCount), 1),
+    median: _.round(median(personnelCount), 1),
     min: min(personnelCount),
     max: max(personnelCount)
   }
@@ -398,8 +398,8 @@ const createStats = function(raw_values){
   });
   stats_output.apparatus_stats = {
     num_per_incident: {
-      mean: _.round(mean(apparatusCount)),
-      median: _.round(median(apparatusCount)),
+      mean: _.round(mean(apparatusCount), 1),
+      median: _.round(median(apparatusCount), 1),
       min: min(apparatusCount),
       max: max(apparatusCount)
     },
