@@ -10,7 +10,6 @@
     <!-- Include the script that builds the page and powers Netlify CMS -->
     <script src="https://unpkg.com/netlify-cms@^2.0.0/dist/netlify-cms.js"></script>
     <!-- Include the JS file for remark plugin-->
-    <script src="https://unpkg.com/remark-attr@0.11.1/dist/index.js"></script>
     <!-- Include Netlify Identity for authentication -->
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
     <script>
@@ -23,8 +22,6 @@
           }
         });
       }
-
-      CMS.registerRemarkPlugin(remarkAttr);
 
       var ArrayControl = createClass({
         handleChange: function (e) {
