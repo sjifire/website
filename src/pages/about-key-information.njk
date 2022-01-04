@@ -9,9 +9,11 @@ permalink: "/about/key-information/index.html"
   <h1>
     {{ title | safe }}
   </h1>
-  <div class="lede">
-    {{ key_information.preamble | markdownify | safe }}
-  </div>
+  {% if key_information.preamble %}
+    <div class="lede">
+      {{ key_information.preamble | markdownify | safe }}
+    </div>
+  {% endif %}
 {% endblock %}
 
 {% block content %}
