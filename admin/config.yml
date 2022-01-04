@@ -305,7 +305,7 @@ collections:
                     name: caption
                     widget: string
                     hint: "Add a caption for the map"
-      - label: "About/Key Information"
+      - label: "Key Information"
         name: "key_information"
         delete: false
         editor:
@@ -762,7 +762,7 @@ collections:
       - label: Year
         field: date
         pattern: \d{4}
-  - name: "Media Releases"
+  - name: "media releases"
     label: "Media Releases"
     label_singular: "Media Release"
     folder: "src/media_releases/"
