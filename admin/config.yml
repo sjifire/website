@@ -310,7 +310,7 @@ collections:
         delete: false
         editor:
           preview: true
-        file: "src/_data/key_information.json"
+        file: "src/_data/key_information.yml"
         fields:
           - label: Preamble
             name: preamble
@@ -323,7 +323,7 @@ collections:
           - label: Body
             name: body
             widget: markdown
-            required: false
+            required: true
       - label: "Incidents"
         name: "incidents"
         delete: false
