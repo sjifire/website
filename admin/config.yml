@@ -749,6 +749,7 @@ collections:
     folder: "src/media_releases/"
     slug: "{{fields.date}}-{{slug}}"
     preview_path_date_field: "date"
+    preview_path: "date"
     extension: "json"
     create: true # Allow users to create new documents in this collection
     delete: true # Allow users to delete items in this collection
@@ -778,7 +779,7 @@ collections:
         choose_url: false
         required: true
         media_folder: "/src/assets/media_releases/{{year}}"
-        public_folder: ''
+        public_folder: "/assets/media_releases/{{year}}"
     sortable_fields:
       - date
       - commit_date
