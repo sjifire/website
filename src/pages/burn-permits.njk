@@ -1,0 +1,23 @@
+---
+title: "Burn Regulations & Permits"
+permalink: "/services/burn-permits/index.html"
+---
+
+{% extends 'base.njk' %}
+
+{% block page_header %}
+  <h1>
+    {{ title | safe }}
+  </h1>
+  {% if burn_permits.preamble %}
+    <div class="lede">
+      {{ burn_permits.preamble | markdownify | safe }}
+    </div>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  <div class="post__copy">
+    {{ burn_permits.body | markdownify | safe }}
+  </div>
+{% endblock %}

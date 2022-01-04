@@ -1,6 +1,7 @@
 backend:
   name: git-gateway
   branch: main
+
 media_folder: "src/assets/images"
 public_folder: "/assets/images"
 site_url: "https://www.sjifire.org/"
@@ -151,11 +152,42 @@ collections:
         pattern: \d{4}
       - label: Post Type
         field: post_type
-
   - name: pages
     label: "Pages"
     description: "Edit pages across the site."
     files:
+      - label: "Config Settings"
+        name: "Config Settings"
+        delete: false
+        editor:
+          preview: false
+        file: "src/_data/configs.json"
+        fields:
+          - name: "fire_status"
+            label: "Fire Danger Status"
+            widget: "select"
+            options: ["Low", "Moderate", "High", "Very High", "Extreme"]
+          - name: "burn_ban_status"
+            label: "Burn Ban Status"
+            widget: "select"
+            options: ["Open", "Restricted", "Closed"]
+          - name: "commercial_burn_ban_status"
+            label: "Commercial Burn Ban Status"
+            widget: "select"
+            options: ["Open", "Restricted", "Closed"]
+          - name: "rec_campfire_status"
+            label: "Recreational Campfire Status"
+            widget: "select"
+            options: ["Open", "Restricted", "Closed"]
+          - name: "site_name"
+            label: "Site Name"
+            widget: "string"
+          - name: "formal_site_name"
+            label: "Formal Site Name"
+            widget: "string"
+          - name: "site_desc"
+            label: "Site Description"
+            widget: "string"
       - label: "Homepage"
         name: "homepage"
         delete: false
@@ -288,6 +320,76 @@ collections:
             required: false
             hint: >-
               Text that appears under the main heading.
+          - label: Body
+            name: body
+            widget: markdown
+            required: false
+      - label: "Incidents"
+        name: "incidents"
+        delete: false
+        editor:
+          preview: true
+        extension: "json"
+        file: "src/_data/incidents.yml"
+        fields:
+          - label: Preamble
+            name: preamble
+            widget: markdown
+            buttons: ['bold', 'italic', 'link']
+            editor_components: []
+            required: false
+            hint: >-
+              Text that appears under the main heading.
+          - label: Body
+            name: body
+            widget: markdown
+            required: false
+      - label: "Governance"
+        name: "governance"
+        delete: false
+        editor:
+          preview: false
+        file: "src/_data/governance.json"
+        fields:
+          - label: Preamble
+            name: preamble
+            widget: markdown
+            buttons: ['bold', 'italic', 'link']
+            editor_components: []
+            modes: [rich_text]
+            hint: >-
+              Text that appears under the main heading.
+          - label: About
+            name: about
+            widget: markdown
+            minimal: false
+            buttons: ['bold', 'italic', 'link', 'heading-two', 'heading-three', 'heading-four', 'heading-five', 'heading-six', 'quote', 'bulleted-list', 'numbered-list']
+            editor_components: []
+            modes: [rich_text]
+            hint: "Add a chunk of text (rich text editor)"
+          - label: Commission
+            name: commission
+            widget: markdown
+            minimal: false
+            buttons: ['bold', 'italic', 'link', 'heading-two', 'heading-three', 'heading-four', 'heading-five', 'heading-six', 'quote', 'bulleted-list', 'numbered-list']
+            editor_components: []
+            modes: [rich_text]
+            hint: "Add a chunk of text (rich text editor)"
+      - label: "Services"
+        name: "services"
+        delete: false
+        editor:
+          preview: false
+        file: "src/_data/services.yml"
+        fields:
+          - label: Preamble
+            name: preamble
+            widget: markdown
+            buttons: ['bold', 'italic', 'link']
+            editor_components: []
+            modes: [rich_text]
+            hint: >-
+              Text that appears under the main heading.
           - sections:
             name: "sections"
             widget: "list"
@@ -306,6 +408,7 @@ collections:
                     minimal: false
                     buttons: ['bold', 'italic', 'link', 'heading-two', 'heading-three', 'heading-four', 'heading-five', 'heading-six', 'quote', 'bulleted-list', 'numbered-list']
                     editor_components: []
+                    modes: [rich_text]
                     required: false
                     hint: "Add a chunk of text (rich text editor)"
               - label: "Image"
@@ -359,6 +462,151 @@ collections:
                     name: caption
                     widget: string
                     hint: "Add a caption for the map"
+      - label: "Emergency Services"
+        name: "emergency_services"
+        delete: false
+        editor:
+          preview: true
+        file: "src/_data/emergency_services.yml"
+        fields:
+          - label: Preamble
+            name: preamble
+            widget: markdown
+            buttons: ['bold', 'italic', 'link']
+            editor_components: []
+            required: false
+            hint: >-
+              Text that appears under the main heading.
+          - label: Body
+            name: body
+            widget: markdown
+            required: true
+      - label: "Burn Permits"
+        name: "burn_permits"
+        delete: false
+        editor:
+          preview: true
+        file: "src/_data/burn_permits.yml"
+        fields:
+          - label: Preamble
+            name: preamble
+            widget: markdown
+            buttons: ['bold', 'italic', 'link']
+            editor_components: []
+            required: false
+            hint: >-
+              Text that appears under the main heading.
+          - label: Body
+            name: body
+            widget: markdown
+            required: true
+      - label: "Firewise"
+        name: "firewise"
+        delete: false
+        editor:
+          preview: true
+        extension: "json"
+        file: "src/_data/firewise.yml"
+        fields:
+          - label: Preamble
+            name: preamble
+            widget: markdown
+            buttons: ['bold', 'italic', 'link']
+            editor_components: []
+            required: false
+            hint: >-
+              Text that appears under the main heading.
+          - label: Body
+            name: body
+            widget: markdown
+            required: true
+      - label: "Smoke & CO Alarms"
+        name: "smoke & CO alarms"
+        delete: false
+        editor:
+          preview: true
+        extension: "json"
+        file: "src/_data/fire_alarms.yml"
+        fields:
+          - label: Preamble
+            name: preamble
+            widget: markdown
+            buttons: ['bold', 'italic', 'link']
+            editor_components: []
+            required: false
+            hint: >-
+              Text that appears under the main heading.
+          - label: Body
+            name: body
+            widget: markdown
+            required: true
+      - label: "Knoxbox"
+        name: "knoxbox"
+        delete: false
+        editor:
+          preview: true
+        file: "src/_data/knoxbox.yml"
+        fields:
+          - label: Preamble
+            name: preamble
+            widget: markdown
+            buttons: ['bold', 'italic', 'link']
+            editor_components: []
+            required: false
+            hint: >-
+              Text that appears under the main heading.
+          - label: Body
+            name: body
+            widget: markdown
+            required: true
+      - label: "Contact"
+        name: "contact"
+        delete: false
+        editor:
+          preview: false
+        file: "src/_data/contact.json"
+        fields:
+          - label: Preamble
+            name: preamble
+            widget: markdown
+            buttons: ['bold', 'italic', 'link']
+            editor_components: []
+            modes: [rich_text]
+            hint: >-
+              Text that appears under the main heading.
+          - label: Copy
+            name: copy
+            widget: markdown
+            minimal: false
+            buttons: ['bold', 'italic', 'link', 'heading-two', 'heading-three', 'heading-four', 'heading-five', 'heading-six', 'quote', 'bulleted-list', 'numbered-list']
+            editor_components: [image]
+            modes: [rich_text]
+            required: false
+            hint: "Add a chunk of text (rich text editor)"
+      - label: "Thank You"
+        name: "thank_you"
+        delete: false
+        editor:
+          preview: false
+        file: "src/_data/thank_you.json"
+        fields:
+          - label: Preamble
+            name: preamble
+            widget: markdown
+            buttons: ['bold', 'italic', 'link']
+            editor_components: []
+            modes: [rich_text]
+            hint: >-
+              Text that appears under the main heading.
+          - label: Copy
+            name: copy
+            widget: markdown
+            minimal: false
+            buttons: ['bold', 'italic', 'link', 'heading-two', 'heading-three', 'heading-four', 'heading-five', 'heading-six', 'quote', 'bulleted-list', 'numbered-list']
+            editor_components: [image]
+            modes: [rich_text]
+            required: false
+            hint: "Add a chunk of text (rich text editor)"
       - label: "Disclaimer"
         name: "disclaimer"
         delete: false
@@ -446,172 +694,6 @@ collections:
                     name: caption
                     widget: string
                     hint: "Add a caption for the map"
-      - label: "Governance"
-        name: "governance"
-        delete: false
-        editor:
-          preview: false
-        file: "src/_data/governance.json"
-        fields:
-          - label: Preamble
-            name: preamble
-            widget: markdown
-            buttons: ['bold', 'italic', 'link']
-            editor_components: []
-            modes: [rich_text]
-            hint: >-
-              Text that appears under the main heading.
-          - label: About
-            name: about
-            widget: markdown
-            minimal: false
-            buttons: ['bold', 'italic', 'link', 'heading-two', 'heading-three', 'heading-four', 'heading-five', 'heading-six', 'quote', 'bulleted-list', 'numbered-list']
-            editor_components: []
-            modes: [rich_text]
-            hint: "Add a chunk of text (rich text editor)"
-          - label: Commission
-            name: commission
-            widget: markdown
-            minimal: false
-            buttons: ['bold', 'italic', 'link', 'heading-two', 'heading-three', 'heading-four', 'heading-five', 'heading-six', 'quote', 'bulleted-list', 'numbered-list']
-            editor_components: []
-            modes: [rich_text]
-            hint: "Add a chunk of text (rich text editor)"
-      - label: "Services"
-        name: "services"
-        delete: false
-        editor:
-          preview: false
-        file: "src/_data/services.json"
-        fields:
-          - label: Preamble
-            name: preamble
-            widget: markdown
-            buttons: ['bold', 'italic', 'link']
-            editor_components: []
-            modes: [rich_text]
-            hint: >-
-              Text that appears under the main heading.
-          - sections:
-            name: "sections"
-            widget: "list"
-            collapsed: true
-            add_to_top: true
-            hint: "Add discrete sections of content to this page. The sections you can choose from: 'text', 'image', 'youtube'."
-            required: true
-            types:
-              - label: "Text Section"
-                name: "text"
-                widget: "object"
-                fields:
-                  - label: Rich Text
-                    name: copy
-                    widget: markdown
-                    minimal: false
-                    buttons: ['bold', 'italic', 'link', 'heading-two', 'heading-three', 'heading-four', 'heading-five', 'heading-six', 'quote', 'bulleted-list', 'numbered-list']
-                    editor_components: []
-                    modes: [rich_text]
-                    required: false
-                    hint: "Add a chunk of text (rich text editor)"
-              - label: "Image"
-                name: "image"
-                widget: "object"
-                hint: "Add an image to the post, complete with 'alt' tag and, optionally, a caption"
-                fields:
-                  - label: Image Upload
-                    name: source
-                    widget: image
-                    allow_multiple: false
-                    choose_url: false
-                    public_folder: ''
-                  - label: Width
-                    name: width
-                    widget: number
-                    hint: "What is the width of this image?"
-                  - label: Height
-                    name: height
-                    widget: number
-                    hint: "What is the height of this image"
-                  - label: Alternative Text
-                    name: alt
-                    widget: string
-                    hint: "Provide alternative ('alt') text for this image"
-                  - label: Image Caption
-                    name: caption
-                    widget: string
-                    hint: "Add a caption for the image (optional)"
-              - label: "YouTube Video"
-                name: "youtube"
-                widget: "object"
-                fields:
-                  - label: YouTube Video Link
-                    name: source
-                    widget: string
-                    hint: "Add a YouTube video player by copy-pasting the 'Share' link"
-                  - label: Video Caption
-                    name: caption
-                    widget: string
-                    hint: "Add a caption for the video (optional)"
-              - label: "Google Map"
-                name: "gmap"
-                widget: "object"
-                fields:
-                  - label: Google Map Link
-                    name: source
-                    widget: string
-                    hint: "Add a YouTube video player by copy-pasting the 'Share' link"
-                  - label: Map Caption
-                    name: caption
-                    widget: string
-                    hint: "Add a caption for the map"
-      - label: "Contact"
-        name: "contact"
-        delete: false
-        editor:
-          preview: false
-        file: "src/_data/contact.json"
-        fields:
-          - label: Preamble
-            name: preamble
-            widget: markdown
-            buttons: ['bold', 'italic', 'link']
-            editor_components: []
-            modes: [rich_text]
-            hint: >-
-              Text that appears under the main heading.
-          - label: Copy
-            name: copy
-            widget: markdown
-            minimal: false
-            buttons: ['bold', 'italic', 'link', 'heading-two', 'heading-three', 'heading-four', 'heading-five', 'heading-six', 'quote', 'bulleted-list', 'numbered-list']
-            editor_components: [image]
-            modes: [rich_text]
-            required: false
-            hint: "Add a chunk of text (rich text editor)"
-      - label: "Thank You"
-        name: "thank_you"
-        delete: false
-        editor:
-          preview: false
-        file: "src/_data/thank_you.json"
-        fields:
-          - label: Preamble
-            name: preamble
-            widget: markdown
-            buttons: ['bold', 'italic', 'link']
-            editor_components: []
-            modes: [rich_text]
-            hint: >-
-              Text that appears under the main heading.
-          - label: Copy
-            name: copy
-            widget: markdown
-            minimal: false
-            buttons: ['bold', 'italic', 'link', 'heading-two', 'heading-three', 'heading-four', 'heading-five', 'heading-six', 'quote', 'bulleted-list', 'numbered-list']
-            editor_components: [image]
-            modes: [rich_text]
-            required: false
-            hint: "Add a chunk of text (rich text editor)"
       - label: "404 Error - Page Not Found"
         name: "error_404"
         delete: false
@@ -627,24 +709,6 @@ collections:
             modes: [rich_text]
             hint: >-
               Text that appears under the main heading.
-      - label: "Stat Settings"
-        name: "Stat Settings"
-        extension: "json"
-        delete: false
-        editor:
-          preview: false
-        file: "src/_data/stats.json"
-        fields:
-          - name: stats
-            label: Stats
-            widget: list
-            fields:
-            - name: stat pairs
-              label: Stat Pairs
-              widget: list
-              fields:
-                - {name: key, widget: "string"}
-                - {name: value, widget: "string"}
   - name: "meetings"
     label: "Board Meetings"
     label_singular: "Board Meeting"
@@ -691,6 +755,51 @@ collections:
             choose_url: false
             media_folder: '/src/assets/docs/'
             public_folder: ''
+    sortable_fields:
+      - date
+      - commit_date
+    view_groups:
+      - label: Year
+        field: date
+        pattern: \d{4}
+  - name: "Media Releases"
+    label: "Media Releases"
+    label_singular: "Media Release"
+    folder: "src/media_releases/"
+    slug: "{{fields.date}}-{{slug}}"
+    preview_path_date_field: "date"
+    extension: "json"
+    create: true # Allow users to create new documents in this collection
+    delete: true # Allow users to delete items in this collection
+    editor:
+      preview: false
+    summary: "{{fields.date | date('YYYY-MM-DD')}} • {{fields.title}}"
+    description: "Add media releases to the site."
+    fields: # The fields for each document, usually in front matter
+      - label: Title
+        name: title
+        widget: string
+        required: true
+      - label: Date
+        name: date
+        widget: datetime
+        date_format: "YYYY-MM-DD"
+        time_format: false
+        format: "YYYY-MM-DD"
+        picker_utc: true
+        default: ''
+        hint: release date
+        required: true
+      - label: "Documents"
+        name: "documents"
+        widget: file
+        pattern: ['.pdf$', "Must end with '.pdf'"]
+        hint: must be a pdf
+        allow_multiple: false
+        choose_url: false
+        required: true
+        media_folder: "/src/assets/media_releases/{{year}}"
+        public_folder: "/assets/media_releases/{{year}}"
     sortable_fields:
       - date
       - commit_date

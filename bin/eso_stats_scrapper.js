@@ -13,7 +13,7 @@ const _ = require('lodash');
 
 // const path = require('path');
 const { hideBin } = require('yargs/helpers')
-const esoScraper = require( "../src/modules/eso_scraper" );
+const esoScrapper = require( "../src/modules/eso_scrapper" );
 
 const USERNAME = process.env.ESO_REPORT_USERNAME;
 const PASSWORD = process.env.ESO_REPORT_PASSWORD;
@@ -64,15 +64,15 @@ var argv = require('yargs/yargs')(hideBin(process.argv))
   let csvPath = argv.csv_input;
   if(_.isUndefined(csvPath)){
     logger.info("retrieving CSV report from ESO")
-    csvPath = await esoScraper.retrieveCSVReport(USERNAME, PASSWORD, AGENCY, argv.r, argv.headless);
+    csvPath = await esoScrapper.retrieveCSVReport(USERNAME, PASSWORD, AGENCY, argv.r, argv.headless);
   }
   if(argv.c){
     logger.info(`outputing csv file to ${argv.c}`)
     fs.copyFileSync(csvPath, argv.c);
   }
   logger.info("parsing CSV report")
-  let records = esoScraper.parseCSV(csvPath);
-  let statsOutput = esoScraper.generateStats(records);
+  let records = esoScrapper.parseCSV(csvPath);
+  let statsOutput = esoScrapper.generateStats(records);
   let json = JSON.stringify(statsOutput, null, 2);
   logger.info(`outputing json file to ${argv.o}`)
   fs.writeFileSync(argv.o, json)

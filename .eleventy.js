@@ -1,12 +1,16 @@
-const htmlmin = require("html-minifier");
+const htmlmin      = require("html-minifier");
 const { DateTime } = require("luxon");
-const CleanCSS = require("clean-css");
-const util = require("util");
-const slugify = require("slugify");
+const CleanCSS     = require("clean-css");
+const util         = require("util");
+const slugify      = require("slugify");
+const yaml         = require("js-yaml");
+
 const isProduction = process.env.ELEVENTY_ENV === `production`;
 
 module.exports = function (eleventyConfig) {
   require("dotenv").config();
+
+  eleventyConfig.addDataExtension("yml", contents => yaml.load(contents));
 
   eleventyConfig.addPassthroughCopy("src/assets/");
 
@@ -51,8 +55,16 @@ module.exports = function (eleventyConfig) {
       .filter(hideFutureItems)
   });
 
-  const MarkdownIt = require("markdown-it");
-  const mdRender = new MarkdownIt();
+  // const MarkdownIt = require("markdown-it");
+  //FIXME: Remark is not easily supported in 11ty at the moment
+  //       once it is, lets move to Remark as that is what the Netlify CMS
+  //       uses, so we can make sure we're using the same parser
+  const mdRender = require('markdown-it')({linkify: true})
+  .use(require('markdown-it-attrs'), {
+    allowedAttributes: ['id', 'class', 'width', 'height', 'sizes']
+  });
+
+  // const mdRender = new MarkdownIt();
   eleventyConfig.addFilter("markdownify", function(rawString) {
     return mdRender.render(rawString);
   });

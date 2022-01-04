@@ -1,0 +1,23 @@
+---
+title: "24/7 Emergency Services"
+permalink: "/services/emergency-services/index.html"
+---
+
+{% extends 'base.njk' %}
+
+{% block page_header %}
+  <h1>
+    {{ title | safe }}
+  </h1>
+  {% if emergency_services.preamble %}
+    <div class="lede">
+      {{ emergency_services.preamble | markdownify | safe }}
+    </div>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  <div class="post__copy">
+    {{ emergency_services.body | markdownify | safe }}
+  </div>
+{% endblock %}

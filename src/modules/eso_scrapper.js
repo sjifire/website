@@ -166,6 +166,11 @@ const processRecords = function(records){
     let incidentTypeCall = baseRecord['Incident Type Code'].toString();
     raw_values.calls_per_day[dispatchedDate.toLocaleDateString()]++;
 
+    // lets check some times
+    if(dispatchedDate - baseRecord['Alarm Date'] < 2) logger.verbose(`${incidentID} has incorrect Alarm & Dispatch times`)
+    if(incidentTypeCall == '571' && (_.isDate(baseRecord['En Route Date']) || _.isDate(baseRecord['Arrival Date']))) logger.verbose(`${incidentID} is a standby yet has en route or arrival dates set`)
+
+
     if(prevCallEnd && prevCallEnd > dispatchedDate){
       if (!BACKFILL_TYPES.some(v => incidentTypeCall.startsWith(v))){
         raw_values.overlapping_calls_num += 1
@@ -307,7 +312,8 @@ const createStats = function(raw_values){
     updated_at: new Date(),
     date_range_from: raw_values.date_range_from,
     date_range_to:   raw_values.date_range_to,
-    comment: 'auto generated; do not manually modify',
+    _comment: 'auto generated; do not manually modify',
+    _time_dsc: 'all times are in seconds',
     unit_time_stats: {},
     personnel_stats: {},
     region_stats: {},
@@ -319,8 +325,8 @@ const createStats = function(raw_values){
       num_nighttime_incidents: raw_values.nighttime_calls,
       incident_times:{
         sum: sum(incidentTimes),
-        mean: mean(incidentTimes),
-        median: median(incidentTimes),
+        mean: _.round(mean(incidentTimes)),
+        median: _.round(median(incidentTimes)),
         min: min(incidentTimes),
         max: max(incidentTimes)
       },
@@ -331,8 +337,8 @@ const createStats = function(raw_values){
       num_overlapping_incidents: raw_values.overlapping_calls_num,
       num_per_day: {
         mean: sum(callsPerDay),
-        mean: mean(callsPerDay),
-        median: median(callsPerDay),
+        mean: _.round(mean(callsPerDay)),
+        median: _.round(median(callsPerDay)),
         min: min(callsPerDay),
         max: max(callsPerDay)
       }
@@ -357,8 +363,8 @@ const createStats = function(raw_values){
   ]).forEach((arr,k)=>{
     stats_output.unit_time_stats[k] = {
       sum:  sum(arr),
-      mean: mean(arr),
-      median: median(arr),
+      mean: _.round(mean(arr)),
+      median: _.round(median(arr)),
       min: min(arr),
       max: max(arr)
     }
@@ -370,8 +376,8 @@ const createStats = function(raw_values){
   });
   let incident = {
     sum:  sum(collapsedPersonnelTimes),
-    mean: mean(collapsedPersonnelTimes),
-    median: median(collapsedPersonnelTimes),
+    mean: _.round(mean(collapsedPersonnelTimes)),
+    median: _.round(median(collapsedPersonnelTimes)),
     min: min(collapsedPersonnelTimes),
     max: max(collapsedPersonnelTimes)
   };
@@ -380,9 +386,9 @@ const createStats = function(raw_values){
     return pt.length;
   });
   stats_output.personnel_stats['num_per_incidents'] = {
-    mean: mean(personnelCount),
-    median: median(personnelCount),
-    // min: min(personnelCount),
+    mean: _.round(mean(personnelCount), 1),
+    median: _.round(median(personnelCount), 1),
+    min: min(personnelCount),
     max: max(personnelCount)
   }
   stats_output.personnel_stats['num_unique_responders'] = _.uniq(_.flatten(raw_values.personnel)).length
@@ -392,8 +398,8 @@ const createStats = function(raw_values){
   });
   stats_output.apparatus_stats = {
     num_per_incident: {
-      mean: mean(apparatusCount),
-      median: median(apparatusCount),
+      mean: _.round(mean(apparatusCount), 1),
+      median: _.round(median(apparatusCount), 1),
       min: min(apparatusCount),
       max: max(apparatusCount)
     },
@@ -425,8 +431,8 @@ const createStats = function(raw_values){
     let compactedArr = _.chain(raw_regions[region]).flatten().compact().value();
     stats_output.region_stats[region]['unit_travel_time'] = {
       sum:  sum(compactedArr),
-      mean: mean(compactedArr),
-      median: median(compactedArr),
+      mean: _.round(mean(compactedArr)),
+      median: _.round(median(compactedArr)),
       min: min(compactedArr),
       max: max(compactedArr)
     };

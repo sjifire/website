@@ -18,6 +18,12 @@ main website for sjifire.org
 1. run `npm test`
 1. run `npm start`
 
+#### Admin access
+1. `npm install -g http-server`
+1. `cd admin; http-server -o -a localhost`
+1. for login access, use site `https://web-admin.sjifire.org/`
+1. for saving admin locally, you need to run a proxy.  See [Netlify docs](https://www.netlifycms.org/docs/beta-features/#working-with-a-local-git-repository) for details
+
 ## getting started (production)
 1. setup a cloudinary account and get a URL secret
 1. setup Netlify account
@@ -57,5 +63,5 @@ main website for sjifire.org
         * `ESO_REPORT_USERNAME`
         * `ESO_REPORT_PASSWORD`
         * `ESO_REPORT_AGENCY`
-      * modify `.github/workflows/eso_stats_scraper.yml` configuration and report_name as needed
+      * modify `.github/workflows/eso_stats_scrapper.yml` configuration and report_name as needed
 
