@@ -17,6 +17,7 @@ permalink: "/about/key-information/index.html"
 {% endblock %}
 
 {% block content %}
-  {% set baseSections = key_information.sections %}
-  {% include "sections_block.njk" %}
+  <div class="post__copy">
+    {{ key_information.body | markdownify | safe }}
+  </div>
 {% endblock %}
