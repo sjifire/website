@@ -1,0 +1,23 @@
+---
+title: "Who We Are"
+permalink: "/services/who-we-are/index.html"
+---
+
+{% extends 'base.njk' %}
+
+{% block page_header %}
+  <h1>
+    {{ title | safe }}
+  </h1>
+  {% if who_we_are.preamble %}
+    <div class="lede">
+      {{ who_we_are.preamble | markdownify | safe }}
+    </div>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  <div class="post__copy">
+    {{ who_we_are.body | markdownify | safe }}
+  </div>
+{% endblock %}
