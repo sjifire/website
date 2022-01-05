@@ -223,7 +223,7 @@ collections:
         delete: false
         editor:
           preview: true
-        file: "src/_data/about.json"
+        file: "src/_data/about.yml"
         fields:
           - label: Preamble
             name: preamble
