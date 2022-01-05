@@ -9,13 +9,14 @@
  *  - This module is tightly coupled with the needs
  *    of SJIF&R, such as the stats computed from
  *    the raw data.
- *  - this is tightly coupled to the report columns and
- *    one incident per row
+ *  - this is tightly coupled to the report columns requiring
+ *    at least one incident per row, but expecting multiple
+ *    columns per incident for each responder on each apparatus
  *  - tightly coupled to quirks of SJIF&R, such as
- *    zones (south, north, central), and types
+ *    zones (south, north, central)
  */
-const fs = require('fs');
-const _ = require('lodash');
+const fs     = require('fs');
+const _      = require('lodash');
 const logger = require('./logger')
 
 process.env.TZ = 'UTC';
@@ -40,15 +41,23 @@ const ESO_TIMEOUT   = 600000; //the report can take a LONG time to generate;
 const ESO_LOGIN_URL = 'https://www.esosuite.net/login';
 
 
+/**
+ * Retrieves a predefined CSV report from ESO.  See README.md for details
+ * @param  {[String]}  username ESO username to log in
+ * @param  {[String]}  password ESO password to log in
+ * @param  {[String]}  agency ESO agency to log in
+ * @param  {[String]}  reportName the pre-defined ESO report
+ * @param  {[Boolean]} headless whether to run in headless mode or not.
+ * @return {[String]}  local filepath of temp csv file
+ */
 const retrieveCSVReport = async function(username, password, agency, reportName, headless){
-
-  const os = require('os');
+  const os   = require('os');
   const path = require('path');
   const userDataDir = fs.mkdtempSync(path.join(os.tmpdir(), 'chromium'));
 
   const { chromium } = require('playwright');
   const context = await chromium.launchPersistentContext(userDataDir, { headless: headless, acceptDownloads: true });
-  const page = await context.newPage();
+  const page    = await context.newPage();
   await page.goto(ESO_LOGIN_URL);
 
   // Interact with login form
@@ -59,11 +68,11 @@ const retrieveCSVReport = async function(username, password, agency, reportName,
 
   // go to ad-hoc reporting engine and run report
   await page.click('text=Ad-Hoc');
-
   const [reportPage] = await Promise.all([
     context.waitForEvent('page'),
-    page.click('text=' + reportName) // Opens a new tab
+    page.click('text=' + reportName) // ad-hoc opens a new tab; we need to go find it
   ])
+
   //wait for report to finish displaying
   await reportPage.waitForLoadState('networkidle', {timeout: ESO_TIMEOUT});
   // download CSV of the report.
@@ -79,6 +88,13 @@ const retrieveCSVReport = async function(username, password, agency, reportName,
 };
 
 
+/**
+ * Given a local filepath to a CSV file, parse, sort, and do some record cleanup
+ * @param  {[String]}  local filepath to a CSV file.
+ *                     Must be UTF8 encoded
+ * @return {[Array of Objects]} Each row is an object, with the array
+ *                              sorted by Dispatch Date
+ */
 const parseCSV = function(csvPath){
   const content = fs.readFileSync(csvPath, "utf8");
   const {parse} = require('csv-parse/sync');
@@ -104,16 +120,22 @@ const parseCSV = function(csvPath){
   return _.sortBy(records, 'Dispatched Date');
 };
 
+/**
+ * process records to generate statistics
+ * @param  {[Array of Objects]} expecting an array of sorted objects, each object
+ *                              representing a row from the ESO csv report
+ * @return {[Object]} a large nested object of statistics.
+ */
 const generateStats = (records) => {
-  let raw_values = processRecords(records);
-  return createStats(raw_values);
+  let raw_values = _processRecords(records);
+  return _createStats(raw_values);
 };
 
 
 /**
  * Private helper methods
  */
-const processRecords = function(records){
+const _processRecords = function(records){
   // stats for the day range from most recent record:
   let mostRecentRecordDate = _.last(records)['Dispatched Date']
   // NOTE: this date range makes it exclusive, NOT inclusive...
@@ -196,14 +218,14 @@ const processRecords = function(records){
                                .filter((r, loc, allRecords) => (loc === 0) ? true : !_.isEqual(r, allRecords[loc-1]))
                                .value();
     // COMPUTE times based upon the Unit/Apparatus time, NOT each individual time
-    let firstEnRouteUnit = findFirst(incidentUnitRecords, 'Dispatched Date', 'En Route Date');
+    let firstEnRouteUnit = _findFirst(incidentUnitRecords, 'Dispatched Date', 'En Route Date');
     let reactionTime     = (firstEnRouteUnit['En Route Date'] - dispatchedDate)/1000;
     if(_.isNaN(reactionTime)) reactionTime = null;
-    let firstArrivedUnit = findFirst(incidentUnitRecords, 'Arrival Date');
-    let travelTimes      = extractTimes(incidentUnitRecords, 'En Route Date', 'Arrival Date');
-    let toSceneTimes     = extractTimes(incidentUnitRecords, 'Dispatched Date', 'Arrival Date')
+    let firstArrivedUnit = _findFirst(incidentUnitRecords, 'Arrival Date');
+    let travelTimes      = _extractTimes(incidentUnitRecords, 'En Route Date', 'Arrival Date');
+    let toSceneTimes     = _extractTimes(incidentUnitRecords, 'Dispatched Date', 'Arrival Date')
     // let onSceneTime   = (baseRecord['Last Unit Cleared Date'] - firstArrivedUnit['Arrival Date'])/1000;
-    let onSceneTimes     = extractTimes(incidentUnitRecords, 'Arrival Date', 'Clear Date')
+    let onSceneTimes     = _extractTimes(incidentUnitRecords, 'Arrival Date', 'Clear Date')
     if(_.isEmpty(_.compact(travelTimes))){
       logger.debug(`${incidentID} has empty travel times`)
       // travelTimes      = null;
@@ -301,11 +323,11 @@ const processRecords = function(records){
       raw_values.incident_types.push('other'); // TODO: in district or out of district?
     }
   });
-  logger.debug("processRecords", raw_values)
+  logger.debug("_processRecords", raw_values)
   return raw_values;
 };
 
-const createStats = function(raw_values){
+const _createStats = function(raw_values){
   let callsPerDay = _.values(raw_values.calls_per_day);
   let incidentTimes = _.chain(raw_values.incident_times).flatten().compact().value();
   let stats_output = {
@@ -448,17 +470,8 @@ Date.prototype.addDays = function(days) {
   return date;
 };
 
-//TODO: if the time is < 2 seconds, then there was a mistake!
-// const avgTime = (records, fromCol, toCol) => {
-//   let times = _.map(records, function(r){
-//     let dateDiff = (r[toCol] - r[fromCol])/1000;
-//     return (dateDiff < 2) ? null : dateDiff;
-//   });
-//   times = _.compact(times);
-//   return sum(times)/times.length;
-// }
 
-const extractTimes = (records, fromCol, toCol) => {
+const _extractTimes = (records, fromCol, toCol) => {
   let fromColIsArr = _.isArray(fromCol);
   let times = _.map(records, function(r){
     let fromVal = null
@@ -481,7 +494,7 @@ const extractTimes = (records, fromCol, toCol) => {
   // return sum(times)/times.length;
 }
 
-const findFirst = (vals, fromCol, toCol) => {
+const _findFirst = (vals, fromCol, toCol) => {
   let sortedVals = null;
   if(toCol){
     sortedVals = _.sortBy(vals, toCol);
@@ -508,13 +521,6 @@ const median = arr => {
     nums = [...arr].sort((a, b) => a - b);
   return arr.length % 2 !== 0 ? nums[mid] : (nums[mid - 1] + nums[mid]) / 2;
 };
-
-// https://stackoverflow.com/a/563442
-Date.prototype.addDays = function(days) {
-    var date = new Date(this.valueOf());
-    date.setDate(date.getDate() + days);
-    return date;
-}
 
 
 // Export it to make it available outside
