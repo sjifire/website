@@ -251,7 +251,6 @@ collections:
                     minimal: false
                     buttons: ['bold', 'italic', 'link', 'heading-two', 'heading-three', 'heading-four', 'heading-five', 'heading-six', 'quote', 'bulleted-list', 'numbered-list']
                     editor_components: []
-                    modes: [rich_text]
                     required: false
                     hint: "Add a chunk of text (rich text editor)"
               - label: "Image"
