@@ -5,7 +5,7 @@
     </div>
   {% elif section.type === 'image' %}
     <figure class="post__media">
-      <img src="{{ 'https://res.cloudinary.com/san-juan-fire-district-3/image/fetch/f_auto,q_auto:good,c_limit,w_1200,h_800/' + site.rootUrl if helpers.env === 'production' }}/assets/media/{{ section.source }}" alt="{{ section.alt }}" {{ 'width="' + section.width + '"' if section.width}} {{ 'height="' + section.height + '"' if section.height}} loading="lazy">
+      <img src="{{ 'https://res.cloudinary.com/san-juan-fire-district-3/image/fetch/f_auto,q_auto:good,c_limit,w_1200,h_800/' + site.rootUrl if helpers.env === 'production' }}/assets/images/{{ section.source }}" alt="{{ section.alt }}" {{ 'width="' + section.width + '"' if section.width}} {{ 'height="' + section.height + '"' if section.height}} loading="lazy">
       {% if section.caption %}
         <figcaption>
           {{ section.caption }}
