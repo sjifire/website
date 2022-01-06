@@ -2,8 +2,8 @@ backend:
   name: git-gateway
   branch: main
 
-media_folder: "src/assets/images"
-public_folder: "/assets/images"
+media_folder: "src/assets/media"
+public_folder: "/assets/media"
 site_url: "https://www.sjifire.org/"
 show_preview_links: false
 collections:
