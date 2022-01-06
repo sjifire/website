@@ -1,0 +1,74 @@
+preamble: San Juan Island Fire and Rescue is responsible for providing emergency
+  response to all of San Juan Island as well as Brown Island, Henry Island,
+  Johns Island, Pearl Island, Spieden Island, and Stuart Island.
+sections:
+  - type: text
+    copy: >-
+      ### Who We Are
+
+      At San Juan Island and Rescue, WE are YOU!
+
+
+      We are your neighbors, friends and the workers you see every day around our islands.
+
+
+      Some of us are part- or full-time staff but most of us are volunteers.  Even our small limited paid staff have just about all began as SJIF&R volunteers.
+
+
+      We work on homes & gardens, or on boats, docks, and aircraft. We deliver packages, or farm the fields. We work for the county, restaurants, and professional services.  We are young, starting our careers out of High School, and some of us are older and retired.
+
+
+      We serve on boards and commissions. We are members of nonprofit organizations and volunteer there too.
+
+
+      As your neighbors you see us, running out the doors of shops to answer the call. You hear our cars leaving as we head out to respond to emergencies.
+
+
+      At all hours.
+
+
+      In all weather.
+
+
+      We serve because we are islanders. We live here, work here and many of us our raising our families here.
+
+
+      WE are YOU.
+  - type: image
+    source: IMG_2338-1536x2048.jpg
+    width: 384
+    height: 512
+    alt: Ferry Terminal
+    caption: Friday Harbor Ferry Terminal
+  - type: text
+    copy: >-
+      
+      ### District
+
+      San Juan Fire District #3, the special district overseeing San Juan Island Fire and Rescue, encompasses all of San Juan Island, including the Town of Friday Harbor; as well as all of Brown, Henry, Johns, Pearl, Spieden and Stuart Islands. San Juan Island is the second-largest and most populous of the San Juan Islands. The Town of Friday Harbor, on San Juan Island, is the only incorporated town and it is the county seat.
+
+
+      ### Services
+
+      San Juan Island Fire and Rescue (SJIF&R) provides all-hazard emergency response throughout our district’s islands including emergency medical response, structural and wildland firefighting, search and rescue operations, HAZMAT response, vehicle extrication, marine and other emergencies. Most of our members are dual trained Firefighters and EMTs. We work closely with our neighboring fire districts, San Juan Island EMS, the San Juan County’s Sheriff Department, as well as state and federal emergency services agencies.
+  - type: gmap
+    source: https://www.google.com/maps/d/embed?mid=1nXNMqwagMcA3r_gfxBkgf1By9m8A6RLM&ehbc=2E312F
+    caption: "San Juan Fire District #3 District"
+  - type: text
+    copy: As needed, we provide fire response to other non-ferry served islands
+      through a contract with the Washington State Department of Natural
+      Resources ([DNR](https://www.dnr.wa.gov/FightingFire)), fire services .
+      SJIF&R participates in the [Statewide Mobilization
+      Plan](http://www.wsp.wa.gov/all-risk-mobilization/) and provides mutual
+      aid to neighboring fire districts, as those districts provide mutual aid
+      for our district
+  - type: text
+    copy: >-
+      ### Stations and equipment
+
+      There are six fire stations on San Juan Island, and there is a station on Brown Island. San Juan Island Fire and Rescue operates a satellite station on Pearl Island and is staging emergency response equipment on Stuart and Henry Islands. San Juan Island Fire and Rescue provides marine fire, rescue and emergency medical response to our district, and as needed for all San Juan County Islands.
+
+
+      ### Governance
+
+      San Juan Island Fire and Rescue is governed by San Juan County Fire District 3. The state of Washington chartered San Juan Island Fire Department in May of 1959.  See our [Governance Page](/governance) for details.

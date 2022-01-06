@@ -223,7 +223,7 @@ collections:
         delete: false
         editor:
           preview: true
-        file: "src/_data/about.json"
+        file: "src/_data/about.yml"
         fields:
           - label: Preamble
             name: preamble
@@ -251,7 +251,6 @@ collections:
                     minimal: false
                     buttons: ['bold', 'italic', 'link', 'heading-two', 'heading-three', 'heading-four', 'heading-five', 'heading-six', 'quote', 'bulleted-list', 'numbered-list']
                     editor_components: []
-                    modes: [rich_text]
                     required: false
                     hint: "Add a chunk of text (rich text editor)"
               - label: "Image"
@@ -311,6 +310,25 @@ collections:
         editor:
           preview: true
         file: "src/_data/key_information.yml"
+        fields:
+          - label: Preamble
+            name: preamble
+            widget: markdown
+            buttons: ['bold', 'italic', 'link']
+            editor_components: []
+            required: false
+            hint: >-
+              Text that appears under the main heading.
+          - label: Body
+            name: body
+            widget: markdown
+            required: true
+      - label: "Who We Are"
+        name: "who we are"
+        delete: false
+        editor:
+          preview: true
+        file: "src/_data/who_we_are.yml"
         fields:
           - label: Preamble
             name: preamble
