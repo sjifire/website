@@ -61,7 +61,7 @@ module.exports = function (eleventyConfig) {
   //       uses, so we can make sure we're using the same parser
   const mdRender = require('markdown-it')({linkify: true})
   .use(require('markdown-it-attrs'), {
-    allowedAttributes: ['id', 'class', 'width', 'height', 'sizes']
+    allowedAttributes: ['id', 'class', 'width', 'height', 'sizes', 'target']
   });
 
   // const mdRender = new MarkdownIt();

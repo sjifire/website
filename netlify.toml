@@ -32,7 +32,8 @@
   [plugins.inputs]
   exclude = [
     './public/services/*',
-    './public/reports/*'
+    './public/reports/*',
+    './public/about/key-information'
   ]
 
 # disable for now because:

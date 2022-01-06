@@ -304,6 +304,25 @@ collections:
                     name: caption
                     widget: string
                     hint: "Add a caption for the map"
+      - label: "Key Information"
+        name: "key_information"
+        delete: false
+        editor:
+          preview: true
+        file: "src/_data/key_information.yml"
+        fields:
+          - label: Preamble
+            name: preamble
+            widget: markdown
+            buttons: ['bold', 'italic', 'link']
+            editor_components: []
+            required: false
+            hint: >-
+              Text that appears under the main heading.
+          - label: Body
+            name: body
+            widget: markdown
+            required: true
       - label: "Who We Are"
         name: "who we are"
         delete: false
@@ -761,7 +780,7 @@ collections:
       - label: Year
         field: date
         pattern: \d{4}
-  - name: "Media Releases"
+  - name: "media releases"
     label: "Media Releases"
     label_singular: "Media Release"
     folder: "src/media_releases/"
