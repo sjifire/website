@@ -35,6 +35,7 @@
         "uses-passive-event-listeners": "warn",
         "uses-text-compression": "warn",
         "link-text": "warn",
+        "external-anchors-use-rel-noopener": "warn",
         "tap-targets": "warn"
 
       }
