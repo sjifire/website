@@ -31,9 +31,9 @@
   package = "@netlify/plugin-sitemap"
   [plugins.inputs]
   exclude = [
-    './public/services/*',
-    './public/reports/*',
-    './public/about/key-information'
+    './public/services/**',
+    './public/reports/**',
+    './public/about/**/index.html'
   ]
 
 # disable for now because:
