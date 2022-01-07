@@ -338,6 +338,10 @@ collections:
             required: false
             hint: >-
               Text that appears under the main heading.
+          - label: "Featured Image"
+            name: "featured_image"
+            widget: "image"
+            allow_multiple: false
           - label: Body
             name: body
             widget: markdown
