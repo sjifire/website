@@ -12,6 +12,8 @@
     <!-- Include the JS file for remark plugin-->
     <!-- Include Netlify Identity for authentication -->
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <script src="./editor-component-image.js"></script>
+    <script src="./editor-component-video.js"></script>
     <script>
       if (window.netlifyIdentity) {
         window.netlifyIdentity.on("init", user => {
@@ -22,6 +24,10 @@
           }
         });
       }
+
+      CMS.registerEditorComponent(window.NetlifyCmsEditorComponentImage);
+      CMS.registerEditorComponent(window.NetlifyCmsEditorComponentYoutube);
+      CMS.registerEditorComponent(window.NetlifyCmsEditorComponentVimeo);
 
       var ArrayControl = createClass({
         handleChange: function (e) {
