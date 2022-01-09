@@ -4,6 +4,7 @@ const CleanCSS     = require("clean-css");
 const util         = require("util");
 const slugify      = require("slugify");
 const yaml         = require("js-yaml");
+const { parseHTML } = require("linkedom");
 
 const isProduction = process.env.ELEVENTY_ENV === `production`;
 
@@ -119,7 +120,33 @@ module.exports = function (eleventyConfig) {
     return "1/11/22"
   });
 
-
+  // from "@sardine/eleventy-plugin-external-links
+  // but adding it for local pdfs
+  eleventyConfig.addTransform('external-links', (content, outputPath) => {
+    try {
+      if (outputPath && outputPath.endsWith('.html')) {
+        const { document } = parseHTML(content);
+        const links = [...document.querySelectorAll('a')];
+        if (links.length > 0) {
+          links.map((link) => {
+            if (/^(https?\:\/\/|\/\/)/i.test(link.href) ||
+                /\.pdf$/i.test(link.href)) {
+              link.target = '_blank';
+              // we want to see who's linking to our docs
+              // link.setAttribute('rel', 'noreferrer');
+            }
+            return link;
+          });
+        } else {
+          return html;
+        }
+        content = document.toString();
+      }
+    } catch (error) {
+      console.error(error);
+    }
+    return content;
+  });
 
 
   // Minify HTML Output
