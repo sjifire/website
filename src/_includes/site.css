@@ -530,10 +530,35 @@ body {
 }
 
 
-.contact-page-grid {
+.l-2col {
   display: grid;
-  grid-template-columns: 1fr 33%;
-  gap: 3rem;
+}
+
+.l-2col {
+  grid-template-areas: 
+    "main" 
+    "sidebar";
+  grid-template-columns: 1fr;
+  gap: 60px;
+}
+
+@media (min-width: 768px) {
+  .l-2col {
+    grid-template-areas: "sidebar  main";
+    grid-template-columns: 1fr 2fr;
+  }
+}
+
+.l-2col__sidebar {
+  grid-area: sidebar;
+}
+
+.l-2col__main {
+  grid-area: main;
+}
+
+.block-content > * + * {
+  margin-block: 1.25rem;
 }
 
 
