@@ -97,9 +97,11 @@ h3 {
   line-height: 1.15;
 }
 
+html, body {
+ height: 100%;
+}
+
 body {
-  display: grid;
-  grid-template-rows: auto auto auto 1fr auto;
   font-family: var(--ff-sans);
 }
 
@@ -259,6 +261,8 @@ body {
 }
 
 .site-footer {
+  position: sticky;
+  top: 100vh;
   padding: 2rem 0;
   text-align: center;
   background-color: var(--dk-red);
