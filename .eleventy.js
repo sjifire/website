@@ -62,7 +62,8 @@ module.exports = function (eleventyConfig) {
   const mdRender = require('markdown-it')({linkify: true})
   .use(require('markdown-it-attrs'), {
     allowedAttributes: ['id', 'class', 'width', 'height', 'sizes', 'target']
-  });
+  })
+  .use(require('markdown-it-video'));
 
   // const mdRender = new MarkdownIt();
   eleventyConfig.addFilter("markdownify", function(rawString) {
