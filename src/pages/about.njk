@@ -5,16 +5,18 @@ permalink: "/about/index.html"
 
 {% extends 'base.njk' %}
 
-{% block page_header %}
-  <h1>
-    {{ title | safe }}
-  </h1>
-  <div class="lede">
-    {{ about.preamble | markdownify | safe }}
-  </div>
-{% endblock %}
-
 {% block content %}
-  {% set baseSections = about.sections %}
-  {% include "sections_block.njk" %}
+  <div class="l-2col">
+    <div class="l-2col__main block-content">
+      <h1>
+        {{ title | safe }}
+      </h1>
+      {{ about.preamble | markdownify | safe }}
+      {% set baseSections = about.sections %}
+      {% include "sections_block.njk" %}
+    </div>
+    <aside class="l-2col__sidebar block-content">
+      <img src="https://res.cloudinary.com/san-juan-fire-district-3/image/fetch/f_auto,q_auto:good,c_limit,w_1200,h_800/https://sjifire.netlify.app/assets/images/IMG_2338-1536x2048.jpg" alt="Ferry Terminal" loading="lazy" width="384" height="512">
+    </aside>
+  </div>
 {% endblock %}

@@ -531,21 +531,18 @@ body {
 
 
 .l-2col {
-  display: grid;
 }
 
 .l-2col {
-  grid-template-areas: 
-    "main" 
-    "sidebar";
-  grid-template-columns: 1fr;
-  gap: 60px;
 }
 
 @media (min-width: 768px) {
   .l-2col {
+    display: grid;
     grid-template-areas: "sidebar  main";
+    grid-template-columns: fit-content(20ch) minmax(min(50vw, 30ch), 1fr);
     grid-template-columns: 1fr 2fr;
+    gap: 60px;
   }
 }
 

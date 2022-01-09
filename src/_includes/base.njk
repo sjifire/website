@@ -13,7 +13,7 @@
   {# icon tags #}
     <link rel="icon" type="image/png" href="{{ 'https://res.cloudinary.com/san-juan-fire-district-3/image/fetch/f_auto/' + site.rootUrl if helpers.env === 'production' }}/assets/sjifire-logo-clear.png" />
   {# og #}
-    <meta property="og:url" content="{{ site.prodUrl + page.url}}"" key="ogurl" />
+    <meta property="og:url" content="{{ site.prodUrl + page.url}}" key="ogurl" />
     <!-- <meta property="og:image" content={previewImage} key="ogimage" /> -->
     <meta property="og:site_name" content="{{configs.site_name}}" key="ogsitename" />
     <meta property="og:title" content="{{pageTitle}}" key="ogtitle" />
@@ -38,15 +38,17 @@
     {% include "header.njk" %}
   </header>
 
-  <header class="page-header">
-    <div class="rap">
-      <article class="page-header__copy">
-        {% block page_header %}{% endblock %}
-      </article>
-    </div>
-  </header>
+  {% if page.url === '/' or page.fileSlug === 'news-article' %}
+    <header class="page-header">
+      <div class="rap">
+        <article class="page-header__copy">
+          {% block page_header %}{% endblock %}
+        </article>
+      </div>
+    </header>
 
-  {% include "page_hero.njk" %}
+    {% include "page_hero.njk" %}
+  {% endif %}
 
   <main class="site-main" role="main">
     <div class="rap">
