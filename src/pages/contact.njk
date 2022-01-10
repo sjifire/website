@@ -25,6 +25,18 @@ permalink: "/contact/index.html"
             Email Address
           </label>
           <input id="email" type="email" name="email-address" class="form-control" required>
+          <label for="inquiry_category" required style="margin-top:1.5rem;">
+            Inquiry Category
+          </label>
+          <select id="inquiry_category" name="inquiry_category" class="form-control">
+            <option value="general" selected>General Inquiry</option>
+            <option value="feedback">Feedback & Concerns</option>
+            <option value="fire_safety">Fire Safety & Prevention</option>
+            <option value="med_classes">CPR & First Aid Classes</option>
+            <option value="pub_ed">Public Education & Trainings</option>
+            <option value="media">Media</option>
+            <option value="opportunities">Volunteer & Career Opportunities</option>
+          </select>
           <label for="message" required style="margin-top:1.5rem;">
             Message
           </label>
@@ -39,17 +51,32 @@ permalink: "/contact/index.html"
       </form>
     </div>
     <aside class="l-grid__sidebar block-content">
+      <h4>Emergency: CALL 911</h4>
       <h4>Address</h4>
       <address>
         San Juan County Fire District 3<br>
         1011 Mullis Street<br>
         Friday Harbor, WA 98250
       </address>
+
+      <address>
+        Office: <a href="tel:+13603785334">(360) 378-5334</a><br/>
+        Fax: (360) 378-2591<br/>
+        Dispatch Non Emergency: <a href="tel:+13603784151">(360) 378-4151</a>
+      </address>
+
       <h4>Office Hours</h4>
-      <p>8 a.m. to 4 p.m., Monday through Friday</p>
+      <p>
+        <i>Not Open to the Public during Covid Pandemic</i><br/>
+        8 a.m. to 4 p.m., Monday through Friday<br/>
+        Except Holidays
+      </p>
+
       <div class="embed-responsive embed-responsive-16by9">
         <iframe title="HQ location" src="{{ site.address.map }}" loading="lazy"></iframe>
       </div>
     </aside>
+
+
   </div>
 {% endblock %}
