@@ -12,7 +12,7 @@ module.exports = function (eleventyConfig) {
   require("dotenv").config();
 
   eleventyConfig.addDataExtension("yml", contents => yaml.load(contents));
-
+  eleventyConfig.setDataDeepMerge(true);
   eleventyConfig.addPassthroughCopy("src/assets/");
 
   eleventyConfig.addFilter("limit", function (arr, limit) {
@@ -23,7 +23,6 @@ module.exports = function (eleventyConfig) {
     return new CleanCSS({}).minify(code).styles;
   });
 
-  eleventyConfig.setDataDeepMerge(true);
   
   eleventyConfig.addFilter("pluck", function (arr, selections, attr) {
     return arr.filter((item) => selections.includes(item[attr]));
@@ -103,11 +102,18 @@ module.exports = function (eleventyConfig) {
   function nextSecondTuesday(month = new Date().getMonth(), day = new Date().getDate()){
     var temp = new Date();
     temp.setMonth(month, day);
-    var n = 1;
-    while(temp.getDay()!= 2) temp.setDate(++n);
-    temp.setDate(n+7);
+    // n must start at 1, but setDate is n++...
+    // we need to set the date and THEN increment n
+    var n = temp.getDate();
+    while(temp.getDay()!= 2){
+console.log(` ${n} - ${temp.getDay()}`)
+      temp.setDate(++n);
+    }
+    // temp.setDate(n+7);
+console.log(` ${day}>${temp.getDate()}`)
     if(day>temp.getDate()){
       var nextMonth=temp.getMonth()+1;
+console.log(`  month: ${nextMonth}`)
       // everything is zero-indexed EXCEPT date; that starts with 1
       // as the first of the month.  If you set this to 0, it goes to
       // the last day of the previous month
@@ -116,8 +122,9 @@ module.exports = function (eleventyConfig) {
     return temp.toLocaleDateString();
   };
   eleventyConfig.addShortcode("nextBoardMeetingDate", function () {
-    // return nextSecondTuesday();
-    return "1/11/22"
+console.log(`RESULT: ${nextSecondTuesday(1, 4)}`)
+    return nextSecondTuesday();
+    // return "1/11/22"
   });
 
   // from "@sardine/eleventy-plugin-external-links
