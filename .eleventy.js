@@ -12,7 +12,7 @@ module.exports = function (eleventyConfig) {
   require("dotenv").config();
 
   eleventyConfig.addDataExtension("yml", contents => yaml.load(contents));
-
+  eleventyConfig.setDataDeepMerge(true);
   eleventyConfig.addPassthroughCopy("src/assets/");
 
   eleventyConfig.addFilter("limit", function (arr, limit) {
@@ -23,7 +23,6 @@ module.exports = function (eleventyConfig) {
     return new CleanCSS({}).minify(code).styles;
   });
 
-  eleventyConfig.setDataDeepMerge(true);
   
   eleventyConfig.addFilter("pluck", function (arr, selections, attr) {
     return arr.filter((item) => selections.includes(item[attr]));
@@ -100,24 +99,9 @@ module.exports = function (eleventyConfig) {
     return util.inspect(obj);
   });
 
-  function nextSecondTuesday(month = new Date().getMonth(), day = new Date().getDate()){
-    var temp = new Date();
-    temp.setMonth(month, day);
-    var n = 1;
-    while(temp.getDay()!= 2) temp.setDate(++n);
-    temp.setDate(n+7);
-    if(day>temp.getDate()){
-      var nextMonth=temp.getMonth()+1;
-      // everything is zero-indexed EXCEPT date; that starts with 1
-      // as the first of the month.  If you set this to 0, it goes to
-      // the last day of the previous month
-      return nextSecondTuesday(nextMonth, 1);
-    }
-    return temp.toLocaleDateString();
-  };
+  const nextBoardMeetingDate = require('./src/modules/next_board_meeting_date')
   eleventyConfig.addShortcode("nextBoardMeetingDate", function () {
-    // return nextSecondTuesday();
-    return "1/11/22"
+    return nextBoardMeetingDate().toLocaleDateString();
   });
 
   // from "@sardine/eleventy-plugin-external-links
