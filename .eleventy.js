@@ -108,24 +108,41 @@ module.exports = function (eleventyConfig) {
   // but adding it for local pdfs
   eleventyConfig.addTransform('external-links', (content, outputPath) => {
     try {
-      if (outputPath && outputPath.endsWith('.html')) {
-        const { document } = parseHTML(content);
-        const links = [...document.querySelectorAll('a')];
-        if (links.length > 0) {
-          links.map((link) => {
-            if (/^(https?\:\/\/|\/\/)/i.test(link.href) ||
-                /\.pdf$/i.test(link.href)) {
-              link.target = '_blank';
-              // we want to see who's linking to our docs
-              // link.setAttribute('rel', 'noreferrer');
-            }
-            return link;
-          });
-        } else {
-          return html;
+      if (!outputPath || !outputPath.endsWith('.html')) return content
+      const { document } = parseHTML(content);
+      const links = [...document.querySelectorAll('a')];
+      if (links.length == 0) return content
+      links.map((link) => {
+        if (/^(https?\:\/\/|\/\/)/i.test(link.href) ||
+            /\.pdf$/i.test(link.href)) {
+          link.target = '_blank';
+          // we want to see who's linking to our docs
+          // link.setAttribute('rel', 'noreferrer');
         }
-        content = document.toString();
-      }
+        return link;
+      });
+      content = document.toString();
+    } catch (error) {
+      console.error(error);
+    }
+    return content;
+  });
+
+  //lazy load EXCEPT logo; can we do this via tag attr or class rather
+  // than hardcode?
+  eleventyConfig.addTransform('lazy-load-imgs', (content, outputPath) => {
+    try {
+      if (!outputPath || !outputPath.endsWith('.html')) return content;
+      const { document } = parseHTML(content);
+      const imgs = [...document.querySelectorAll('img')];
+      if (imgs.length == 0) return content;
+      imgs.map((img) => {
+        if (!/logo/i.test(img.src)){
+          img.setAttribute('loading', 'lazy');
+        }
+        return img;
+      });
+      content = document.toString();
     } catch (error) {
       console.error(error);
     }
