@@ -5,7 +5,7 @@ permalink: "/services/fire-alarms/index.html"
 
 {% extends 'base.njk' %}
 
-{% block page_header %}
+{% block content %}
   <h1>
     {{ title | safe }}
   </h1>
@@ -14,10 +14,5 @@ permalink: "/services/fire-alarms/index.html"
       {{ fire_alarms.preamble | markdownify | safe }}
     </div>
   {% endif %}
-{% endblock %}
-
-{% block content %}
-  <div class="post__copy">
-    {{ fire_alarms.body | markdownify | safe }}
-  </div>
+  {{ fire_alarms.body | markdownify | safe }}
 {% endblock %}

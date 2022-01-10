@@ -15,8 +15,8 @@ permalink: "/governance/index.html"
 {% endblock #}
 
 {% block content %}
-  <div class="l-2col">
-    <div class="l-2col__main block-content">
+  <div class="l-grid l-grid--2col">
+    <div class="l-grid__main block-content">
       <h1>{{ title | safe }}</h1>
       {{ governance.preamble | markdownify | safe }}
       {{ governance.about | markdownify | safe }}
@@ -25,7 +25,7 @@ permalink: "/governance/index.html"
       </h3>
       {{ governance.commission | markdownify | safe }}
     </div>
-    <aside class="l-2col__sidebar block-content">
+    <aside class="l-grid__sidebar block-content">
       <ul class="document-list">
         <li>
             {% if collections.futureMeetings.length %}

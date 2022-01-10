@@ -97,6 +97,10 @@ h3 {
   line-height: 1.15;
 }
 
+html, body {
+  height: 100%;
+}
+
 body {
   display: grid;
   grid-template-rows: auto auto auto 1fr auto;
@@ -259,6 +263,8 @@ body {
 }
 
 .site-footer {
+  position: sticky;
+  top: 100vh;
   padding: 2rem 0;
   text-align: center;
   background-color: var(--dk-red);
@@ -529,30 +535,31 @@ body {
   margin-bottom: 1rem;
 }
 
-
-.l-2col {
-}
-
-.l-2col {
-}
-
 @media (min-width: 768px) {
-  .l-2col {
+  .l-squeezed {
+    max-width: 720px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .l-grid {
     display: grid;
+  }
+  .l-grid--1col {
+
+  }
+  .l-grid--2col {
     grid-template-areas: "sidebar  main";
-    grid-template-columns: fit-content(20ch) minmax(min(50vw, 30ch), 1fr);
     grid-template-columns: 1fr 2fr;
     gap: 60px;
   }
+  .l-grid__sidebar {
+    grid-area: sidebar;
+  }
+  .l-grid__main {
+    grid-area: main;
+  }
 }
 
-.l-2col__sidebar {
-  grid-area: sidebar;
-}
-
-.l-2col__main {
-  grid-area: main;
-}
 
 .block-content > * + * {
   margin-block: 1.25rem;
@@ -590,14 +597,6 @@ body {
   font-size: 1rem;
 }
 
-
-@media (min-width: 992px) {
-  .post__copy, .page-header__copy {
-    max-width: 720px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-}
 
 .pagination {
   display: flex;

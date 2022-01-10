@@ -5,16 +5,14 @@ permalink: "/disclaimer/index.html"
 
 {% extends 'base.njk' %}
 
-{% block page_header %}
+{% block content %}
   <h1>
     {{ title | safe }}
   </h1>
   <div class="lede">
     {{ disclaimer.preamble | markdownify | safe }}
   </div>
-{% endblock %}
 
-{% block content %}
   {% set baseSections = disclaimer.sections %}
   {% include "sections_block.njk" %}
 {% endblock %}

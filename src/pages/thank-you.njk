@@ -5,17 +5,13 @@ permalink: "/thank-you/index.html"
 
 {% extends 'base.njk' %}
 
-{% block page_header %}
+{% block content %}
   <h1>
     {{ title | safe }}
   </h1>
   <div class="lede">
     {{ thank_you.preamble | markdownify | safe }}
   </div>
-{% endblock %}
 
-{% block content %}
-  <div class="post__copy">
-    {{ thank_you.copy | markdownify | safe }}
-  </div>
+  {{ thank_you.copy | markdownify | safe }}
 {% endblock %}

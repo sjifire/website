@@ -6,8 +6,8 @@ permalink: "/about/index.html"
 {% extends 'base.njk' %}
 
 {% block content %}
-  <div class="l-2col">
-    <div class="l-2col__main block-content">
+  <div class="l-grid l-grid--2col">
+    <div class="l-grid__main block-content">
       <h1>
         {{ title | safe }}
       </h1>
@@ -15,7 +15,7 @@ permalink: "/about/index.html"
       {% set baseSections = about.sections %}
       {% include "sections_block.njk" %}
     </div>
-    <aside class="l-2col__sidebar block-content">
+    <aside class="l-grid__sidebar block-content">
       <img src="https://res.cloudinary.com/san-juan-fire-district-3/image/fetch/f_auto,q_auto:good,c_limit,w_1200,h_800/https://sjifire.netlify.app/assets/images/IMG_2338-1536x2048.jpg" alt="Ferry Terminal" loading="lazy" width="384" height="512">
     </aside>
   </div>

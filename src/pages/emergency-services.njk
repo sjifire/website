@@ -5,7 +5,7 @@ permalink: "/services/emergency-services/index.html"
 
 {% extends 'base.njk' %}
 
-{% block page_header %}
+{% block content %}
   <h1>
     {{ title | safe }}
   </h1>
@@ -14,10 +14,5 @@ permalink: "/services/emergency-services/index.html"
       {{ emergency_services.preamble | markdownify | safe }}
     </div>
   {% endif %}
-{% endblock %}
-
-{% block content %}
-  <div class="post__copy">
-    {{ emergency_services.body | markdownify | safe }}
-  </div>
+  {{ emergency_services.body | markdownify | safe }}
 {% endblock %}

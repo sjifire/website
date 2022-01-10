@@ -5,7 +5,7 @@ permalink: "/services/knoxbox/index.html"
 
 {% extends 'base.njk' %}
 
-{% block page_header %}
+{% block content %}
   <h1>
     {{ title | safe }}
   </h1>
@@ -14,10 +14,5 @@ permalink: "/services/knoxbox/index.html"
       {{ knoxbox.preamble | markdownify | safe }}
     </div>
   {% endif %}
-{% endblock %}
-
-{% block content %}
-  <div class="post__copy">
-    {{ knoxbox.body | markdownify | safe }}
-  </div>
+  {{ knoxbox.body | markdownify | safe }}
 {% endblock %}
