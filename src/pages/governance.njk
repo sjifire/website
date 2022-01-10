@@ -34,32 +34,32 @@ permalink: "/governance/index.html"
     </header>
     <ul class="document-list">
       <li>
-          {% if collections.futureMeetings.length %}
-            <h3>Upcoming Meetings</h3>
-            <ul class="news-grid">
-              {% for meeting in collections.futureMeetings %}
-                <li class="news-grid__item">
-                  <time class="news__type">
-                    {{ meeting.date | postDateTerseISO }}
-                  </time>
-                  <div class="news__headline">
-                    <p>{{ meeting.title }}</p>
-                  </div>
-                  <ul class="news__list">
-                    {% for doc in meeting.documents %}
-                      <li>
-                        <a href="/assets/docs/{{ doc.file }}">
-                          {{ doc.title }}
-                        </a>
-                      </li>
-                    {% endfor %}
-                  </ul>
-                </li>
-              {% endfor %}
-            </ul>
-          {% else %}
-            <p>Next regular scheduled board meeting is tentatively on <span id='next-board-meeting'>{% nextBoardMeetingDate %}</span> at 3pm.</p>
-          {% endif %}
+        {% if collections.futureMeetings.length %}
+          <h3>Upcoming Meetings</h3>
+          <ul class="news-grid">
+            {% for meeting in collections.futureMeetings %}
+              <li class="news-grid__item">
+                <time class="news__type">
+                  {{ meeting.date | postDateTerseISO }}
+                </time>
+                <div class="news__headline">
+                  <p>{{ meeting.title }}</p>
+                </div>
+                <ul class="news__list">
+                  {% for doc in meeting.documents %}
+                    <li>
+                      <a href="/assets/docs/{{ doc.file }}">
+                        {{ doc.title }}
+                      </a>
+                    </li>
+                  {% endfor %}
+                </ul>
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p>Next regular scheduled board meeting is tentatively on <span id='next-board-meeting'>{% nextBoardMeetingDate %}</span> at 3pm.</p>
+        {% endif %}
       </li>
       {% for year, set in collections.pastMeetings | groupby('year') | dictsort | reverse %}
         <li>
