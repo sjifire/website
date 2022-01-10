@@ -137,7 +137,8 @@ module.exports = function (eleventyConfig) {
       const imgs = [...document.querySelectorAll('img')];
       if (imgs.length == 0) return content;
       imgs.map((img) => {
-        if (!/logo/i.test(img.src)){
+        //do not modify if loading attr is already set.
+        if (!/logo/i.test(img.src) && img.loading !== undefined){
           img.setAttribute('loading', 'lazy');
         }
         return img;
