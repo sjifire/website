@@ -12,7 +12,7 @@ module.exports = function (eleventyConfig) {
   require("dotenv").config();
 
   eleventyConfig.addDataExtension("yml", contents => yaml.load(contents));
-  eleventyConfig.setDataDeepMerge(true);
+  // eleventyConfig.setDataDeepMerge(true);
   eleventyConfig.addPassthroughCopy("src/assets/");
 
   eleventyConfig.addFilter("limit", function (arr, limit) {
