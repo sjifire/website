@@ -145,6 +145,9 @@ body {
 .item {
   padding: 10px;
 }
+.item:not(:last-child) {
+  margin-right: 8px;
+}
 .item a {
   color: rgba(255,255,255,0.5);
   text-decoration: none;
@@ -154,6 +157,13 @@ body {
   color: white;
   cursor: pointer;
 }
+.item.active {
+  background-color: var(--black);
+}
+.item.active > a {
+  color: var(--yellow);
+}
+
 /* Mobile menu */
 .menu {
   display: flex;
@@ -217,7 +227,7 @@ body {
 }
 
 /* Desktop menu */
-@media all and (min-width: 576px) {
+@media all and (min-width: 767px) {
   .menu {
     /* align-items: flex-start; */
     flex-wrap: nowrap;
@@ -232,13 +242,17 @@ body {
     position: relative;
     display: block;
     width: auto;
+    text-align: left;
   }
+  .submenu-active > li > a, .submenu-active > li > a::after {
+    color: white;
+  }
+
   .submenu-active .submenu {
     display: block;
     position: absolute;
     right: 0;
-    /* left: 0; */
-    top: auto;
+    top: 45px;
     z-index: 10;
     background: var(--black);
   }
