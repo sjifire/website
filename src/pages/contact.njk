@@ -1,5 +1,5 @@
 ---
-title: "Contact Us"
+title: "Questions or Comments?"
 permalink: "/contact/index.html"
 ---
 
@@ -8,7 +8,7 @@ permalink: "/contact/index.html"
 {% block content %}
   <div class="l-grid l-grid--2col">
     <div class="l-grid__main block-content">
-      <h1>
+      <h1 class="special-heading">
         {{ title | safe }}
       </h1>
       {{ contact.copy | markdownify | safe }}
@@ -51,32 +51,34 @@ permalink: "/contact/index.html"
       </form>
     </div>
     <aside class="l-grid__sidebar block-content">
-      <h4>Emergency: CALL 911</h4>
-      <h4>Address</h4>
-      <address>
-        San Juan County Fire District 3<br>
-        1011 Mullis Street<br>
-        Friday Harbor, WA 98250
-      </address>
+      <h4 class="brand-red">Emergency: CALL 911</h4>
+      <div>
+        <h4 class="brand-red">Address</h4>
+        <address>
+          San Juan County Fire District 3<br>
+          1011 Mullis Street<br>
+          Friday Harbor, WA 98250
+        </address>
 
-      <address>
-        Office: <a href="tel:+13603785334">(360) 378-5334</a><br/>
-        Fax: (360) 378-2591<br/>
-        Dispatch Non Emergency: <a href="tel:+13603784151">(360) 378-4151</a>
-      </address>
+        <address>
+          Office: <a href="tel:+13603785334">(360) 378-5334</a><br/>
+          Fax: (360) 378-2591<br/>
+          Dispatch Non Emergency: <a href="tel:+13603784151">(360) 378-4151</a>
+        </address>
+      </div>
 
-      <h4>Office Hours</h4>
-      <p>
-        <i>Not Open to the Public during Covid Pandemic</i><br/>
-        8 a.m. to 4 p.m., Monday through Friday<br/>
-        Except Holidays
-      </p>
+      <div>
+        <h4 class="brand-red">Office Hours</h4>
+        <p>
+          <i>Not Open to the Public during Covid Pandemic</i><br/>
+          8 a.m. to 4 p.m., Monday through Friday<br/>
+          Except Holidays
+        </p>
+      </div>
 
       <div class="embed-responsive embed-responsive-16by9">
         <iframe title="HQ location" src="{{ site.address.map }}" loading="lazy"></iframe>
       </div>
     </aside>
-
-
   </div>
 {% endblock %}
