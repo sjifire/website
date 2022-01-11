@@ -351,7 +351,6 @@ collections:
         delete: false
         editor:
           preview: true
-        extension: "json"
         file: "src/_data/incidents.yml"
         fields:
           - label: Preamble
@@ -371,7 +370,7 @@ collections:
         delete: false
         editor:
           preview: false
-        file: "src/_data/governance.json"
+        file: "src/_data/governance.yml"
         fields:
           - label: Preamble
             name: preamble
@@ -527,7 +526,6 @@ collections:
         delete: false
         editor:
           preview: true
-        extension: "json"
         file: "src/_data/firewise.yml"
         fields:
           - label: Preamble
@@ -547,7 +545,6 @@ collections:
         delete: false
         editor:
           preview: true
-        extension: "json"
         file: "src/_data/fire_alarms.yml"
         fields:
           - label: Preamble
