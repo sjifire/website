@@ -4,6 +4,7 @@ const CleanCSS     = require("clean-css");
 const util         = require("util");
 const slugify      = require("slugify");
 const yaml         = require("js-yaml");
+const { parseHTML } = require("linkedom");
 
 const isProduction = process.env.ELEVENTY_ENV === `production`;
 
@@ -11,7 +12,7 @@ module.exports = function (eleventyConfig) {
   require("dotenv").config();
 
   eleventyConfig.addDataExtension("yml", contents => yaml.load(contents));
-
+  // eleventyConfig.setDataDeepMerge(true);
   eleventyConfig.addPassthroughCopy("src/assets/");
 
   eleventyConfig.addFilter("limit", function (arr, limit) {
@@ -22,7 +23,6 @@ module.exports = function (eleventyConfig) {
     return new CleanCSS({}).minify(code).styles;
   });
 
-  eleventyConfig.setDataDeepMerge(true);
   
   eleventyConfig.addFilter("pluck", function (arr, selections, attr) {
     return arr.filter((item) => selections.includes(item[attr]));
@@ -62,7 +62,8 @@ module.exports = function (eleventyConfig) {
   const mdRender = require('markdown-it')({linkify: true})
   .use(require('markdown-it-attrs'), {
     allowedAttributes: ['id', 'class', 'width', 'height', 'sizes', 'target']
-  });
+  })
+  .use(require('markdown-it-video'));
 
   // const mdRender = new MarkdownIt();
   eleventyConfig.addFilter("markdownify", function(rawString) {
@@ -98,27 +99,56 @@ module.exports = function (eleventyConfig) {
     return util.inspect(obj);
   });
 
-  function nextSecondTuesday(month = new Date().getMonth(), day = new Date().getDate()){
-    var temp = new Date();
-    temp.setMonth(month, day);
-    var n = 1;
-    while(temp.getDay()!= 2) temp.setDate(++n);
-    temp.setDate(n+7);
-    if(day>temp.getDate()){
-      var nextMonth=temp.getMonth()+1;
-      // everything is zero-indexed EXCEPT date; that starts with 1
-      // as the first of the month.  If you set this to 0, it goes to
-      // the last day of the previous month
-      return nextSecondTuesday(nextMonth, 1);
-    }
-    return temp.toLocaleDateString();
-  };
+  const nextBoardMeetingDate = require('./src/modules/next_board_meeting_date')
   eleventyConfig.addShortcode("nextBoardMeetingDate", function () {
-    // return nextSecondTuesday();
-    return "1/11/22"
+    return nextBoardMeetingDate().toLocaleDateString();
   });
 
+  // from "@sardine/eleventy-plugin-external-links
+  // but adding it for local pdfs
+  eleventyConfig.addTransform('external-links', (content, outputPath) => {
+    try {
+      if (!outputPath || !outputPath.endsWith('.html')) return content
+      const { document } = parseHTML(content);
+      const links = [...document.querySelectorAll('a')];
+      if (links.length == 0) return content
+      links.map((link) => {
+        if (/^(https?\:\/\/|\/\/)/i.test(link.href) ||
+            /\.pdf$/i.test(link.href)) {
+          link.target = '_blank';
+          // we want to see who's linking to our docs
+          // link.setAttribute('rel', 'noreferrer');
+        }
+        return link;
+      });
+      content = document.toString();
+    } catch (error) {
+      console.error(error);
+    }
+    return content;
+  });
 
+  //lazy load EXCEPT logo; can we do this via tag attr or class rather
+  // than hardcode?
+  eleventyConfig.addTransform('lazy-load-imgs', (content, outputPath) => {
+    try {
+      if (!outputPath || !outputPath.endsWith('.html')) return content;
+      const { document } = parseHTML(content);
+      const imgs = [...document.querySelectorAll('img')];
+      if (imgs.length == 0) return content;
+      imgs.map((img) => {
+        //do not modify if loading attr is already set.
+        if (!/logo/i.test(img.src) && img.loading !== undefined){
+          img.setAttribute('loading', 'lazy');
+        }
+        return img;
+      });
+      content = document.toString();
+    } catch (error) {
+      console.error(error);
+    }
+    return content;
+  });
 
 
   // Minify HTML Output
