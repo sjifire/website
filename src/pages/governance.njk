@@ -5,88 +5,83 @@ permalink: "/governance/index.html"
 
 {% extends 'base.njk' %}
 
-{% block page_header %}
+{# block page_header %}
   <h1>
     {{ title | safe }}
   </h1>
   <div class="lede">
     {{ governance.preamble | markdownify | safe }}
   </div>
-{% endblock %}
+{% endblock #}
 
 {% block content %}
-  <div class="post__copy">
-    {{ governance.about | markdownify | safe }}
-  </div>
-  <div class="post__copy">
-    <header>
-      <h2 class="special-heading">
+  <div class="l-grid l-grid--2col">
+    <div class="l-grid__main block-content">
+      <h1>{{ title | safe }}</h1>
+      {{ governance.preamble | markdownify | safe }}
+      {{ governance.about | markdownify | safe }}
+      <h3>
         Board of Commissioners
-      </h2>
-    </header>
-    {{ governance.commission | markdownify | safe }}
-  </div>
-  <section class="page-section">
-    <header>
-      <h2 class="special-heading">
-        Board Meetings & Documents
-      </h2>
-    </header>
-    <ul class="document-list">
-      <li>
-        {% if collections.futureMeetings.length %}
-          <h3>Upcoming Meetings</h3>
-          <ul class="news-grid">
-            {% for meeting in collections.futureMeetings %}
-              <li class="news-grid__item">
-                <time class="news__type">
-                  {{ meeting.date | postDateTerseISO }}
-                </time>
-                <div class="news__headline">
-                  <p>{{ meeting.title }}</p>
-                </div>
-                <ul class="news__list">
-                  {% for doc in meeting.documents %}
-                    <li>
-                      <a href="/assets/docs/{{ doc.file }}">
-                        {{ doc.title }}
-                      </a>
-                    </li>
-                  {% endfor %}
-                </ul>
-              </li>
-            {% endfor %}
-          </ul>
-        {% else %}
-          <p>Next regular scheduled board meeting is tentatively on <span id='next-board-meeting'>{% nextBoardMeetingDate %}</span> at 3pm.</p>
-        {% endif %}
-      </li>
-      {% for year, set in collections.pastMeetings | groupby('year') | dictsort | reverse %}
+      </h3>
+      {{ governance.commission | markdownify | safe }}
+    </div>
+    <aside class="l-grid__sidebar block-content">
+      <ul class="document-list">
         <li>
-          <h3>Past Meetings: {{ year }}</h3>
-          <ul class="news-grid">
-            {% for meeting in set %}
-              <li class="news-grid__item">
-                <time class="news__type">
-                  {{ meeting.date | postDateTerseISO }}
-                </time>
-                <div class="news__headline">
-                  <p>{{ meeting.title }}</p>
-                </div>
-                <ul class="news__list">
-                  {% for doc in meeting.documents %}
-                    <li>
-                      <a href="/assets/docs/{{ doc.file }}">
-                        {{ doc.title }}
-                      </a>
-                    </li>
-                  {% endfor %}
-                </ul>
-              </li>
-            {% endfor %}
-          </ul>
+            {% if collections.futureMeetings.length %}
+              <h4>Upcoming Meetings</h4>
+              <ul class="news-grid">
+                {% for meeting in collections.futureMeetings %}
+                  <li class="news-grid__item">
+                    <time class="news__type">
+                      {{ meeting.date | postDateTerseISO }}
+                    </time>
+                    <div class="news__headline">
+                      <p>{{ meeting.title }}</p>
+                    </div>
+                    <ul class="news__list">
+                      {% for doc in meeting.documents %}
+                        <li>
+                          <a href="/assets/docs/{{ doc.file }}" target="_blank">
+                            {{ doc.title }}
+                          </a>
+                        </li>
+                      {% endfor %}
+                    </ul>
+                  </li>
+                {% endfor %}
+              </ul>
+            {% else %}
+              <p>Next regular scheduled board meeting is tentatively on <span id='next-board-meeting'>{% nextBoardMeetingDate %}</span> at 3pm.</p>
+            {% endif %}
         </li>
-      {% endfor %}
-    </ul>
-  </section>
+        {% for year, set in collections.pastMeetings | groupby('year') | dictsort | reverse %}
+          <li>
+            <h4>Past Meetings: {{ year }}</h4>
+            <ul class="news-grid">
+              {% for meeting in set %}
+                <li class="news-grid__item">
+                  <time class="news__type">
+                    {{ meeting.date | postDateTerseISO }}
+                  </time>
+                  <div class="news__headline">
+                    <p>{{ meeting.title }}</p>
+                  </div>
+                  <ul class="news__list">
+                    {% for doc in meeting.documents %}
+                      <li>
+                        <a href="/assets/docs/{{ doc.file }}">
+                          {{ doc.title }}
+                        </a>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                </li>
+              {% endfor %}
+            </ul>
+          </li>
+        {% endfor %}
+      </ul>
+    </aside>
+  </div>
 {% endblock %}

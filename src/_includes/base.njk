@@ -38,15 +38,17 @@
     {% include "header.njk" %}
   </header>
 
-  <header class="page-header">
-    <div class="rap">
-      <article class="page-header__copy">
-        {% block page_header %}{% endblock %}
-      </article>
-    </div>
-  </header>
+  {% if page.url === '/' or page.fileSlug === 'news-article' %}
+    <header class="page-header">
+      <div class="rap">
+        <article class="l-squeezed">
+          {% block page_header %}{% endblock %}
+        </article>
+      </div>
+    </header>
 
-  {% include "page_hero.njk" %}
+    {% include "page_hero.njk" %}
+  {% endif %}
 
   <main class="site-main" role="main">
     <div class="rap">
@@ -62,14 +64,7 @@
     </div>
   </footer>
 
-  <script>
-    const toggleButton = document.getElementsByClassName('toggle-button')[0]
-    const navbarLinks = document.getElementsByClassName('navbar-links')[0]
-
-    toggleButton.addEventListener('click', () => {
-      navbarLinks.classList.toggle('active')
-    })
-  </script>
+  {% include "nav-js.njk" %}
   {% block script %}{% endblock %}
 </body>
-</html></html>
+</html>

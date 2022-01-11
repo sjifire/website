@@ -5,16 +5,13 @@ permalink: "/services/index.html"
 
 {% extends 'base.njk' %}
 
-{% block page_header %}
+{% block content %}
   <h1>
     {{ title | safe }}
   </h1>
   <div class="lede">
     {{ services.preamble | markdownify | safe }}
   </div>
-{% endblock %}
-
-{% block content %}
   {% set baseSections = services.sections %}
   {% include "sections_block.njk" %}
 {% endblock %}
