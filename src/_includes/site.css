@@ -427,7 +427,6 @@ body {
 }
 
 .special-heading {
-  font-size: 28px;
   display: inline-block;
   padding-bottom: 0.15rem;
   background-color: transparent;
@@ -672,6 +671,11 @@ body {
   position: absolute !important;
   width: 1px !important;
   white-space: nowrap !important;            /* 3 */
+}
+
+
+.brand-red {
+  color: var(--dk-red);
 }
 
 
