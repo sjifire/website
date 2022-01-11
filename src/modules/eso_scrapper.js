@@ -501,7 +501,7 @@ const _extractTimes = (records, fromCol, toCol) => {
     }
     if(!fromVal) return null;
     let dateDiff = (r[toCol] - fromVal)/1000;
-    return (dateDiff < 2) ? null : dateDiff;
+    return (dateDiff <= 3) ? null : dateDiff;
   });
   return times;
   // times = _.compact(times);
