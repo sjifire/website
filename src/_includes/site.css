@@ -101,6 +101,7 @@ body {
   display: grid;
   grid-template-rows: auto auto auto 1fr auto;
   font-family: var(--ff-sans);
+  background-color: #fff;
 }
 
 .site-header {
@@ -274,10 +275,14 @@ body {
 
 
 .page-header {
-  padding-top: 2rem;
-  padding-bottom: 3rem;
+  padding-bottom: 40px;
   background-color: var(--dk-gray);
   color: #fff;
+}
+
+.page-header--home {
+  padding-top: 60px;
+  padding-bottom: 160px;
 }
 
 .page-header h1 {
@@ -293,7 +298,11 @@ body {
 
 .site-main {
   padding: 2rem 0;
-  background-color: #fff;
+}
+
+.site-main--overlap {
+  padding: 0;
+  transform: translateY(-100px);
 }
 
 .site-footer {
@@ -354,84 +363,6 @@ body {
   box-shadow: 1px 2px 8px rgba(0,0,0, 0.15);
 }
 
-.home-alerts {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  position: relative;
-  z-index: 2;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  justify-content: center;
-  gap: 30px 60px;
-}
-
-.alert {
-  display: grid;
-  grid-template-rows: 1fr auto;
-  background-color: #fff;
-  border-radius: 4px;
-  box-shadow: 1px 2px 8px rgba(0,0,0, 0.15);
-}
-
-.alert__body {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  grid-template-areas:  "alert__icon alert__header"
-                        "alert__blurb alert__blurb";
-  gap: 0.5rem 20px;
-}
-         
-@media (min-width: 992px) {
-  .alert__body {
-    grid-template-areas:  "alert__icon alert__header"
-                          "alert__icon alert__blurb";
-  }
-}
-.alert__header {
-  grid-area: alert__header;
-}
-
-.alert__icon {
-  grid-area: alert__icon;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 40px;
-  height: 40px;
-  background-color: var(--yellow);
-  border-radius: 50%;
-}
-
-.alert__icon svg {
-  width: 60%;
-  height: auto;
-  fill: var(--dk-red);
-}
-
-.alert__blurb {
-  grid-area: alert__blurb;
-}
-
-.alert__body, .alert__footer {
-  padding: 20px;
-}
-
-.alert__footer {
-  padding-top: 14px;
-  padding-bottom: 14px;
-}
-
-.alert__body h2 {
-  margin-bottom: 0.15rem;
-  line-height: 1.1;
-}
-
-.alert__body time {
-  text-transform: uppercase;
-  color: var(--md-gray);
-  font-size: 13px;
-}
 
 .news-grid {
   display: grid;
@@ -439,9 +370,9 @@ body {
   gap: 50px 30px;
 }
 
-@media (min-width: 767px) {
+@media (min-width: 768px) {
   .news-grid {
-    gap: 60px;
+    gap: 30px;
   }
 }
 
@@ -505,12 +436,22 @@ body {
 }
 
 .news__type {
+  display: flex;
+  align-items: center;
   margin-bottom: 1.5rem;
   font-size: 12px;
   font-weight: 600;
+  letter-spacing: 0.025rem;
   line-height: 1;
   color: var(--dk-red);
   text-transform: uppercase;
+}
+
+.news__type svg {
+  margin-right: 8px;
+  width: 28px;
+  height: 28px;
+  fill: var(--dk-red);
 }
 
 .news__date {
@@ -529,28 +470,6 @@ body {
   font-size: 15px;
   text-decoration: underline;
   color: var(--link-blue);
-}
-
-.page-section {
-  padding-block: 4rem;
-}
-
-
-@media (min-width: 992px) {
-  .alert__body {
-    grid-template-columns: auto 1fr;
-  }
-}
-
-.alert__footer {
-  border-top: 1px solid #e1e5e9;
-  text-align: right;
-}
-
-.alert__footer a {
-  text-decoration: none;
-  font-weight: 500;
-  text-transform: uppercase;
 }
 
 
@@ -582,8 +501,12 @@ body {
   }
   .l-grid--2col {
     grid-template-areas: "sidebar  main";
-    grid-template-columns: 1fr 2fr;
+    grid-template-columns: minmax(190px, 220px) 1fr;
     gap: 60px;
+  }
+  .l-grid--2col.flipped {
+    grid-template-areas: "main sidebar";
+    grid-template-columns: 1fr minmax(190px, 220px);
   }
   .l-grid__sidebar {
     grid-area: sidebar;
@@ -591,6 +514,34 @@ body {
   .l-grid__main {
     grid-area: main;
   }
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: white;
+  box-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+  border-radius: 12px;
+}
+
+.card__body {
+  padding: 12px 30px;
+}
+
+.card__footer {
+  border-top: 1px solid #e1e5e9;
+  padding: 12px 30px;
+  text-transform: uppercase;
+  text-align: right;
+}
+
+.card__footer a {
+  text-decoration: none;
+}
+
+.card__footer a:hover {
+  text-decoration: underline;
 }
 
 

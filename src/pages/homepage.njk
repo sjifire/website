@@ -16,41 +16,36 @@ permalink: /
 
 {% block content %}
 
-  <section class="page-section">
-    <ul class="news-grid">
-      <li class="news-grid__item news-grid__item--heading">
-        <h2 class="special-heading">
-          Latest News
-        </h2>
-        <a href="/news/">
-          Archive
-          <svg>
-            <use xlink:href="#right_arrow" />
-          </svg>
-        </a>
-      </li>
-      {% for post in posts | exclude('Advisory', 'post_type') | reverse | limit(5) %}
-        <li class="news-grid__item">
-          <a href="/news/{{ post.date | htmlDateStringISO }}-{{ post.title | slugify }}/">
-            <div class="news__type">
-              {{ post.post_type }}
+  <section class="l-grid l-grid--2col flipped">
+    <aside class="l-grid__sidebar">
+    test
+    </aside>
+    <div class="l-grid__main">
+      <ul class="news-grid">
+        {% for post in posts | reverse | limit(6) %}
+          <li class="news-grid__item card">
+            <div class="card__body">
+              <div class="news__type">
+                {% include "post_type_icons.njk" %}
+                {{ post.post_type }}
+              </div>
+              <h3 class="news__headline">
+                {{ post.title | safe }}
+              </h3>
+              <time datetime="{{ post.date | htmlDateStringISO }}" pubdate="pubdate" class="news__date">
+                {{ post.date | postDateTerseISO }}
+              </time>
+              <div class="news__lede">
+                {{ post.lede | markdownify | safe }}
+              </div>
             </div>
-            <h3 class="news__headline">
-              {{ post.title | safe }}
-            </h3>
-            <time datetime="{{ post.date | htmlDateStringISO }}" pubdate="pubdate" class="news__date">
-              {{ post.date | postDateTerseISO }}
-            </time>
-            <div class="news__lede">
-              {{ post.lede | markdownify | safe }}
+            <div class="card__footer">
+              <a href="/news/{{ post.date | htmlDateStringISO }}-{{ post.title | slugify }}/">Read more</a>
             </div>
-            <span class="news__readmore">
-              Read more
-            </span>
-          </a>
-        </li>
-      {% endfor %}
-    </ul>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
   </section>
 
 {% endblock %}
