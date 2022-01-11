@@ -17,9 +17,6 @@ permalink: /
 {% block content %}
 
   <section class="l-grid l-grid--2col flipped">
-    <aside class="l-grid__sidebar">
-    test
-    </aside>
     <div class="l-grid__main">
       <ul class="news-grid">
         {% for post in posts | reverse | limit(6) %}
@@ -46,6 +43,87 @@ permalink: /
         {% endfor %}
       </ul>
     </div>
+    <aside class="l-grid__sidebar">
+      <table class="widget widget--burn-status">
+        <caption class="widget__header">
+          <div class="flex">
+            <svg><use xlink:href='#flame' /></svg>
+            <div>
+              <h4>
+                Burn Statuses
+              </h4>
+              <time class="" pubdate="">
+                Updated: Nov 23, 2021
+              </time>
+            </div>
+          </div>
+        </caption>
+        <tbody class="widget__body">
+          <tr class="odd">
+            <td>
+              Fire Danger
+            </td>
+            <td class="level level--low">
+              {{ configs.fire_status }}
+            </td>
+          </tr>
+          <tr class="even">
+            <td>
+              Residential Burning
+            </td>
+            <td class="level level--low">
+              {{ configs.burn_ban_status }}
+            </td>
+          </tr>
+          <tr class="odd">
+            <td>
+              Commercial Burning
+            </td>
+            <td class="level level--low">
+              {{ configs.commercial_burn_ban_status }}
+            </td>
+          </tr>
+          <tr class="even">
+            <td>
+              Recreational Campfires
+            </td>
+            <td class="level level--low">
+              {{ configs.rec_campfire_status }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <table class="widget widget--station-stats">
+        <caption class="widget__header">
+          <div class="flex">
+            <svg><use xlink:href='#stats' /></svg>
+            <div>
+              <h4>
+                Station Statistics
+              </h4>
+              <time class="" pubdate="">
+                Updated: {{ stats.updated_at | postDateTerseISO }}
+              </time>
+            </div>
+          </div>
+        </caption>
+        <tbody class="widget__body">
+          {% set cls = cycler("odd", "even") %}
+          {% for i in range(0,4) %}
+            {% set random_num = range(14,1011) | random %}
+            <tr class="{{ cls.next() }}">
+              <td>
+                {{ 'Calls' if i === 0 else 'Stat Header' }}
+                <aside>{{ 'Last 30 Days' if i === 0 else 'Qualifying Text' }}</aside>
+              </td>
+              <td>
+                {{ random_num }}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </aside>
   </section>
 
 {% endblock %}
