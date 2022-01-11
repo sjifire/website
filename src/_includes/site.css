@@ -6,8 +6,8 @@
 }
 
 /* Remove default padding */
-ul[class],
-ol[class] {
+ul,
+ol {
   padding: 0;
 }
 
@@ -18,8 +18,8 @@ h2,
 h3,
 h4,
 p,
-ul[class],
-ol[class],
+ul,
+ol,
 li,
 figure,
 figcaption,
@@ -149,7 +149,7 @@ body {
   margin-right: 8px;
 }
 .item a {
-  color: rgba(255,255,255,0.5);
+  color: rgba(255,255,255,0.4);
   text-decoration: none;
 }
 .item a:hover,
@@ -157,11 +157,8 @@ body {
   color: white;
   cursor: pointer;
 }
-.item.active {
-  background-color: var(--black);
-}
 .item.active > a {
-  color: var(--yellow);
+  color: white;
 }
 
 /* Mobile menu */
@@ -170,6 +167,7 @@ body {
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
+  padding: 10px 6px;
 }
 .menu li a {
   display: block;
@@ -215,7 +213,7 @@ body {
   line-height: 16px;
   font-weight: 900;
   content: "\25bc";
-  color: rgba(255,255,255,0.75);
+  color: rgba(255,255,255,0.4);
   padding-left: 5px;
 }
 .subitem a {
@@ -223,7 +221,17 @@ body {
 }
 .submenu-active {
   background-color: var(--black);
-  border-radius: 3px;
+  border-radius: 4px;
+}
+.submenu-active > .submenu {
+  background-color: var(--black);
+  border-radius: 4px;
+}
+.submenu-active > a {
+  color: white;
+}
+.submenu-active > a:after {
+  color: var(--yellow);
 }
 
 /* Desktop menu */
@@ -236,6 +244,7 @@ body {
   .logo {
     flex: 1;
     order: 0;
+    transform: translateY(-20px);
   }
   .item {
     order: 1;
@@ -244,23 +253,22 @@ body {
     width: auto;
     text-align: left;
   }
+  .item.active {
+    background-color: var(--black);
+  }
   .submenu-active > li > a, .submenu-active > li > a::after {
     color: white;
   }
-
   .submenu-active .submenu {
     display: block;
     position: absolute;
     right: 0;
-    top: 45px;
+    top: 44px;
     z-index: 10;
     background: var(--black);
   }
   .toggle {
     display: none;
-  }
-  .submenu-active {
-    border-radius: 0;
   }
 }
 
