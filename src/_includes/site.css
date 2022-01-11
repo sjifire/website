@@ -98,8 +98,6 @@ html, body {
 }
 
 body {
-  display: grid;
-  grid-template-rows: auto auto auto 1fr auto;
   font-family: var(--ff-sans);
 }
 
