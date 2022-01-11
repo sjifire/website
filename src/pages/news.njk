@@ -10,17 +10,14 @@ permalink: "/news/{% if pagination.pageNumber > 0 %}page-{{ pagination.pageNumbe
 
 {% extends 'base.njk' %}
 
-{% block page_header %}
-  <h1>
-    {{ title | safe }}
-  </h1>
-  <div class="lede">
-    {{ news.preamble | markdownify | safe }}
-  </div>
-{% endblock %}
-
 {% block content %}
   <section class="page-section">
+    <h1>
+      {{ title | safe }}
+    </h1>
+    <div class="lede">
+      {{ news.preamble | markdownify | safe }}
+    </div>
     <ul class="news-grid">
       {% for post in pagination.items %}
         <li class="news-grid__item">
