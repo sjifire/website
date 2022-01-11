@@ -348,7 +348,9 @@ const _createStats = function(raw_values){
       incident_times:{
         sum: sum(incidentTimes),
         mean: _.round(mean(incidentTimes)),
-        median: _.round(median(incidentTimes)),
+        q1: _.round(q25(incidentTimes)),
+        median: _.round(q50(incidentTimes)),
+        q3: _.round(q75(incidentTimes)),
         min: min(incidentTimes),
         max: max(incidentTimes)
       },
@@ -360,7 +362,9 @@ const _createStats = function(raw_values){
       num_per_day: {
         mean: sum(callsPerDay),
         mean: _.round(mean(callsPerDay)),
-        median: _.round(median(callsPerDay)),
+        q1: _.round(q25(callsPerDay)),
+        median: _.round(q50(callsPerDay)),
+        q3: _.round(q75(callsPerDay)),
         min: min(callsPerDay),
         max: max(callsPerDay)
       }
@@ -386,7 +390,9 @@ const _createStats = function(raw_values){
     stats_output.unit_time_stats[k] = {
       sum:  sum(arr),
       mean: _.round(mean(arr)),
-      median: _.round(median(arr)),
+      q1: _.round(q25(arr)),
+      median: _.round(q50(arr)),
+      q3: _.round(q75(arr)),
       min: min(arr),
       max: max(arr)
     }
@@ -399,7 +405,9 @@ const _createStats = function(raw_values){
   let incident = {
     sum:  sum(collapsedPersonnelTimes),
     mean: _.round(mean(collapsedPersonnelTimes)),
-    median: _.round(median(collapsedPersonnelTimes)),
+    q1: _.round(q25(collapsedPersonnelTimes)),
+    median: _.round(q50(collapsedPersonnelTimes)),
+    q3: _.round(q75(collapsedPersonnelTimes)),
     min: min(collapsedPersonnelTimes),
     max: max(collapsedPersonnelTimes)
   };
@@ -409,7 +417,9 @@ const _createStats = function(raw_values){
   });
   stats_output.personnel_stats['num_per_incidents'] = {
     mean: _.round(mean(personnelCount), 1),
-    median: _.round(median(personnelCount), 1),
+    q1: _.round(q25(personnelCount), 1),
+    median: _.round(q50(personnelCount), 1),
+    q3: _.round(q75(personnelCount), 1),
     min: min(personnelCount),
     max: max(personnelCount)
   }
@@ -421,7 +431,9 @@ const _createStats = function(raw_values){
   stats_output.apparatus_stats = {
     num_per_incident: {
       mean: _.round(mean(apparatusCount), 1),
-      median: _.round(median(apparatusCount), 1),
+      q1: _.round(q25(apparatusCount), 1),
+      median: _.round(q50(apparatusCount), 1),
+      q3: _.round(q75(apparatusCount), 1),
       min: min(apparatusCount),
       max: max(apparatusCount)
     },
@@ -454,7 +466,9 @@ const _createStats = function(raw_values){
     stats_output.region_stats[region]['unit_travel_time'] = {
       sum:  sum(compactedArr),
       mean: _.round(mean(compactedArr)),
-      median: _.round(median(compactedArr)),
+      q1: _.round(q25(compactedArr)),
+      median: _.round(q50(compactedArr)),
+      q3: _.round(q75(compactedArr)),
       min: min(compactedArr),
       max: max(compactedArr)
     };
@@ -487,7 +501,7 @@ const _extractTimes = (records, fromCol, toCol) => {
     }
     if(!fromVal) return null;
     let dateDiff = (r[toCol] - fromVal)/1000;
-    return (dateDiff < 2) ? null : dateDiff;
+    return (dateDiff <= 3) ? null : dateDiff;
   });
   return times;
   // times = _.compact(times);
@@ -516,11 +530,24 @@ const sum  = arr => arr.reduce((a,b) => a + b, 0);
 const mean = arr => sum(arr) / arr.length;
 const max  = arr => Math.max(...arr);
 const min  = arr => Math.min.apply(Math, arr.map(function(v) { return v == null ? Infinity : v; }));
-const median = arr => {
-  const mid = Math.floor(arr.length / 2),
-    nums = [...arr].sort((a, b) => a - b);
-  return arr.length % 2 !== 0 ? nums[mid] : (nums[mid - 1] + nums[mid]) / 2;
+const q25 = arr => quantile(arr, .25);
+const q50 = arr => quantile(arr, .50);
+const q75 = arr => quantile(arr, .75);
+const median = q50;
+
+const quantile = (arr, q) => {
+    const sorted = asc(arr);
+    const pos = (sorted.length - 1) * q;
+    const base = Math.floor(pos);
+    const rest = pos - base;
+    if (sorted[base + 1] !== undefined) {
+        return sorted[base] + rest * (sorted[base + 1] - sorted[base]);
+    } else {
+        return sorted[base];
+    }
 };
+
+const asc = arr => arr.sort((a, b) => a - b);
 
 
 // Export it to make it available outside
