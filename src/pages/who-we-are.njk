@@ -6,13 +6,18 @@ permalink: "/about/who-we-are/index.html"
 {% extends 'base.njk' %}
 
 {% block content %}
-  <h1>
-    {{ title | safe }}
-  </h1>
-  {% if who_we_are.preamble %}
-    <div class="lede">
-      {{ who_we_are.preamble | markdownify | safe }}
+  <div class="l-grid l-grid--2col">
+    <div class="l-grid__main block-content">
+      <h1>
+        {{ title | safe }}
+      </h1>
+      {% if who_we_are.preamble %}
+        {{ who_we_are.preamble | markdownify | safe }}
+      {% endif %}
+      {{ who_we_are.body | markdownify | safe }}
     </div>
-  {% endif %}
-  {{ who_we_are.body | markdownify | safe }}
+    <aside class="l-grid__sidebar block-content">
+      <img src="https://res.cloudinary.com/san-juan-fire-district-3/image/fetch/f_auto,q_auto:good,c_limit,w_1200,h_800/https://sjifire.netlify.app/{{ who_we_are.featured_image}}" loading="lazy">
+    </aside>
+  </div>
 {% endblock %}
