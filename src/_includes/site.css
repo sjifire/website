@@ -589,7 +589,7 @@ body {
   background-color: white;
 }
 
-.widget__body .odd {
+.widget__body .even {
   background-color: var(--lt-gray);
 }
 
@@ -636,7 +636,7 @@ body {
   color: #81682C;
 }
 .widget__body .level--extreme,
-.widget__body .level--closed {
+.widget__body .level--restricted {
   background-color: #FFE0E0;
   color: var(--dk-red);
 }
