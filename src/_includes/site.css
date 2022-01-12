@@ -182,7 +182,7 @@ body {
 .toggle svg {
   width: 30px;
   height: 30px;
-  fill: white;
+  fill: #fff;
 }
 .item.button {
   order: 2;
@@ -244,7 +244,6 @@ body {
   .logo {
     flex: 1;
     order: 0;
-    transform: translateY(-20px);
   }
   .item {
     order: 1;
@@ -561,7 +560,7 @@ body {
 
 .widget__header .flex {
   display: flex;
-  gap: 10px;
+  gap: 6px;
   padding: 18px 15px;
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
@@ -574,14 +573,16 @@ body {
 }
 
 .widget__header h4 {
+  margin-bottom: 0.15rem;
   font-size: 24px;
   line-height: 1.5rem;
   font-weight: 700;
 }
 
-.widget__header time {
+.widget__header .timeframe {
   text-transform: uppercase;
   font-size: 0.7rem;
+  font-weight: 300;
   letter-spacing: 0.05rem;
 }
 
