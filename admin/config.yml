@@ -33,7 +33,7 @@ collections:
           - { label: "Fact Check", value: "Fact Check" }
           - { label: "General News", value: "News" }
           - { label: "Member Profile", value: "Member Profile" }
-          - { label: "Response Moment", value: "Response Moment" }
+          - { label: "On Scene", value: "On Scene" }
         default: "news"
         required: true
       - label: Date
