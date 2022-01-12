@@ -621,7 +621,8 @@ body {
 .widget__body .level {
   font-weight: 600;
 }
-.widget__body .level--low {
+.widget__body .level--low,
+.widget__body .level--open {
   background-color: #CEE8CE;
   color: #206220;
 }
@@ -629,11 +630,13 @@ body {
   background-color: #D8EAFF;
   color: var(--blue);
 }
-.widget__body .level--high {
+.widget__body .level--high,
+.widget__body .level--restricted {
   background-color: #FFEAB8;
   color: #81682C;
 }
-.widget__body .level--extreme {
+.widget__body .level--extreme,
+.widget__body .level--closed {
   background-color: #FFE0E0;
   color: var(--dk-red);
 }

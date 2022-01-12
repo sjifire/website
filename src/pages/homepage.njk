@@ -60,7 +60,7 @@ permalink: /
             <td>
               Fire Danger
             </td>
-            <td class="level level--low">
+            <td class="level level--{{configs.fire_status | slugify}}">
               {{ configs.fire_status }}
             </td>
           </tr>
@@ -68,7 +68,7 @@ permalink: /
             <td>
               Recreational Fires
             </td>
-            <td class="level level--low">
+            <td class="level level--{{configs.rec_campfire_status | slugify}}">
               {{ configs.rec_campfire_status }}
             </td>
           </tr>
@@ -76,7 +76,7 @@ permalink: /
             <td>
               Residential Burn Piles
             </td>
-            <td class="level level--low">
+            <td class="level level--{{configs.burn_ban_status | slugify}}">
               {{ configs.burn_ban_status }}
             </td>
           </tr>
@@ -84,7 +84,7 @@ permalink: /
             <td>
               Commercial Burns
             </td>
-            <td class="level level--low">
+            <td class="level level--{{configs.commercial_burn_ban_status | slugify}}">
               {{ configs.commercial_burn_ban_status }}
             </td>
           </tr>
