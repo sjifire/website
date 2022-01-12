@@ -8,6 +8,7 @@ main website for sjifire.org
 ## tech
 - static site generator: [Eleventy](https://www.11ty.dev/)
 - cms: [NetlifyCMS](https://www.netlifycms.org/)
+- Image Handling: [Cloudinary](https://cloudinary.com/)
 - host: [Netlify](https://www.netlify.com/)
 - code/CI/Job hosting: [Github](https://www.github.com)
 
