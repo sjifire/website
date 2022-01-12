@@ -163,6 +163,20 @@ collections:
           preview: false
         file: "src/_data/configs.json"
         fields:
+          - label: burn_season_start
+            name: Burn Season Start
+            widget: datetime
+            date_format: "YYYY-MM-DD"
+            time_format: false
+            format: "YYYY-MM-DD"
+            picker_utc: true
+          - label: burn_season_end
+            name: Burn Season End
+            widget: datetime
+            date_format: "YYYY-MM-DD"
+            time_format: false
+            format: "YYYY-MM-DD"
+            picker_utc: true
           - name: "fire_status"
             label: "Fire Danger Status"
             widget: "select"
