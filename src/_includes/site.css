@@ -638,16 +638,6 @@ body {
   color: var(--dk-red);
 }
 
-@media (min-width: 768px) {
-  .l-squeezed {
-    max-width: 720px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  .l-grid {
-    display: grid;
-  }
-  .l-grid--1col {
 
 .block-content > * + * {
   margin-block: 1.25rem;
