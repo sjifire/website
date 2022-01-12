@@ -50,11 +50,8 @@ permalink: /
             <svg><use xlink:href='#flame' /></svg>
             <div>
               <h4>
-                Burn Statuses
+                Fire Safety
               </h4>
-              <time class="" pubdate="">
-                Updated: Nov 23, 2021
-              </time>
             </div>
           </div>
         </caption>
@@ -69,26 +66,26 @@ permalink: /
           </tr>
           <tr class="even">
             <td>
-              Residential Burning
+              Recreational Fires
+            </td>
+            <td class="level level--low">
+              {{ configs.rec_campfire_status }}
+            </td>
+          </tr>
+          <tr class="odd">
+            <td>
+              Residential Burn Piles
             </td>
             <td class="level level--low">
               {{ configs.burn_ban_status }}
             </td>
           </tr>
-          <tr class="odd">
+          <tr class="even">
             <td>
-              Commercial Burning
+              Commercial Burns
             </td>
             <td class="level level--low">
               {{ configs.commercial_burn_ban_status }}
-            </td>
-          </tr>
-          <tr class="even">
-            <td>
-              Recreational Campfires
-            </td>
-            <td class="level level--low">
-              {{ configs.rec_campfire_status }}
             </td>
           </tr>
         </tbody>
@@ -99,8 +96,11 @@ permalink: /
             <svg><use xlink:href='#stats' /></svg>
             <div>
               <h4>
-                Station Statistics
+                Call Statistics
               </h4>
+              <time class="" pubdate="">
+                Last 30 days
+              </time><br/>
               <time class="" pubdate="">
                 Updated: {{ stats.updated_at | postDateTerseISO }}
               </time>
@@ -109,18 +109,73 @@ permalink: /
         </caption>
         <tbody class="widget__body">
           {% set cls = cycler("odd", "even") %}
-          {% for i in range(0,4) %}
-            {% set random_num = range(14,1011) | random %}
-            <tr class="{{ cls.next() }}">
-              <td>
-                {{ 'Calls' if i === 0 else 'Stat Header' }}
-                <aside>{{ 'Last 30 Days' if i === 0 else 'Qualifying Text' }}</aside>
-              </td>
-              <td>
-                {{ random_num }}
-              </td>
-            </tr>
-          {% endfor %}
+          <tr class="{{ cls.next() }}">
+            <td>
+              Calls
+              <aside>Last 30 Days</aside>
+            </td>
+            <td>
+              {{ stats.incident_stats.num_incidents }}
+            </td>
+          </tr>
+          <tr class="{{ cls.next() }}">
+            <td>
+              Calls
+              <aside>Last 365 Days</aside>
+            </td>
+            <td>
+              {{ stats.incident_stats.num_incidents_last_365_days }}
+            </td>
+          </tr>
+          <tr class="{{ cls.next() }}">
+            <td>
+              Reaction Time
+              <aside>Seconds</aside>
+            </td>
+            <td>
+              {{ stats.unit_time_stats.first_unit_reaction.median }}
+            </td>
+          </tr>
+          <tr class="{{ cls.next() }}">
+            <td rowspan=3>
+              Travel Time to Scene
+              <aside>Minutes</aside>
+            </td>
+            <td>
+              {{ stats.region_stats.north.unit_travel_time.median }}
+              <aside>North</aside>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              {{ stats.region_stats.south.unit_travel_time.median }}
+              <aside>South</aside>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              {{ stats.region_stats.central.unit_travel_time.median }}
+              <aside>Central</aside>
+            </td>
+          </tr>
+          <tr class="{{ cls.next() }}">
+            <td>
+              Total Responder Time on Calls
+              <aside>Minutes</aside>
+            </td>
+            <td>
+              {{ (stats.personnel_stats.time_on_incidents.sum/60) | round}}
+            </td>
+          </tr>
+          <tr class="{{ cls.next() }}">
+            <td>
+              Responder Participation on Calls
+              <aside>Num Responders</aside>
+            </td>
+            <td>
+              {{ stats.personnel_stats.num_unique_responders }}
+            </td>
+          </tr>
         </tbody>
       </table>
     </aside>

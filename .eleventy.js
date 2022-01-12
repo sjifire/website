@@ -78,6 +78,7 @@ module.exports = function (eleventyConfig) {
     });
   });
 
+  //TODO: cleanup, and perhaps handle both string and obj in one method; future work
   eleventyConfig.addFilter("postDateTerseISO", (dateObj) => {
     return DateTime.fromISO(dateObj, {zone: 'utc'}).toLocaleString(DateTime.DATE_MED);
   });
@@ -90,8 +91,16 @@ module.exports = function (eleventyConfig) {
     return DateTime.fromISO(dateObj, {zone: 'utc'}).toFormat('yyyy-LL-dd');
   });
   
+  eleventyConfig.addFilter("postDateTerseJS", (dateObj) => {
+    return DateTime.fromJSDate(dateObj, {zone: 'utc'}).toLocaleString(DateTime.DATE_MED);
+  });
+
   eleventyConfig.addFilter("yearOnlyJS", (dateObj) => {
     return DateTime.fromJSDate(dateObj, {zone: 'utc'}).toFormat('yyyy');
+  });
+
+  eleventyConfig.addFilter("round", (num) => {
+    return Math.round(num);
   });
   
   eleventyConfig.addFilter("dump", (obj) => {
