@@ -45,23 +45,23 @@
     <tr class="{{ cls.next() }}">
       <th rowspan=3>
         Travel Time
-        <aside>Minutes</aside>
+        <aside>Minutes (% calls)</aside>
       </th>
       <td>
         {{ (stats.region_stats.north.unit_travel_time.median/60) | round(1) }}
-        <aside>North</aside>
+        <aside>North ({{((stats.region_stats.north.num_incidents/stats.incident_stats.num_incidents) * 100) | round }}%)</aside>
       </td>
     </tr>
     <tr class="odd">
       <td>
         {{ (stats.region_stats.south.unit_travel_time.median/60) | round(1) }}
-        <aside>South</aside>
+        <aside>South ({{((stats.region_stats.south.num_incidents/stats.incident_stats.num_incidents) * 100) | round }}%)</aside>
       </td>
     </tr>
     <tr>
       <td>
         {{ (stats.region_stats.central.unit_travel_time.median/60) | round(1) }}
-        <aside>Central</aside>
+        <aside>Central ({{((stats.region_stats.central.num_incidents/stats.incident_stats.num_incidents) * 100) | round }}%)</aside>
       </td>
     </tr>
     <tr class="{{ cls.next() }}">
