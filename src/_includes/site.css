@@ -589,7 +589,7 @@ body {
   background-color: white;
 }
 
-.widget__body .even {
+.widget__body .odd {
   background-color: var(--lt-gray);
 }
 
