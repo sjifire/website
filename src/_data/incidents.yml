@@ -1,9 +1,5 @@
 ---
 body: |-
-  (Sidebar: Stats Widget)
-
-  ## Overview
-
   SJIF&R follows a national standard around logging and grouping of incident
   data, as defined by the [National Fire Incident Reporting
   System](https://www.usfa.fema.gov/nfirs/).
@@ -52,7 +48,7 @@ body: |-
   Github repository](https://github.com/sjifire/website).
 
 
-  ### Understanding Incident Lifecycle
+  ## Understanding Incident Lifecycle
 
   Everytime a call is made to 911, it follows a standardized set of steps to
   make sure the right resources are sent to you in a timely and safe manner.

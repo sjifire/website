@@ -6,13 +6,20 @@ permalink: "/services/burn-permits/index.html"
 {% extends 'base.njk' %}
 
 {% block content %}
-  <h1>
-    {{ title | safe }}
-  </h1>
-  {% if burn_permits.preamble %}
-    <div class="lede">
-      {{ burn_permits.preamble | markdownify | safe }}
+  <div class="l-grid l-grid--2col flipped">
+    <div class="l-grid__main block-content">
+      <h1>
+        {{ title | safe }}
+      </h1>
+      {% if burn_permits.preamble %}
+        <div class="lede">
+          {{ burn_permits.preamble | markdownify | safe }}
+        </div>
+      {% endif %}
+      {{ burn_permits.body | markdownify | safe }}
     </div>
-  {% endif %}
-  {{ burn_permits.body | markdownify | safe }}
+    <aside class="l-grid__sidebar block-content">
+      {% include "burn-status-widget.njk" %}
+    </aside>
+  </div>
 {% endblock %}

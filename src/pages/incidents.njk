@@ -6,13 +6,20 @@ permalink: "/about/incidents/index.html"
 {% extends 'base.njk' %}
 
 {% block content %}
-  <h1>
-    {{ title | safe }}
-  </h1>
-  {% if incidents.preamble %}
-    <div class="lede">
-      {{ incidents.preamble | markdownify | safe }}
+  <div class="l-grid l-grid--2col flipped">
+    <div class="l-grid__main block-content">
+      <h1>
+        {{ title | safe }}
+      </h1>
+      {% if incidents.preamble %}
+        <div class="lede">
+          {{ incidents.preamble | markdownify | safe }}
+        </div>
+      {% endif %}
+      {{ incidents.body | markdownify | safe }}
     </div>
-  {% endif %}
-  {{ incidents.body | markdownify | safe }}
+    <aside class="l-grid__sidebar block-content">
+      {% include "call-stats-widget.njk" %}
+    </aside>
+  </div>
 {% endblock %}
