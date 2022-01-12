@@ -1,4 +1,6 @@
 {
+  "burn_season_start": "2021-10-04",
+  "burn_season_closed": "2022-05-31",
   "fire_status": "Low",
   "burn_ban_status": "Open",
   "commercial_burn_ban_status": "Open",
