@@ -1,9 +1,11 @@
 {
-  "fire_status": "Low",
-  "burn_ban_status": "Open",
-  "commercial_burn_ban_status": "Open",
-  "rec_campfire_status": "Open",
   "site_name": "San Juan Island Fire and Rescue",
+  "site_desc": "San Juan Island Fire and Rescue provides fire, medical, rescue, and marine emergency services to Friday Harbor and multiple islands within San Juan County, WA.",
+  "rec_campfire_status": "Open",
+  "burn_ban_status": "Open",
   "formal_site_name": "San Juan County Fire District #3",
-  "site_desc": "San Juan Island Fire and Rescue provides fire, medical, rescue, and marine emergency services to Friday Harbor and multiple islands within San Juan County, WA."
+  "burn_season_start": "2021-10-04",
+  "burn_season_end": "2022-05-31",
+  "fire_status": "Low",
+  "commercial_burn_ban_status": "Open"
 }

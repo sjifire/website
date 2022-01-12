@@ -163,6 +163,20 @@ collections:
           preview: false
         file: "src/_data/configs.json"
         fields:
+          - label: Burn Season Start
+            name: burn_season_start
+            widget: datetime
+            date_format: "YYYY-MM-DD"
+            time_format: false
+            format: "YYYY-MM-DD"
+            picker_utc: true
+          - label: Burn Season End
+            name: burn_season_end
+            widget: datetime
+            date_format: "YYYY-MM-DD"
+            time_format: false
+            format: "YYYY-MM-DD"
+            picker_utc: true
           - name: "fire_status"
             label: "Fire Danger Status"
             widget: "select"
@@ -170,11 +184,11 @@ collections:
           - name: "burn_ban_status"
             label: "Burn Ban Status"
             widget: "select"
-            options: ["Open", "Restricted", "Closed"]
+            options: ["Open", "Closed"]
           - name: "commercial_burn_ban_status"
             label: "Commercial Burn Ban Status"
             widget: "select"
-            options: ["Open", "Restricted", "Closed"]
+            options: ["Open", "Closed"]
           - name: "rec_campfire_status"
             label: "Recreational Campfire Status"
             widget: "select"
