@@ -24,7 +24,7 @@ body: |+
   are included.  The vast majority of incident reports are finished within a few
   hours, though larger, more complicated, multi-day incident reports, such as
   for wildland fires, may take upwards of 3 days to complete.
-  * All time statistics are the median, or typical 50%, over the past 30 days.
+  * All time statistics are the median, or the typical 50%, over the past 30 days.
   * Times are logged by dispatch from communication over a single radio
   frequency, which can cause the logging of times to be delayed if the airway is
   clogged with voice traffic.
