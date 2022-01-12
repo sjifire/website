@@ -12,6 +12,10 @@
         <a href="/about/">About</a>
       </li>
   #}
+      <li class="item{{ ' active' if page.url.includes('/about/') }}">
+        <a href="/about/">About</a>
+      </li>
+{#
       <li class="item has-submenu{{ ' active' if page.url.includes('/about/') }}">
         <a tabindex="0">About</a>
         <ul class="submenu">
@@ -23,6 +27,7 @@
           <li class="subitem"><a href="#">Stations</a></li>
           <li class="subitem"><a href="#">Join Our Team</a></li>
         </ul>
+#}
       </li>
       <li class="item{{ ' active' if page.url.includes('/news/') }}">
         <a href="/news/">News</a>

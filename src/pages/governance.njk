@@ -24,11 +24,10 @@ permalink: "/governance/index.html"
         Board of Commissioners
       </h3>
       {{ governance.commission | markdownify | safe }}
+    </div>
+    <aside class="l-grid__sidebar block-content">
       <ul class="document-list">
         <li>
-          <h3>
-            Board Meetings
-          </h3>
             {% if collections.futureMeetings.length %}
               <h4>Upcoming Meetings</h4>
               <ul class="news-grid">
@@ -80,16 +79,6 @@ permalink: "/governance/index.html"
                 </li>
               {% endfor %}
             </ul>
-          </li>
-        {% endfor %}
-      </ul>
-    </div>
-    <aside class="l-grid__sidebar block-content">
-      <h4>Important Documents</h4>
-      <ul>
-        {% for i in range(1,5) %}
-          <li>
-            <a href="#">Document {{i}}</a>
           </li>
         {% endfor %}
       </ul>

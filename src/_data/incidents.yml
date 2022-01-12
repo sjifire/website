@@ -1,71 +1,66 @@
 ---
-body: |-
-  SJIF&R follows a national standard around logging and grouping of incident
-  data, as defined by the [National Fire Incident Reporting
-  System](https://www.usfa.fema.gov/nfirs/).
+body: |+
+  Our purpose in emergency services is crystal clear: save lives, protect property, and
+  promote public safety through prevention and education.
 
-  ## Definitions
+  Collecting and using data—whether from calls, our internal trainings, or public
+  education events—can help us provide improved AND more cost-effective services to our
+  community.  It can show what is working well, what isn’t, what is changing over time,
+  and how effective intentional changes have been in meeting our purpose.
 
-  * An Incident is an emergency call to 911.  This includes all calls to 911
-  within our district as well as out-of-district incidents which we responded
-  to.
-  * All statistics are for the past 30 days unless noted otherwise.
+  However, data is not the be-all and end-all.  It is an important tool, but just one of
+  a handful we use to see how we’re doing and where we can improve.
+
+
+  ## Key Points
+
+  * A call, or incident, is anytime dispatch receives a 911 call that is in our
+  district or and assistance request from beyond our district.
+  * These numbers represent the last 30 days of calls that have been completed and
+  had their paperwork submitted. We also display the number of calls in the past 365 days.
+  * This data is recomputed every morning and comes directly from [ESO]( https://www.eso.com/),
+  our incident and medical reporting software.
   * Only incidents which are finished and have had all the paperwork finalized
   are included.  The vast majority of incident reports are finished within a few
   hours, though larger, more complicated, multi-day incident reports, such as
-  for wildland fires, may take upwards of 96 hours to complete.
-  * All time statistics are averages over the past 30 days, rounded to the
-  nearest minute.
+  for wildland fires, may take upwards of 3 days to complete.
+  * All time statistics are the median, or typical 50%, over the past 30 days.
   * Times are logged by dispatch from communication over a single radio
   frequency, which can cause the logging of times to be delayed if the airway is
   clogged with voice traffic.
+  * It’s important to state that this data is provided in good faith and as-is, as defined in the [disclaimer](/disclaimer/).
 
-  ### Field Definitions
 
-  * **Calls:** The number of
+  ## Field Definitions
+
   * **Responders:**
-    * **Responder Time on Calls:** The total amount of time that individual responders spent on incidents
-    * **Unique Responders:**  How many responders responded to one or more incidents
+    * **Responder Time on Calls:** This is the total amount of time your responders have spent on
+    active calls in their community in the past 30 days.  Some scenes can get complex with
+    responders and apparatus coming and going, and this number tracks that down to the
+    level of the individual responder.  It doesn’t include return travel to the station,
+    clean-up time, equipment maintenance time, or training hours.
+    * **Unique Responders:**  How many responders responded to one or more incidents in the past 30 days.
   * **Incident Times:**
-    * **Reaction Time:** When a crew is ready to go to work and is in a moving apparatus, dispatch logs an **[En Route Time]**.  The 'Reaction Time' is the time from when Dispatch sends out a page **[Dispatched Time]** to when the crew is En Route.
-    * **Travel Time:**  The amount of time between when an apparatus when en route and when it has arrived on scene **[Arrived Time]**.  These times are broken out based upon the incident regions, which roughly correspond to:
+    * **Reaction Time:** This is the time from when dispatch tells us they received a 911
+    call to when responders are dressed in the appropriate equipment, vehicle has been
+    inspected with a full walk-around, all responders are buckled in their seats, and the
+    vehicle is moving forward.  We don’t want to travel with open doors or coffee mugs on
+    the rear tailboard!  And the days of just hopping into or on a moving vehicle are long gone.
+    * **Travel Time:**  The amount of time from when an apparatus is moving to when it
+    arrives on scene.  These times are broken out based upon the incident regions,
+    which roughly correspond to:
       * **Central:** The central part of the island, from a rough line around Egg Lake Road to Friday Harbor.
       * **North:** North of Egg Lake Road out to Roche Harbor and beyond.
       * **South:** South and West of Town, along Cattle Pt. Rd. and Bailer Hill.
 
 
   The code for the website and statistics reporting can be found on [SJIF&R's
-  Github repository](https://github.com/sjifire/website).
+  Github repository](https://github.com/sjifire/website)
+  [[stats.json](https://github.com/sjifire/website/blob/main/src/_data/stats.json),
+  [eso_stats_scrapper.js](https://github.com/sjifire/website/blob/main/bin/eso_stats_scrapper.js)]
 
 
-  ## Understanding Incident Lifecycle
+  SJIF&R follows a national standard around logging and grouping of incident
+  data, and this data is integrated into the regional and national medical and incident
+  reporting systems, such as [National Fire Incident Reporting System](https://www.usfa.fema.gov/nfirs/).
 
-  Every time a call is made to 911, it follows a standardized set of steps to
-  make sure the right resources are sent to you in a timely and safe manner.
-
-  During an incident, certain key events are logged and time stamped by
-  dispatch.  They're noted as **[Event Time]**
-
-
-  1. Dispatch received a 911 call **[Alarm Time]**
-  1. Dispatch notifies SJIF&R of an incident via a "page" over the radio.
-  **[Dispatched Time]**
-  1. The on-duty crew responds **[En Route Time]**
-  1. Dispatch gives a 'short' description of the event and additional pertinent
-  information they've received from the reporting party.
-  1. If needed, the on-duty crew officer, or one of the command officers who are
-  always monitoring, may request additional resources, based upon the type of
-  call and subsequent information from Dispatch
-  1. Upon arrival, the first unit may give a 'size up' of the scene ("car on its
-  side, non-blocking, no one in the vehicle"). They may request additional
-  resources based upon what they see. **[Arrived Time]**
-  1. If additional resources have been requested, SJIF&R members travel to their
-  assigned stations, and may go en route to the scene, or stand by in quarters
-  awaiting instruction
-  1. On an incident, there is always an incident commander, regardless whether
-  it is short incident only requiring two or three responders, or it requires
-  dozens of responders over multiple hours, there is always someone in control.
-  1. If responders are no longer needed, whether they are traveling or already
-  on scene, they are prompty cleared. **[Clear Time]**
-  1. apparatus may need to be cleaned and restocked before they are available to
-  respond for the next call. **[Out/In Service Time]**

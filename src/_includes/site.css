@@ -99,8 +99,6 @@ html, body {
 }
 
 body {
-  display: grid;
-  grid-template-rows: auto auto auto 1fr auto;
   font-family: var(--ff-sans);
   background-color: #fff;
 }
@@ -392,7 +390,6 @@ body {
 }
 
 .special-heading {
-  font-size: 28px;
   display: inline-block;
   padding-bottom: 0.15rem;
   background-color: transparent;
@@ -641,6 +638,16 @@ body {
   color: var(--dk-red);
 }
 
+@media (min-width: 768px) {
+  .l-squeezed {
+    max-width: 720px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .l-grid {
+    display: grid;
+  }
+  .l-grid--1col {
 
 .block-content > * + * {
   margin-block: 1.25rem;
@@ -753,6 +760,11 @@ body {
   position: absolute !important;
   width: 1px !important;
   white-space: nowrap !important;            /* 3 */
+}
+
+
+.brand-red {
+  color: var(--dk-red);
 }
 
 
