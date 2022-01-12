@@ -104,6 +104,10 @@ module.exports = function (eleventyConfig) {
     if(!place) place = 0;
     return _.round(num, place);
   });
+
+  eleventyConfig.addFilter("formatNumber", (num) => {
+    return num.toLocaleString();
+  });
   
   eleventyConfig.addFilter("dump", (obj) => {
     return util.inspect(obj);

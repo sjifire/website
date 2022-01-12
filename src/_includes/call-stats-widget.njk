@@ -4,13 +4,10 @@
       <svg><use xlink:href='#stats' /></svg>
       <div>
         <h4>
-          Call Statistics
+          SJIF&R Statistics
         </h4>
         <time class="" pubdate="">
           Last 30 days
-        </time><br/>
-        <time class="" pubdate="">
-          Updated: {{ stats.updated_at | postDateTerseISO }}
         </time>
       </div>
     </div>
@@ -20,7 +17,6 @@
     <tr class="{{ cls.next() }}">
       <td>
         Calls
-        <aside>Last 30 Days</aside>
       </td>
       <td>
         {{ stats.incident_stats.num_incidents }}
@@ -32,7 +28,7 @@
         <aside>Last 365 Days</aside>
       </td>
       <td>
-        {{ stats.incident_stats.num_incidents_last_365_days }}
+        {{ stats.incident_stats.num_incidents_last_365_days | formatNumber }}
       </td>
     </tr>
     <tr class="{{ cls.next() }}">
@@ -46,7 +42,7 @@
     </tr>
     <tr class="{{ cls.next() }}">
       <td rowspan=3>
-        Travel Time to Scene
+        Travel Time
         <aside>Minutes</aside>
       </td>
       <td>
@@ -68,17 +64,16 @@
     </tr>
     <tr class="{{ cls.next() }}">
       <td>
-        Total Responder Time on Calls
+        Responder Time on Calls
         <aside>Minutes</aside>
       </td>
       <td>
-        {{ (stats.personnel_stats.time_on_incidents.sum/60) | round }}
+        {{ (stats.personnel_stats.time_on_incidents.sum/60) | round | formatNumber }}
       </td>
     </tr>
     <tr class="{{ cls.next() }}">
       <td>
-        Responder Participation on Calls
-        <aside>Num Responders</aside>
+        Unique Responders
       </td>
       <td>
         {{ stats.personnel_stats.num_unique_responders }}
