@@ -516,7 +516,7 @@ body {
   flex-direction: column;
   justify-content: space-between;
   background-color: white;
-  box-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+  box-shadow: 0 0 8px rgba(0,0,0,0.2);
   border-radius: 12px;
 }
 
@@ -544,24 +544,27 @@ body {
   table-layout: fixed;
   border-spacing: 0;
   box-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+  border-radius: 12px;
 }
 
 .widget + .widget {
   margin-top: 40px;
 }
 
-.widget__header {
+.widget__header th {
   background-color: var(--blue);
   color: white;
-  padding: 18px 15px;
+  text-align: left;
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
-  text-align: left;
 }
 
 .widget__header .flex {
   display: flex;
   gap: 10px;
+  padding: 18px 15px;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
 }
 
 .widget__header svg {
@@ -595,22 +598,22 @@ body {
   padding: 15px;
 }
 
-.widget__body td:first-child {
+.widget__body th {
   border-right: 1px solid #d1d5d9;
   text-align: right;
   font-weight: 500;
   line-height: 1.2;
 }
-.widget__body td aside {
+.widget__body th aside, .widget__body td aside {
   font-size: 0.7rem;
   font-weight: 400;
   color: #919397;
 }
-.widget__body td:last-child {
+.widget__body td {
   text-align: center;
   text-transform: uppercase;
 }
-.widget--station-stats .widget__body td:last-child {
+.widget--station-stats .widget__body td {
   font-family: monospace;
   font-size: 24px;
   font-weight: 300;
@@ -636,6 +639,24 @@ body {
 .widget__body .level--restricted {
   background-color: #FFE0E0;
   color: var(--dk-red);
+}
+
+.widget__foot td {
+  padding: 6px 15px;
+  text-align: right;
+  font-size: 0.9rem;
+  color: var(--muted-gray);
+  vertical-align: center;
+}
+
+.widget__foot td a {
+  color: var(--muted-gray);
+  text-decoration: none;
+}
+
+.widget__foot td a:hover, .widget__foot td a:focus {
+  text-decoration: underline;
+  color: var(--md-gray);
 }
 
 

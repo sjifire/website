@@ -1,50 +1,52 @@
 <table class="widget widget--station-stats">
-  <caption class="widget__header">
-    <div class="flex">
-      <svg><use xlink:href='#stats' /></svg>
-      <div>
-        <h4>
-          SJIF&R Statistics
-        </h4>
-        <time class="" pubdate="">
-          Last 30 days
-        </time>
+  <thead class="widget__header">
+    <th colspan="2">
+      <div class="flex">
+        <svg><use xlink:href='#stats' /></svg>
+        <div>
+          <h4>
+            SJIF&R Statistics
+          </h4>
+          <time class="" pubdate="">
+            Last 30 days
+          </time>
+        </div>
       </div>
-    </div>
-  </caption>
+    </th>
+  </thead>
   <tbody class="widget__body">
     {% set cls = cycler("odd", "even") %}
     <tr class="{{ cls.next() }}">
-      <td>
+      <th>
         Calls
-      </td>
+      </th>
       <td>
         {{ stats.incident_stats.num_incidents }}
       </td>
     </tr>
     <tr class="{{ cls.next() }}">
-      <td>
+      <th>
         Calls
         <aside>Last 365 Days</aside>
-      </td>
+      </th>
       <td>
         {{ stats.incident_stats.num_incidents_last_365_days | formatNumber }}
       </td>
     </tr>
     <tr class="{{ cls.next() }}">
-      <td>
+      <th>
         Reaction Time
         <aside>Seconds</aside>
-      </td>
+      </th>
       <td>
         {{ stats.unit_time_stats.first_unit_reaction.median }}
       </td>
     </tr>
     <tr class="{{ cls.next() }}">
-      <td rowspan=3>
+      <th rowspan=3>
         Travel Time
         <aside>Minutes</aside>
-      </td>
+      </th>
       <td>
         {{ (stats.region_stats.north.unit_travel_time.median/60) | round(1) }}
         <aside>North</aside>
@@ -63,21 +65,26 @@
       </td>
     </tr>
     <tr class="{{ cls.next() }}">
-      <td>
+      <th>
         Responder Time on Calls
         <aside>Minutes</aside>
-      </td>
+      </th>
       <td>
         {{ (stats.personnel_stats.time_on_incidents.sum/60) | round | formatNumber }}
       </td>
     </tr>
     <tr class="{{ cls.next() }}">
-      <td>
+      <th>
         Unique Responders
-      </td>
+      </th>
       <td>
         {{ stats.personnel_stats.num_unique_responders }}
       </td>
     </tr>
   </tbody>
+  <tfoot class="widget__foot">
+    <td colspan="2">
+      <a href="/services/emergency-services/">More Info »</a>
+    </td>
+  </tfoot>
 </table>
