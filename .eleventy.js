@@ -4,6 +4,7 @@ const CleanCSS     = require("clean-css");
 const util         = require("util");
 const slugify      = require("slugify");
 const yaml         = require("js-yaml");
+const _            = require("lodash");
 
 const isProduction = process.env.ELEVENTY_ENV === `production`;
 
@@ -99,8 +100,9 @@ module.exports = function (eleventyConfig) {
     return DateTime.fromJSDate(dateObj, {zone: 'utc'}).toFormat('yyyy');
   });
 
-  eleventyConfig.addFilter("round", (num) => {
-    return Math.round(num);
+  eleventyConfig.addFilter("round", (num, place) => {
+    if(!place) place = 0;
+    return _.round(num, place);
   });
   
   eleventyConfig.addFilter("dump", (obj) => {

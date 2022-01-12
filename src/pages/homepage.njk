@@ -142,19 +142,19 @@ permalink: /
               <aside>Minutes</aside>
             </td>
             <td>
-              {{ stats.region_stats.north.unit_travel_time.median }}
+              {{ (stats.region_stats.north.unit_travel_time.median/60) | round(1) }}
               <aside>North</aside>
             </td>
           </tr>
           <tr>
             <td>
-              {{ stats.region_stats.south.unit_travel_time.median }}
+              {{ (stats.region_stats.south.unit_travel_time.median/60) | round(1) }}
               <aside>South</aside>
             </td>
           </tr>
           <tr>
             <td>
-              {{ stats.region_stats.central.unit_travel_time.median }}
+              {{ (stats.region_stats.central.unit_travel_time.median/60) | round(1) }}
               <aside>Central</aside>
             </td>
           </tr>
@@ -164,7 +164,7 @@ permalink: /
               <aside>Minutes</aside>
             </td>
             <td>
-              {{ (stats.personnel_stats.time_on_incidents.sum/60) | round}}
+              {{ (stats.personnel_stats.time_on_incidents.sum/60) | round }}
             </td>
           </tr>
           <tr class="{{ cls.next() }}">
