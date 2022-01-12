@@ -31,7 +31,7 @@ body: |+
   * It’s important to state that this data is provided in good faith and as-is, as defined in the [disclaimer](/disclaimer/).
 
 
-  ## Field Definitions
+  ## Definitions
 
   * **Responders:**
     * **Responder Time on Calls:** This is the total amount of time your responders have spent on
@@ -57,7 +57,7 @@ body: |+
   The code for the website and statistics reporting can be found on [SJIF&R's
   Github repository](https://github.com/sjifire/website)
   [[stats data](https://github.com/sjifire/website/blob/main/src/_data/stats.json),
-  [ESO retriever](https://github.com/sjifire/website/blob/main/bin/eso_stats_scrapper.js)]
+  [stats code](https://github.com/sjifire/website/blob/main/bin/eso_stats_scrapper.js)]
 
 
   SJIF&R follows a national standard around logging and grouping of incident
