@@ -56,8 +56,8 @@ body: |+
 
   The code for the website and statistics reporting can be found on [SJIF&R's
   Github repository](https://github.com/sjifire/website)
-  [[stats data](https://github.com/sjifire/website/blob/main/src/_data/stats.json),
-  [stats code](https://github.com/sjifire/website/blob/main/bin/eso_stats_scrapper.js)]
+  [[data](https://github.com/sjifire/website/blob/main/src/_data/stats.json),
+  [code](https://github.com/sjifire/website/blob/main/bin/eso_stats_scrapper.js)].
 
 
   SJIF&R follows a national standard around logging and grouping of incident
