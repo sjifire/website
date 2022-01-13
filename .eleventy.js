@@ -116,8 +116,7 @@ module.exports = function (eleventyConfig) {
         if (/^(https?\:\/\/|\/\/)/i.test(link.href) ||
             /\.pdf$/i.test(link.href)) {
           link.target = '_blank';
-          // we want to see who's linking to our docs
-          // link.setAttribute('rel', 'noreferrer');
+          link.rel    = 'noreferrer';
         }
         return link;
       });
