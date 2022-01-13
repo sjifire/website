@@ -6,13 +6,15 @@ permalink: "/services/emergency-services/index.html"
 {% extends 'base.njk' %}
 
 {% block content %}
-  <h1>
-    {{ title | safe }}
-  </h1>
-  {% if emergency_services.preamble %}
-    <div class="lede">
-      {{ emergency_services.preamble | markdownify | safe }}
-    </div>
-  {% endif %}
-  {{ emergency_services.body | markdownify | safe }}
+  <div class="l-squeezed block-content">
+    <h1>
+      {{ title | safe }}
+    </h1>
+    {% if emergency_services.preamble %}
+      <div class="lede">
+        {{ emergency_services.preamble | markdownify | safe }}
+      </div>
+    {% endif %}
+    {{ emergency_services.body | markdownify | safe }}
+  </div>
 {% endblock %}

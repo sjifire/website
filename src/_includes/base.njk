@@ -39,7 +39,7 @@
   </header>
 
   {% if page.url === '/' or page.fileSlug === 'news-article' %}
-    <header class="page-header">
+    <header class="page-header{{ ' page-header--home' if page.url === '/' }}">
       <div class="rap">
         <article class="l-squeezed">
           {% block page_header %}{% endblock %}
@@ -50,7 +50,7 @@
     {% include "page_hero.njk" %}
   {% endif %}
 
-  <main class="site-main" role="main">
+  <main class="site-main{{ ' site-main--overlap' if page.url === '/' }}" role="main">
     <div class="rap">
       {% block content %}
         {{ content | safe }}

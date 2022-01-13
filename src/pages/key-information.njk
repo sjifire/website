@@ -14,5 +14,7 @@ permalink: "/about/key-information/index.html"
       {{ key_information.preamble | markdownify | safe }}
     </div>
   {% endif %}
-  {{ key_information.body | markdownify | safe }}
+  <div class="block-content">
+    {{ key_information.body | markdownify | safe }}
+  </div>
 {% endblock %}

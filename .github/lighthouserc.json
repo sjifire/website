@@ -36,6 +36,7 @@
         "uses-text-compression": "warn",
         "link-text": "warn",
         "external-anchors-use-rel-noopener": "warn",
+        "crawlable-anchors": "warn",
         "tap-targets": "warn"
 
       }
