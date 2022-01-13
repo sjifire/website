@@ -16,8 +16,7 @@ body: |+
 
   * A call, or incident, is anytime dispatch receives a 911 call that is in our
   district or and assistance request from beyond our district.
-  * These numbers represent the last 30 days of calls that have been completed and
-  had their paperwork submitted. We also display the number of calls in the past 365 days.
+  * These numbers represent the last 30 days of calls except where we also display the number of calls in the past 365 days.
   * This data is recomputed every morning and comes directly from [ESO]( https://www.eso.com/),
   our incident and medical reporting software.
   * Only incidents which are finished and have had all the paperwork finalized
