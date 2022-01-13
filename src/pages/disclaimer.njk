@@ -10,10 +10,12 @@ permalink: "/disclaimer/index.html"
     <h1>
       {{ title | safe }}
     </h1>
+  {% if disclaimer.preamble %}
     <div class="lede">
       {{ disclaimer.preamble | markdownify | safe }}
     </div>
+  {% endif %}
+  <div class="block-content">
+    {{ disclaimer.body | markdownify | safe }}
   </div>
-  {% set baseSections = disclaimer.sections %}
-  {% include "sections_block.njk" %}
 {% endblock %}
