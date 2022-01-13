@@ -11,12 +11,14 @@ permalink: "/news/{% if pagination.pageNumber > 0 %}page-{{ pagination.pageNumbe
 {% extends 'base.njk' %}
 
 {% block content %}
-  <h1>
-    {{ title | safe }}
-  </h1>
-  <div class="lede">
-    {{ news.preamble | markdownify | safe }}
-  </div>
+  <header class="hgroup">
+    <h1>
+      {{ title | safe }}
+    </h1>
+    <div class="lede">
+      {{ news.preamble | markdownify | safe }}
+    </div>
+  </header>
   <ul class="l-grid l-grid--auto">
     {% for post in pagination.items %}
       <li class="card">

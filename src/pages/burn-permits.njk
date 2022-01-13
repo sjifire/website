@@ -7,7 +7,7 @@ permalink: "/services/burn-permits/index.html"
 
 {% block content %}
   <div class="l-grid l-grid--2col">
-    <div class="l-grid__main block-content">
+    <div class="l-grid__main">
       <h1>
         {{ title | safe }}
       </h1>
@@ -18,14 +18,17 @@ permalink: "/services/burn-permits/index.html"
       {% endif %}
       {{ burn_permits.body | markdownify | safe }}
     </div>
-    <aside class="l-grid__sidebar block-content">
-      <p>
-        <a href="https://www.sanjuanco.com/1161/Apply-for-Burn-Permits">Purchase Residential Burn Permit</a>
-      </p>
-      <p>
-        <a href="https://www.sanjuanco.com/FormCenter/Fire-Marshal-12/Request-an-Inspection-55">Schedule Commercial Burn Inspection</a>
-      </p>
+    <aside class="l-grid__sidebar">
       {% include "burn-status-widget.njk" %}
+      <h4 class="sidebar__heading">Important Documents</h4>
+      <ul>
+        <li>
+          <a href="https://www.sanjuanco.com/1161/Apply-for-Burn-Permits">Purchase Residential Burn Permit</a>
+        </li>
+        <li>
+          <a href="https://www.sanjuanco.com/FormCenter/Fire-Marshal-12/Request-an-Inspection-55">Schedule Commercial Burn Inspection</a>
+        </li>
+      </ul>
     </aside>
   </div>
 {% endblock %}
