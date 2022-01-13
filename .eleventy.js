@@ -4,6 +4,7 @@ const CleanCSS     = require("clean-css");
 const util         = require("util");
 const slugify      = require("slugify");
 const yaml         = require("js-yaml");
+const _            = require("lodash");
 const { parseHTML } = require("linkedom");
 
 const isProduction = process.env.ELEVENTY_ENV === `production`;
@@ -79,10 +80,16 @@ module.exports = function (eleventyConfig) {
     });
   });
 
+  //TODO: cleanup, and perhaps handle both string and obj in one method; future work
+
+  eleventyConfig.addFilter("postDateTerseNoYearISO", (dateObj) => {
+    return DateTime.fromISO(dateObj, {zone: 'utc'}).toLocaleString({ month: 'short', day: 'numeric' });
+  });
+
   eleventyConfig.addFilter("postDateTerseISO", (dateObj) => {
     return DateTime.fromISO(dateObj, {zone: 'utc'}).toLocaleString(DateTime.DATE_MED);
   });
-  
+
   eleventyConfig.addFilter("postDateVerboseISO", (dateObj) => {
     return DateTime.fromISO(dateObj, {zone: 'utc'}).toLocaleString(DateTime.DATE_HUGE);
   });
@@ -91,8 +98,21 @@ module.exports = function (eleventyConfig) {
     return DateTime.fromISO(dateObj, {zone: 'utc'}).toFormat('yyyy-LL-dd');
   });
   
+  eleventyConfig.addFilter("postDateTerseJS", (dateObj) => {
+    return DateTime.fromJSDate(dateObj, {zone: 'utc'}).toLocaleString(DateTime.DATE_MED);
+  });
+
   eleventyConfig.addFilter("yearOnlyJS", (dateObj) => {
     return DateTime.fromJSDate(dateObj, {zone: 'utc'}).toFormat('yyyy');
+  });
+
+  eleventyConfig.addFilter("round", (num, place) => {
+    if(!place) place = 0;
+    return _.round(num, place);
+  });
+
+  eleventyConfig.addFilter("formatNumber", (num) => {
+    return num.toLocaleString();
   });
   
   eleventyConfig.addFilter("dump", (obj) => {
@@ -115,8 +135,8 @@ module.exports = function (eleventyConfig) {
       links.map((link) => {
         if (/^(https?\:\/\/|\/\/)/i.test(link.href) ||
             /\.pdf$/i.test(link.href)) {
-          link.target = '_blank';
-          link.rel    = 'noreferrer';
+          link.setAttribute('target', '_blank');
+          link.setAttribute('rel', 'noreferrer');
         }
         return link;
       });

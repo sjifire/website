@@ -2,78 +2,40 @@
   <span>Emergency? Call <em>911</em></span>
 </aside>
 
-  <nav class="rap">
-    <ul class="menu">
-      <li class="logo">
-        <a href="/"><img src="{{ 'https://res.cloudinary.com/san-juan-fire-district-3/image/fetch/f_auto/' + site.rootUrl if helpers.env === 'production' }}/assets/sjifire-logo-clear.png" width="320" height="317" alt="San Juan Island Fire and Rescue Logo"></a>
-      </li>
-  {#    
-      <li class="item{{ ' active' if page.url.includes('/about/') }}">
-        <a href="/about/">About</a>
-      </li>
-  #}
-      <li class="item{{ ' active' if page.url.includes('/about/') }}">
-        <a href="/about/">About</a>
-      </li>
+<nav class="rap">
+  <ul class="menu">
+    <li class="logo">
+      <a href="/"><img src="{{ 'https://res.cloudinary.com/san-juan-fire-district-3/image/fetch/f_auto/' + site.rootUrl if helpers.env === 'production' }}/assets/sjifire-logo-clear.png" width="320" height="317" alt="San Juan Island Fire and Rescue Logo"></a>
+    </li>
+    <li class="item{{ ' active' if page.url.includes('/about/') }}">
+      <a href="/about/">About</a>
+    </li>
 {#
-      <li class="item has-submenu{{ ' active' if page.url.includes('/about/') }}">
-        <a tabindex="0">About</a>
-        <ul class="submenu">
-          <li class="subitem"><a href="/about/who-we-are/">Who We Are</a></li>
-          <li class="subitem"><a href="/about/key-information/">Key Information</a></li>
-          <li class="subitem"><a href="/about/incidents/">Incidents</a></li>
-          <li class="subitem"><a href="/governance/">Governance</a></li>
-          <li class="subitem"><a href="#">Staff & Volunteers</a></li>
-          <li class="subitem"><a href="#">Stations</a></li>
-          <li class="subitem"><a href="#">Join Our Team</a></li>
-        </ul>
-#}
-      </li>
-      <li class="item{{ ' active' if page.url.includes('/news/') }}">
-        <a href="/news/">News</a>
-      </li>
-      <li class="item{{ ' active' if page.url.includes('/governance/') }}">
-        <a href="/governance/">Governance</a>
-      </li>
-      <li class="item{{ ' active' if page.url.includes('/contact/') }}">
-        <a href="/contact">Contact</a>
-      </li>
-      <li class="toggle">
-        <a href="#"><svg><use xlink:href='#menu' /></svg></a>
-      </li>
-    </ul>
-  </nav>
-
-{#
-<div class="rap">
-  <nav class="navbar">
-    <div class="brand-title">
-      <a href="/" class="site-logo">
-        <img src="{{ 'https://res.cloudinary.com/san-juan-fire-district-3/image/fetch/f_auto/' + site.rootUrl if helpers.env === 'production' }}/assets/sjifire-logo-clear.png" width="320" height="317" alt="San Juan Island Fire and Rescue Logo">
-      </a>
-    </div>
-    <a href="#" class="toggle-button">
-      <span class="bar"></span>
-      <span class="bar"></span>
-      <span class="bar"></span>
-    </a>
-    <div class="navbar-links">
-      <ul>
-        <li{{ ' class=active' if page.url.includes('/about/') }}>
-          <a href="/about/">About</a>
-        </li>
-        <li{{ ' class=active' if page.url.includes('/news/') }}>
-          <a href="/news/">News</a>
-        </li>
-        <li{{ ' class=active' if page.url.includes('/governance/') }}>
-          <a href="/governance/">Governance</a>
-        </li>
-        <li{{ ' class=active' if page.url === '/contact/' }}>
-          <a href="/contact/">Contact</a>
-        </li>
+    <li class="item has-submenu{{ ' active' if page.url.includes('/about/') }}">
+      <a tabindex="0">About</a>
+      <ul class="submenu">
+        <li class="subitem"><a href="/about/who-we-are/">Who We Are</a></li>
+        <li class="subitem"><a href="/about/key-information/">Key Information</a></li>
+        <li class="subitem"><a href="/about/incidents/">Incidents</a></li>
+        <li class="subitem"><a href="/governance/">Governance</a></li>
+        <li class="subitem"><a href="#">Staff & Volunteers</a></li>
+        <li class="subitem"><a href="#">Stations</a></li>
+        <li class="subitem"><a href="#">Join Our Team</a></li>
       </ul>
-    </div>
-  </nav>
-</div>
 #}
+    </li>
+    <li class="item{{ ' active' if page.url.includes('/news/') }}">
+      <a href="/news/">News</a>
+    </li>
+    <li class="item{{ ' active' if page.url.includes('/governance/') }}">
+      <a href="/governance/">Governance</a>
+    </li>
+    <li class="item{{ ' active' if page.url.includes('/contact/') }}">
+      <a href="/contact">Contact</a>
+    </li>
+    <li class="toggle">
+      <a href="#"><svg><use xlink:href='#menu' /></svg></a>
+    </li>
+  </ul>
+</nav>
 

@@ -1,6 +1,6 @@
 {% for section in baseSections %}
   {% if section.type === 'text' %}
-    <div class="l-squeezed post__copy">
+    <div class="block-content">
       {{ section.copy | markdownify | safe }}
     </div>
   {% elif section.type === 'image' %}
