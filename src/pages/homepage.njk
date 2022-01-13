@@ -18,9 +18,9 @@ permalink: /
 
   <section class="l-grid l-grid--2col flipped">
     <div class="l-grid__main">
-      <ul class="news-grid">
+      <ul class="l-grid l-grid--auto">
         {% for post in posts | reverse | limit(6) %}
-          <li class="news-grid__item card">
+          <li class="card">
             <div class="card__body">
               <div class="news__type">
                 {% include "post_type_icons.njk" %}
@@ -46,8 +46,8 @@ permalink: /
     <aside class="l-grid__sidebar">
       {% include "burn-status-widget.njk" %}
       {% include "call-stats-widget.njk" %}
-      <div class='widget'>
-        <iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2FSJIFire%2F&tabs=timeline&width=310&height=600&small_header=true&adapt_container_width=true&hide_cover=false&show_facepile=false&appId" width="340" height="500" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" loading="lazy"></iframe>
+      <div class='embed-responsive embed-responsive-1by2'>
+        <iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2FSJIFire%2F&tabs=timeline&width=310&height=600&small_header=true&adapt_container_width=true&hide_cover=false&show_facepile=false&appId" style="margin-top: 40px;border:none;" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" loading="lazy"></iframe>
       </div>
     </aside>
   </section>
