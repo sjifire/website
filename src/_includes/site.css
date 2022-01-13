@@ -95,7 +95,7 @@ body {
 }
 
 .site-header {
-  background-color: var(--dk-gray);
+  background: var(--dk-gray);
 }
 
 .site-header__911 {
@@ -400,15 +400,25 @@ body {
 
 .news__lede {
   margin-block: 1rem;
-  font-size: 15px;
+  font-size: 16px;
+  color: var(--dk-gray);
   line-height: 1.35;
 }
 
 .news__readmore {
   display: inline-block;
   font-size: 15px;
-  text-decoration: underline;
   color: var(--link-blue);
+}
+
+.news__readmore svg {
+  width: 12px;
+  height: 12px;
+  fill: var(--muted-gray);
+}
+
+.news__readmore:hover, .news__readmore:focus {
+  color: var(--blue);
 }
 
 
@@ -517,10 +527,12 @@ body {
 }
 
 .card__footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
   border-top: 1px solid #e1e5e9;
   padding: 12px 30px;
   text-transform: uppercase;
-  text-align: right;
 }
 
 .card__footer a {
