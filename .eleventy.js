@@ -135,8 +135,8 @@ module.exports = function (eleventyConfig) {
       links.map((link) => {
         if (/^(https?\:\/\/|\/\/)/i.test(link.href) ||
             /\.pdf$/i.test(link.href)) {
-          link.target = '_blank';
-          link.rel    = 'noreferrer';
+          link.setAttribute('target', '_blank');
+          link.setAttribute('rel', 'noreferrer');
         }
         return link;
       });
