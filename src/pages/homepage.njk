@@ -16,10 +16,10 @@ permalink: /
 
 {% block content %}
 
-  <section class="l-grid l-grid--2col flipped">
+  <section class="l-grid l-grid--2col">
     <div class="l-grid__main">
       <ul class="l-grid l-grid--auto">
-        {% for post in posts | reverse | limit(6) %}
+        {% for post in posts | reverse | limit(8) %}
           <li class="card">
             <div class="card__body">
               <div class="news__type">
@@ -27,7 +27,9 @@ permalink: /
                 {{ post.post_type }}
               </div>
               <h3 class="news__headline">
-                {{ post.title | safe }}
+                <a href="/news/{{ post.date | htmlDateStringISO }}-{{ post.title | slugify }}/">
+                  {{ post.title | safe }}
+                </a>
               </h3>
               <time datetime="{{ post.date | htmlDateStringISO }}" pubdate="pubdate" class="news__date">
                 {{ post.date | postDateTerseISO }}

@@ -77,7 +77,7 @@ select {
   --blue: #20528D;
 }
 
-h1, h2 {
+h1 {
   font-weight: 900;
 }
 
@@ -161,9 +161,9 @@ body {
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 6px;
+  padding: 5px 0;
 }
-.menu li a {
+.menu li:not(.logo) a {
   display: block;
   padding: 0 10px;
 }
@@ -297,6 +297,12 @@ body {
   transform: translateY(-100px);
 }
 
+.site-main img {
+  display: inline-block;
+  max-width: 100%;
+  height: auto;
+}
+
 .site-footer {
   position: sticky;
   top: 100vh;
@@ -374,14 +380,24 @@ body {
   fill: var(--dk-red);
 }
 
+
+.news__headline a {
+  color: var(--dk-gray);
+  text-decoration: none;
+}
+
+.news__headline a:hover, .news__headline a:focus {
+  color: var(--muted-gray);
+}
+
 .news__date {
-  color: var(--md-gray);
+  color: var(--muted-gray);
   font-size: 15px;
 }
 
 .news__lede {
   margin-block: 1rem;
-  font-size: 16px;
+  font-size: 15px;
   line-height: 1.35;
 }
 
@@ -407,8 +423,18 @@ body {
   margin-bottom: 1rem;
 }
 
+.l-grid {
+  margin: 0;
+  padding: 0;
+}
+
 .l-grid__sidebar {
   margin-top: 40px;
+}
+
+.l-grid--auto {
+  display: grid;
+  gap: 20px;
 }
 
 @media (min-width: 768px) {
@@ -421,13 +447,9 @@ body {
     display: grid;
   }
   .l-grid--2col {
-    grid-template-areas: "sidebar  main";
-    grid-template-columns: minmax(240px, 1fr) 2.5fr;
-    gap: 60px;
-  }
-  .l-grid--2col.flipped {
     grid-template-areas: "main sidebar";
     grid-template-columns: 2.5fr minmax(240px, 1fr);
+    gap: 60px;
   }
   .l-grid__sidebar {
     margin-top: 0;
@@ -437,9 +459,8 @@ body {
     grid-area: main;
   }
   .l-grid--auto {
-    display: grid;
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 50px 30px;
+    gap: 30px;
   }
 }
 
@@ -453,7 +474,7 @@ body {
 }
 
 .card__body {
-  padding: 12px 30px;
+  padding: 30px;
 }
 
 .card__footer {
@@ -594,7 +615,7 @@ body {
 }
 
 
-
+/* 
 .special-heading {
   display: inline-block;
   padding-bottom: 0.15rem;
@@ -603,7 +624,7 @@ body {
   background-repeat: no-repeat;
   background-size: 100% .3em;
   background-position: 0 82%;
-}
+} */
 
 
 .block-content > * + * {
@@ -613,10 +634,6 @@ body {
 
 .post__media + .post__media, .post__media + .post__copy, .post__copy + .post__media {
   margin-block: 1.55rem;
-}
-
-.post__copy > * + * {
-  margin-block: 1.25rem;
 }
 
 .post__media figcaption {
@@ -636,10 +653,6 @@ body {
 
 .post__media > figcaption {
   text-align: center;
-}
-
-.post__copy {
-  font-size: 1rem;
 }
 
 
