@@ -75,6 +75,7 @@ select {
   --dk-red: #C42414;
   --md-gray: #515559;
   --muted-gray: #919599;
+  --btn-gray: #e1e5e9;
   --lt-gray: #f1f5f9;
   --rule-gray: #e1e5e9;
   --link-blue: #3182E4;
@@ -918,7 +919,9 @@ select.form-control:focus::-ms-value {
 
 
 .btn {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 0 0.25rem;
   font-weight: 400;
   text-align: center;
   white-space: nowrap;
@@ -933,6 +936,7 @@ select.form-control:focus::-ms-value {
   line-height: 1.5;
   border-radius: 0.25rem;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  text-decoration: none;
 }
 
 .btn:hover, .btn:focus {
@@ -945,8 +949,8 @@ select.form-control:focus::-ms-value {
 }
 
 .btn-primary {
-  background-color: var(--link-blue);
-  border-color: var(--link-blue);
+  background-color: var(--blue);
+  border-color: var(--blue);
   color: #fff;
 }
 
@@ -955,4 +959,27 @@ select.form-control:focus::-ms-value {
   border-color: var(--dk-red);
   color: #fff;
   cursor: pointer;
+}
+
+.btn-secondary {
+  background-color: var(--btn-gray);
+  color: var(--md-gray);
+}
+
+.btn-secondary:hover, .btn-secondary:focus {
+  background-color: var(--blue);
+  color: white;
+}
+
+.btn > svg {
+  width: 15px;
+  height: 15px;
+}
+
+.btn-secondary svg {
+  fill: var(--md-gray);
+}
+
+.btn-secondary:hover svg, .btn-secondary:focus svg {
+  fill: var(--yellow);
 }
