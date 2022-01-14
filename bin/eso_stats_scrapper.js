@@ -39,6 +39,17 @@ var argv = require('yargs/yargs')(hideBin(process.argv))
         type: 'boolean',
         default: false
     })
+    .option('day_range', {
+        description: 'how many days to run detailed analysis on',
+        type: 'integer',
+        default: 30
+    })
+    .option('stop_date', {
+        description: 'when to stop detailed analysis'
+    })
+    .option('start_date', {
+        description: 'when to start detailed analysis'
+    })
     .count('verbose')
     .alias('v', 'verbose')
     .demandOption(['o','r'])
@@ -73,7 +84,11 @@ var argv = require('yargs/yargs')(hideBin(process.argv))
   logger.info("parsing CSV report");
   let records = esoScrapper.parseCSV(csvPath);
 
-  let statsOutput = esoScrapper.generateStats(records);
+  let statsOutput = esoScrapper.generateStats({
+    records: records,
+    start_date: argv.start_date,
+    stop_date: argv.stop_date,
+    day_range: argv.day_range});
   logger.info(`outputing json file to ${argv.o}`);
   let json = JSON.stringify(statsOutput, null, 2);
   fs.writeFileSync(argv.o, json);

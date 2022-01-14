@@ -7,29 +7,30 @@
     <li class="logo">
       <a href="/"><img src="{{ 'https://res.cloudinary.com/san-juan-fire-district-3/image/fetch/f_auto/' + site.rootUrl if helpers.env === 'production' }}/assets/sjifire-logo-clear.png" width="320" height="317" alt="San Juan Island Fire and Rescue Logo"></a>
     </li>
-    <li class="item{{ ' active' if page.url.includes('/about/') }}">
-      <a href="/about/">About</a>
-    </li>
-{#
     <li class="item has-submenu{{ ' active' if page.url.includes('/about/') }}">
       <a tabindex="0">About</a>
       <ul class="submenu">
         <li class="subitem"><a href="/about/who-we-are/">Who We Are</a></li>
         <li class="subitem"><a href="/about/key-information/">Key Information</a></li>
         <li class="subitem"><a href="/about/incidents/">Incidents</a></li>
-        <li class="subitem"><a href="/governance/">Governance</a></li>
+        <li class="subitem"><a href="/about/governance/">Governance</a></li>
+      </ul>
+{#
         <li class="subitem"><a href="#">Staff & Volunteers</a></li>
         <li class="subitem"><a href="#">Stations</a></li>
         <li class="subitem"><a href="#">Join Our Team</a></li>
-      </ul>
+
 #}
     </li>
     <li class="item{{ ' active' if page.url.includes('/news/') }}">
       <a href="/news/">News</a>
     </li>
-    <li class="item{{ ' active' if page.url.includes('/governance/') }}">
-      <a href="/governance/">Governance</a>
-    </li>
+    <li class="item has-submenu{{ ' active' if page.url.includes('/services/') }}">
+      <a tabindex="0">Services</a>
+      <ul class="submenu">
+        <li class="subitem"><a href="/services/emergency-services/">24/7 Emergency Services</a></li>
+        <li class="subitem"><a href="/services/burn-permits/">Burn Permits</a></li>
+      </ul>
     <li class="item{{ ' active' if page.url.includes('/contact/') }}">
       <a href="/contact">Contact</a>
     </li>

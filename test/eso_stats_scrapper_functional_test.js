@@ -88,16 +88,19 @@ describe('parseCSV', function(){
 
 //TODO: focus on edge case stats
 describe('generateStats', function(){
-  let records = null;
-  let parsedStats  = null;
+  let records     = null;
+  let parsedStats = null;
+
   before(() => {
     records = esoScrapper.parseCSV(sampleCSVPath);
-    parsedStats = esoScrapper.generateStats(records);
+    parsedStats = esoScrapper.generateStats({records: records});
   });
+
   it('should return expected high-level keys', function(){
     let keys = Object.keys(parsedStats);
     assert.include(keys, 'apparatus_stats', 'incident_stats', 'personnel_stats', 'region_stats', 'unit_time_stats', 'updated_at', 'date_range_from', 'date_range_to')
   });
+
   it('should return expected keys within incident_stats', function(){
     let keys = Object.keys(parsedStats.incident_stats);
     assert.include(keys, 'types', 'num_incidents_last_365_days', 'num_incidents', 'num_daytime_incidents', 'num_nighttime_incidents', 'incident_times', 'num_overlapping_incidents', 'num_per_day')
@@ -125,7 +128,7 @@ describe('generateStats', function(){
     // * lots of units coming and going at different times
     let sampleBuildingFireCSV = `${__dirname}/files/sample_building_fire.csv`;
     let records = esoScrapper.parseCSV(sampleBuildingFireCSV);
-    let parsedStats = esoScrapper.generateStats(records);
+    let parsedStats = esoScrapper.generateStats({records: records});
     //Only grabs the first due unit reactions time
     assert.deepEqual(parsedStats.unit_time_stats.first_unit_reaction, { sum: 199, mean: 199, median: 199, q1: 199, q3: 199, min: 199, max: 199 });
     assert.deepEqual(parsedStats.unit_time_stats.travel, { sum: 5601, mean: 800, median: 931, q1: 689, q3: 951, min: 329, max: 1063 });
@@ -156,7 +159,7 @@ describe('generateStats', function(){
     // Testing for quick reaction from E31 but slower reaction for L31 as it wasn't staffed with oncall
     let samplePath = `${__dirname}/files/sample_call_dispatched_before_previous_call.csv`;
     let records = esoScrapper.parseCSV(samplePath);
-    let parsedStats = esoScrapper.generateStats(records);
+    let parsedStats = esoScrapper.generateStats({records: records});
     assert.deepEqual(parsedStats.unit_time_stats.first_unit_reaction, { sum: 645, mean: 323, median: 323, q1: 190, q3: 455, min: 57, max: 588 });
     assert.deepEqual(parsedStats.unit_time_stats.travel, { sum: 1887, mean: 944, median: 944, q1: 862, q3: 1025, min: 781, max: 1106 });
     assert.deepEqual(parsedStats.unit_time_stats.on_scene, { sum: 2954, mean: 1477, median: 1477, q1: 1176, q3: 1779, min: 874, max: 2080 });
@@ -190,7 +193,7 @@ describe('generateStats', function(){
     // * do NOT log a standby/cover as an overlapping call
     let samplePath = `${__dirname}/files/sample_date_entry_mistake_under_pov.csv`;
     let records = esoScrapper.parseCSV(samplePath);
-    let parsedStats = esoScrapper.generateStats(records);
+    let parsedStats = esoScrapper.generateStats({records: records});
     //only have one as the standby unit doesn't have a reaction time
     assert.deepEqual(parsedStats.unit_time_stats.first_unit_reaction,  { sum: 107, mean: 107, median: 107, q1: 107, q3: 107, min: 107, max: 107 });
     // lots of travel times from ONLY the first call
@@ -227,7 +230,7 @@ describe('generateStats', function(){
     // * make sure both are flagged as overlapping incidents!
     let samplePath = `${__dirname}/files/sample_different_call_triggered_during_incident_but_cancelled_en_route.csv`;
     let records = esoScrapper.parseCSV(samplePath);
-    let parsedStats = esoScrapper.generateStats(records);
+    let parsedStats = esoScrapper.generateStats({records: records});
     //both have reaction times
     assert.deepEqual(parsedStats.unit_time_stats.first_unit_reaction,  { sum: 353, mean: 177, median: 177, q1: 144, q3: 209, min: 112, max: 241 });
     // lots of travel times from ONLY the first call
@@ -259,7 +262,7 @@ describe('generateStats', function(){
     //  * make sure both are flagged as overlapping incidents!
     let samplePath = `${__dirname}/files/sample_overlapping_calls_one_response_unit.csv`;
     let records = esoScrapper.parseCSV(samplePath);
-    let parsedStats = esoScrapper.generateStats(records);
+    let parsedStats = esoScrapper.generateStats({records: records});
     //both have reaction times, but the 2nd one is notably slower
     assert.deepEqual(parsedStats.unit_time_stats.first_unit_reaction, { sum: 1256, mean: 628, median: 628, q1: 347, q3: 909, min: 66, max: 1190 });
     assert.deepEqual(parsedStats.unit_time_stats.travel, { sum: 1300, mean: 650, median: 650, q1: 472, q3: 829, min: 293, max: 1007 });
@@ -299,7 +302,7 @@ describe('generateStats', function(){
     //  * make sure these are not logged as overlapping calls because one of them is a standby
     let samplePath = `${__dirname}/files/sample_long_call_standby.csv`;
     let records = esoScrapper.parseCSV(samplePath);
-    let parsedStats = esoScrapper.generateStats(records);
+    let parsedStats = esoScrapper.generateStats({records: records});
 
     //both have reaction times, but the 2nd one is notably slower
     assert.deepEqual(parsedStats.unit_time_stats.first_unit_reaction, { sum: 129, mean: 65, median: 65, q1: 51, q3: 78, min: 38, max: 91 });
@@ -331,7 +334,7 @@ describe('generateStats', function(){
     // * make sure both are flagged as overlapping incidents!
     let samplePath = `${__dirname}/files/sample_incident_with_standby_call.csv`;
     let records = esoScrapper.parseCSV(samplePath);
-    let parsedStats = esoScrapper.generateStats(records);
+    let parsedStats = esoScrapper.generateStats({records: records});
 
     assert.deepEqual(parsedStats.unit_time_stats.first_unit_reaction, { sum: 107, mean: 107, median: 107, q1: 107, q3: 107, min: 107, max: 107 });
     assert.deepEqual(parsedStats.unit_time_stats.travel, { sum: 2651, mean: 663, median: 497, q1: 469, q3: 691, min: 440, max: 1217 });
@@ -357,7 +360,7 @@ describe('generateStats', function(){
   it('should handle missing arrival dates', function(){
     let samplePath = `${__dirname}/files/sample_missing_arrival_date.csv`;
     let records = esoScrapper.parseCSV(samplePath);
-    let parsedStats = esoScrapper.generateStats(records);
+    let parsedStats = esoScrapper.generateStats({records: records});
 
     assert.deepEqual(parsedStats.unit_time_stats.first_unit_reaction, { sum: 147, mean: 147, median: 147, q1: 147, q3: 147, min: 147, max: 147 });
     assert.deepEqual(parsedStats.unit_time_stats.travel, { sum: 2521, mean: 840, median: 833, q1: 776, q3: 901, min: 719, max: 969 });
@@ -378,5 +381,87 @@ describe('generateStats', function(){
     assert.deepEqual(parsedStats.incident_stats.incident_times, { sum: 3478, mean: 3478, median: 3478, q1: 3478, q3: 3478, min: 3478, max: 3478 });
     assert.equal(parsedStats.apparatus_stats.num_unique_used, 3)
   });
+
+  it('should be able to compute a shorter 10 day_range', function(){
+    day_range = 10;
+    shortParsedStats = esoScrapper.generateStats({records: records, day_range: day_range});
+    assert.deepEqual(shortParsedStats.date_range_to, new Date('2021-12-27T23:59:59.999Z'))
+    assert.deepEqual(shortParsedStats.date_range_from, new Date('2021-12-18T00:00:00.000Z'))
+
+    assert.equal(shortParsedStats.unit_time_stats.first_unit_reaction.sum, 3168)
+    assert.equal(shortParsedStats.unit_time_stats.travel.sum, 18521)
+    assert.equal(shortParsedStats.incident_stats.num_incidents, 27)
+    assert.equal(shortParsedStats.personnel_stats.num_unique_responders, 15)
+    assert.equal(shortParsedStats.incident_stats.incident_times.median, 2172)
+  })
+
+  it('should be able to compute a shorter 9 day_range', function(){
+    // these should be different
+    day_range = 9;
+    shortParsedStats = esoScrapper.generateStats({records: records, day_range: day_range});
+    assert.deepEqual(shortParsedStats.date_range_to, new Date('2021-12-27T23:59:59.999Z'))
+    assert.deepEqual(shortParsedStats.date_range_from, new Date('2021-12-19T00:00:00.000Z'))
+
+    assert.equal(shortParsedStats.unit_time_stats.first_unit_reaction.sum, 2714)
+    assert.equal(shortParsedStats.unit_time_stats.travel.sum, 16386)
+    assert.equal(shortParsedStats.incident_stats.num_incidents, 25)
+    assert.equal(shortParsedStats.personnel_stats.num_unique_responders, 14)
+    assert.equal(shortParsedStats.incident_stats.incident_times.median, 2059)
+  })
+
+  it('should be able to compute from a different end date', function(){
+    stop_date = new Date('2021-12-26T23:59:59.999Z')
+    shortParsedStats = esoScrapper.generateStats({records: records, stop_date: stop_date});
+    assert.deepEqual(shortParsedStats.date_range_to, new Date('2021-12-26T23:59:59.999Z'))
+    assert.deepEqual(shortParsedStats.date_range_from, new Date('2021-11-27T00:00:00.000Z'))
+
+    assert.equal(shortParsedStats.unit_time_stats.first_unit_reaction.sum, 9734)
+    assert.equal(shortParsedStats.unit_time_stats.travel.sum, 37447)
+    assert.equal(shortParsedStats.incident_stats.num_incidents, 78)
+    assert.equal(shortParsedStats.personnel_stats.num_unique_responders, 22)
+    assert.equal(shortParsedStats.incident_stats.incident_times.median, 2123)
+  })
+
+  it('should be able to compute from a string end date', function(){
+    shortParsedStats = esoScrapper.generateStats({records: records, stop_date: '2021-12-26'});
+    assert.deepEqual(shortParsedStats.date_range_to, new Date('2021-12-26T23:59:59.999Z'))
+    assert.deepEqual(shortParsedStats.date_range_from, new Date('2021-11-27T00:00:00.000Z'))
+    assert.equal(shortParsedStats.incident_stats.num_incidents, 78)
+    assert.equal(shortParsedStats.personnel_stats.num_unique_responders, 22)
+  })
+
+  it('should be able to compute from a different start date', function(){
+    start_date = new Date('2021-10-01')
+    shortParsedStats = esoScrapper.generateStats({records: records, start_date: start_date});
+    assert.deepEqual(shortParsedStats.date_range_to, new Date('2021-10-30T23:59:59.999Z'))
+    assert.deepEqual(shortParsedStats.date_range_from, new Date('2021-10-01T00:00:00.000Z'))
+
+    assert.equal(shortParsedStats.unit_time_stats.first_unit_reaction.sum, 9819)
+    assert.equal(shortParsedStats.unit_time_stats.travel.sum, 39961)
+    assert.equal(shortParsedStats.incident_stats.num_incidents, 89)
+    assert.equal(shortParsedStats.personnel_stats.num_unique_responders, 27)
+    assert.equal(shortParsedStats.incident_stats.incident_times.median, 1809)
+  })
+
+  it('should be able to compute from a string start date', function(){
+    shortParsedStats = esoScrapper.generateStats({records: records, start_date: '2021-10-01'});
+    assert.deepEqual(shortParsedStats.date_range_to, new Date('2021-10-30T23:59:59.999Z'))
+    assert.deepEqual(shortParsedStats.date_range_from, new Date('2021-10-01T00:00:00.000Z'))
+
+    assert.equal(shortParsedStats.incident_stats.num_incidents, 89)
+    assert.equal(shortParsedStats.personnel_stats.num_unique_responders, 27)
+  })
+
+  it('should be able to compute from a start and stop date', function(){
+    shortParsedStats = esoScrapper.generateStats({records: records, start_date: '2021-10-01', stop_date: '2021-10-10'});
+    assert.deepEqual(shortParsedStats.date_range_to, new Date('2021-10-10T23:59:59.999Z'))
+    assert.deepEqual(shortParsedStats.date_range_from, new Date('2021-10-01T00:00:00.000Z'))
+
+    assert.equal(shortParsedStats.unit_time_stats.first_unit_reaction.sum, 3389)
+    assert.equal(shortParsedStats.unit_time_stats.travel.sum, 14351)
+    assert.equal(shortParsedStats.incident_stats.num_incidents, 27)
+    assert.equal(shortParsedStats.personnel_stats.num_unique_responders, 21)
+    assert.equal(shortParsedStats.incident_stats.incident_times.median, 1890)
+  })
 });
 
