@@ -17,6 +17,16 @@ permalink: "/about/governance/index.html"
       {{ governance.commission | markdownify | safe }}
     </div>
     <aside class="l-grid__sidebar">
+      <h4 class="sidebar__heading">Important Documents</h4>
+      <ul>
+        {% for i in range(0,5) %}
+          <li>
+            <a href="/assets/docs/document-{{ i }}" target="_blank">
+              Document #{{ i }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
       <h4 class="sidebar__heading">Upcoming Meetings</h4>
       {% if collections.futureMeetings.length %}
         <dl class="sidebar__desc-list">
