@@ -101,7 +101,7 @@ body {
 
 .site-header--home {
   background-blend-mode: multiply, luminosity;
-  background-image: url('/assets/images/Arata-Photo-1-e1635900798243.jpg');
+  background-image: url('/assets/images/bg-home-header.jpg');
   background-color: var(--dk-red);
   background-repeat:  no-repeat;
   background-position: top center;

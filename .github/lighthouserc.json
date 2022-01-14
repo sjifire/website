@@ -35,6 +35,7 @@
         "uses-passive-event-listeners": "warn",
         "uses-text-compression": "warn",
         "link-text": "warn",
+        "errors-in-console": "warn",
         "external-anchors-use-rel-noopener": "warn",
         "crawlable-anchors": "warn",
         "tap-targets": "warn"
