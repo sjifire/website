@@ -39,3 +39,23 @@
   </ul>
 </nav>
 
+{% if page.url === '/' or page.fileSlug === 'news-article' %}
+  <header class="page-header page-header--{{ 'home' if page.url === '/' else 'news' }}">
+    <div class="rap">
+      <article class="l-squeezed">
+          <h1>
+            {{ title | safe if page.url === '/' else post.title | safe }}
+          </h1>
+          {% if page.fileSlug === 'news-article' %}
+            <time datetime="{{ post.date | htmlDateStringISO }}" pubdate="pubdate">
+              {{ post.date | postDateVerboseISO }}
+            </time>
+          {% endif %}
+          <div class="lede">
+            {{ homepage.preamble | markdownify | safe if page.url === '/' else post.lede | markdownify | safe }}
+          </div>
+      </article>
+    </div>
+  </header>
+{% endif %}
+

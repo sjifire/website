@@ -5,15 +5,6 @@ permalink: /
 
 {% extends 'base.njk' %}
 
-{% block page_header %}
-  <h1>
-    {{ title }}
-  </h1>
-  <div class="lede">
-    {{ homepage.preamble | markdownify | safe }}
-  </div>
-{% endblock %}
-
 {% block content %}
 
   <section class="l-grid l-grid--2col">
