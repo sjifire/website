@@ -22,7 +22,7 @@ const logger = require('./logger')
 process.env.TZ = 'UTC';
 
 
-const DETAILED_STATS_DAY_RANGE = 30;
+const DEFAULT_DETAILED_STATS_DAY_RANGE = 30;
 
 const SOUTH_STATIONS   = ["32", "33"];
 const CENTRAL_STATIONS = ["31", "36"];
@@ -126,8 +126,13 @@ const parseCSV = function(csvPath){
  *                              representing a row from the ESO csv report
  * @return {[Object]} a large nested object of statistics.
  */
-const generateStats = (records) => {
-  let raw_values = _processRecords(records);
+const generateStats = ({
+  records,
+  start_date,
+  stop_date,
+  day_range = DEFAULT_DETAILED_STATS_DAY_RANGE
+  }={}) => {
+  let raw_values = _processRecords(records, start_date, stop_date, day_range);
   return _createStats(raw_values);
 };
 
@@ -135,14 +140,26 @@ const generateStats = (records) => {
 /**
  * Private helper methods
  */
-const _processRecords = function(records){
+const _processRecords = function(records, start_date, stop_date, day_range){
   // stats for the day range from most recent record:
-  let mostRecentRecordDate = _.last(records)['Dispatched Date']
+  // CLONE THE DATE before we modify it!
+  if (start_date){
+    start_date = new Date(start_date); //copy date so we can modify OR parse if it comes in as a string
+    if(!stop_date){
+      stop_date = start_date.addDays(day_range-1) //we change it to be the very end of day, so this works out
+    }else{
+      stop_date = new Date(stop_date); //copy date so we can modify OR parse if it comes in as a string
+      day_range = Math.round((stop_date.getTime() - start_date.getTime())/1000/60/60/24);
+    }
+  }
+  if (!stop_date) stop_date = _.last(records)['Dispatched Date'].getTime();
+  stop_date = new Date(stop_date); //copy date so we can modify OR parse if it comes in as a string
+  stop_date.setUTCHours(23,59,59,999); //set to the very end of day
   // NOTE: this date range makes it exclusive, NOT inclusive...
-  // so if 30 days, it would go from 12/25/21 back to 11/26/21
-  let dateCutoff = mostRecentRecordDate.addDays(-DETAILED_STATS_DAY_RANGE).addDays(1);
+  // so if 30 days, it would go from 12/25/21 23:59:59 back to 11/26/21 00:00:00
+  let dateCutoff = start_date ? start_date : stop_date.addDays(-day_range).addDays(1);
   dateCutoff.setHours(0,0,0,0);
-  let recordsInRange = records.filter(record => record['Alarm Date'] > dateCutoff)
+  let recordsInRange = records.filter(record => record['Alarm Date'] >= dateCutoff && record['Alarm Date'] <= stop_date)
   //the groupBy sorts by lexographical ordering of the Incident Number; this isn't
   //always entered in correctly nor is the order of the incident the same order
   //as when pages go out.  SO we list the incidents by dispatch date order,
@@ -169,11 +186,11 @@ const _processRecords = function(records){
     in_range_calls:   _.size(byIncidentInRange),
     total_calls:      _.uniqBy(records, 'Incident Number').length,
     date_range_from: dateCutoff,
-    date_range_to:   mostRecentRecordDate
+    date_range_to:   stop_date
   }
   // loop for every day in the detailed range and set it up with zero.
   // this way we log the days that have no activit.
-  for (var day = new Date(dateCutoff.getTime()); day <= mostRecentRecordDate; day.setDate(day.getDate() + 1)) {
+  for (var day = new Date(dateCutoff.getTime()); day <= stop_date; day.setDate(day.getDate() + 1)) {
     raw_values.calls_per_day[day.toLocaleDateString()] = 0;
   }
 
@@ -184,6 +201,7 @@ const _processRecords = function(records){
     let incidentRecords = byIncidentInRange[incidentID];
     //baseRecord is used for all columns that are the same within the incidentID grouping
     let baseRecord      = incidentRecords[0];
+
     let dispatchedDate  = baseRecord['Dispatched Date'];
     let incidentTypeCall = baseRecord['Incident Type Code'].toString();
     raw_values.calls_per_day[dispatchedDate.toLocaleDateString()]++;
