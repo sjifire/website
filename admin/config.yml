@@ -644,7 +644,6 @@ collections:
           preview: false
         file: "src/_data/disclaimer.yml"
         fields:
-        fields:
           - label: Preamble
             name: preamble
             widget: markdown
