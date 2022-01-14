@@ -41,6 +41,12 @@
   status = 301
   force = true
 
+[[redirects]]
+  from = "/about"
+  to = "/about/who-we-are"
+  status = 301
+  force = true
+
 
 
 # disable for now because:
