@@ -514,6 +514,33 @@ body {
   margin-top: 1.25rem;
 }
 
+.sidebar__figure + .sidebar__figure {
+  margin-top: 30px;
+}
+
+.sidebar__figure img {
+  display: block;
+}
+
+.sidebar__figure figcaption {
+  position: relative;
+  padding: 6px 8px 0 16px;
+  color: var(--black);
+  text-transform: lowercase;
+  font-variant: small-caps;
+  line-height: 1;
+}
+
+.sidebar__figure figcaption:before {
+  content: "»";
+  display: block;
+  position: absolute;
+  top: 6px;
+  left: 0;
+  z-index: 1;
+  color: var(--dk-red);
+}
+
 .hgroup {
   margin-bottom: 30px;
 }
