@@ -37,16 +37,21 @@
 
 [[redirects]]
   from = "/governance"
-  to = "/about/governance"
+  to = "/about/governance/"
   status = 301
   force = true
 
 [[redirects]]
   from = "/about"
-  to = "/about/who-we-are"
+  to = "/about/who-we-are/"
   status = 301
   force = true
 
+[[redirects]]
+  from = "/services"
+  to = "/services/emergency-services/"
+  status = 301
+  force = true
 
 
 # disable for now because:
