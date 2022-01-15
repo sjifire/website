@@ -181,8 +181,8 @@ module.exports = function (eleventyConfig) {
       imgs.map((img) => {
         //modify if local img
         if (/^\//i.test(img.src)){
-          if(/small/i.test(img.className)) imgSize = 'w_400,h_200'
-          else if(/medium/i.test(img.className)) imgSize = 'w_800,h_400'
+          if(/small_img/i.test(img.className)) imgSize = 'w_400,h_200'
+          else if(/med_img/i.test(img.className)) imgSize = 'w_800,h_400'
           else imgSize = 'w_1200,h_800'
           newImgURL = `https://res.cloudinary.com/san-juan-fire-district-3/image/fetch/f_auto,q_auto:good,c_limit,${imgSize}/${siteUrl}`
           pNode = img.parentNode;
