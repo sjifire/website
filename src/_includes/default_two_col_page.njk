@@ -1,0 +1,22 @@
+{% extends 'base.njk' %}
+
+{% block content %}
+  <div class="l-grid l-grid--2col">
+    <div class="l-grid__main block-content">
+      <h1>
+        {{ title | safe }}
+      </h1>
+      {% if pageData.preamble %}
+        <div class="lede">
+          {{ pageData.preamble | markdownify | safe }}
+        </div>
+      {% endif %}
+      {{ pageData.body | markdownify | safe }}
+    </div>
+    <aside class="l-grid__sidebar block-content">
+      {% block sidebar_content %}
+        {{ sidebar_content | safe }}
+      {% endblock %}
+    </aside>
+  </div>
+{% endblock %}

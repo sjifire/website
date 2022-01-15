@@ -3,78 +3,67 @@ title: "Governance"
 permalink: "/about/governance/index.html"
 ---
 
-{% extends 'base.njk' %}
+{% set pageData = governance %}
 
-{% block content %}
-  <div class="l-grid l-grid--2col">
-    <div class="l-grid__main block-content">
-      <h1>{{ title | safe }}</h1>
-      {{ governance.preamble | markdownify | safe }}
-      {{ governance.about | markdownify | safe }}
-      <h3>
-        Board of Commissioners
-      </h3>
-      {{ governance.commission | markdownify | safe }}
-    </div>
-    <aside class="l-grid__sidebar">
+{% block sidebar_content %}
 {#
-      <h4 class="sidebar__heading">Important Documents</h4>
-      <ul>
-        {% for i in range(0,5) %}
-          <li>
-            <a href="/assets/docs/document-{{ i }}" target="_blank">
-              Document #{{ i }}
-            </a>
-          </li>
-        {% endfor %}
-      </ul>
+  <h4 class="sidebar__heading">Important Documents</h4>
+  <ul>
+    {% for i in range(0,5) %}
+      <li>
+        <a href="/assets/docs/document-{{ i }}" target="_blank">
+          Document #{{ i }}
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
 #}
-      <h4 class="sidebar__heading">Upcoming Meetings</h4>
-      {% if collections.futureMeetings.length %}
-        <dl class="sidebar__desc-list">
-          {% for meeting in collections.futureMeetings %}
-            <dt>
-              {{ meeting.date | postDateTerseNoYearISO }} - {{ meeting.title }}
-            </dt>
-            <dd>
-              <ul>
-                {% for doc in meeting.documents %}
-                  <li>
-                    <a href="/assets/docs/{{ doc.file }}" target="_blank">
-                      {{ doc.title }}
-                    </a>
-                  </li>
-                {% endfor %}
-              </ul>
-            </dd>
-          {% endfor %}
-        </dl>
-      {% else %}
-        <p>Next regular scheduled board meeting is tentatively on <strong><span id='next-board-meeting'>{% nextBoardMeetingDate %}</span> at 3pm</strong>.</p>
-      {% endif %}
-      {% for year, set in collections.pastMeetings | groupby('year') | dictsort | reverse %}
-        <details class="block-content" {{ 'open' if loop.first }}>
-          <summary class="sidebar__heading">Past Meetings: {{ year }}</summary>
-          <dl class="sidebar__desc-list">
-            {% for meeting in set %}
-              <dt>
-                {{ meeting.date | postDateTerseNoYearISO }} - {{ meeting.title }}
-              </dt>
-              <dd>
-                <ul>
-                  {% for doc in meeting.documents %}
-                    <li>
-                      <a href="/assets/docs/{{ doc.file }}">
-                        {{ doc.title }}
-                      </a>
-                    </li>
-                  {% endfor %}
-                </ul>
-              </dd>
+  <h4 class="sidebar__heading">Upcoming Meetings</h4>
+  {% if collections.futureMeetings.length %}
+    <dl class="sidebar__desc-list">
+      {% for meeting in collections.futureMeetings %}
+        <dt>
+          {{ meeting.date | postDateTerseNoYearISO }} - {{ meeting.title }}
+        </dt>
+        <dd>
+          <ul>
+            {% for doc in meeting.documents %}
+              <li>
+                <a href="/assets/docs/{{ doc.file }}" target="_blank">
+                  {{ doc.title }}
+                </a>
+              </li>
             {% endfor %}
           </ul>
-        </details>
+        </dd>
       {% endfor %}
-    </aside>
-  </div>
+    </dl>
+  {% else %}
+    <p>Next regular scheduled board meeting is tentatively on <strong><span id='next-board-meeting'>{% nextBoardMeetingDate %}</span> at 3pm</strong>.</p>
+  {% endif %}
+  {% for year, set in collections.pastMeetings | groupby('year') | dictsort | reverse %}
+    <details class="block-content" {{ 'open' if loop.first }}>
+      <summary class="sidebar__heading">Past Meetings: {{ year }}</summary>
+      <dl class="sidebar__desc-list">
+        {% for meeting in set %}
+          <dt>
+            {{ meeting.date | postDateTerseNoYearISO }} - {{ meeting.title }}
+          </dt>
+          <dd>
+            <ul>
+              {% for doc in meeting.documents %}
+                <li>
+                  <a href="/assets/docs/{{ doc.file }}">
+                    {{ doc.title }}
+                  </a>
+                </li>
+              {% endfor %}
+            </ul>
+          </dd>
+        {% endfor %}
+      </ul>
+    </details>
+  {% endfor %}
 {% endblock %}
+{% extends "default_two_col_page.njk" %}
+
