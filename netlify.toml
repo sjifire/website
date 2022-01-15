@@ -80,6 +80,19 @@
   to = "/about/key-information"
   status = 301
   force = true
+[[redirects]]
+  from = "/privacy-policy"
+  to = "/disclaimer"
+  status = 301
+  force = true
+[[redirects]]
+  from = "/firewise"
+  to = "/services/firewise"
+  status = 301
+  force = true
+
+
+
 
 # disable for now because:
 #  - it causes admin sub-domain to not deploy
