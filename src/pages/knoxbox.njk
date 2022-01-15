@@ -3,16 +3,5 @@ title: "KnoxBox Key Access"
 permalink: "/services/knoxbox/index.html"
 ---
 
-{% extends 'base.njk' %}
-
-{% block content %}
-  <h1>
-    {{ title | safe }}
-  </h1>
-  {% if knoxbox.preamble %}
-    <div class="lede">
-      {{ knoxbox.preamble | markdownify | safe }}
-    </div>
-  {% endif %}
-  {{ knoxbox.body | markdownify | safe }}
-{% endblock %}
+{% set pageData = knoxbox %}
+{% include "default_single_col_page.njk" %}
