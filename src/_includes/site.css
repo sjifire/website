@@ -514,15 +514,15 @@ body {
   margin-top: 1.25rem;
 }
 
-.sidebar__figure + .sidebar__figure {
+.l-grid__sidebar figure + figure {
   margin-top: 30px;
 }
 
-.sidebar__figure img {
+.l-grid__sidebar figure img {
   display: block;
 }
 
-.sidebar__figure figcaption {
+.l-grid__sidebar figcaption {
   position: relative;
   padding: 6px 8px 0 16px;
   color: var(--black);
@@ -531,7 +531,7 @@ body {
   line-height: 1;
 }
 
-.sidebar__figure figcaption:before {
+.l-grid__sidebar figcaption:before {
   content: "»";
   display: block;
   position: absolute;
@@ -734,6 +734,37 @@ body {
 .post__media > figcaption {
   text-align: center;
 }
+
+/*
+  this and post__media should? be merged;
+  We need to be able to style across posts and within the main
+  part of the site interior pages as well as on the sidebar
+  using the same cloudinary logic (see .eleventy.js)
+*/
+.block-content figure + figure {
+  margin-block: 1.55rem;
+}
+
+.block-content figcaption {
+  margin-top: 0.5rem;
+  font-size: 13px;
+  text-transform: uppercase;
+  color: var(--muted-gray);
+}
+
+.block-content figure > img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.block-content figure > figcaption {
+  text-align: center;
+}
+
+
 
 
 .pagination {
