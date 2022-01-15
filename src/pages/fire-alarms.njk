@@ -3,16 +3,6 @@ title: "Smoke and Carbon Monoxide Alarms"
 permalink: "/services/fire-alarms/index.html"
 ---
 
-{% extends 'base.njk' %}
+{% set pageData = fire_alarms %}
+{% extends "default_one_col_page.njk" %}
 
-{% block content %}
-  <h1>
-    {{ title | safe }}
-  </h1>
-  {% if fire_alarms.preamble %}
-    <div class="lede">
-      {{ fire_alarms.preamble | markdownify | safe }}
-    </div>
-  {% endif %}
-  {{ fire_alarms.body | markdownify | safe }}
-{% endblock %}
