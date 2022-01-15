@@ -3,27 +3,14 @@ title: "Who We Are"
 permalink: "/about/who-we-are/index.html"
 ---
 
-{% extends 'base.njk' %}
+{% set pageData = who_we_are %}
 
-{% block content %}
-  <div class="l-grid l-grid--2col">
-    <div class="l-grid__main block-content">
-      <h1>
-        {{ title | safe }}
-      </h1>
-      {% if who_we_are.preamble %}
-        {{ who_we_are.preamble | markdownify | safe }}
-      {% endif %}
-      {{ who_we_are.body | markdownify | safe }}
-    </div>
-    <aside class="l-grid__sidebar block-content">
-      <img src="https://res.cloudinary.com/san-juan-fire-district-3/image/fetch/f_auto,q_auto:good,c_limit,w_1200,h_800/https://sjifire.netlify.app/{{ who_we_are.featured_image}}" loading="lazy" alt="Team Dinner">
+{% block sidebar_content %}
+  <img src="https://res.cloudinary.com/san-juan-fire-district-3/image/fetch/f_auto,q_auto:good,c_limit,w_1200,h_800/https://sjifire.netlify.app/{{ who_we_are.featured_image}}" loading="lazy" alt="Team Dinner">
 
-      <img src="https://res.cloudinary.com/san-juan-fire-district-3/image/fetch/f_auto,q_auto:good,c_limit,w_1200,h_800/https://sjifire.netlify.app/assets/images/family-break-time.jpg" loading="lazy" alt="Family Break Time">
+  <img src="https://res.cloudinary.com/san-juan-fire-district-3/image/fetch/f_auto,q_auto:good,c_limit,w_1200,h_800/https://sjifire.netlify.app/assets/images/family-break-time.jpg" loading="lazy" alt="Family Break Time">
 
-      <img src="https://res.cloudinary.com/san-juan-fire-district-3/image/fetch/f_auto,q_auto:good,c_limit,w_1200,h_800/https://sjifire.netlify.app/assets/images/Vols-2-edited-1-scaled.jpg" loading="lazy" alt="Wildland Fire Drill">
-
-
-    </aside>
-  </div>
+  <img src="https://res.cloudinary.com/san-juan-fire-district-3/image/fetch/f_auto,q_auto:good,c_limit,w_1200,h_800/https://sjifire.netlify.app/assets/images/Vols-2-edited-1-scaled.jpg" loading="lazy" alt="Wildland Fire Drill">
 {% endblock %}
+{% extends "default_two_col_page.njk" %}
+

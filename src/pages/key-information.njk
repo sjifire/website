@@ -3,18 +3,5 @@ title: "Key Information"
 permalink: "/about/key-information/index.html"
 ---
 
-{% extends 'base.njk' %}
-
-{% block content %}
-  <h1>
-    {{ title | safe }}
-  </h1>
-  {% if key_information.preamble %}
-    <div class="lede">
-      {{ key_information.preamble | markdownify | safe }}
-    </div>
-  {% endif %}
-  <div class="block-content">
-    {{ key_information.body | markdownify | safe }}
-  </div>
-{% endblock %}
+{% set pageData = key_information %}
+{% include "default_single_col_page.njk" %}

@@ -1,0 +1,16 @@
+
+{% extends 'base.njk' %}
+
+{% block content %}
+  <div class="l-squeezed block-content">
+    <h1>
+      {{ title | safe }}
+    </h1>
+    {% if pageData.preamble %}
+      <div class="lede">
+        {{ pageData.preamble | markdownify | safe }}
+      </div>
+    {% endif %}
+    {{ pageData.body | markdownify | safe }}
+  </div>
+{% endblock %}

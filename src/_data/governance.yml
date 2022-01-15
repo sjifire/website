@@ -1,8 +1,8 @@
-preamble: |+
+body: |+
   San Juan Island Fire and Rescue is governed by San Juan County Fire District
   3. The state of Washington chartered San Juan Island Fire Department in May of
   1959.
-about: |+
+
   In Washington, special purpose districts are limited purpose **local
   governments** separate from a city, town, or county government. Generally,
   they perform limited functions including fire protection, that are not
@@ -25,14 +25,16 @@ about: |+
   Washington State. The WAC codifies the regulations and arranges them by
   subject or agency.
 
-commission: |+
+
+  ### Board of Commissioners
+
   SJI Fire & Rescue is governed by the elected, three member Board of
   Commissioners for San Juan County Fire District #3. Board meetings are open to
   the public and regularly scheduled meetings are held on the second Tuesday of
   every month, at 3:00 PM at the Fire District headquarters, located at Fire
   Station #31 at 1011 Mullis Street in Friday Harbor.
 
-  Board members are elected at-large, and serve a six-year term (RCW 52.14.060)
+  Board members are elected at-large, and serve a six-year term ([RCW 52.14.060](https://app.leg.wa.gov/rcw/default.aspx?cite=52.14.060))
 
 
   ### Current Commissioners
