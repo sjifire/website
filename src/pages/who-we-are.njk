@@ -6,26 +6,11 @@ permalink: "/about/who-we-are/index.html"
 {% set pageData = who_we_are %}
 
 {% block sidebar_content %}
-  <figure class="sidebar__figure">
-    <img src="https://res.cloudinary.com/san-juan-fire-district-3/image/fetch/f_auto,q_auto:good,c_limit,w_1200,h_800/https://sjifire.netlify.app/{{ who_we_are.featured_image}}" loading="lazy" alt="Team Dinner" width="1067" height="800">
-    <figcaption>
-      Team Dinner while on shift
-    </figcaption>
-  </figure>
+  <img src="{{ who_we_are.featured_image}}" alt="Team Dinner while on shift" title="Team Dinner while on shift">
 
-  <figure class="sidebar__figure">
-    <img src="https://res.cloudinary.com/san-juan-fire-district-3/image/fetch/f_auto,q_auto:good,c_limit,w_1200,h_800/https://sjifire.netlify.app/assets/images/family-break-time.jpg" loading="lazy" alt="Family Break Time" width="1067" height="800">
-    <figcaption>
-      Catching our breath after a recent training exercise
-    </figcaption>
-  </figure>
+  <img src="/assets/images/family-break-time.jpg" alt="Family Break Time" title="Family Break Time">
 
-  <figure class="sidebar__figure">
-    <img src="https://res.cloudinary.com/san-juan-fire-district-3/image/fetch/f_auto,q_auto:good,c_limit,w_1200,h_800/https://sjifire.netlify.app/assets/images/Vols-2-edited-1-scaled.jpg" loading="lazy" alt="Wildland Fire Drill" width="1200" height="675">
-    <figcaption>
-      The team
-    </figcaption>
-  </figure>
+  <img src="/assets/images/Vols-2-edited-1-scaled.jpg" alt="Wildland Fire Drill" title="Wildland Fire Drill">
 {% endblock %}
 {% extends "default_two_col_page.njk" %}
 
