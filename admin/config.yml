@@ -487,16 +487,14 @@ collections:
         delete: false
         editor:
           preview: false
-        file: "src/_data/error_404.json"
+        file: "src/_data/error_404.yml"
         fields:
-          - label: Preamble
-            name: preamble
+          - label: Body
+            name: body
             widget: markdown
-            buttons: ['bold', 'italic', 'link']
-            editor_components: []
-            modes: [rich_text]
-            hint: >-
-              Text that appears under the main heading.
+            minimal: false
+            required: true
+            hint: "Add a chunk of text (rich text editor)"
   - name: "meetings"
     label: "Board Meetings"
     label_singular: "Board Meeting"
