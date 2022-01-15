@@ -12,7 +12,8 @@ body: >-
   ### Smoke Alarms
 
 
-  ![Smoke Alarm on Ceiling](/assets/images/smoke_alarm.jpg "Smoke Alarm on Ceiling"){.right}
+  ![Smoke Alarm on Ceiling](/assets/images/smoke_alarm.jpg "Smoke Alarm on Ceiling")
+  <figcaption>Smoke Alarm</<figcaption>>
 
 
   Whether you’re awake or asleep, a properly installed and maintained smoke alarm is constantly on alert, scanning the air for fire and smoke. If there is a fire in your home, smoke spreads fast, usually much faster than flames, and you need smoke alarms to give you and your family time to get out.
@@ -28,7 +29,8 @@ body: >-
   ### Carbon Monoxide Detectors
 
 
-  ![CO Alarm by Floor](/assets/images/co_alarm.jpg "CO Alarm by Floor"){.right}
+  ![CO Alarm by Floor](/assets/images/co_alarm.jpg "CO Alarm by Floor")
+  <figcaption>CO Alarm</<figcaption>>
 
 
   Carbon Monoxide (CO) is a colorless, odorless, tasteless and toxic gas produced as a by-product of combustion. Any fuel burning appliance, vehicle, tool or other device has the potential to produce dangerous levels of CO gas. Examples of CO producing devices commonly in use around our homes include:
