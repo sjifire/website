@@ -54,6 +54,33 @@
   force = true
 
 
+# remove after a few yrs; help to redirect old links...
+[[redirects]]
+  from = "/governance/documents"
+  to = "/about/governance/"
+  status = 301
+  force = true
+[[redirects]]
+  from = "/governance/board-of-commissioners"
+  to = "/about/governance/"
+  status = 301
+  force = true
+[[redirects]]
+  from = "/contact-us"
+  to = "/contact/"
+  status = 301
+  force = true
+[[redirects]]
+  from = "/about/staff"
+  to = "/about/key-information"
+  status = 301
+  force = true
+[[redirects]]
+  from = "/about/about-san-juan-fire-and-rescue"
+  to = "/about/key-information"
+  status = 301
+  force = true
+
 # disable for now because:
 #  - it causes admin sub-domain to not deploy
 #  - it is REALLY expensive to run and we'll run out of build minutes
