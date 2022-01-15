@@ -169,6 +169,46 @@ module.exports = function (eleventyConfig) {
     return content;
   });
 
+  eleventyConfig.addTransform('wrap internal images', (content, outputPath) => {
+    try {
+      if (!outputPath || !outputPath.endsWith('.html')) return content;
+      // if (!isProduction) return content;
+      const { document } = parseHTML(content);
+      const imgs = [...document.querySelectorAll('.l-grid__main img, .l-squeezed img')];
+      if (imgs.length == 0) return content;
+
+      siteUrl = 'https://sjifire.netlify.app'
+      imgs.map((img) => {
+        //modify if local img
+        if (/^\//i.test(img.src)){
+          if(/small/i.test(img.className)) imgSize = 'w_400,h_200'
+          else if(/medium/i.test(img.className)) imgSize = 'w_800,h_400'
+          else imgSize = 'w_1200,h_800'
+          newImgURL = `https://res.cloudinary.com/san-juan-fire-district-3/image/fetch/f_auto,q_auto:good,c_limit,${imgSize}/${siteUrl}`
+          pNode = img.parentNode;
+          parentDiv = pNode.parentNode;
+          const figure = document.createElement("figure");
+          figure.className = 'post__media'
+          figure.innerHTML = `
+  <img src="${newImgURL}${img.src}" alt="${img.alt}" title="${img.title}" loading="lazy" />
+  <figcaption>
+    ${img.title}
+  </figcaption>
+`
+          parentDiv.insertBefore(figure, pNode);
+          parentDiv.removeChild(pNode);
+          pNode.removeChild(img)
+          return figure;
+        }
+        return img;
+      });
+      content = document.toString();
+    } catch (error) {
+      console.error(error);
+    }
+    return content;
+  });
+
 
   // Minify HTML Output
   eleventyConfig.addTransform("htmlmin", function(content, outputPath) {
