@@ -13,7 +13,7 @@
       {% endif %}
       {{ pageData.body | markdownify | safe }}
     </div>
-    <aside class="l-grid__sidebar block-content">
+    <aside class="l-grid__sidebar">
       {% block sidebar_content %}
         {{ sidebar_content | safe }}
       {% endblock %}
