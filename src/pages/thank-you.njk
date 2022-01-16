@@ -3,15 +3,7 @@ title: "Thank You"
 permalink: "/thank-you/index.html"
 ---
 
-{% extends 'base.njk' %}
 
-{% block content %}
-  <h1>
-    {{ title | safe }}
-  </h1>
-  <div class="lede">
-    {{ thank_you.preamble | markdownify | safe }}
-  </div>
+{% set pageData = thank_you %}
+{% include "default_single_col_page.njk" %}
 
-  {{ thank_you.copy | markdownify | safe }}
-{% endblock %}
