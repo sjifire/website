@@ -368,8 +368,8 @@ collections:
           preview: true
         file: "src/_data/contact.yml"
         fields:
-          - label: Copy
-            name: copy
+          - label: Body
+            name: body
             widget: markdown
             minimal: false
             required: true
