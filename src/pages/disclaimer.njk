@@ -3,19 +3,6 @@ title: "Disclaimer"
 permalink: "/disclaimer/index.html"
 ---
 
-{% extends 'base.njk' %}
+{% set pageData = disclaimer %}
+{% include "default_single_col_page.njk" %}
 
-{% block content %}
-  <div class="l-squeezed block-content">
-    <h1>
-      {{ title | safe }}
-    </h1>
-  {% if disclaimer.preamble %}
-    <div class="lede">
-      {{ disclaimer.preamble | markdownify | safe }}
-    </div>
-  {% endif %}
-  <div class="block-content">
-    {{ disclaimer.body | markdownify | safe }}
-  </div>
-{% endblock %}
