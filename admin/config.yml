@@ -442,7 +442,7 @@ collections:
         delete: false
         editor:
           preview: false
-        file: "src/_data/thank_you.json"
+        file: "src/_data/thank_you.yml"
         fields:
           - label: Preamble
             name: preamble
@@ -452,14 +452,10 @@ collections:
             modes: [rich_text]
             hint: >-
               Text that appears under the main heading.
-          - label: Copy
-            name: copy
+          - label: Body
+            name: body
             widget: markdown
             minimal: false
-            buttons: ['bold', 'italic', 'link', 'heading-two', 'heading-three', 'heading-four', 'heading-five', 'heading-six', 'quote', 'bulleted-list', 'numbered-list']
-            editor_components: [image]
-            modes: [rich_text]
-            required: false
             hint: "Add a chunk of text (rich text editor)"
       - label: "Disclaimer"
         name: "disclaimer"
