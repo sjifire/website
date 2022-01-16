@@ -204,7 +204,7 @@ collections:
         delete: false
         editor:
           preview: false
-        file: "src/_data/homepage.json"
+        file: "src/_data/homepage.yml"
         fields:
           - label: Preamble
             name: preamble
