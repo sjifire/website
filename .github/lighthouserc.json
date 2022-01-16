@@ -38,6 +38,7 @@
         "errors-in-console": "warn",
         "external-anchors-use-rel-noopener": "warn",
         "crawlable-anchors": "warn",
+        "unminified-css": "warn",
         "tap-targets": "warn"
 
       }
