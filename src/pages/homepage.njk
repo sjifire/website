@@ -12,7 +12,7 @@ permalink: /
 
 {% block main_content %}
   <ul class="l-grid l-grid--auto">
-    {% for post in posts | reverse | limit(8) %}
+    {% for post in posts | reverse | limit(homepage.number_news_stories) %}
       <li class="card">
         <div class="card__body">
           <div class="news__type">
