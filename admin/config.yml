@@ -353,6 +353,10 @@ collections:
             name: body
             widget: markdown
             required: true
+          - label: Sidebar
+            name: sidebar
+            widget: markdown
+            required: false
       - label: "Smoke & CO Alarms"
         name: "smoke & CO alarms"
         delete: false
