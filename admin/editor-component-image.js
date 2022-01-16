@@ -64,34 +64,24 @@ window.NetlifyCmsEditorComponentImage = {
       },
     },
     {
-      label: 'Styling',
+      label: 'Image Scaling',
       name: 'klass',
       widget: 'select',
       options: [
-        { label: "Left-Float", value: "left-float" },
-        { label: "Right-Float", value: "right-float" },
-        { label: "Left", value: "left" },
-        { label: "Center", value: "center" },
-        { label: "Right", value: "right" },
+        { label: "Scale to Small Image", value: "small_img" },
+        { label: "Scale to Medium Image", value: "med_img" },
+        { label: "Scale to Large Image", value: "large_img" },
       ],
     },
     {
-      label: 'Width',
-      name: 'width',
-      hint: 'px or %'
-    },
-    {
-      label: 'Height',
-      name: 'height',
-      hint: 'px or %'
-    },
-    {
       label: 'Alt Text',
-      name: 'alt'
+      name: 'alt',
+      required: true
     },
     {
       label: 'Title',
-      name: 'title'
+      name: 'title',
+      required: true
     },
   ],
 };

@@ -251,14 +251,6 @@ collections:
           preview: true
         file: "src/_data/who_we_are.yml"
         fields:
-          - label: Preamble
-            name: preamble
-            widget: markdown
-            buttons: ['bold', 'italic', 'link']
-            editor_components: []
-            required: false
-            hint: >-
-              Text that appears under the main heading.
           - label: Body
             name: body
             widget: markdown
