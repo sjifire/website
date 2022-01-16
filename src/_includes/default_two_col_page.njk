@@ -20,9 +20,13 @@
       {% endif %}
     </div>
     <aside class="l-grid__sidebar">
-      {% block sidebar_content %}
-        {{ sidebar_content | safe }}
-      {% endblock %}
+      {% if pageData.sidebar %}
+        {{ pageData.sidebar | markdownify | safe }}
+      {% else %}
+        {% block sidebar_content %}
+          {{ sidebar_content | safe }}
+        {% endblock %}
+      {% endif %}
     </aside>
   </div>
 {% endblock %}

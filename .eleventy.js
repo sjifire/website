@@ -185,18 +185,33 @@ module.exports = function (eleventyConfig) {
           else imgSize = 'w_1200,h_800'
           newImgURL = `${siteData.cloudinaryRootUrl}/image/fetch/f_auto,q_auto:good,c_limit,${imgSize}/${siteData.rootUrl}`
           parentDiv = img.parentNode;
-          // parentDiv = img.parentNode;
           const figure = document.createElement("figure");
-          // figure.className = 'post__media'
           figure.innerHTML = `
   <img src="${newImgURL}${img.src}" alt="${img.alt}" title="${img.title}" loading="lazy" />
   <figcaption>
     ${img.title}
   </figcaption>
 `
-          parentDiv.insertBefore(figure, img);
-          parentDiv.removeChild(img);
-          // pNode.removeChild(img)
+          if(parentDiv.localName === 'p'){
+            // markdown adds a <p> for every 2 \n that exist;
+            // this is just a bit of extra cleanup to remove orphaned
+            // <p> which may impact markdown.
+            // we also move the figure up and out of the <p> tag so
+            // you don't have to have two sets of styles, with one for
+            // the figure inside a p tag, and one outside.
+            origParentDiv = parentDiv;
+            parentDiv = parentDiv.parentNode
+
+            parentDiv.insertBefore(figure, origParentDiv);
+            origParentDiv.removeChild(img);
+            if(parentDiv.childNodes.length <= 1 || origParentDiv.innerHTML.trim() === ''){
+              parentDiv.removeChild(origParentDiv);
+            }
+          }else{
+            parentDiv.insertBefore(figure, img);
+            parentDiv.removeChild(img);
+
+          }
           return figure;
         }
         return img;
