@@ -214,6 +214,10 @@ collections:
             modes: [rich_text]
             hint: >-
               Text that appears under the main heading.
+          - label: "Number of News Stories to show"
+            name: "number_news_stories"
+            widget: "select"
+            options: [4, 6, 8, 10, 12]
       - label: "News"
         name: "news"
         delete: false
@@ -236,14 +240,6 @@ collections:
           preview: true
         file: "src/_data/key_information.yml"
         fields:
-          - label: Preamble
-            name: preamble
-            widget: markdown
-            buttons: ['bold', 'italic', 'link']
-            editor_components: []
-            required: false
-            hint: >-
-              Text that appears under the main heading.
           - label: Body
             name: body
             widget: markdown
@@ -297,30 +293,17 @@ collections:
           preview: false
         file: "src/_data/governance.yml"
         fields:
-          - label: Preamble
-            name: preamble
+          - label: Body
+            name: body
             widget: markdown
-            buttons: ['bold', 'italic', 'link']
-            editor_components: []
-            modes: [rich_text]
-            hint: >-
-              Text that appears under the main heading.
-          - label: About
-            name: about
-            widget: markdown
-            minimal: false
-            buttons: ['bold', 'italic', 'link', 'heading-two', 'heading-three', 'heading-four', 'heading-five', 'heading-six', 'quote', 'bulleted-list', 'numbered-list']
-            editor_components: []
-            modes: [rich_text]
-            hint: "Add a chunk of text (rich text editor)"
-          - label: Commission
-            name: commission
-            widget: markdown
-            minimal: false
-            buttons: ['bold', 'italic', 'link', 'heading-two', 'heading-three', 'heading-four', 'heading-five', 'heading-six', 'quote', 'bulleted-list', 'numbered-list']
-            editor_components: []
-            modes: [rich_text]
-            hint: "Add a chunk of text (rich text editor)"
+            required: false
+          - label: Most Important Documents
+            name: important_documents
+            widget: file
+            allow_multiple: true
+            choose_url: false
+            media_folder: '/src/assets/docs/'
+            public_folder: ''
       - label: "Emergency Services"
         name: "emergency_services"
         delete: false
