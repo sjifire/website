@@ -3,46 +3,39 @@ title: San Juan Island Fire and Rescue
 permalink: /
 ---
 
-{% extends 'base.njk' %}
-
-{% block content %}
-
-  <section class="l-grid l-grid--2col">
-    <div class="l-grid__main">
-      <ul class="l-grid l-grid--auto">
-        {% for post in posts | reverse | limit(8) %}
-          <li class="card">
-            <div class="card__body">
-              <div class="news__type">
-                {% include "post_type_icons.njk" %}
-                {{ post.post_type }}
-              </div>
-              <h3 class="news__headline">
-                <a href="/news/{{ post.date | htmlDateStringISO }}-{{ post.title | slugify }}/">
-                  {{ post.title | safe }}
-                </a>
-              </h3>
-              <time datetime="{{ post.date | htmlDateStringISO }}" pubdate="pubdate" class="news__date">
-                {{ post.date | postDateTerseISO }}
-              </time>
-              <div class="news__lede">
-                {{ post.lede | markdownify | safe }}
-              </div>
-            </div>
-            <div class="card__footer">
-              <a href="/news/{{ post.date | htmlDateStringISO }}-{{ post.title | slugify }}/" class="news__readmore">Read more <svg><use xlink:href="#right-arrow"></svg></a>
-            </div>
-          </li>
-        {% endfor %}
-      </ul>
-    </div>
-    <aside class="l-grid__sidebar">
-      {% include "burn-status-widget.njk" %}
-      {% include "call-stats-widget.njk" %}
-      <div class='embed-responsive embed-responsive-1by2' style="margin-top:40px;">
-        <iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2FSJIFire%2F&tabs=timeline&width=310&height=600&small_header=true&adapt_container_width=true&hide_cover=false&show_facepile=false&appId" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" loading="lazy" title="SJIFire Facebook Page"></iframe>
-      </div>
-    </aside>
-  </section>
-
+{% block sidebar_content %}
+  {% include "burn-status-widget.njk" %}
+  {% include "call-stats-widget.njk" %}
+  <div class='embed-responsive embed-responsive-1by2' style="margin-top:40px;">
+    <iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2FSJIFire%2F&tabs=timeline&width=310&height=600&small_header=true&adapt_container_width=true&hide_cover=false&show_facepile=false&appId" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" loading="lazy" title="SJIFire Facebook Page"></iframe>
 {% endblock %}
+
+{% block main_content %}
+  <ul class="l-grid l-grid--auto">
+    {% for post in posts | reverse | limit(8) %}
+      <li class="card">
+        <div class="card__body">
+          <div class="news__type">
+            {% include "post_type_icons.njk" %}
+            {{ post.post_type }}
+          </div>
+          <h3 class="news__headline">
+            <a href="/news/{{ post.date | htmlDateStringISO }}-{{ post.title | slugify }}/">
+              {{ post.title | safe }}
+            </a>
+          </h3>
+          <time datetime="{{ post.date | htmlDateStringISO }}" pubdate="pubdate" class="news__date">
+            {{ post.date | postDateTerseISO }}
+          </time>
+          <div class="news__lede">
+            {{ post.lede | markdownify | safe }}
+          </div>
+        </div>
+        <div class="card__footer">
+          <a href="/news/{{ post.date | htmlDateStringISO }}-{{ post.title | slugify }}/" class="news__readmore">Read more <svg><use xlink:href="#right-arrow"></svg></a>
+        </div>
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}
+{% extends "default_two_col_page.njk" %}
