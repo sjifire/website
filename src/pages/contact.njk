@@ -11,7 +11,7 @@ permalink: "/contact/index.html"
       <h1>
         {{ title | safe }}
       </h1>
-      {{ contact.copy | markdownify | safe }}
+      {{ contact.body | markdownify | safe }}
       <form name="contact" method="POST" netlify-honeypot="bot-field" data-netlify="true" action="/thank-you/">
         <p class="sr-only">
           <label>Don't fill this out if you're human: <input name="bot-field" /></label>
