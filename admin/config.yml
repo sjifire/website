@@ -258,7 +258,7 @@ collections:
           - label: Sidebar
             name: sidebar
             widget: markdown
-            required: true
+            required: false
       - label: "Incidents"
         name: "incidents"
         delete: false
@@ -277,7 +277,7 @@ collections:
           - label: Body
             name: body
             widget: markdown
-            required: false
+            required: true
       - label: "Governance"
         name: "governance"
         delete: false
@@ -285,17 +285,31 @@ collections:
           preview: false
         file: "src/_data/governance.yml"
         fields:
+          - label: "Important Documents"
+            name: "important_documents"
+            widget: "list"
+            summary: '{{fields.file}}'
+            hint: "Highlight Important Documents"
+            allow_add: true
+            add_to_top: true
+            fields:
+              - label: Title
+                name: title
+                widget: string
+                required: true
+              - label: File
+                name: file
+                widget: file
+                allow_multiple: false
+                choose_url: false
+                media_folder: '/src/assets/docs/'
+                public_folder: ''
+
+
           - label: Body
             name: body
             widget: markdown
-            required: false
-          - label: Most Important Documents
-            name: important_documents
-            widget: file
-            allow_multiple: true
-            choose_url: false
-            media_folder: '/src/assets/docs/'
-            public_folder: ''
+            required: true
       - label: "Emergency Services"
         name: "emergency_services"
         delete: false
@@ -303,14 +317,6 @@ collections:
           preview: true
         file: "src/_data/emergency_services.yml"
         fields:
-          - label: Preamble
-            name: preamble
-            widget: markdown
-            buttons: ['bold', 'italic', 'link']
-            editor_components: []
-            required: false
-            hint: >-
-              Text that appears under the main heading.
           - label: Body
             name: body
             widget: markdown
@@ -322,14 +328,6 @@ collections:
           preview: true
         file: "src/_data/burn_permits.yml"
         fields:
-          - label: Preamble
-            name: preamble
-            widget: markdown
-            buttons: ['bold', 'italic', 'link']
-            editor_components: []
-            required: false
-            hint: >-
-              Text that appears under the main heading.
           - label: Body
             name: body
             widget: markdown
@@ -341,14 +339,6 @@ collections:
           preview: true
         file: "src/_data/firewise.yml"
         fields:
-          - label: Preamble
-            name: preamble
-            widget: markdown
-            buttons: ['bold', 'italic', 'link']
-            editor_components: []
-            required: false
-            hint: >-
-              Text that appears under the main heading.
           - label: Body
             name: body
             widget: markdown
