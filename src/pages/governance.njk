@@ -6,18 +6,18 @@ permalink: "/about/governance/index.html"
 {% set pageData = governance %}
 
 {% block sidebar_content %}
-{#
-  <h4 class="sidebar__heading">Important Documents</h4>
-  <ul>
-    {% for i in range(0,5) %}
-      <li>
-        <a href="/assets/docs/document-{{ i }}" target="_blank">
-          Document #{{ i }}
-        </a>
-      </li>
-    {% endfor %}
-  </ul>
-#}
+  {% if governance.important_documents.length %}
+    <h4 class="sidebar__heading">Important Documents</h4>
+    <ul>
+      {% for doc in governance.important_documents %}
+        <li>
+          <a href="/assets/docs/{{ doc.file }}">
+            {{ doc.title }}
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
   <h4 class="sidebar__heading">Upcoming Meetings</h4>
   {% if collections.futureMeetings.length %}
     <dl class="sidebar__desc-list">
