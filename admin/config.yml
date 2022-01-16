@@ -217,7 +217,7 @@ collections:
           - label: "Number of News Stories to show"
             name: "number_news_stories"
             widget: "select"
-            options: [4, 6, 8, 10, 12]
+            options: ["4", "6", "8", "10", "12"]
       - label: "News"
         name: "news"
         delete: false
