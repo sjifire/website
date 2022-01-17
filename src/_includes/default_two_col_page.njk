@@ -19,7 +19,7 @@
       {% endblock %}
     </div>
 
-    <aside class="l-grid__sidebar block-content">
+    <aside class="l-grid__sidebar">
       {% if pageData.sidebar %}
         {{ pageData.sidebar | markdownify | safe }}
       {% endif %}
