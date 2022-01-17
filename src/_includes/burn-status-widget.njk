@@ -8,8 +8,8 @@
             Fire Safety
           </h4>
           <div class="timeframe">
-            Burn Season: {{ configs.burn_season_start | postDateTerseNoYearISO -}}-
-            {{- configs.burn_season_end | postDateTerseNoYearISO }}
+            Burn Season: {{ burn_permits.burn_season_start | postDateTerseNoYearISO -}}-
+            {{- burn_permits.burn_season_end | postDateTerseNoYearISO }}
           </div>
         </div>
       </div>
@@ -20,32 +20,32 @@
       <th>
         Fire Danger
       </th>
-      <td class="level level--{{configs.fire_status | slugify}}">
-        {{ configs.fire_status }}
+      <td class="level level--{{burn_permits.fire_status | slugify}}">
+        {{ burn_permits.fire_status }}
       </td>
     </tr>
     <tr class="even">
       <th>
         Recreational Campfires
       </th>
-      <td class="level level--{{configs.rec_campfire_status | slugify}}">
-        {{ configs.rec_campfire_status }}
+      <td class="level level--{{burn_permits.rec_campfire_status | slugify}}">
+        {{ burn_permits.rec_campfire_status }}
       </td>
     </tr>
     <tr class="odd">
       <th>
         Residential Burn Permits
       </th>
-      <td class="level level--{{configs.burn_ban_status | slugify}}">
-        {{ configs.burn_ban_status }}
+      <td class="level level--{{burn_permits.burn_ban_status | slugify}}">
+        {{ burn_permits.burn_ban_status }}
       </td>
     </tr>
     <tr class="even">
       <th>
         Commercial Burn Permits
       </th>
-      <td class="level level--{{configs.commercial_burn_ban_status | slugify}}">
-        {{ configs.commercial_burn_ban_status }}
+      <td class="level level--{{burn_permits.commercial_burn_ban_status | slugify}}">
+        {{ burn_permits.commercial_burn_ban_status }}
       </td>
     </tr>
   </tbody>
