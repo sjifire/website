@@ -105,6 +105,7 @@ body {
   background-color: var(--dk-red);
   background-repeat:  no-repeat;
   background-position: top center;
+  background-attachment: fixed;
   background-size: cover;
 }
 
@@ -221,11 +222,11 @@ body {
   white-space: nowrap;
 }
 .submenu-active {
-  background-color: var(--black);
+  background-color: rgba(0,0,0,0.55);
   border-radius: 4px;
 }
 .submenu-active > .submenu {
-  background-color: var(--black);
+  /* background-color: var(--dk-red); */
   border-radius: 4px;
 }
 .submenu-active > a {
