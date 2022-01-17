@@ -509,8 +509,8 @@ collections:
         default: ''
         hint: release date
         required: true
-      - label: "Documents"
-        name: "documents"
+      - label: "Document"
+        name: "document"
         widget: file
         pattern: ['.pdf$', "Must end with '.pdf'"]
         hint: must be a pdf

@@ -71,18 +71,17 @@ permalink: "/news/{% if pagination.pageNumber > 0 %}page-{{ pagination.pageNumbe
       {% endif %}
     </div>
     <aside class="l-grid__sidebar">
-      {% set years = ['2022','2021','2020','2019'] %}
-      {% for year in years %}
+      {% for year, set in media_releases | groupby('year') | dictsort | reverse %}
         <details class="block-content" {{ 'open' if loop.first }}>
-          <summary class="sidebar__heading">Press Releases: {{ year }}</summary>
+          <summary class="sidebar__heading">Media Releases: {{ year }}</summary>
           <dl class="sidebar__desc-list">
-            {% for i in range(0,2) %}
+            {% for media_release in set | reverse %}
               <dt>
-                January {{ range(1, 31) | random }}
+                {{ media_release.date | postDateTerseNoYearISO }}
               </dt>
               <dd>
-                <a href="#">
-                  Lorem ipsum sit dolores
+                <a href="/assets/docs/{{ media_release.file }}">
+                  {{ media_release.title }}
                 </a>
               </dd>
             {% endfor %}
