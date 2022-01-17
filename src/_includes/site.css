@@ -223,11 +223,6 @@ body {
 }
 .submenu-active {
   background-color: rgba(0,0,0,0.55);
-  border-radius: 4px;
-}
-.submenu-active > .submenu {
-  /* background-color: var(--dk-red); */
-  border-radius: 4px;
 }
 .submenu-active > a {
   color: white;
@@ -259,6 +254,9 @@ body {
   }
   .submenu-active > li > a, .submenu-active > li > a::after {
     color: white;
+  }
+  .submenu-active {
+    background: var(--black);
   }
   .submenu-active .submenu {
     display: block;
