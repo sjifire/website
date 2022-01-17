@@ -11,60 +11,85 @@ permalink: "/news/{% if pagination.pageNumber > 0 %}page-{{ pagination.pageNumbe
 {% extends 'base.njk' %}
 
 {% block content %}
-  <header class="hgroup">
-    <h1>
-      {{ title | safe }}
-    </h1>
-    <div class="lede">
-      {{ news.preamble | markdownify | safe }}
-    </div>
-  </header>
-  <ul class="l-grid l-grid--auto">
-    {% for post in pagination.items %}
-      <li class="card">
-        <div class="card__body">
-          <div class="news__type">
-            {% include "post_type_icons.njk" %}
-            {{ post.post_type }}
-          </div>
-          <h3 class="news__headline">
-            <a href="/news/{{ post.date | htmlDateStringISO }}-{{ post.title | slugify }}/">
-              {{ post.title | safe }}
-            </a>
-          </h3>
-          <time datetime="{{ post.date | htmlDateStringISO }}" pubdate="pubdate" class="news__date">
-            {{ post.date | postDateTerseISO }}
-          </time>
-          <div class="news__lede">
-            {{ post.lede | markdownify | safe }}
-          </div>
+  <div class="l-grid l-grid--2col">
+    <div class="l-grid__main block-content">
+      <header class="hgroup">
+        <h1>
+          {{ title | safe }}
+        </h1>
+        <div class="lede">
+          {{ news.preamble | markdownify | safe }}
         </div>
-        <div class="card__footer">
-          <a href="/news/{{ post.date | htmlDateStringISO }}-{{ post.title | slugify }}/" class="news__readmore">Read more <svg><use xlink:href="#right-arrow"></svg></a>
-        </div>
-      </li>
-    {% endfor %}
-  </ul>
+      </header>
+      <ul class="l-grid l-grid--auto">
+        {% for post in pagination.items %}
+          <li class="card">
+            <div class="card__body">
+              <div class="news__type">
+                {% include "post_type_icons.njk" %}
+                {{ post.post_type }}
+              </div>
+              <h3 class="news__headline">
+                <a href="/news/{{ post.date | htmlDateStringISO }}-{{ post.title | slugify }}/">
+                  {{ post.title | safe }}
+                </a>
+              </h3>
+              <time datetime="{{ post.date | htmlDateStringISO }}" pubdate="pubdate" class="news__date">
+                {{ post.date | postDateTerseISO }}
+              </time>
+              <div class="news__lede">
+                {{ post.lede | markdownify | safe }}
+              </div>
+            </div>
+            <div class="card__footer">
+              <a href="/news/{{ post.date | htmlDateStringISO }}-{{ post.title | slugify }}/" class="news__readmore">Read more <svg><use xlink:href="%right-arrow"></svg></a>
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
 
-  {% if pagination.href.previous or pagination.href.next %}
-    <nav class="pagination">
-      {% if pagination.href.previous %}
-        <a href="{{ pagination.href.previous | url }}">«</a>
-      {% else %}
-        <span>«</span>
+      {% if pagination.href.previous or pagination.href.next %}
+        <nav class="pagination">
+          {% if pagination.href.previous %}
+            <a href="{{ pagination.href.previous | url }}">«</a>
+          {% else %}
+            <span>«</span>
+          {% endif %}
+        {%- for pageEntry in pagination.pages %}
+          {% if page.url == pagination.hrefs[ loop.index0 ] %}
+            <span>{{ loop.index }}</span>
+          {% else %}
+            <a href="{{ pagination.hrefs[ loop.index0 ] | url }}">{{ loop.index }}</a>
+          {% endif %}
+        {%- endfor %}
+          {% if pagination.href.next %}
+            <a href="{{ pagination.href.next | url }}">»</a>
+          {% else %}
+            <span>»</span>
+          {% endif %}
+        </nav>
       {% endif %}
-    {%- for pageEntry in pagination.pages %}
-      {% if page.url == pagination.hrefs[ loop.index0 ] %}
-        <span>{{ loop.index }}</span>
-      {% else %}
-        <a href="{{ pagination.hrefs[ loop.index0 ] | url }}">{{ loop.index }}</a>
-      {% endif %}
-    {%- endfor %}
-      {% if pagination.href.next %}
-        <a href="{{ pagination.href.next | url }}">»</a>
-      {% else %}
-        <span>»</span>
-      {% endif %}
-    </nav>
-  {% endif %}
+    </div>
+    <aside class="l-grid__sidebar">
+      {% set years = ['2022','2021','2020','2019'] %}
+      {% for year in years %}
+        <details class="block-content" {{ 'open' if loop.first }}>
+          <summary class="sidebar__heading">Press Releases: {{ year }}</summary>
+          <dl class="sidebar__desc-list">
+            {% for i in range(0,2) %}
+              <dt>
+                January {{ range(1, 31) | random }}
+              </dt>
+              <dd>
+                <a href="#">
+                  Lorem ipsum sit dolores
+                </a>
+              </dd>
+            {% endfor %}
+          </ul>
+        </details>
+      {% endfor %}
+    </aside>
+  </div>
 {% endblock %}
+
