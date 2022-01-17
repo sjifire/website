@@ -346,14 +346,6 @@ collections:
           preview: true
         file: "src/_data/fire_alarms.yml"
         fields:
-          - label: Preamble
-            name: preamble
-            widget: markdown
-            buttons: ['bold', 'italic', 'link']
-            editor_components: []
-            required: false
-            hint: >-
-              Text that appears under the main heading.
           - label: Body
             name: body
             widget: markdown
@@ -365,14 +357,6 @@ collections:
           preview: true
         file: "src/_data/knoxbox.yml"
         fields:
-          - label: Preamble
-            name: preamble
-            widget: markdown
-            buttons: ['bold', 'italic', 'link']
-            editor_components: []
-            required: false
-            hint: >-
-              Text that appears under the main heading.
           - label: Body
             name: body
             widget: markdown
@@ -384,16 +368,8 @@ collections:
           preview: true
         file: "src/_data/contact.yml"
         fields:
-          - label: Preamble
-            name: preamble
-            widget: markdown
-            buttons: ['bold', 'italic', 'link']
-            editor_components: []
-            modes: [rich_text]
-            hint: >-
-              Text that appears under the main heading.
-          - label: Copy
-            name: copy
+          - label: Body
+            name: body
             widget: markdown
             minimal: false
             required: true

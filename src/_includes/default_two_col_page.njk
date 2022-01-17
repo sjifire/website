@@ -13,20 +13,19 @@
           </div>
         {% endif %}
         {{ pageData.body | markdownify | safe }}
-      {% else %}
-        {% block main_content %}
-          {{ main_content | safe }}
-        {% endblock %}
       {% endif %}
+      {% block main_content %}
+        {{ main_content | safe }}
+      {% endblock %}
     </div>
+
     <aside class="l-grid__sidebar">
       {% if pageData.sidebar %}
         {{ pageData.sidebar | markdownify | safe }}
-      {% else %}
-        {% block sidebar_content %}
-          {{ sidebar_content | safe }}
-        {% endblock %}
       {% endif %}
+      {% block sidebar_content %}
+        {{ sidebar_content | safe }}
+      {% endblock %}
     </aside>
   </div>
 {% endblock %}
