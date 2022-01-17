@@ -278,6 +278,7 @@ collections:
             label: "Fire Danger Status"
             widget: "select"
             options: ["Low", "Moderate", "High", "Very High", "Extreme"]
+            preview: false
           - label: Burn Season Start
             name: burn_season_start
             widget: datetime
@@ -285,6 +286,7 @@ collections:
             time_format: false
             format: "YYYY-MM-DD"
             picker_utc: true
+            preview: false
           - label: Burn Season End
             name: burn_season_end
             widget: datetime
@@ -292,22 +294,27 @@ collections:
             time_format: false
             format: "YYYY-MM-DD"
             picker_utc: true
+            preview: false
           - name: "burn_ban_status"
             label: "Burn Ban Status"
             widget: "select"
             options: ["Open", "Closed"]
+            preview: false
           - name: "commercial_burn_ban_status"
             label: "Commercial Burn Ban Status"
             widget: "select"
             options: ["Open", "Closed"]
+            preview: false
           - name: "rec_campfire_status"
             label: "Recreational Campfire Status"
             widget: "select"
             options: ["Open", "Restricted", "Closed"]
+            preview: false
           - label: Body
             name: body
             widget: markdown
             required: true
+            preview: true
       - label: "Firewise"
         name: "firewise"
         delete: false
