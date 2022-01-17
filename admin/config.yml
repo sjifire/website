@@ -153,52 +153,6 @@ collections:
     label: "Pages"
     description: "Edit pages across the site."
     files:
-      - label: "Config Settings"
-        name: "Config Settings"
-        delete: false
-        editor:
-          preview: false
-        file: "src/_data/configs.json"
-        fields:
-          - label: Burn Season Start
-            name: burn_season_start
-            widget: datetime
-            date_format: "YYYY-MM-DD"
-            time_format: false
-            format: "YYYY-MM-DD"
-            picker_utc: true
-          - label: Burn Season End
-            name: burn_season_end
-            widget: datetime
-            date_format: "YYYY-MM-DD"
-            time_format: false
-            format: "YYYY-MM-DD"
-            picker_utc: true
-          - name: "fire_status"
-            label: "Fire Danger Status"
-            widget: "select"
-            options: ["Low", "Moderate", "High", "Very High", "Extreme"]
-          - name: "burn_ban_status"
-            label: "Burn Ban Status"
-            widget: "select"
-            options: ["Open", "Closed"]
-          - name: "commercial_burn_ban_status"
-            label: "Commercial Burn Ban Status"
-            widget: "select"
-            options: ["Open", "Closed"]
-          - name: "rec_campfire_status"
-            label: "Recreational Campfire Status"
-            widget: "select"
-            options: ["Open", "Restricted", "Closed"]
-          - name: "site_name"
-            label: "Site Name"
-            widget: "string"
-          - name: "formal_site_name"
-            label: "Formal Site Name"
-            widget: "string"
-          - name: "site_desc"
-            label: "Site Description"
-            widget: "string"
       - label: "Homepage"
         name: "homepage"
         delete: false
@@ -320,6 +274,36 @@ collections:
           preview: true
         file: "src/_data/burn_permits.yml"
         fields:
+          - name: "fire_status"
+            label: "Fire Danger Status"
+            widget: "select"
+            options: ["Low", "Moderate", "High", "Very High", "Extreme"]
+          - label: Burn Season Start
+            name: burn_season_start
+            widget: datetime
+            date_format: "YYYY-MM-DD"
+            time_format: false
+            format: "YYYY-MM-DD"
+            picker_utc: true
+          - label: Burn Season End
+            name: burn_season_end
+            widget: datetime
+            date_format: "YYYY-MM-DD"
+            time_format: false
+            format: "YYYY-MM-DD"
+            picker_utc: true
+          - name: "burn_ban_status"
+            label: "Burn Ban Status"
+            widget: "select"
+            options: ["Open", "Closed"]
+          - name: "commercial_burn_ban_status"
+            label: "Commercial Burn Ban Status"
+            widget: "select"
+            options: ["Open", "Closed"]
+          - name: "rec_campfire_status"
+            label: "Recreational Campfire Status"
+            widget: "select"
+            options: ["Open", "Restricted", "Closed"]
           - label: Body
             name: body
             widget: markdown
