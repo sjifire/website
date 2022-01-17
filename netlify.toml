@@ -66,6 +66,11 @@
   status = 301
   force = true
 [[redirects]]
+  from = "/board-of-commissioners"
+  to = "/about/governance/"
+  status = 301
+  force = true
+[[redirects]]
   from = "/contact-us"
   to = "/contact/"
   status = 301
