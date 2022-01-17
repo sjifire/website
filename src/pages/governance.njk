@@ -39,7 +39,7 @@ permalink: "/about/governance/index.html"
       {% endfor %}
     </dl>
   {% else %}
-    <p>Next regular scheduled board meeting is tentatively on <strong><span id='next-board-meeting'>{% nextBoardMeetingDate %}</span> at 3pm</strong>.</p>
+    <p>Next regular scheduled board meeting is on <strong><span id='next-board-meeting'>{% nextBoardMeetingDate %}</span> at 3pm</strong>.</p>
   {% endif %}
   {% for year, set in collections.pastMeetings | groupby('year') | dictsort | reverse %}
     <details class="block-content" {{ 'open' if loop.first }}>
