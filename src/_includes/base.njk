@@ -1,5 +1,5 @@
-{% set pageTitle = (configs.site_name if page.url === '/' else title + ' | ' + configs.site_name) | safe %}
-{% set pageDsc = (description or configs.site_desc) | safe %}
+{% set pageTitle = (site.site_name if page.url === '/' else title + ' | ' + site.site_name) | safe %}
+{% set pageDsc = (description or site.site_desc) | safe %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,7 +15,7 @@
   {# og #}
     <meta property="og:url" content="{{ site.prodUrl + page.url}}" key="ogurl" />
     <!-- <meta property="og:image" content={previewImage} key="ogimage" /> -->
-    <meta property="og:site_name" content="{{configs.site_name}}" key="ogsitename" />
+    <meta property="og:site_name" content="{{site.site_name}}" key="ogsitename" />
     <meta property="og:title" content="{{pageTitle}}" key="ogtitle" />
     <meta property="og:description" content="{{ pageDsc }}" key="ogdesc" />
     <link rel="preconnect" href="//www.google-analytics.com" />

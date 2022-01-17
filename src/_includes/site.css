@@ -670,7 +670,7 @@ body {
   color: #81682C;
 }
 .widget__body .level--extreme,
-.widget__body .level--restricted {
+.widget__body .level--closed {
   background-color: #FFE0E0;
   color: var(--dk-red);
 }
