@@ -56,7 +56,7 @@
             </time>
           {% endif %}
           <div class="lede">
-            {{ homepage.preamble | markdownify | safe if page.url === '/' else post.lede | markdownify | safe }}
+            {{ (homepage.preamble if page.url === '/' else post.lede) | markdownify | safe }}
           </div>
       </article>
     </div>
