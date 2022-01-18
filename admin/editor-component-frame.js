@@ -12,7 +12,7 @@ window.NetlifyCmsEditorComponentFrame = {
     label: "Title",
     widget: "string"
   }],
- pattern: /{{< iframe link="(.+?)" title="(.+?)" >}}/,
+ pattern: /{{< iframe link="(.+?)" title="(.+?)" >}}/mi,
  fromBlock: function(match){
     return{
        link: match[1],
@@ -20,7 +20,7 @@ window.NetlifyCmsEditorComponentFrame = {
     };
  },
  toBlock: ({link, title}) =>
-    `{{< iframe link="${link}" title="${title}">}}`,
+    `{{< iframe link="${link}" title="${title}" >}}`,
 
  toPreview: ({link, title}) => {
   return `
