@@ -250,8 +250,7 @@ collections:
                 choose_url: false
                 media_folder: '/src/assets/docs/'
                 public_folder: ''
-
-
+                public_folder: ''
           - label: Body
             name: body
             widget: markdown
