@@ -1,6 +1,6 @@
 window.NetlifyCmsEditorComponentFrame = {
  id:"frame",
- label: "Embedded frameborder",
+ label: "Embedded Frame",
  fields:[
   {
     name: "link",
@@ -12,16 +12,17 @@ window.NetlifyCmsEditorComponentFrame = {
     label: "Title",
     widget: "string"
   }],
- pattern: /{{< iframe link="(.*)" >}}/,
+ pattern: /{{< iframe link="(.+?)" title="(.+?)" >}}/,
  fromBlock: function(match){
     return{
-       link: match[1]
+       link: match[1],
+       title: match[2]
     };
  },
- toBlock: ({link}) =>
-    `{{< iframe link="${link}" >}}`,
+ toBlock: ({link, title}) =>
+    `{{< iframe link="${link}" title="${title}">}}`,
 
- toPreview: ({link}) => {
+ toPreview: ({link, title}) => {
   return `
   <figure class="post__media">
     <div class="embed-responsive embed-responsive-16by9">
