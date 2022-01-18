@@ -4,16 +4,16 @@ window.NetlifyCmsEditorComponentFile = {
   fromBlock: match => {
     if(!match) return {};
     return {
-      filePath: match[3],
-      title: match[2]
+      file: match[2],
+      title: match[1]
     }
   },
   toBlock: function (obj) {
-    markdown = `[${obj.title.replace(/"/g, '\\"')}](${obj.filePath})`;
+    markdown = `[${obj.title.replace(/"/g, '\\"')}](${obj.file})`;
     return markdown;
   },
   // eslint-disable-next-line react/display-name
-  toPreview: ({ filePath, title }, getAsset, fields) => {
+  toPreview: ({ file, title }, getAsset, fields) => {
     const fileField = fields?.find(f => f.get('widget') === 'file');
     const src = getAsset(image, fileField);
     return `<a src=${src || ''}>${title}</a>`;
