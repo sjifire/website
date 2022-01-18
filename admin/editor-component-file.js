@@ -28,6 +28,11 @@ window.NetlifyCmsEditorComponentFile = {
       choose_url: false,
       media_folder: '/src/assets/docs/',
       public_folder: ''
+    },
+    {
+      label: 'Title',
+      name: 'title',
+      required: true
     }
   ]
 };
