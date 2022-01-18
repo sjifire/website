@@ -8,7 +8,8 @@
   },
   permalink: "/news/{{ post.date | htmlDateStringISO }}-{{ post.title | slugify }}/index.html",
   eleventyComputed: {
-    title: "{{ post.title | safe }}"
+    title: "{{ post.title | safe }}",
+    description: "{{ post.lede | safe }}"
   }
 }
 ---
