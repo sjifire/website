@@ -97,7 +97,7 @@
   force = true
 [[redirects]]
   from = "/ems"
-  to = "/news/2022-01-18-san-juan-island-fire-and-rescue-is-an-ems-agency/"
+  to = "/news/2022-01-18-sjifandr-is-an-ems-agency/"
   status = 200
   force = true
 
