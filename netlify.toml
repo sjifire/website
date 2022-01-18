@@ -98,7 +98,7 @@
 [[redirects]]
   from = "/ems"
   to = "/news/2022-01-18-sjifandr-is-an-ems-agency/"
-  status = 200
+  status = 301
   force = true
 
 
