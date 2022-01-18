@@ -67,14 +67,17 @@ collections:
             allow_multiple: false
             choose_url: false
             public_folder: ''
+            required: false
           - label: Width
             name: width
             widget: number
             hint: "What is the width of this image?"
+            required: false
           - label: Height
             name: height
             widget: number
             hint: "What is the height of this image"
+            required: false
       - sections:
         name: "sections"
         widget: "list"
