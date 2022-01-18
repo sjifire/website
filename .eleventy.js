@@ -169,6 +169,20 @@ module.exports = function (eleventyConfig) {
     }
     return content;
   });
+  // const frameEditorComponent = require("./admin/editor-component-frame.js");
+  // eleventyConfig.addTransform('convert HUGO shortcodes', (content, outputPath) => {
+  //   try {
+  //     if (!outputPath || !outputPath.endsWith('.html')) return content;
+  //     while(match = content.match(window.NetlifyCmsEditorComponentFrame.pattern)){
+  //       var block = window.NetlifyCmsEditorComponentFrame.fromBlock(match);
+  //       var replacedHTML = window.NetlifyCmsEditorComponentFrame.toPreview(block);
+  //       content = content.replace(match[0], replacedHTML);//only match the specific version!
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  //   return content;
+  // });
 
   eleventyConfig.addTransform('wrap internal images', (content, outputPath, obj) => {
     try {
