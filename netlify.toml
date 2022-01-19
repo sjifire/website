@@ -102,11 +102,14 @@
   force = true
 [[redirects]]
   from = "/ems"
-  to = "/news/2022-01-18-sjifandr-is-an-ems-agency/"
+  to = "/news/2022-01-18-we-are-an-ems-agency/"
   status = 301
   force = true
-
-
+[[redirects]]
+  from = "/news/2022-01-18-sjifandr-is-an-ems-agency/"
+  to = "/news/2022-01-18-we-are-an-ems-agency/"
+  status = 301
+  force = true
 
 
 # disable for now because:
