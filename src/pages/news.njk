@@ -42,7 +42,7 @@ permalink: "/news/{% if pagination.pageNumber > 0 %}page-{{ pagination.pageNumbe
               </div>
             </div>
             <div class="card__footer">
-              <a href="/news/{{ post.date | htmlDateStringISO }}-{{ post.title | slugify }}/" class="news__readmore">Read more <svg><use xlink:href="%right-arrow"></svg></a>
+              <a href="/news/{{ post.date | htmlDateStringISO }}-{{ post.title | slugify }}/" class="news__readmore">Read more <svg><use xlink:href="#right-arrow"></svg></a>
             </div>
           </li>
         {% endfor %}
