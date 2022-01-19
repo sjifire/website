@@ -81,6 +81,11 @@
   status = 301
   force = true
 [[redirects]]
+  from = "/about-us/"
+  to = "/about/who-we-are/"
+  status = 301
+  force = true
+[[redirects]]
   from = "/about/about-san-juan-fire-and-rescue"
   to = "/about/key-information"
   status = 301
