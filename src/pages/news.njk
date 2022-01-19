@@ -80,7 +80,7 @@ permalink: "/news/{% if pagination.pageNumber > 0 %}page-{{ pagination.pageNumbe
                 {{ media_release.date | postDateTerseNoYearISO }}
               </dt>
               <dd>
-                <a href="/assets/docs/{{ media_release.file }}">
+                <a href="{{ media_release.document }}">
                   {{ media_release.title }}
                 </a>
               </dd>
