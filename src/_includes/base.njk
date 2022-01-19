@@ -14,7 +14,13 @@
     <link rel="icon" type="image/png" href="{{ site.cloudinaryRootUrl + '/image/fetch/f_auto/' + site.rootUrl if helpers.env === 'production' }}/assets/sjifire-logo-clear.png" />
   {# og #}
     <meta property="og:url" content="{{ site.prodUrl + page.url}}" key="ogurl" />
-    <!-- <meta property="og:image" content={previewImage} key="ogimage" /> -->
+    <meta property="og:image" content="
+      {%- if page.fileSlug === 'news-article' %}
+        {{- site.cloudinaryRootUrl + '/image/fetch/f_auto,q_auto:good,c_fill,w_1200,h_630/' + site.rootUrl if helpers.env === 'production' }}/assets/images/{{ post.featured_image.source -}}
+      {% else %}
+        {{- site.cloudinaryRootUrl + '/image/fetch/f_auto,q_auto:good,c_fill,w_1200,h_630/' + site.rootUrl if helpers.env === 'production' }}/assets/images/{{ site.opengraph_image -}}
+      {% endif -%}
+    " key="ogimage" />
     <meta property="og:site_name" content="{{site.site_name}}" key="ogsitename" />
     <meta property="og:title" content="{{pageTitle}}" key="ogtitle" />
     <meta property="og:description" content="{{ pageDsc }}" key="ogdesc" />
