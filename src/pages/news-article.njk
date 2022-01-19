@@ -19,8 +19,9 @@
 {% block content %}
 
   <article class="l-squeezed">
-    {% set baseSections = post.sections %}
-    {% include "sections_block.njk" %}
+    <div class="block-content">
+      {{ post.body | markdownify | safe }}
+    </div
   </article>
 
   <nav class="l-squeezed pagination">
