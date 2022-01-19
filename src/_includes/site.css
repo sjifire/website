@@ -296,6 +296,7 @@ body {
 .page-header .lede {
   font-size: 18px;
   color: rgba(255, 255, 255, 0.75);
+  margin-top: 1rem;
 }
 
 .site-main {
