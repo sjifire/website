@@ -6,6 +6,7 @@ const slugify      = require("slugify");
 const yaml         = require("js-yaml");
 const _            = require("lodash");
 const { parseHTML } = require("linkedom");
+const { minify }    = require("terser");
 
 const isProduction = process.env.ELEVENTY_ENV === `production`;
 
@@ -125,6 +126,13 @@ module.exports = function (eleventyConfig) {
     return nextBoardMeetingDate().toLocaleDateString();
   });
 
+
+  eleventyConfig.addShortcode("imgRoot", function(cloudinary_cmds){
+    // if(helpers.env !== 'production') return ''
+    if(!cloudinary_cmds) cloudinary_cmds = 'f_auto';
+    return `${siteData.cloudinaryRootUrl}/image/fetch/${cloudinary_cmds}/${siteData.rootUrl}`
+  })
+
   // from "@sardine/eleventy-plugin-external-links
   // but adding it for local pdfs
   eleventyConfig.addTransform('external-links', (content, outputPath) => {
@@ -237,6 +245,21 @@ module.exports = function (eleventyConfig) {
     return content;
   });
 
+
+  eleventyConfig.addNunjucksAsyncFilter("jsmin", async function (
+    code,
+    callback
+  ) {
+    try {
+      if(!isProduction) return callback(null, code);
+      const minified = await minify(code);
+      callback(null, minified.code);
+    } catch (err) {
+      console.error("Terser error: ", err);
+      // Fail gracefully.
+      callback(null, code);
+    }
+  });
 
   // Minify HTML Output
   eleventyConfig.addTransform("htmlmin", function(content, outputPath) {
