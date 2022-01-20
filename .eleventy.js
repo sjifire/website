@@ -133,16 +133,15 @@ module.exports = function (eleventyConfig) {
   const imgPath = (assetPath, cloudinaryCmds) => {
     // if(helpers.env !== 'production') return ''
     if(!cloudinaryCmds) cloudinaryCmds = 'f_auto';
-    if(isProduction){
+    if(isProduction && siteData.enable_cloudinary_rewrites){
       return `/optim//${assetPath}?c_param=${cloudinaryCmds}`
     }
     return `${siteData.cloudinaryRootUrl}/image/fetch/${cloudinaryCmds}/${siteData.rootUrl}/${assetPath}`
-    // newImgURL = `${siteData.cloudinaryRootUrl}/image/fetch/f_auto,q_auto:good,c_limit,${imgSize}/${siteData.rootUrl}`
-  }
+  };
 
   eleventyConfig.addShortcode("imgPath", function(assetPath, cloudinaryCmds){
     return imgPath(assetPath, cloudinaryCmds);
-  })
+  });
 
   // from "@sardine/eleventy-plugin-external-links
   // but adding it for local pdfs
