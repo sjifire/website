@@ -133,9 +133,9 @@ module.exports = function (eleventyConfig) {
   const imgPath = (assetPath, cloudinaryCmds) => {
     // if(helpers.env !== 'production') return ''
     if(!cloudinaryCmds) cloudinaryCmds = 'f_auto';
-    if(isProduction){
-      return `/optim/${assetPath}?c_param=${cloudinaryCmds}`
-    }
+    // if(isProduction){
+    //   return `/optim/${assetPath}?c_param=${cloudinaryCmds}`
+    // }
     return `${siteData.cloudinaryRootUrl}/image/fetch/${cloudinaryCmds}/${siteData.rootUrl}/${assetPath}`
     // newImgURL = `${siteData.cloudinaryRootUrl}/image/fetch/f_auto,q_auto:good,c_limit,${imgSize}/${siteData.rootUrl}`
   }
