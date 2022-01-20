@@ -14,6 +14,7 @@
     <link rel="icon" type="image/png" href="{{ site.cloudinaryRootUrl + '/image/fetch/f_auto/' + site.rootUrl if helpers.env === 'production' }}/assets/sjifire-logo-clear.png" />
   {# og #}
     <meta property="og:url" content="{{ site.prodUrl + page.url}}" key="ogurl" />
+    <meta property="og:type" content="website" />
     <meta property="og:image" content="
       {%- if page.fileSlug === 'news-article' %}
         {{- site.cloudinaryRootUrl + '/image/fetch/f_auto,q_auto:good,c_fill,w_1200,h_630/' + site.rootUrl if helpers.env === 'production' }}/assets/images/{{ post.featured_image.source -}}
