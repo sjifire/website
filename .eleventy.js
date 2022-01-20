@@ -127,10 +127,11 @@ module.exports = function (eleventyConfig) {
   });
 
 
-  eleventyConfig.addShortcode("imgRoot", function(cloudinary_cmds){
+  eleventyConfig.addShortcode("imgPath", function(assetPath, cloudinaryCmds){
     // if(helpers.env !== 'production') return ''
-    if(!cloudinary_cmds) cloudinary_cmds = 'f_auto';
-    return `${siteData.cloudinaryRootUrl}/image/fetch/${cloudinary_cmds}/${siteData.rootUrl}`
+    if(!cloudinaryCmds) cloudinaryCmds = 'f_auto';
+    return `/optim/${assetPath}?c_param=${cloudinaryCmds}`
+    // return `${siteData.cloudinaryRootUrl}/image/fetch/${cloudinary_cmds}/${siteData.rootUrl}`
   })
 
   // from "@sardine/eleventy-plugin-external-links
