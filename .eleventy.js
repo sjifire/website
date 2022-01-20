@@ -7,12 +7,16 @@ const yaml         = require("js-yaml");
 const _            = require("lodash");
 const { parseHTML } = require("linkedom");
 const { minify }    = require("terser");
+const nunjucks      = require("nunjucks");
+const fs            = require('fs');
 
 const isProduction = process.env.ELEVENTY_ENV === `production`;
 
 module.exports = function (eleventyConfig) {
   require("dotenv").config();
   siteData = require("./src/_data/site.json");
+  const netlifyConfigs = nunjucks.render('netlify.toml.njk', {site: siteData});
+  fs.writeFileSync('netlify.toml', netlifyConfigs);
 
   eleventyConfig.addDataExtension("yml", contents => yaml.load(contents));
   // eleventyConfig.setDataDeepMerge(true);
