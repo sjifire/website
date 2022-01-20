@@ -7,12 +7,16 @@ const yaml         = require("js-yaml");
 const _            = require("lodash");
 const { parseHTML } = require("linkedom");
 const { minify }    = require("terser");
+const nunjucks      = require("nunjucks");
+const fs            = require('fs');
 
 const isProduction = process.env.ELEVENTY_ENV === `production`;
 
 module.exports = function (eleventyConfig) {
   require("dotenv").config();
   siteData = require("./src/_data/site.json");
+  const netlifyConfigs = nunjucks.render('netlify.toml.njk', {site: siteData});
+  fs.writeFileSync('netlify.toml', netlifyConfigs);
 
   eleventyConfig.addDataExtension("yml", contents => yaml.load(contents));
   // eleventyConfig.setDataDeepMerge(true);
@@ -126,11 +130,18 @@ module.exports = function (eleventyConfig) {
     return nextBoardMeetingDate().toLocaleDateString();
   });
 
-
-  eleventyConfig.addShortcode("imgRoot", function(cloudinary_cmds){
+  const imgPath = (assetPath, cloudinaryCmds) => {
     // if(helpers.env !== 'production') return ''
-    if(!cloudinary_cmds) cloudinary_cmds = 'f_auto';
-    return `${siteData.cloudinaryRootUrl}/image/fetch/${cloudinary_cmds}/${siteData.rootUrl}`
+    if(!cloudinaryCmds) cloudinaryCmds = 'f_auto';
+    if(isProduction){
+      return `/optim/${assetPath}?c_param=${cloudinaryCmds}`
+    }
+    return `${siteData.cloudinaryRootUrl}/image/fetch/${cloudinaryCmds}/${siteData.rootUrl}/${assetPath}`
+    // newImgURL = `${siteData.cloudinaryRootUrl}/image/fetch/f_auto,q_auto:good,c_limit,${imgSize}/${siteData.rootUrl}`
+  }
+
+  eleventyConfig.addShortcode("imgPath", function(assetPath, cloudinaryCmds){
+    return imgPath(assetPath, cloudinaryCmds);
   })
 
   // from "@sardine/eleventy-plugin-external-links
@@ -205,11 +216,14 @@ module.exports = function (eleventyConfig) {
           if(/small_img/i.test(img.className)) imgSize = 'w_400,h_200'
           else if(/med_img/i.test(img.className)) imgSize = 'w_800,h_400'
           else imgSize = 'w_1200,h_800'
-          newImgURL = `${siteData.cloudinaryRootUrl}/image/fetch/f_auto,q_auto:good,c_limit,${imgSize}/${siteData.rootUrl}`
+          cloudinaryCmds = `f_auto,q_auto:good,c_limit,${imgSize}`;
+          newImgURL = imgPath(img.src, cloudinaryCmds);
+          // newImgURL = imgPath(img.src.replace('/assets', ''), cloudinaryCmds);
+          // newImgURL = `${siteData.cloudinaryRootUrl}/image/fetch/f_auto,q_auto:good,c_limit,${imgSize}/${siteData.rootUrl}`
           parentDiv = img.parentNode;
           const figure = document.createElement("figure");
           figure.innerHTML = `
-  <img src="${newImgURL}${img.src}" alt="${img.alt}" title="${img.title}" loading="lazy" />
+  <img src="${newImgURL}" alt="${img.alt}" title="${img.title}" loading="lazy" />
   <figcaption>
     ${img.title}
   </figcaption>

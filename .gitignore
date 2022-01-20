@@ -1,6 +1,7 @@
 # build artefacts
 /public
 /_site
+/netlify.toml
 
 # dev stuff
 _datacache
