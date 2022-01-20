@@ -133,8 +133,10 @@ module.exports = function (eleventyConfig) {
   const imgPath = (assetPath, cloudinaryCmds) => {
     // if(helpers.env !== 'production') return ''
     if(!cloudinaryCmds) cloudinaryCmds = 'f_auto';
-    return `/optim/${assetPath}?c_param=${cloudinaryCmds}`
-    // return `${siteData.cloudinaryRootUrl}/image/fetch/${cloudinary_cmds}/${siteData.rootUrl}`
+    if(isProduction){
+      return `/optim/${assetPath}?c_param=${cloudinaryCmds}`
+    }
+    return `${siteData.cloudinaryRootUrl}/image/fetch/${cloudinaryCmds}/${siteData.rootUrl}/${assetPath}`
     // newImgURL = `${siteData.cloudinaryRootUrl}/image/fetch/f_auto,q_auto:good,c_limit,${imgSize}/${siteData.rootUrl}`
   }
 
@@ -215,7 +217,8 @@ module.exports = function (eleventyConfig) {
           else if(/med_img/i.test(img.className)) imgSize = 'w_800,h_400'
           else imgSize = 'w_1200,h_800'
           cloudinaryCmds = `f_auto,q_auto:good,c_limit,${imgSize}`;
-          newImgURL = imgPath(img.src.replace('/assets', ''), cloudinaryCmds);
+          newImgURL = imgPath(img.src, cloudinaryCmds);
+          // newImgURL = imgPath(img.src.replace('/assets', ''), cloudinaryCmds);
           // newImgURL = `${siteData.cloudinaryRootUrl}/image/fetch/f_auto,q_auto:good,c_limit,${imgSize}/${siteData.rootUrl}`
           parentDiv = img.parentNode;
           const figure = document.createElement("figure");

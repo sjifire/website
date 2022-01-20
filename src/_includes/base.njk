@@ -11,15 +11,15 @@
   {# meta-desc #}
     <meta name="description" content="{{ pageDsc }}" />
   {# icon tags #}
-    <link rel="icon" type="image/png" href="{% imgPath 'sjifire-logo-clear.png' %}" />
+    <link rel="icon" type="image/png" href="{% imgPath '/assets/sjifire-logo-clear.png' %}" />
   {# og #}
     <meta property="og:url" content="{{ site.prodUrl + page.url}}" key="ogurl" />
     <meta property="og:type" content="website" />
     <meta property="og:image" content="
       {%- if page.fileSlug === 'news-article' and post.featured_image.source %}
-        {%- imgPath '/images/' + post.featured_image.source, 'f_auto,q_auto:good,c_fill,w_1200,h_630' -%}
+        {%- imgPath '/assets/images/' + post.featured_image.source, 'f_auto,q_auto:good,c_fill,w_1200,h_630' -%}
       {% else %}
-        {%- imgPath '/images/' + site.opengraph_image, 'f_auto,q_auto:good,c_fill,w_1200,h_630' -%}
+        {%- imgPath '/assets/images/' + site.opengraph_image, 'f_auto,q_auto:good,c_fill,w_1200,h_630' -%}
       {% endif -%}" key="ogimage" />
     <meta property="og:site_name" content="{{site.site_name}}" key="ogsitename" />
     <meta property="og:title" content="{{pageTitle}}" key="ogtitle" />
@@ -46,7 +46,7 @@
 
   {% if page.fileSlug === 'news-article' and post.featured_image != "" %}
     <figure class="featured__media">
-      <img src="{% imgPath 'images/' + post.featured_image.source, 'f_auto,c_limit,w_900,h_500' %}" alt="{{ post.featured_image.alt }}" loading="eager">
+      <img src="{% imgPath '/assets/images/' + post.featured_image.source, 'f_auto,c_limit,w_900,h_500' %}" alt="{{ post.featured_image.alt }}" loading="eager">
     </figure>
   {% endif %}
 
