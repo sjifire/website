@@ -122,7 +122,29 @@
   to = "{{site.cloudinaryRootUrl}}/image/fetch/f_auto/{{site.rootUrl}}/:splat"
   status = 200
 
+[[redirects]]
+  from = "/optim2/*"
+  query = {c_param = ":c_param"}
+  to = "{{site.cloudinaryRootUrl}}/image/fetch/:c_param/{{site.rootUrl}}:splat"
+  status = 200
 
+[[redirects]]
+  from = "/optim2/*"
+  to = "{{site.cloudinaryRootUrl}}/image/fetch/f_auto/{{site.rootUrl}}/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/optim3/*"
+  query = {c_param = ":c_param"}
+  to = "{{site.cloudinaryRootUrl}}/image/fetch/:c_param/{{site.rootUrl}}:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/optim3/*"
+  to = "{{site.cloudinaryRootUrl}}/image/fetch/f_auto/{{site.rootUrl}}/:splat"
+  status = 301
+  force = true
 
 # disable for now because:
 #  - it causes admin sub-domain to not deploy
