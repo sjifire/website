@@ -18,11 +18,21 @@
 
 {% block content %}
 
-  <article class="l-squeezed">
-    <div class="block-content">
+  {% if post.sidebar_template_include %}
+    <div class="l-grid l-grid--2col">
+      <div class="l-grid__main block-content">
+        {{ post.body | markdownify | safe }}
+      </div>
+
+      <aside class="l-grid__sidebar">
+        {% include post.sidebar_template_include %}
+      </aside>
+    </div>
+  {% else %}
+    <article class="l-squeezed block-content">
       {{ post.body | markdownify | safe }}
-    </div
-  </article>
+    </article>
+  {% endif %}
 
   <nav class="l-squeezed pagination">
     {% if pagination.href.previous %}
