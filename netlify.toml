@@ -112,6 +112,12 @@
   force = true
 
 
+[[redirects]]
+  from = "/optim/* c_param=:c_param"
+  to = "https://res.cloudinary.com/san-juan-fire-district-3/image/fetch/:c_param/https://sjifire.netlify.app/assets/:splat"
+  status = 200
+
+
 # disable for now because:
 #  - it causes admin sub-domain to not deploy
 #  - it is REALLY expensive to run and we'll run out of build minutes
