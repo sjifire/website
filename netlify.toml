@@ -117,10 +117,15 @@
   to = "https://res.cloudinary.com/san-juan-fire-district-3/image/fetch/f_auto/https://sjifire.netlify.app/assets/:splat"
   status = 200
 
-#[[redirects]]
-#  from = "/optim/* c_param=:c_param"
-#  to = "https://res.cloudinary.com/san-juan-fire-district-3/image/fetch/:c_param/https://sjifire.netlify.app/assets/:splat"
-#  status = 200
+[[redirects]]
+  from = "/optim/*"
+  to = "https://res.cloudinary.com/san-juan-fire-district-3/image/fetch/f_auto/https://sjifire.netlify.app/assets/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/optim/* c_param=:c_param"
+  to = "https://res.cloudinary.com/san-juan-fire-district-3/image/fetch/:c_param/https://sjifire.netlify.app/assets/:splat"
+  status = 200
 
 
 # disable for now because:
