@@ -130,6 +130,8 @@ module.exports = function (eleventyConfig) {
     return nextBoardMeetingDate().toLocaleDateString();
   });
 
+  // SEE: https://github.com/sjifire/website/issues/127
+  // for side-effects of using netlify rewrites.
   const imgPath = (assetPath, cloudinaryCmds) => {
     // if(helpers.env !== 'production') return ''
     if(!cloudinaryCmds) cloudinaryCmds = 'f_auto';
