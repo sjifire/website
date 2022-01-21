@@ -23,7 +23,8 @@
     "markdown-it-video": "^0.6.3",
     "playwright": "^1.17.2",
     "terser": "^5.10.0",
-    "winston": "^3.4.0"
+    "winston": "^3.4.0",
+    "yargs": "^17.3.1"
   },
   "devDependencies": {
     "chai": "^4.3.4",
