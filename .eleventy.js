@@ -136,8 +136,11 @@ module.exports = function (eleventyConfig) {
     // if(helpers.env !== 'production') return ''
     if(!cloudinaryCmds) cloudinaryCmds = 'f_auto';
     if(isProduction && siteData.enable_cloudinary_rewrites){
+      // the double // seems to help with the path rewrites for cloudinary
       return `/optim//${assetPath}?c_param=${cloudinaryCmds}`
     }
+    //HOWEVER, a double // seems to make it hard for Cloudinary to find the src img... so stripping
+    assetPath = assetPath.replace(/^\//, '');
     return `${siteData.cloudinaryRootUrl}/image/fetch/${cloudinaryCmds}/${siteData.rootUrl}/${assetPath}`
   };
 
