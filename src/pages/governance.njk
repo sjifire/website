@@ -47,7 +47,7 @@ permalink: "/about/governance/index.html"
   </div>
   <div class="sidebar-block">
     {% for year, set in collections.pastMeetings | groupby('year') | dictsort | reverse %}
-      <details class="block-content" {{ 'open' if loop.first }}>
+      <details class="sidebar__accordion" {{ 'open' if loop.first }}>
         <summary class="sidebar__heading">Past Meetings: {{ year }}</summary>
         <dl class="sidebar__desc-list">
           {% for meeting in set %}
