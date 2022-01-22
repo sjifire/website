@@ -490,7 +490,7 @@ body {
   }
 }
 
-.l-grid__sidebar > * + .sidebar__heading, .l-grid__sidebar > * + details, .l-grid__sidebar > * + .widget {
+.sidebar-block + .sidebar-block {
   margin-top: 30px;
 }
 
