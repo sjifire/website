@@ -717,6 +717,9 @@ body {
   margin-block: 1.25rem;
 }
 
+.block-content li + li {
+  margin-block: 0.75rem;
+}
 
 .post__media + .post__media, .post__media + .post__copy, .post__copy + .post__media {
   margin-block: 1.55rem;
