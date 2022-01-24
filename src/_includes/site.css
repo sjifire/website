@@ -490,7 +490,7 @@ body {
   }
 }
 
-.l-grid__sidebar > * + .sidebar__heading, .l-grid__sidebar > * + details, .l-grid__sidebar > * + .widget {
+.sidebar-block + .sidebar-block {
   margin-top: 30px;
 }
 
@@ -508,8 +508,13 @@ body {
   color: var(--muted-gray);
 }
 
+.sidebar__accordion + .sidebar__accordion {
+  margin-top: 0.75rem;
+}
+
 .sidebar__desc-list {
-  padding-left: 1rem;
+  margin: 0.75rem 0 1.5rem;
+  padding-left: 1.2rem;
 }
 
 .sidebar__desc-list dt {
