@@ -100,11 +100,12 @@ body {
 }
 
 .site-header--home {
-  background-blend-mode: multiply, luminosity;
-  background-image: url('/assets/images/bg-home-header.jpg');
+  --home-header-bg-image: url("https://res.cloudinary.com/san-juan-fire-district-3/w_800,q_auto:eco,e_grayscale/bg-home-header_o8fjpt.jpg");
+  background-blend-mode: multiply,luminosity;
+  background-image: var(--home-header-bg-image);
   background-color: var(--dk-red);
   background-repeat:  no-repeat;
-  background-position: top center;
+  background-position: center center;
   background-attachment: fixed;
   background-size: cover;
 }
