@@ -66,7 +66,7 @@
   {% set js %}
     {% include "nav-js.njk" %}
     {% if page.url === '/' %}
-      const imgs = [{{ site.home_header_backgrounds | join(',')}];
+      const imgs = [{{ site.home_header_backgrounds | join(',')}}];
       const random = Math.floor(Math.random() * imgs.length);
       const image = imgs[random]
       document.getElementById('home-header').style.setProperty('--home-header-bg-image', 'url('+image+')');
