@@ -5,7 +5,7 @@
 <nav class="rap">
   <ul class="menu">
     <li class="logo">
-      <a href="/"><img src="{{ 'https://res.cloudinary.com/san-juan-fire-district-3/image/fetch/f_auto/' + site.rootUrl if helpers.env === 'production' }}/assets/sjifire-logo-clear.png" width="320" height="317" alt="San Juan Island Fire and Rescue Logo"></a>
+      <a href="/"><img src="{% imgPath '/assets/sjifire-logo-clear.png' %}" width="320" height="317" alt="San Juan Island Fire and Rescue Logo"></a>
     </li>
     <li class="item has-submenu{{ ' active' if page.url.includes('/about/') }}">
       <a tabindex="0">About</a>

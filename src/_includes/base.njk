@@ -11,10 +11,16 @@
   {# meta-desc #}
     <meta name="description" content="{{ pageDsc }}" />
   {# icon tags #}
-    <link rel="icon" type="image/png" href="{{ site.cloudinaryRootUrl + '/image/fetch/f_auto/' + site.rootUrl if helpers.env === 'production' }}/assets/sjifire-logo-clear.png" />
+    <link rel="icon" type="image/png" href="{% imgPath '/assets/sjifire-logo-clear.png' %}" />
   {# og #}
     <meta property="og:url" content="{{ site.prodUrl + page.url}}" key="ogurl" />
-    <!-- <meta property="og:image" content={previewImage} key="ogimage" /> -->
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="
+      {%- if page.fileSlug === 'news-article' and post.featured_image.source %}
+        {%- imgPath '/assets/images/' + post.featured_image.source, 'f_auto,q_auto:good,c_fill,w_1200,h_630' -%}
+      {% else %}
+        {%- imgPath '/assets/images/' + site.opengraph_image, 'f_auto,q_auto:good,c_fill,w_1200,h_630' -%}
+      {% endif -%}" key="ogimage" />
     <meta property="og:site_name" content="{{site.site_name}}" key="ogsitename" />
     <meta property="og:title" content="{{pageTitle}}" key="ogtitle" />
     <meta property="og:description" content="{{ pageDsc }}" key="ogdesc" />
@@ -38,9 +44,9 @@
     {% include "header.njk" %}
   </header>
 
-  {% if page.fileSlug === 'news-article' %}
+  {% if page.fileSlug === 'news-article' and post.featured_image != "" %}
     <figure class="featured__media">
-      <img src="{{ site.cloudinaryRootUrl + '/image/fetch/f_auto,q_auto:good,c_limit,w_900,h_500/' + site.rootUrl if helpers.env === 'production' }}/assets/images/{{ post.featured_image.source }}" alt="{{ post.featured_image.alt }}" width="{{ post.featured_image.width }}" height="{{ post.featured_image.height }}" loading="eager">
+      <img src="{% imgPath '/assets/images/' + post.featured_image.source, 'f_auto,c_limit,w_900,h_500' %}" alt="{{ post.featured_image.alt }}" loading="eager">
     </figure>
   {% endif %}
 
@@ -57,8 +63,11 @@
       {% include "footer.njk" %}
     </div>
   </footer>
-
-  {% include "nav-js.njk" %}
-  {% block script %}{% endblock %}
+  {% set js %}
+    {% include "nav-js.njk" %}
+  {% endset %}
+  <script defer>
+    {{ js | jsmin | safe }}
+  </script>
 </body>
 </html>
