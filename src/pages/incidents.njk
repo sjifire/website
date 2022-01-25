@@ -1,11 +1,14 @@
 ---
 title: "Incidents"
 permalink: "/about/incidents/index.html"
+mobile_layout_flipped: true
 ---
 
 {% set pageData = incidents %}
 
 {% block sidebar_content %}
-  {% include "call-stats-widget.njk" %}
+  <div class="sidebar-block">
+    {% include "call-stats-widget.njk" %}
+  </div>
 {% endblock %}
 {% extends "default_two_col_page.njk" %}

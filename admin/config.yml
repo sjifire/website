@@ -18,6 +18,8 @@ collections:
     delete: true # Allow users to delete items in this collection
     summary: "{{fields.date | date('YYYY-MM-DD')}} • {{fields.title}}"
     description: "Add posts on the site."
+    editor:
+      preview: false
     fields: # The fields for each document, usually in front matter
       - label: Title
         name: title
@@ -59,6 +61,7 @@ collections:
         name: "featured_image"
         widget: "object"
         hint: "Featured image that appears at the top of the post, complete with 'alt' tag and, optionally, a caption"
+        required: false
         fields:
           - label: Image Upload
             name: source
@@ -66,80 +69,21 @@ collections:
             allow_multiple: false
             choose_url: false
             public_folder: ''
+            required: false
           - label: Width
             name: width
             widget: number
             hint: "What is the width of this image?"
+            required: false
           - label: Height
             name: height
             widget: number
             hint: "What is the height of this image"
-      - sections:
-        name: "sections"
-        widget: "list"
-        collapsed: true
-        add_to_top: false
-        hint: "Add discrete sections of content to this post. The sections you can choose from: 'text', 'image', 'youtube'."
+            required: false
+      - label: Body
+        name: body
+        widget: markdown
         required: true
-        types:
-          - label: "Text Section"
-            name: "text"
-            widget: "object"
-            fields:
-              - label: Rich Text
-                name: copy
-                widget: markdown
-                minimal: false
-                required: false
-                hint: "Add a chunk of text (rich text editor)"
-          - label: "Image"
-            name: "image"
-            widget: "object"
-            hint: "Add an image to the post, complete with 'alt' tag and, optionally, a caption"
-            fields:
-              - label: Image Upload
-                name: source
-                widget: image
-                allow_multiple: false
-                choose_url: false
-                public_folder: ''
-              - label: Width
-                name: width
-                widget: number
-                hint: "What is the width of this image?"
-              - label: Height
-                name: height
-                widget: number
-                hint: "What is the height of this image"
-              - label: Image Caption
-                name: caption
-                widget: string
-                hint: "Add a caption for the image (optional)"
-                required: false
-          - label: "YouTube Video"
-            name: "youtube"
-            widget: "object"
-            fields:
-              - label: YouTube Video Link
-                name: source
-                widget: string
-                hint: "Add a YouTube video player by copy-pasting the 'Share' link"
-              - label: Video Caption
-                name: caption
-                widget: string
-                hint: "Add a caption for the video (optional)"
-          - label: "Google Map"
-            name: "gmap"
-            widget: "object"
-            fields:
-              - label: Google Map Link
-                name: source
-                widget: string
-                hint: "Add a YouTube video player by copy-pasting the 'Share' link"
-              - label: Video Caption
-                name: caption
-                widget: string
-                hint: "Add a caption for the video (optional)"
     sortable_fields:
       - date
       - commit_date
@@ -250,8 +194,6 @@ collections:
                 choose_url: false
                 media_folder: '/src/assets/docs/'
                 public_folder: ''
-
-
           - label: Body
             name: body
             widget: markdown

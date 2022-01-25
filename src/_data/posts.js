@@ -8,6 +8,7 @@ const posts = fs
   .filter(name => path.extname(name) === ".json")
   .map(name => ({
     ...require(path.join(postsFolder, name)),
-  }));
+  }))
+  .sort((a, b) => new Date(a.date) - new Date(b.date));
 
 module.exports = posts;

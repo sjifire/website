@@ -6,12 +6,17 @@ const slugify      = require("slugify");
 const yaml         = require("js-yaml");
 const _            = require("lodash");
 const { parseHTML } = require("linkedom");
+const { minify }    = require("terser");
+const nunjucks      = require("nunjucks");
+const fs            = require('fs');
 
 const isProduction = process.env.ELEVENTY_ENV === `production`;
 
 module.exports = function (eleventyConfig) {
   require("dotenv").config();
   siteData = require("./src/_data/site.json");
+  const netlifyConfigs = nunjucks.render('netlify.toml.njk', {site: siteData});
+  fs.writeFileSync('netlify.toml', netlifyConfigs);
 
   eleventyConfig.addDataExtension("yml", contents => yaml.load(contents));
   // eleventyConfig.setDataDeepMerge(true);
@@ -125,6 +130,24 @@ module.exports = function (eleventyConfig) {
     return nextBoardMeetingDate().toLocaleDateString();
   });
 
+  // SEE: https://github.com/sjifire/website/issues/127
+  // for side-effects of using netlify rewrites.
+  const imgPath = (assetPath, cloudinaryCmds) => {
+    // if(helpers.env !== 'production') return ''
+    if(!cloudinaryCmds) cloudinaryCmds = 'f_auto';
+    if(isProduction && siteData.enable_cloudinary_rewrites){
+      // the double // seems to help with the path rewrites for cloudinary
+      return `/optim//${assetPath}?c_param=${cloudinaryCmds}`
+    }
+    //HOWEVER, a double // seems to make it hard for Cloudinary to find the src img... so stripping
+    assetPath = assetPath.replace(/^\//, '');
+    return `${siteData.cloudinaryRootUrl}/image/fetch/${cloudinaryCmds}/${siteData.rootUrl}/${assetPath}`
+  };
+
+  eleventyConfig.addShortcode("imgPath", function(assetPath, cloudinaryCmds){
+    return imgPath(assetPath, cloudinaryCmds);
+  });
+
   // from "@sardine/eleventy-plugin-external-links
   // but adding it for local pdfs
   eleventyConfig.addTransform('external-links', (content, outputPath) => {
@@ -169,6 +192,20 @@ module.exports = function (eleventyConfig) {
     }
     return content;
   });
+  // const frameEditorComponent = require("./admin/editor-component-frame.js");
+  // eleventyConfig.addTransform('convert HUGO shortcodes', (content, outputPath) => {
+  //   try {
+  //     if (!outputPath || !outputPath.endsWith('.html')) return content;
+  //     while(match = content.match(window.NetlifyCmsEditorComponentFrame.pattern)){
+  //       var block = window.NetlifyCmsEditorComponentFrame.fromBlock(match);
+  //       var replacedHTML = window.NetlifyCmsEditorComponentFrame.toPreview(block);
+  //       content = content.replace(match[0], replacedHTML);//only match the specific version!
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  //   return content;
+  // });
 
   eleventyConfig.addTransform('wrap internal images', (content, outputPath, obj) => {
     try {
@@ -183,11 +220,14 @@ module.exports = function (eleventyConfig) {
           if(/small_img/i.test(img.className)) imgSize = 'w_400,h_200'
           else if(/med_img/i.test(img.className)) imgSize = 'w_800,h_400'
           else imgSize = 'w_1200,h_800'
-          newImgURL = `${siteData.cloudinaryRootUrl}/image/fetch/f_auto,q_auto:good,c_limit,${imgSize}/${siteData.rootUrl}`
+          cloudinaryCmds = `f_auto,q_auto:good,c_limit,${imgSize}`;
+          newImgURL = imgPath(img.src, cloudinaryCmds);
+          // newImgURL = imgPath(img.src.replace('/assets', ''), cloudinaryCmds);
+          // newImgURL = `${siteData.cloudinaryRootUrl}/image/fetch/f_auto,q_auto:good,c_limit,${imgSize}/${siteData.rootUrl}`
           parentDiv = img.parentNode;
           const figure = document.createElement("figure");
           figure.innerHTML = `
-  <img src="${newImgURL}${img.src}" alt="${img.alt}" title="${img.title}" loading="lazy" />
+  <img src="${newImgURL}" alt="${img.alt}" title="${img.title}" loading="lazy" />
   <figcaption>
     ${img.title}
   </figcaption>
@@ -223,6 +263,21 @@ module.exports = function (eleventyConfig) {
     return content;
   });
 
+
+  eleventyConfig.addNunjucksAsyncFilter("jsmin", async function (
+    code,
+    callback
+  ) {
+    try {
+      if(!isProduction) return callback(null, code);
+      const minified = await minify(code);
+      callback(null, minified.code);
+    } catch (err) {
+      console.error("Terser error: ", err);
+      // Fail gracefully.
+      callback(null, code);
+    }
+  });
 
   // Minify HTML Output
   eleventyConfig.addTransform("htmlmin", function(content, outputPath) {

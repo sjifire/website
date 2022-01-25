@@ -1,7 +1,7 @@
 {% extends 'base.njk' %}
 
 {% block content %}
-  <div class="l-grid l-grid--2col">
+  <div class="l-grid l-grid--2col{{ ' flipped' if mobile_layout_flipped === true }}">
     <div class="l-grid__main block-content">
       {% if pageData %}
         <h1>

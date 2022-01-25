@@ -8,7 +8,8 @@
   },
   permalink: "/news/{{ post.date | htmlDateStringISO }}-{{ post.title | slugify }}/index.html",
   eleventyComputed: {
-    title: "{{ post.title | safe }}"
+    title: "{{ post.title | safe }}",
+    description: "{{ post.lede | safe }}"
   }
 }
 ---
@@ -18,8 +19,9 @@
 {% block content %}
 
   <article class="l-squeezed">
-    {% set baseSections = post.sections %}
-    {% include "sections_block.njk" %}
+    <div class="block-content">
+      {{ post.body | markdownify | safe }}
+    </div
   </article>
 
   <nav class="l-squeezed pagination">

@@ -66,6 +66,11 @@
   status = 301
   force = true
 [[redirects]]
+  from = "/board-of-commissioners"
+  to = "/about/governance/"
+  status = 301
+  force = true
+[[redirects]]
   from = "/contact-us"
   to = "/contact/"
   status = 301
@@ -73,6 +78,11 @@
 [[redirects]]
   from = "/about/staff"
   to = "/about/key-information"
+  status = 301
+  force = true
+[[redirects]]
+  from = "/about-us/"
+  to = "/about/who-we-are/"
   status = 301
   force = true
 [[redirects]]
@@ -90,9 +100,27 @@
   to = "/services/firewise"
   status = 301
   force = true
+[[redirects]]
+  from = "/ems"
+  to = "/news/2022-01-18-we-are-an-ems-agency/"
+  status = 301
+  force = true
+[[redirects]]
+  from = "/news/2022-01-18-sjifandr-is-an-ems-agency/"
+  to = "/news/2022-01-18-we-are-an-ems-agency/"
+  status = 301
+  force = true
 
+[[redirects]]
+  from = "/optim/*"
+  query = {c_param = ":c_param"}
+  to = "{{site.cloudinaryRootUrl}}/image/fetch/:c_param/{{site.rootUrl}}:splat"
+  status = 200
 
-
+[[redirects]]
+  from = "/optim/*"
+  to = "{{site.cloudinaryRootUrl}}/image/fetch/f_auto/{{site.rootUrl}}/:splat"
+  status = 200
 
 # disable for now because:
 #  - it causes admin sub-domain to not deploy
