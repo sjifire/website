@@ -45,7 +45,7 @@ window.NetlifyCmsEditorComponentImage = {
     if(obj.klass || obj.height || obj.width){
       markdown += `{${obj.klass ? '.' + obj.klass : ''} ${obj.width ? 'width=' + obj.width : ''} ${obj.height ? 'height=' + obj.height : ''}}`;
     }
-    return markdown;
+    return DOMPurify.sanitize(markdown);
   },
   // eslint-disable-next-line react/display-name
   toPreview: ({ alt, image, title, width, height, klass }, getAsset, fields) => {

@@ -1,3 +1,5 @@
+if(typeof window === "undefined") window = {};
+
 window.NetlifyCmsEditorComponentYoutube = {
   id: "youtube",
   label: "YouTube",
@@ -15,10 +17,10 @@ window.NetlifyCmsEditorComponentYoutube = {
     };
   },
   toBlock: function (obj) {
-    return "@[youtube](" + obj.url + ")";
+    return DOMPurify.sanitize("@[youtube](" + obj.url + ")");
   },
   toPreview: function (obj) {
-    return "@[youtube](" + obj.url + ")"
+    return DOMPurify.sanitize("@[youtube](" + obj.url + ")");
   },
 };
 

@@ -1,3 +1,4 @@
+if(typeof window === "undefined") window = {};
 window.NetlifyCmsEditorComponentFile = {
   label: 'File',
   id: 'file',
@@ -10,7 +11,8 @@ window.NetlifyCmsEditorComponentFile = {
   },
   toBlock: function (obj) {
     markdown = `[${obj.title.replace(/"/g, '\\"')}](${obj.file})`;
-    return markdown;
+    return DOMPurify.sanitize(markdown);
+    // return markdown;
   },
   // eslint-disable-next-line react/display-name
   toPreview: ({ file, title }, getAsset, fields) => {
