@@ -1,20 +1,21 @@
+# Site
+main site for sjifire.org
+
 Production: [![Netlify Status](https://api.netlify.com/api/v1/badges/28bc440c-5eb0-4464-a8d8-a980573ffea2/deploy-status)](https://app.netlify.com/sites/sjifire/deploys)
 
 Admin: [![Netlify Status](https://api.netlify.com/api/v1/badges/3cf1d290-9e0f-4d4e-8eee-58784cce4ef6/deploy-status)](https://app.netlify.com/sites/sjifire-admin/deploys)
 
-# website
-main website for sjifire.org
 
 ## tech
 - static site generator: [Eleventy](https://www.11ty.dev/)
 - cms: [NetlifyCMS](https://www.netlifycms.org/)
 - Image Handling: [Cloudinary](https://cloudinary.com/)
 - host: [Netlify](https://www.netlify.com/)
-- code/CI/Job hosting: [Github](https://www.github.com)
+- code/CI/Job hosting: [GitHub](https://www.github.com)
 
 
 ## getting started (local)
-1. clone repo
+1. clone repository
 1. run `npm install`
 1. run `npm test`
 1. run `npm start`
@@ -28,10 +29,10 @@ main website for sjifire.org
 ## getting started (production)
 1. setup a cloudinary account and get a URL secret
 1. setup Netlify account
-   * link to your github repo (netlify will build from every git push by default)
+   * link to your GitHub repository (netlify will build from every git push by default)
    * modify Publish directory to `public`
    * Add 2 environment variables: 
-     * `CLOUDINARY_URL`: set to your cloudinary url secret
+     * `CLOUDINARY_URL`: set to your cloudinary URL secret
      * `ELEVENTY_ENV`: set to `production`
 
 1. setup ESO Report: used to produce daily stats updates
@@ -60,7 +61,7 @@ main website for sjifire.org
 
    * modify column definitions so all columns which end in ` Date` are of the format `General Date`
       * make sure `CSV` is selected as an export option
-      * add 3 github repository secrets at `Settings -> Secrets`
+      * add 3 GitHub repository secrets at `Settings -> Secrets`
         * `ESO_REPORT_USERNAME`
         * `ESO_REPORT_PASSWORD`
         * `ESO_REPORT_AGENCY`
