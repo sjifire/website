@@ -21,9 +21,10 @@ window.NetlifyCmsEditorComponentFrame = {
        title: match[2]
     };
  },
- toBlock: ({link, title}) =>
-    `[iframe link="${link}" title="${title}"]`,
-
+ toBlock: ({link, title}) => {
+    markdown = `[iframe link="${link}" title="${title}"]`
+    return DOMPurify.sanitize(markdown);
+ },
  toPreview: ({link, title}) => {
   return `
   <figure class="post__media">
