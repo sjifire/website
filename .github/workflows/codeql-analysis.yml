@@ -15,6 +15,7 @@ on:
     branches:
     - main
   pull_request:
+    - main
 
   schedule:
     - cron: '36 2 * * 3'
