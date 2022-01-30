@@ -41,9 +41,10 @@ window.NetlifyCmsEditorComponentImage = {
     }
   },
   toBlock: function (obj) {
-    let markdown = `![${obj.alt || ''}](${obj.image || ''}${obj.title ? ` "${obj.title.replace(/"/g, '\\"')}"` : ''})`
+    let markdown = `![${obj.alt || ''}](${obj.image || ''}${obj.title ? ` "${obj.title}"` : ''})`
     if (obj.klass || obj.height || obj.width) {
-      markdown += `{${obj.klass ? '.' + obj.klass : ''} ${obj.width ? 'width=' + obj.width : ''} ${obj.height ? 'height=' + obj.height : ''}}`
+      markdown += `{${obj.klass ? '.' + obj.klass : ''} ${obj.width ? 'width=' + obj.width : ''} ${obj.height ? 'height=' + obj.height : ''}`
+      markdown = markdown.trim() + '}'
     }
     return DOMPurify.sanitize(markdown)
   },
