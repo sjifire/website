@@ -13,6 +13,7 @@
  *
  */
 
+/* global DOMPurify */
 window.NetlifyCmsEditorComponentImage = {
   label: 'Image',
   id: 'image',
