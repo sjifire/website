@@ -1,5 +1,6 @@
 if (typeof window === 'undefined') window = {}
 
+/* global DOMPurify */
 window.NetlifyCmsEditorComponentFile = {
   label: 'File',
   id: 'file',

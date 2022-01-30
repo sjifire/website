@@ -1,5 +1,6 @@
 if (typeof window === 'undefined') window = {}
 
+/* global DOMPurify */
 window.NetlifyCmsEditorComponentFrame = {
   id: 'frame',
   label: 'Embedded Frame',

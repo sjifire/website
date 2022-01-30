@@ -1,5 +1,4 @@
-if (typeof window === 'undefined') window = {}
-
+/* global DOMPurify */
 window.NetlifyCmsEditorComponentYoutube = {
   id: 'youtube',
   label: 'YouTube',
