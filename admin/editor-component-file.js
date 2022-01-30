@@ -1,4 +1,4 @@
-if (typeof window === 'undefined') window = {}
+// if (typeof window === 'undefined') window = {}
 
 /* global DOMPurify */
 window.NetlifyCmsEditorComponentFile = {
