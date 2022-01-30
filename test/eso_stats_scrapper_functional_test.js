@@ -1,15 +1,16 @@
 const chai = require('chai')
 const assert = chai.assert
-const fs = require('fs')
+// const fs = require('fs')
+const path = require('path')
 const _ = require('lodash')
-winston = require('winston')
+// winston = require('winston')
 
 // NOTE: if you want to enable debugging while running a test, add
 // winston.level = 'debug'
 // and it will become quite verbose
 
 const esoScrapper = require('../src/modules/eso_scrapper')
-const sampleCSVPath = `${__dirname}/files/sample_report.csv`
+const sampleCSVPath = path.join(__dirname, '/files/sample_report.csv')
 // const sampleJSONPath = `${__dirname}/sample_stats.json`;
 // const sampleJSON = fs.readFileSync('sample_stats.json', "utf8");
 
@@ -35,7 +36,7 @@ describe('parseCSV', function () {
       return r['Incident Number'] === '21-021224'
     })
     assert.equal(recordsWithMultiplePersonnel.length, 3)
-    userIds = _.map(recordsWithMultiplePersonnel, 'User Login ID')
+    const userIds = _.map(recordsWithMultiplePersonnel, 'User Login ID')
     assert.deepEqual(_.sortBy(userIds), ['bsevier', 'cmcconnell', 'mvondassow'])
   })
 
@@ -43,7 +44,7 @@ describe('parseCSV', function () {
     const recordsWithMultipleApparatus = _.filter(records, function (r) {
       return r['Incident Number'] === '21-021228'
     })
-    apparatusNames = _.map(recordsWithMultipleApparatus, 'Apparatus Name')
+    const apparatusNames = _.map(recordsWithMultipleApparatus, 'Apparatus Name')
     assert.deepEqual(_.uniq(_.sortBy(apparatusNames)), ['E31', 'L31'])
   })
 
@@ -65,16 +66,16 @@ describe('parseCSV', function () {
         'User Login ID'
       ]
       _.each(expectedFields, function (f) {
-        found = recordFields.indexOf(f) > -1
+        const found = recordFields.indexOf(f) > -1
         assert.ok(found, `${f} not found in record`)
       })
     })
 
     it('should convert date columns into date objects', function () {
       const recordWithAllDates = records[10]
-      dateFields = _.chain(record).keys().filter(function (k) { return k.match(/\s+Date$/) }).value()
+      const dateFields = _.chain(record).keys().filter(function (k) { return k.match(/\s+Date$/) }).value()
       _.each(dateFields, function (f) {
-        val = recordWithAllDates[f]
+        const val = recordWithAllDates[f]
         assert.ok(_.isDate(val), `${f} is not a Date Object`)
       })
     })
@@ -126,7 +127,7 @@ describe('generateStats', function () {
     // * a bunch of units don't have arrival or en route dates; make sure
     //   we do the best we can and
     // * lots of units coming and going at different times
-    const sampleBuildingFireCSV = `${__dirname}/files/sample_building_fire.csv`
+    const sampleBuildingFireCSV = path.join(__dirname, '/files/sample_building_fire.csv')
     const records = esoScrapper.parseCSV(sampleBuildingFireCSV)
     const parsedStats = esoScrapper.generateStats({ records: records })
     // Only grabs the first due unit reactions time
@@ -157,7 +158,7 @@ describe('generateStats', function () {
     // 21-021224 comes in before 21-021223 (?? not sure how; I thought the run numbers were sequential?)
     // but is paged AFTER 21-021223; so E31 leaves on x223 while L31 leaves 10 min or so later for x224
     // Testing for quick reaction from E31 but slower reaction for L31 as it wasn't staffed with oncall
-    const samplePath = `${__dirname}/files/sample_call_dispatched_before_previous_call.csv`
+    const samplePath = path.join(__dirname, '/files/sample_call_dispatched_before_previous_call.csv')
     const records = esoScrapper.parseCSV(samplePath)
     const parsedStats = esoScrapper.generateStats({ records: records })
     assert.deepEqual(parsedStats.unit_time_stats.first_unit_reaction, { sum: 645, mean: 323, median: 323, q1: 190, q3: 455, min: 57, max: 588 })
@@ -191,7 +192,7 @@ describe('generateStats', function () {
     // FIXME: arguably, 21-022204 should NOT have an on-scene time BUT the data was entered
     //    so incorrectly this may not be worth fixing as it could cause other problems
     // * do NOT log a standby/cover as an overlapping call
-    const samplePath = `${__dirname}/files/sample_date_entry_mistake_under_pov.csv`
+    const samplePath = path.join(__dirname, '/files/sample_date_entry_mistake_under_pov.csv')
     const records = esoScrapper.parseCSV(samplePath)
     const parsedStats = esoScrapper.generateStats({ records: records })
     // only have one as the standby unit doesn't have a reaction time
@@ -228,7 +229,7 @@ describe('generateStats', function () {
     // * make sure the canceled call incident time is the full time
     // * make sure the travel and on scene times for the 2nd call don't exist
     // * make sure both are flagged as overlapping incidents!
-    const samplePath = `${__dirname}/files/sample_different_call_triggered_during_incident_but_cancelled_en_route.csv`
+    const samplePath = path.join(__dirname, '/files/sample_different_call_triggered_during_incident_but_cancelled_en_route.csv')
     const records = esoScrapper.parseCSV(samplePath)
     const parsedStats = esoScrapper.generateStats({ records: records })
     // both have reaction times
@@ -260,7 +261,7 @@ describe('generateStats', function () {
     //  * even though multiple calls, it is the same unit and crew
     //  * incident times should take into account the delayed response on the 2nd call
     //  * make sure both are flagged as overlapping incidents!
-    const samplePath = `${__dirname}/files/sample_overlapping_calls_one_response_unit.csv`
+    const samplePath = path.join(__dirname, '/files/sample_overlapping_calls_one_response_unit.csv')
     const records = esoScrapper.parseCSV(samplePath)
     const parsedStats = esoScrapper.generateStats({ records: records })
     // both have reaction times, but the 2nd one is notably slower
@@ -300,7 +301,7 @@ describe('generateStats', function () {
     //  * the out-of-district is handled appropriately.
     //  * only the 1st and last incidents have an on-scene time
     //  * make sure these are not logged as overlapping calls because one of them is a standby
-    const samplePath = `${__dirname}/files/sample_long_call_standby.csv`
+    const samplePath = path.join(__dirname, '/files/sample_long_call_standby.csv')
     const records = esoScrapper.parseCSV(samplePath)
     const parsedStats = esoScrapper.generateStats({ records: records })
 
@@ -332,7 +333,7 @@ describe('generateStats', function () {
     //   for the dispatch date being used for en route and arrival, which it really shouldn't be
     //   this is why we don't show multiple reaction times and the standby unit is not included in travel times
     // * make sure both are flagged as overlapping incidents!
-    const samplePath = `${__dirname}/files/sample_incident_with_standby_call.csv`
+    const samplePath = path.join(__dirname, '/files/sample_incident_with_standby_call.csv')
     const records = esoScrapper.parseCSV(samplePath)
     const parsedStats = esoScrapper.generateStats({ records: records })
 
@@ -358,7 +359,7 @@ describe('generateStats', function () {
   })
 
   it('should handle missing arrival dates', function () {
-    const samplePath = `${__dirname}/files/sample_missing_arrival_date.csv`
+    const samplePath = path.join(__dirname, '/files/sample_missing_arrival_date.csv')
     const records = esoScrapper.parseCSV(samplePath)
     const parsedStats = esoScrapper.generateStats({ records: records })
 
@@ -383,8 +384,8 @@ describe('generateStats', function () {
   })
 
   it('should be able to compute a shorter 10 dayRange', function () {
-    dayRange = 10
-    shortParsedStats = esoScrapper.generateStats({ records: records, dayRange: dayRange })
+    const dayRange = 10
+    const shortParsedStats = esoScrapper.generateStats({ records: records, dayRange: dayRange })
     assert.deepEqual(shortParsedStats.date_range_to, new Date('2021-12-27T23:59:59.999Z'))
     assert.deepEqual(shortParsedStats.date_range_from, new Date('2021-12-18T00:00:00.000Z'))
 
@@ -397,8 +398,8 @@ describe('generateStats', function () {
 
   it('should be able to compute a shorter 9 dayRange', function () {
     // these should be different
-    dayRange = 9
-    shortParsedStats = esoScrapper.generateStats({ records: records, dayRange: dayRange })
+    const dayRange = 9
+    const shortParsedStats = esoScrapper.generateStats({ records: records, dayRange: dayRange })
     assert.deepEqual(shortParsedStats.date_range_to, new Date('2021-12-27T23:59:59.999Z'))
     assert.deepEqual(shortParsedStats.date_range_from, new Date('2021-12-19T00:00:00.000Z'))
 
@@ -410,8 +411,8 @@ describe('generateStats', function () {
   })
 
   it('should be able to compute from a different end date', function () {
-    stopDate = new Date('2021-12-26T23:59:59.999Z')
-    shortParsedStats = esoScrapper.generateStats({ records: records, stopDate: stopDate })
+    const stopDate = new Date('2021-12-26T23:59:59.999Z')
+    const shortParsedStats = esoScrapper.generateStats({ records: records, stopDate: stopDate })
     assert.deepEqual(shortParsedStats.date_range_to, new Date('2021-12-26T23:59:59.999Z'))
     assert.deepEqual(shortParsedStats.date_range_from, new Date('2021-11-27T00:00:00.000Z'))
 
@@ -423,7 +424,7 @@ describe('generateStats', function () {
   })
 
   it('should be able to compute from a string end date', function () {
-    shortParsedStats = esoScrapper.generateStats({ records: records, stopDate: '2021-12-26' })
+    const shortParsedStats = esoScrapper.generateStats({ records: records, stopDate: '2021-12-26' })
     assert.deepEqual(shortParsedStats.date_range_to, new Date('2021-12-26T23:59:59.999Z'))
     assert.deepEqual(shortParsedStats.date_range_from, new Date('2021-11-27T00:00:00.000Z'))
     assert.equal(shortParsedStats.incident_stats.num_incidents, 78)
@@ -431,8 +432,8 @@ describe('generateStats', function () {
   })
 
   it('should be able to compute from a different start date', function () {
-    startDate = new Date('2021-10-01')
-    shortParsedStats = esoScrapper.generateStats({ records: records, startDate: startDate })
+    const startDate = new Date('2021-10-01')
+    const shortParsedStats = esoScrapper.generateStats({ records: records, startDate: startDate })
     assert.deepEqual(shortParsedStats.date_range_to, new Date('2021-10-30T23:59:59.999Z'))
     assert.deepEqual(shortParsedStats.date_range_from, new Date('2021-10-01T00:00:00.000Z'))
 
@@ -444,7 +445,7 @@ describe('generateStats', function () {
   })
 
   it('should be able to compute from a string start date', function () {
-    shortParsedStats = esoScrapper.generateStats({ records: records, startDate: '2021-10-01' })
+    const shortParsedStats = esoScrapper.generateStats({ records: records, startDate: '2021-10-01' })
     assert.deepEqual(shortParsedStats.date_range_to, new Date('2021-10-30T23:59:59.999Z'))
     assert.deepEqual(shortParsedStats.date_range_from, new Date('2021-10-01T00:00:00.000Z'))
 
@@ -453,7 +454,7 @@ describe('generateStats', function () {
   })
 
   it('should be able to compute from a start and stop date', function () {
-    shortParsedStats = esoScrapper.generateStats({ records: records, startDate: '2021-10-01', stopDate: '2021-10-10' })
+    const shortParsedStats = esoScrapper.generateStats({ records: records, startDate: '2021-10-01', stopDate: '2021-10-10' })
     assert.deepEqual(shortParsedStats.date_range_to, new Date('2021-10-10T23:59:59.999Z'))
     assert.deepEqual(shortParsedStats.date_range_from, new Date('2021-10-01T00:00:00.000Z'))
 
