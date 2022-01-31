@@ -5,13 +5,12 @@ TODO: right now, if this is under ./test/. directly, mocha picks it up and it fa
       however, it would be nice if playwright/test works directly with mocha
       but right now that doesn't look possible
 
-
 TODO: can we set this up to trigger local configurations for starting a
       webServer rather than in playwright.config.js?
 
 TODO: add some navigation checks... click around a bit.
 */
-const { test, expect } = require('@playwright/test');
+const { test, expect } = require('@playwright/test')
 // test.use({
 //   webServer: {
 //     command: 'npm run start',
@@ -23,7 +22,6 @@ const { test, expect } = require('@playwright/test');
 // });
 
 test.describe('check main site', () => {
-
   [
     '/',
     '/contact/',
@@ -37,26 +35,23 @@ test.describe('check main site', () => {
     '/services/burn-permits/',
     '/services/firewise/',
     '/services/knoxbox/',
-    '/services/fire-alarms/',
+    '/services/fire-alarms/'
   ].forEach(path => {
     test(`${path} page successfully loads`, async ({ page, baseURL }) => {
       page.on('pageerror', exception => {
-        console.log(`Uncaught exception: "${exception}"`);
-      });
+        console.log(`Uncaught exception: "${exception}"`)
+      })
       // Listen for all console logs
       // page.on('console', msg => console.log(msg.text()))
 
       // Listen for all console events and handle errors
       page.on('console', msg => {
-        if (msg.type() === 'error')
-          console.log(`** JS Error: "${msg.text()}"`);
-      });
-      const response = await page.goto(path);
-      expect(response.ok()).toBeTruthy();
-    });
-
-  });
-
+        if (msg.type() === 'error') { console.log(`** JS Error: "${msg.text()}"`) }
+      })
+      const response = await page.goto(path)
+      expect(response.ok()).toBeTruthy()
+    })
+  })
 
   // test('landing page', async ({ page }) => {
   //   page.on('pageerror', exception => {
@@ -72,4 +67,4 @@ test.describe('check main site', () => {
   //   });
   //   await page.goto('/');
   // });
-});
+})
