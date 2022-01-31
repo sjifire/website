@@ -1,5 +1,5 @@
 {
-  "updated_at": "2022-01-30T09:12:35.807Z",
+  "updated_at": "2022-01-31T09:13:44.937Z",
   "date_range_from": "2021-12-31T00:00:00.000Z",
   "date_range_to": "2022-01-29T23:59:59.999Z",
   "_comment": "auto generated; do not manually modify",
@@ -129,7 +129,7 @@
       "cancelled": 6,
       "other": 0
     },
-    "num_incidents_last_365_days": 1006,
+    "num_incidents_last_365_days": 1004,
     "num_incidents": 53,
     "num_daytime_incidents": 38,
     "num_nighttime_incidents": 15,
