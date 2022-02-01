@@ -33,10 +33,10 @@
     <link href="{{ absolutePostUrl }}"/>
     <updated>{{ post.date | postDateToRfc3339 }}</updated>
     <id>{{ absolutePostUrl }}</id>
-    <content type="html">
+    <content:encoded type="html"><![CDATA[
     {{ post.lede | markdownify | safe | htmlToAbsoluteUrls(metadata.url) }}
     {{ post.body | markdownify | safe | htmlToAbsoluteUrls(metadata.url) }}
-    </content>
+    ]]></content>
   </entry>
   {%- endfor %}
 </feed>
