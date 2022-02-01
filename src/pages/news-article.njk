@@ -9,7 +9,7 @@
   permalink: "/news/{{ post.date | htmlDateStringISO }}-{{ post.title | slugify }}/index.html",
   eleventyComputed: {
     title: "{{ post.title | safe }}",
-    description: "{{ post.lede | safe }}"
+    description: "{{ post.lede | markdownify | safe }}"
   }
 }
 ---
