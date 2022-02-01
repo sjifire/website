@@ -2,7 +2,7 @@
 
 {% block content %}
   <div class="l-grid l-grid--2col{{ ' flipped' if mobile_layout_flipped === true }}">
-    <div class="l-grid__main block-content">
+    <div class="l-grid__main{{ ' block-content' if user_generated_content !== false }}">
       {% if pageData %}
         <h1>
           {{ title | safe }}
