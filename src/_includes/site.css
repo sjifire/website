@@ -33,6 +33,8 @@ body {
   scroll-behavior: smooth;
   text-rendering: optimizespeed;
   line-height: 1.5;
+  font-family: var(--ff-sans);
+  background-color: #fff;
 }
 
 /* Remove list styles on ul, ol elements with a class attribute */
@@ -66,7 +68,7 @@ select {
 }
 
 :root {
-  --ff-sans: -apple-system, BlinkMacSystemFont, "Roboto", "Arial", "Helvetica Neue", "Helvetica", sans-serif;
+  --ff-sans: -apple-system, blinkmacsystemfont, "Roboto", "Arial", "Helvetica Neue", "Helvetica", sans-serif;
   --dk-gray: #21262d;
   --black: #161b22;
   --yellow: #f2c700;
@@ -89,11 +91,6 @@ body {
   height: 100%;
 }
 
-body {
-  font-family: var(--ff-sans);
-  background-color: #fff;
-}
-
 .site-header {
   background-color: var(--dk-gray);
 }
@@ -111,7 +108,7 @@ body {
 
 .site-header__911 {
   background-color: black;
-  color: rgba(255, 255, 255, 0.75);
+  color: rgba(255, 255, 255, 75%);
   padding: 0.75rem 0;
   text-align: center;
   font-size: 1.2rem;
@@ -129,35 +126,42 @@ body {
 
 /*  --------------------
     RESPONSIVE NAV
------------------------*/
+----------------------- */
 
 .menu,
 .submenu {
   list-style-type: none;
 }
+
 .logo {
   font-size: 20px;
   padding: 0;
 }
+
 .logo img {
   max-width: 120px;
   height: auto;
 }
+
 .item {
   padding: 10px;
 }
+
 .item:not(:last-child) {
   margin-right: 8px;
 }
+
 .item a {
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 80%);
   text-decoration: none;
 }
+
 .item a:hover,
 .item a:hover::after {
   color: white;
   cursor: pointer;
 }
+
 .item.active > a {
   color: white;
 }
@@ -170,62 +174,77 @@ body {
   align-items: center;
   padding: 5px 0;
 }
+
 .menu li:not(.logo) a {
   display: block;
   padding: 0 10px;
 }
+
 .menu li.subitem a {
   padding-block: 8px;
 }
+
 .toggle {
   order: 1;
 }
+
 .toggle svg {
   width: 30px;
   height: 30px;
   fill: #fff;
 }
+
 .item.button {
   order: 2;
 }
+
 .item {
   order: 3;
   width: 100%;
   text-align: center;
   display: none;
 }
+
 .active .item {
   display: block;
 }
+
 /* Submenu up from mobile screens */
 .submenu {
   display: none;
 }
+
 .submenu-active .submenu {
   display: block;
   width: auto;
   padding: 8px;
 }
+
 .has-submenu i {
   font-size: 12px;
 }
+
 .has-submenu > a::after {
   font-size: 12px;
   line-height: 16px;
   font-weight: 900;
   content: "\25bc";
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 40%);
   padding-left: 5px;
 }
+
 .subitem a {
   white-space: nowrap;
 }
+
 .submenu-active {
-  background-color: rgba(0, 0, 0, 0.55);
+  background-color: rgba(0, 0, 0, 55%);
 }
+
 .submenu-active > a {
   color: white;
 }
+
 .submenu-active > a:after {
   color: var(--yellow);
 }
@@ -237,10 +256,12 @@ body {
     flex-wrap: nowrap;
     background: none;
   }
+
   .logo {
     flex: 1;
     order: 0;
   }
+
   .item {
     order: 1;
     position: relative;
@@ -248,16 +269,20 @@ body {
     width: auto;
     text-align: left;
   }
+
   .item.active {
     background-color: var(--black);
   }
+
   .submenu-active > li > a,
   .submenu-active > li > a::after {
     color: white;
   }
+
   .submenu-active {
     background: var(--black);
   }
+
   .submenu-active .submenu {
     display: block;
     position: absolute;
@@ -266,6 +291,7 @@ body {
     z-index: 10;
     background: var(--black);
   }
+
   .toggle {
     display: none;
   }
@@ -294,7 +320,7 @@ body {
 
 .page-header .lede {
   font-size: 18px;
-  color: rgba(255, 255, 255, 0.75);
+  color: rgba(255, 255, 255, 75%);
   margin-top: 1rem;
 }
 
@@ -347,9 +373,11 @@ body {
   .footer-nav {
     justify-content: space-around;
   }
+
   .footer-navgroup {
     /* flex-basis: auto; */
   }
+
   .footer-navgroup:last-child {
     margin-left: auto;
   }
@@ -379,28 +407,39 @@ body {
 
 .rap {
   padding-left: 15px;
-  padding-right: 15px; }
-  @media screen and (min-width: 576px) {
-    .rap {
-      margin-left: auto;
-      margin-right: auto;
-      padding-left: 0;
-      padding-right: 0;
-      max-width: 540px; } }
-  @media screen and (min-width: 768px) {
-    .rap {
-      max-width: 720px; } }
-  @media screen and (min-width: 992px) {
-    .rap {
-      max-width: 960px; } }
-  @media screen and (min-width: 1200px) {
-    .rap {
-      max-width: 1110px; } 
+  padding-right: 15px;
+}
+@media screen and (min-width: 576px) {
+  .rap {
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 0;
+    padding-right: 0;
+    max-width: 540px;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .rap {
+    max-width: 720px;
+  }
+}
+
+@media screen and (min-width: 992px) {
+  .rap {
+    max-width: 960px;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .rap {
+    max-width: 1110px;
+  }
 }
 
 .featured__media {
-  background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0,var(--dk-gray)),color-stop(50%,var(--dk-gray)),color-stop(50%,hsla(0,0%,100%,0)),to(hsla(0,0%,100%,0)));
-  background-image: linear-gradient(to bottom,var(--dk-gray) 0,var(--dk-gray) 50%,hsla(0,0%,100%,0) 50%,hsla(0,0%,100%,0) 100%);
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, var(--dk-gray)), color-stop(50%, var(--dk-gray)), color-stop(50%, hsla(0, 0%, 100%, 0)), to(hsla(0, 0%, 100%, 0)));
+  background-image: linear-gradient(to bottom, var(--dk-gray) 0, var(--dk-gray) 50%, hsla(0, 0%, 100%, 0) 50%, hsla(0, 0%, 100%, 0) 100%);
 }
 
 .featured__media img {
@@ -410,7 +449,7 @@ body {
   height: auto;
   margin-left: auto;
   margin-right: auto;
-  box-shadow: 1px 2px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: 1px 2px 8px rgba(0, 0, 0, 15%);
 }
 
 .news__type {
@@ -521,11 +560,13 @@ body {
 }
 
 @media (min-width: 768px) {
+
   .l-squeezed {
     max-width: 720px;
     margin-left: auto;
     margin-right: auto;
   }
+
   .l-grid--2col,
   .l-grid--2col.flipped {
     grid-template-areas: 
@@ -534,6 +575,7 @@ body {
     grid-template-columns: 2.5fr minmax(240px, 1fr);
     gap: 60px;
   }
+
   .l-grid--auto {
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
     gap: 30px;
@@ -611,7 +653,7 @@ body {
   flex-direction: column;
   justify-content: space-between;
   background-color: white;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 20%);
   border-radius: 12px;
 }
 
@@ -640,7 +682,7 @@ body {
   width: 100%;
   table-layout: fixed;
   border-spacing: 0;
-  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 20%);
   border-radius: 12px;
 }
 
@@ -700,41 +742,49 @@ body {
   font-weight: 500;
   line-height: 1.2;
 }
+
 .widget__body th aside,
 .widget__body td aside {
   font-size: 0.7rem;
   font-weight: 400;
   color: #919397;
 }
+
 .widget__body td {
   text-align: center;
   text-transform: uppercase;
 }
+
 .widget--station-stats .widget__body td {
   font-family: monospace;
   font-size: 24px;
   font-weight: 300;
 }
+
 .widget__body .level {
   font-weight: 600;
 }
+
 .widget__body .level--low,
 .widget__body .level--open {
   background-color: #CEE8CE;
   color: #206220;
 }
+
 .widget__body .level--moderate {
-  background-color: #D8EAFF;
+  background-color: #d8eaff;
   color: var(--blue);
 }
+
 .widget__body .level--high,
 .widget__body .level--restricted {
-  background-color: #FFEAB8;
-  color: #81682C;
+  background-color: #ffeab8;
+  color: #81682c;
 }
+
 .widget__body .level--extreme,
 .widget__body .level--closed {
-  background-color: #FFE0E0;
+  background-color: #ffe0e0;
   color: var(--dk-red);
 }
 
@@ -830,8 +880,7 @@ body {
   text-align: center;
 }
 
-
-
+/* pagination styles */
 .pagination {
   display: flex;
   justify-content: center;
@@ -888,7 +937,7 @@ body {
 }
 
 .embed-responsive-21by9::before {
-  padding-top: 42.85714286%;
+  padding-top: 42.8571%;
 }
 
 .embed-responsive-1by1::before {
@@ -1003,7 +1052,7 @@ fieldset {
   background-color: #fff;
   border-color: #80bdff;
   outline: 0;
-  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 25%);
 }
 
 .form-control::-webkit-input-placeholder {
@@ -1036,9 +1085,11 @@ fieldset {
   background-color: #e9ecef;
   opacity: 1;
 }
+
 select.form-control:not([size]):not([multiple]) {
   height: calc(2.25rem + 2px);
 }
+
 select.form-control:focus::-ms-value {
   color: #495057;
   background-color: #fff;
@@ -1073,7 +1124,7 @@ select.form-control:focus::-ms-value {
 .btn:focus,
 .btn.focus {
   outline: 0;
-  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 25%);
 }
 
 .btn-primary {
