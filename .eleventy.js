@@ -9,18 +9,26 @@ const { parseHTML } = require("linkedom");
 const { minify }    = require("terser");
 const nunjucks      = require("nunjucks");
 const fs            = require('fs');
+const pluginRss = require("@11ty/eleventy-plugin-rss");
 
 const isProduction = process.env.ELEVENTY_ENV === `production`;
 
 module.exports = function (eleventyConfig) {
   require("dotenv").config();
   siteData = require("./src/_data/site.json");
+
   const netlifyConfigs = nunjucks.render('netlify.toml.njk', {site: siteData});
   fs.writeFileSync('netlify.toml', netlifyConfigs);
 
   eleventyConfig.addDataExtension("yml", contents => yaml.load(contents));
   // eleventyConfig.setDataDeepMerge(true);
   eleventyConfig.addPassthroughCopy("src/assets/");
+
+  eleventyConfig.addPlugin(pluginRss, {
+    posthtmlRenderOptions: {
+      closingSingleTag: "default" // opt-out of <img/>-style XHTML single tags
+    }
+  });
 
   eleventyConfig.addFilter("limit", function (arr, limit) {
     return arr.slice(0, limit);
@@ -29,7 +37,6 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addFilter("cssmin", function (code) {
     return new CleanCSS({}).minify(code).styles;
   });
-
   
   eleventyConfig.addFilter("pluck", function (arr, selections, attr) {
     return arr.filter((item) => selections.includes(item[attr]));
@@ -110,6 +117,10 @@ module.exports = function (eleventyConfig) {
 
   eleventyConfig.addFilter("yearOnlyJS", (dateObj) => {
     return DateTime.fromJSDate(dateObj, {zone: 'utc'}).toFormat('yyyy');
+  });
+
+  eleventyConfig.addFilter("postDateToRfc3339", (dateObj) => {
+    return DateTime.fromISO(dateObj, {zone: 'utc'}).toISO();
   });
 
   eleventyConfig.addFilter("round", (num, place) => {
