@@ -12,7 +12,7 @@ window.NetlifyCmsEditorComponentFile = {
     }
   },
   toBlock: function (obj) {
-    const markdown = `[${obj.title.replace(/"/g, '\\"')}](${obj.file})`
+    const markdown = `[${obj.title}](${obj.file})`
     return DOMPurify.sanitize(markdown)
     // return markdown;
   },
