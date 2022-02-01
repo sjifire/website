@@ -773,7 +773,7 @@ body {
   margin-block: 1.25rem;
 }
 
-.block-content li + li {
+.block-content li:not(.card) + li {
   margin-block: 0.75rem;
 }
 
