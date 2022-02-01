@@ -31,7 +31,7 @@ address {
 body {
   min-height: 100vh;
   scroll-behavior: smooth;
-  text-rendering: optimizeSpeed;
+  text-rendering: optimizespeed;
   line-height: 1.5;
 }
 
@@ -55,7 +55,6 @@ select {
   font: inherit;
 }
 
-
 /* Remove all animations and transitions for people that prefer not to see them */
 @media (prefers-reduced-motion: reduce) {
   * {
@@ -66,27 +65,27 @@ select {
   }
 }
 
-
 :root {
   --ff-sans: -apple-system, BlinkMacSystemFont, "Roboto", "Arial", "Helvetica Neue", "Helvetica", sans-serif;
   --dk-gray: #21262d;
   --black: #161b22;
   --yellow: #f2c700;
-  --dk-red: #C42414;
+  --dk-red: #c42414;
   --md-gray: #515559;
   --muted-gray: #919599;
   --btn-gray: #e1e5e9;
   --lt-gray: #f1f5f9;
   --rule-gray: #e1e5e9;
-  --link-blue: #3182E4;
-  --blue: #20528D;
+  --link-blue: #3182e4;
+  --blue: #20528d;
 }
 
 h1 {
   font-weight: 900;
 }
 
-html, body {
+html,
+body {
   height: 100%;
 }
 
@@ -112,7 +111,7 @@ body {
 
 .site-header__911 {
   background-color: black;
-  color: rgba(255,255,255,0.75);
+  color: rgba(255, 255, 255, 0.75);
   padding: 0.75rem 0;
   text-align: center;
   font-size: 1.2rem;
@@ -127,7 +126,6 @@ body {
   font-style: normal;
   font-weight: 600;
 }
-
 
 /*  --------------------
     RESPONSIVE NAV
@@ -152,7 +150,7 @@ body {
   margin-right: 8px;
 }
 .item a {
-  color: rgba(255,255,255,0.8);
+  color: rgba(255, 255, 255, 0.8);
   text-decoration: none;
 }
 .item a:hover,
@@ -216,14 +214,14 @@ body {
   line-height: 16px;
   font-weight: 900;
   content: "\25bc";
-  color: rgba(255,255,255,0.4);
+  color: rgba(255, 255, 255, 0.4);
   padding-left: 5px;
 }
 .subitem a {
   white-space: nowrap;
 }
 .submenu-active {
-  background-color: rgba(0,0,0,0.55);
+  background-color: rgba(0, 0, 0, 0.55);
 }
 .submenu-active > a {
   color: white;
@@ -253,7 +251,8 @@ body {
   .item.active {
     background-color: var(--black);
   }
-  .submenu-active > li > a, .submenu-active > li > a::after {
+  .submenu-active > li > a,
+  .submenu-active > li > a::after {
     color: white;
   }
   .submenu-active {
@@ -271,7 +270,6 @@ body {
     display: none;
   }
 }
-
 
 .page-header {
   padding-bottom: 40px;
@@ -412,7 +410,7 @@ body {
   height: auto;
   margin-left: auto;
   margin-right: auto;
-  box-shadow: 1px 2px 8px rgba(0,0,0, 0.15);
+  box-shadow: 1px 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 .news__type {
@@ -446,7 +444,8 @@ body {
   text-decoration: none;
 }
 
-.news__headline a:hover, .news__headline a:focus {
+.news__headline a:hover,
+.news__headline a:focus {
   color: var(--muted-gray);
 }
 
@@ -474,10 +473,10 @@ body {
   fill: var(--muted-gray);
 }
 
-.news__readmore:hover, .news__readmore:focus {
+.news__readmore:hover,
+.news__readmore:focus {
   color: var(--blue);
 }
-
 
 .document-list {
   list-style: none;
@@ -499,7 +498,6 @@ body {
   margin: 0;
   padding: 0;
 }
-
 
 .l-grid--2col {
   grid-template-areas: 
@@ -528,7 +526,8 @@ body {
     margin-left: auto;
     margin-right: auto;
   }
-  .l-grid--2col, .l-grid--2col.flipped {
+  .l-grid--2col,
+  .l-grid--2col.flipped {
     grid-template-areas: 
                           "main sidebar"
                           "main sidebar";
@@ -607,13 +606,12 @@ body {
   margin-bottom: 30px;
 }
 
-
 .card {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   background-color: white;
-  box-shadow: 0 0 8px rgba(0,0,0,0.2);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
   border-radius: 12px;
 }
 
@@ -642,7 +640,7 @@ body {
   width: 100%;
   table-layout: fixed;
   border-spacing: 0;
-  box-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
   border-radius: 12px;
 }
 
@@ -690,7 +688,8 @@ body {
   background-color: var(--lt-gray);
 }
 
-.widget__body th, .widget__body td {
+.widget__body th,
+.widget__body td {
   border-bottom: 1px solid #d1d5d9;
   padding: 15px;
 }
@@ -701,7 +700,8 @@ body {
   font-weight: 500;
   line-height: 1.2;
 }
-.widget__body th aside, .widget__body td aside {
+.widget__body th aside,
+.widget__body td aside {
   font-size: 0.7rem;
   font-weight: 400;
   color: #919397;
@@ -751,11 +751,11 @@ body {
   text-decoration: none;
 }
 
-.widget__foot td a:hover, .widget__foot td a:focus {
+.widget__foot td a:hover,
+.widget__foot td a:focus {
   text-decoration: underline;
   color: var(--md-gray);
 }
-
 
 /* 
 .special-heading {
@@ -768,7 +768,6 @@ body {
   background-position: 0 82%;
 } */
 
-
 .block-content > * + * {
   margin-block: 1.25rem;
 }
@@ -777,7 +776,9 @@ body {
   margin-block: 0.75rem;
 }
 
-.post__media + .post__media, .post__media + .post__copy, .post__copy + .post__media {
+.post__media + .post__media,
+.post__media + .post__copy,
+.post__copy + .post__media {
   margin-block: 1.55rem;
 }
 
@@ -831,7 +832,6 @@ body {
 
 
 
-
 .pagination {
   display: flex;
   justify-content: center;
@@ -846,7 +846,8 @@ body {
   color: var(--md-gray);
 }
 
-.pagination a:hover, .pagination a:focus {
+.pagination a:hover,
+.pagination a:focus {
   text-decoration: none;
   color: var(--dk-red);
 }
@@ -912,11 +913,9 @@ body {
   white-space: nowrap !important;            /* 3 */
 }
 
-
 .brand-red {
   color: var(--dk-red);
 }
-
 
 label {
   display: inline-block;
@@ -1045,7 +1044,6 @@ select.form-control:focus::-ms-value {
   background-color: #fff;
 }
 
-
 .btn {
   display: inline-flex;
   align-items: center;
@@ -1067,11 +1065,13 @@ select.form-control:focus::-ms-value {
   text-decoration: none;
 }
 
-.btn:hover, .btn:focus {
+.btn:hover,
+.btn:focus {
   text-decoration: none;
 }
 
-.btn:focus, .btn.focus {
+.btn:focus,
+.btn.focus {
   outline: 0;
   box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
@@ -1082,7 +1082,8 @@ select.form-control:focus::-ms-value {
   color: #fff;
 }
 
-.btn-primary:hover, .btn-primary:focus .btn-primary:active {
+.btn-primary:hover,
+.btn-primary:focus .btn-primary:active {
   background-color: var(--dk-red);
   border-color: var(--dk-red);
   color: #fff;
@@ -1094,7 +1095,8 @@ select.form-control:focus::-ms-value {
   color: var(--md-gray);
 }
 
-.btn-secondary:hover, .btn-secondary:focus {
+.btn-secondary:hover,
+.btn-secondary:focus {
   background-color: var(--blue);
   color: white;
 }
@@ -1108,6 +1110,7 @@ select.form-control:focus::-ms-value {
   fill: var(--md-gray);
 }
 
-.btn-secondary:hover svg, .btn-secondary:focus svg {
+.btn-secondary:hover svg,
+.btn-secondary:focus svg {
   fill: var(--yellow);
 }
