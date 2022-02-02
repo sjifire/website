@@ -26,10 +26,10 @@
     <email>{{ metadata.author.email }}</email>
   </author>
   {%- for post in posts | reverse -%}
-  {% set absolutePostUrl %}{{metadata.url}}/news/{{ post.date | htmlDateStringISO }}-{{ post.title | slugify }}/{% endset %}
+  {% set absolutePostUrl %}{{post | postURL}}/{% endset %}
   <entry>
     <title>{{ post.title | safe }}</title>
-    <link href="{{ absolutePostUrl }}"/>
+    <link href="{{ absolutePostUrl }}" rel="self"/>
     <updated>{{ post.date | postDateToRfc3339 }}</updated>
     <id>{{ absolutePostUrl }}</id>
     <category term="{{ post.post_type }}"/>

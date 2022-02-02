@@ -6,7 +6,7 @@
     alias: "post",
     reverse: true
   },
-  permalink: "/news/{{ post.date | htmlDateStringISO }}-{{ post.title | slugify }}/index.html",
+  permalink: "{{post | postURL}}/index.html",
   eleventyComputed: {
     title: "{{ post.title | safe }}",
     description: "{{ post.lede | markdownify | safe }}"

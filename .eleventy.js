@@ -93,6 +93,10 @@ module.exports = function (eleventyConfig) {
     });
   });
 
+  eleventyConfig.addFilter("postURL", function (post) {
+    return `/news/${this.env.filters.htmlDateStringISO(post.date)}-${this.env.filters.slugify(post.title)}`
+  });
+
   //TODO: cleanup, and perhaps handle both string and obj in one method; future work
 
   eleventyConfig.addFilter("postDateTerseNoYearISO", (dateObj) => {
