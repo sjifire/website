@@ -26,7 +26,7 @@
     <email>{{ metadata.author.email }}</email>
   </author>
   {%- for post in posts | reverse -%}
-  {% set absolutePostUrl %}{{post | postURL}}/{% endset %}
+  {% set absolutePostUrl %}{{ post.url }}/{% endset %}
   <entry>
     <title>{{ post.title | safe }}</title>
     <link href="{{ absolutePostUrl }}" rel="self"/>

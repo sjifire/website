@@ -6,7 +6,7 @@
     alias: "post",
     reverse: true
   },
-  permalink: "{{post | postURL}}/index.html",
+  permalink: "{{post.url}}/index.html",
   eleventyComputed: {
     title: "{{ post.title | safe }}",
     description: "{{ post.lede | markdownify | safe }}"
