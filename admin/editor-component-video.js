@@ -1,48 +1,48 @@
+/* global DOMPurify */
 window.NetlifyCmsEditorComponentYoutube = {
-  id: "youtube",
-  label: "YouTube",
+  id: 'youtube',
+  label: 'YouTube',
   fields: [
     {
-      name: "url",
-      label: "Youtube video ID or URL",
-      widget: "string",
-    },
+      name: 'url',
+      label: 'Youtube video ID or URL',
+      widget: 'string'
+    }
   ],
-  pattern: /^\@\[youtube\]\s*\((.+?)\)$/,
+  pattern: /^@\[youtube\]\s*\((.+?)\)$/,
   fromBlock: function (match) {
     return {
-      url: match[1],
-    };
+      url: match[1]
+    }
   },
   toBlock: function (obj) {
-    return "@[youtube](" + obj.url + ")";
+    return DOMPurify.sanitize('@[youtube](' + obj.url + ')')
   },
   toPreview: function (obj) {
-    return "@[youtube](" + obj.url + ")"
-  },
-};
-
+    return DOMPurify.sanitize('@[youtube](' + obj.url + ')')
+  }
+}
 
 window.NetlifyCmsEditorComponentVimeo = {
-  id: "vimeo",
-  label: "Vimeo",
+  id: 'vimeo',
+  label: 'Vimeo',
   fields: [
     {
-      name: "url",
-      label: "Vimeo video ID or URL",
-      widget: "string",
-    },
+      name: 'url',
+      label: 'Vimeo video ID or URL',
+      widget: 'string'
+    }
   ],
-  pattern: /^\@\[vimeo\]\s*\((.+?)\)$/,
+  pattern: /^@\[vimeo\]\s*\((.+?)\)$/,
   fromBlock: function (match) {
     return {
-      url: match[1],
-    };
+      url: match[1]
+    }
   },
   toBlock: function (obj) {
-    return "@[vimeo](" + obj.url + ")";
+    return '@[vimeo](' + obj.url + ')'
   },
   toPreview: function (obj) {
-    return "@[vimeo](" + obj.url + ")"
-  },
-};
+    return '@[vimeo](' + obj.url + ')'
+  }
+}

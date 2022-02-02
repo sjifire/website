@@ -40,7 +40,7 @@
 
   {% include "svg-sprite.svg" %}
 
-  <header class="site-header{{ ' site-header--home' if page.url === '/'}}" role="banner">
+  <header id="home-header" class="site-header{{ ' site-header--home' if page.url === '/'}}" role="banner">
     {% include "header.njk" %}
   </header>
 
@@ -65,6 +65,12 @@
   </footer>
   {% set js %}
     {% include "nav-js.njk" %}
+    {% if page.url === '/' %}
+      const imgs = ["{{ site.home_header_backgrounds | join('","') | safe }}"];
+      const random = Math.floor(Math.random() * imgs.length);
+      const image = imgs[random]
+      document.getElementById('home-header').style.setProperty('--home-header-bg-image', 'url('+image+')');
+    {% endif %}
   {% endset %}
   <script defer>
     {{ js | jsmin | safe }}

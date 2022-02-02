@@ -20,7 +20,13 @@ jobs:
       - run: npm ci
       - run: npm run build --if-present
       - run: npx playwright install-deps chromium
-      - run: ./bin/eso_stats_scrapper.js  --headless -o ./src/_data/stats.json -r website-DEV
+      - name: primary run
+        run: |
+          # Retry 3 times before the steps actually fails
+          cmd="./bin/eso_stats_scrapper.js  --headless -o ./src/_data/stats.json -r website-DEV";
+          (echo "===== ESO Scrapper Attempt: 1 ====" && eval "$cmd") || \
+          (echo "===== ESO Scrapper Attempt: 2 ====" && sleep 30 && eval "$cmd") || \
+          (echo "===== ESO Scrapper Attempt: 3 ====" && sleep 90 && eval "$cmd")
         env:
           ESO_REPORT_USERNAME: ${{ secrets.ESO_REPORT_USERNAME }}
           ESO_REPORT_PASSWORD: ${{ secrets.ESO_REPORT_PASSWORD }}
