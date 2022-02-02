@@ -93,7 +93,6 @@ module.exports = function (eleventyConfig) {
     });
   });
 
-  eleventyConfig.addFilter("postURL", function (post) {
   //TODO: cleanup, and perhaps handle both string and obj in one method; future work
   eleventyConfig.addFilter("postDateTerseNoYearISO", (dateObj) => {
     return DateTime.fromISO(dateObj, {zone: 'utc'}).toLocaleString({ month: 'short', day: 'numeric' });
