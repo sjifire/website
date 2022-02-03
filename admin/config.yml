@@ -198,6 +198,17 @@ collections:
             name: body
             widget: markdown
             required: true
+      - label: "About/Board of Commissioners"
+        name: "board-of-commissioners"
+        delete: false
+        editor:
+          preview: false
+        file: "src/_data/board_of_commissioners.yml"
+        fields:
+          - label: Body
+            name: body
+            widget: markdown
+            required: true
       - label: "Services/24-7 Emergency Services"
         name: "emergency_services"
         delete: false
