@@ -1,5 +1,5 @@
 body: >
-  ### Governance
+  ## Governance
 
 
   * **Formal Name:** San Juan Fire Protection District #3
@@ -15,7 +15,7 @@ body: >
 
 
 
-  ### District
+  ## District
 
 
   * **District Population (2021):**
@@ -34,7 +34,7 @@ body: >
 
 
 
-  ### Administrative Staff
+  ## Administrative Staff
 
 
   * **Fire Chief, EFO:** Norvin Collins
@@ -49,7 +49,7 @@ body: >
 
 
 
-  ### Finance (2022)
+  ## Finance (2022)
 
 
   * **Assessed Valuation of property within District:** $4,481,351,335
@@ -65,7 +65,7 @@ body: >
 
 
 
-  ### Staff & Volunteer Responders (Jan 2022)
+  ## Staff & Volunteer Responders (Jan 2022)
 
 
   * **Volunteer EMTs and/or Firefighters:** 32
@@ -76,21 +76,18 @@ body: >
 
   * **Full Time Firefighters/EMTs:** 7
 
+  * **EMS specific Responders:**
+
+    -  18 EMTs
+
+    -  1 Senior EMS Instructor
+
+    -  7 EMT Evaluators
+
   * **Total Active Members:** 56
 
 
-
-  #### EMS specific Responders:
-
-  * 18 EMTs
-
-  * 1 Senior EMS Instructor
-
-  * 7 EMT Evaluators
-
-
-
-  ### Contact
+  ## Contact
 
 
   * **Emergency Phone Number:** 9-1-1
@@ -104,7 +101,7 @@ body: >
 
 
 
-  ### WSRB Fire Insurance Rating
+  ## Insurance Providers and Washington Survey & Ratings Bureau
 
 
   * [WSRB Report: Town of Friday Harbor](/assets/docs/20_2_28_FridayHarbor_Final_Ltr.pdf): Class 6 (2020)
@@ -114,9 +111,7 @@ body: >
   * [WSRB Media Release](/assets/media_releases/2020/sjifr-report-on-wsrb-ratings-changes.pdf) (2020)
 
 
-
-
-  ### District Facilities & Apparatus
+  ## District Facilities & Apparatus
 
 
   * **Station locations:**
@@ -144,10 +139,8 @@ body: >
     * 1 - Utility Vehicle
 
 
-  ### Misc.
+  ## Response Radio Frequencies
 
-
-  * **Response Radio Frequencies:**
     * Dispatch "Fire South": 155.79750
     * Dispatch "Fire North": 155.14500
     * Dispatch "EMS": 155.28000
