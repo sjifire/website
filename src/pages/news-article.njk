@@ -18,14 +18,19 @@
 
 {% block content %}
 
-  {% if post.sidebar_template_include %}
+  {% if post.sidebar_template_include or post.sidebar %}
     <div class="l-grid l-grid--2col">
       <div class="l-grid__main block-content">
         {{ post.body | markdownify | safe }}
       </div>
-
       <aside class="l-grid__sidebar">
-        {% include post.sidebar_template_include %}
+        <div class="sidebar-block">
+        {% if post.sidebar_template_include %}
+          {% include post.sidebar_template_include %}
+        {% else %}
+          {{ post.sidebar | markdownify | safe }}
+        {% endif %}
+        </div>
       </aside>
     </div>
   {% else %}
