@@ -93,6 +93,16 @@ module.exports = function (eleventyConfig) {
     });
   });
 
+  // NOTE: this works, BUT it doesn't add the environment such as all the custom filters
+  //       but it does allow something like post.body | markownify | templatize | safe
+  // There is an open github issue to allow linking into the templateEngine from within
+  // the config file: https://github.com/11ty/eleventy/issues/1596
+  // This will make work a lot easier BUT it is potentially dangerous to expose templates
+  // to the user... need to do more research to see if this is really all that dangerous.
+  // eleventyConfig.addFilter("templatize", function(rawString) {
+  //   return nunjucks.renderString(rawString, this.ctx); //, this.ctx)
+  // });
+
   //TODO: cleanup, and perhaps handle both string and obj in one method; future work
 
   eleventyConfig.addFilter("postDateTerseNoYearISO", (dateObj) => {
