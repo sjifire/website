@@ -376,7 +376,11 @@ collections:
     fields: # The fields for each document, usually in front matter
       - label: Title
         name: title
-        widget: string
+        widget: "select"
+        options:
+          - { label: "Regular Meeting", value: "Regular Meeting" }
+          - { label: "Special Meeting", value: "Special Meeting" }
+          - { label: "Workshop", value: "Workshop" }
         required: true
       - label: Date
         name: date
