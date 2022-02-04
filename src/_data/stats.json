@@ -1,7 +1,10 @@
 {
-  "updated_at": "2022-02-04T09:12:40.649Z",
+  "updated_at": "2022-02-04T19:54:30.330Z",
+  "date_range_all_from": "2021-02-04T13:45:25.000Z",
+  "date_range_all_to": "2022-02-03T09:39:35.000Z",
   "date_range_from": "2022-01-05T00:00:00.000Z",
   "date_range_to": "2022-02-03T23:59:59.999Z",
+  "parseWarnings": 11,
   "_comment": "auto generated; do not manually modify",
   "_time_dsc": "all times are in seconds",
   "unit_time_stats": {
