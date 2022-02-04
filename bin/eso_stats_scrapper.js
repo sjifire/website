@@ -51,7 +51,7 @@ const argv = require('yargs/yargs')(hideBin(process.argv))
   })
   .count('verbose')
   .alias('v', 'verbose')
-  .demandOption(['o', 'r'])
+  .demandOption(['o'])
   .help()
   .alias('help', 'h')
   .argv
@@ -67,14 +67,18 @@ switch (argv.verbose) {
     logger.level = 'debug'
 }
 
+let csvPath = argv.csv_input
+if (_.isUndefined(csvPath) && _.isUndefined(argv.r)) {
+  throw new Error('Missing required argument: --report_name')
+}
+
 (async function () {
-  let csvPath = argv.csv_input
   if (_.isUndefined(csvPath)) {
     logger.info('retrieving CSV report from ESO')
     csvPath = await esoScrapper.retrieveCSVReport(USERNAME, PASSWORD, AGENCY, argv.r, argv.headless)
   }
 
-  if (argv.c) {
+  if (!_.isUndefined(argv.c)) {
     logger.info(`outputing csv file to ${argv.c}`)
     fs.copyFileSync(csvPath, argv.c)
   }
@@ -88,6 +92,9 @@ switch (argv.verbose) {
     stopDate: argv.stop_date,
     dayRange: argv.day_range
   })
+  logger.info(`incidents: ${statsOutput.incident_stats.num_incidents} (curr date range); ${statsOutput.incident_stats.num_incidents_last_365_days} (last 365)`)
+  logger.info(`date range:      ${statsOutput.date_range_from.toLocaleDateString()} -> ${statsOutput.date_range_to.toLocaleDateString()} (${Math.round((statsOutput.date_range_to.getTime() - statsOutput.date_range_from.getTime()) / (1000 * 3600 * 24))} days)`)
+  logger.info(`full date range: ${statsOutput.date_range_all_from.toLocaleDateString()} -> ${statsOutput.date_range_all_to.toLocaleDateString()} (${Math.round((statsOutput.date_range_all_to.getTime() - statsOutput.date_range_all_from.getTime()) / (1000 * 3600 * 24))} days)`)
   logger.info(`outputing json file to ${argv.o}`)
   const json = JSON.stringify(statsOutput, null, 2)
   fs.writeFileSync(argv.o, json)

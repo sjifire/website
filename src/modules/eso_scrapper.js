@@ -142,7 +142,7 @@ const _processRecords = function (records, startDate, stopDate, dayRange) {
   if (startDate) {
     startDate = new Date(startDate) // copy date so we can modify OR parse if it comes in as a string
     if (!stopDate) {
-      stopDate = startDate.addDays(dayRange - 1) // we change it to be the very end of day, so this works out
+      stopDate = _addDays(startDate, dayRange - 1) // we change it to be the very end of day, so this works out
     } else {
       stopDate = new Date(stopDate) // copy date so we can modify OR parse if it comes in as a string
       dayRange = Math.round((stopDate.getTime() - startDate.getTime()) / 1000 / 60 / 60 / 24)
@@ -153,7 +153,9 @@ const _processRecords = function (records, startDate, stopDate, dayRange) {
   stopDate.setUTCHours(23, 59, 59, 999) // set to the very end of day
   // NOTE: this date range makes it exclusive, NOT inclusive...
   // so if 30 days, it would go from 12/25/21 23:59:59 back to 11/26/21 00:00:00
-  const dateCutoff = startDate || stopDate.addDays(-dayRange).addDays(1)
+  let tmpDate = _addDays(stopDate, -dayRange)
+  tmpDate = _addDays(tmpDate, 1)
+  const dateCutoff = startDate || tmpDate
   dateCutoff.setHours(0, 0, 0, 0)
   const recordsInRange = records.filter(record => record['Alarm Date'] >= dateCutoff && record['Alarm Date'] <= stopDate)
   // the groupBy sorts by lexographical ordering of the Incident Number; this isn't
@@ -181,11 +183,15 @@ const _processRecords = function (records, startDate, stopDate, dayRange) {
     nighttime_calls: 0,
     in_range_calls: _.size(byIncidentInRange),
     total_calls: _.uniqBy(records, 'Incident Number').length,
+    date_range_all_from: _.first(records)['Dispatched Date'],
+    date_range_all_to: _.last(records)['Dispatched Date'],
     date_range_from: dateCutoff,
-    date_range_to: stopDate
+    date_range_to: stopDate,
+    parseWarnings: 0
   }
   // loop for every day in the detailed range and set it up with zero.
   // this way we log the days that have no activit.
+  // eslint-disable-next-line
   for (let day = new Date(dateCutoff.getTime()); day <= stopDate; day.setDate(day.getDate() + 1)) {
     rawValues.calls_per_day[day.toLocaleDateString()] = 0
   }
@@ -203,7 +209,14 @@ const _processRecords = function (records, startDate, stopDate, dayRange) {
     rawValues.calls_per_day[dispatchedDate.toLocaleDateString()]++
 
     // lets check some times
-    if (dispatchedDate - baseRecord['Alarm Date'] < 2) logger.verbose(`${incidentID} has incorrect Alarm & Dispatch times`)
+    if (dispatchedDate - baseRecord['Alarm Date'] <= 2) {
+      logger.verbose(`${incidentID} has incorrect Alarm & Dispatch times`)
+    // this one doesn't matter; it should probably be fixed in training, but from
+    // a report perspective, if these two are the same it is ok.
+    // the alarm date should be when dispatch triggers a record
+    // and the dispatch date is when they tone out.  Hence why we don't flag it as a warning
+    //   rawValues.parseWarnings++
+    }
     if (incidentTypeCall === '571' && (_.isDate(baseRecord['En Route Date']) || _.isDate(baseRecord['Arrival Date']))) logger.verbose(`${incidentID} is a standby yet has en route or arrival dates set`)
 
     if (prevCallEnd && prevCallEnd > dispatchedDate) {
@@ -246,11 +259,16 @@ const _processRecords = function (records, startDate, stopDate, dayRange) {
       // firstArrivedUnit = null;
       // onSceneTimes     = null;
     }
-    if (_.isEmpty(_.compact(onSceneTimes))) logger.debug(`${incidentID} has empty on-scene times`)
+    if (_.isEmpty(_.compact(onSceneTimes))) {
+      logger.debug(`${incidentID} has empty on-scene times`)
+      rawValues.parseWarnings++
+    }
 
     const incidentTime = (baseRecord['Last Unit Cleared Date'] - dispatchedDate) / 1000
-    if (_.isNull(reactionTime)) logger.verbose(`${incidentID} has no reaction time`)
-    if (_.isNull(reactionTime)) logger.verbose(`${incidentID} has no reaction time`)
+    if (_.isNull(reactionTime)) {
+      logger.verbose(`${incidentID} has no reaction time`)
+      rawValues.parseWarnings++
+    }
     rawValues.reaction_times.push(reactionTime)
     rawValues.travel_times.push(travelTimes)
     rawValues.to_scene_times.push(toSceneTimes)
@@ -336,6 +354,9 @@ const _processRecords = function (records, startDate, stopDate, dayRange) {
       rawValues.incident_types.push('other') // TODO: in district or out of district?
     }
   })
+  if (rawValues.incident_ids.length !== incidentsInDispatchedDateOrder.length) {
+    logger.warn(`mismatch on incident counters: ${rawValues.incident_ids.length} (incident_ids) vs ${incidentsInDispatchedDateOrder.length} (incidentArr)`)
+  }
   logger.debug('_processRecords', rawValues)
   return rawValues
 }
@@ -345,8 +366,11 @@ const _createStats = function (rawValues) {
   const incidentTimes = _.chain(rawValues.incident_times).flatten().compact().value()
   const statsOutput = {
     updated_at: new Date(),
+    date_range_all_from: rawValues.date_range_all_from,
+    date_range_all_to: rawValues.date_range_all_to,
     date_range_from: rawValues.date_range_from,
     date_range_to: rawValues.date_range_to,
+    parseWarnings: rawValues.parseWarnings,
     _comment: 'auto generated; do not manually modify',
     _time_dsc: 'all times are in seconds',
     unit_time_stats: {},
@@ -489,8 +513,8 @@ const _createStats = function (rawValues) {
 }
 
 // https://stackoverflow.com/a/563442
-Date.prototype.addDays = function (days) {
-  const date = new Date(this.valueOf())
+const _addDays = function (date, days) {
+  date = new Date(date.valueOf())
   date.setDate(date.getDate() + days)
   return date
 }
