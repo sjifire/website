@@ -23,6 +23,7 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addDataExtension("yml", contents => yaml.load(contents));
   // eleventyConfig.setDataDeepMerge(true);
   eleventyConfig.addPassthroughCopy("src/assets/");
+  eleventyConfig.addPassthroughCopy("src/admin/");
 
   eleventyConfig.addPlugin(pluginRss, {
     posthtmlRenderOptions: {
