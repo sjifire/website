@@ -28,6 +28,10 @@ Git LFS is enabled for Netlify Large Media. see `git lfs track` and `git lfs ls-
 1. for login access, use site `https://www.sjifire.org/admin`
 1. for saving admin locally, you need to run a proxy. See [Netlify docs](https://www.netlifycms.org/docs/beta-features/#working-with-a-local-git-repository) for details
 
+## Code styles
+
+1. `npx prettier --write .`
+
 ## getting started (production)
 
 1. setup a cloudinary account and get a URL secret
