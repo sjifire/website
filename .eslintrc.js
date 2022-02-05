@@ -11,8 +11,5 @@ module.exports = {
     impliedStrict: true,
   },
   rules: {},
-  "extends": [
-    "standard",
-    "prettier"
-  ]
+  extends: ["standard", "prettier"],
 };
