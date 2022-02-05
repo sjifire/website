@@ -169,8 +169,11 @@ module.exports = function (eleventyConfig) {
       const links = [...document.querySelectorAll('a')];
       if (links.length == 0) return content
       links.map((link) => {
+        //NOTE: a negative look-behind regex doesn't seem to work, ie
+        // /\.(?!html)$/i.test(link.href)
+        // so doing a double check, that there is a file extension AND it is not .html
         if (/^(https?\:\/\/|\/\/)/i.test(link.href) ||
-            /\.pdf$/i.test(link.href)) {
+            (/\.\w+$/i.test(link.href) && !/\.html$/i.test(link.href))) {
           link.setAttribute('target', '_blank');
           link.setAttribute('rel', 'noreferrer');
         }
