@@ -3,16 +3,16 @@ module.exports = {
     browser: true,
     es2021: true,
     node: true,
-    mocha: true
+    mocha: true,
   },
-  extends: [
-    'standard'
-  ],
   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    impliedStrict: true
+    ecmaVersion: "latest",
+    sourceType: "module",
+    impliedStrict: true,
   },
-  rules: {
-  }
-}
+  rules: {},
+  "extends": [
+    "standard",
+    "prettier"
+  ]
+};

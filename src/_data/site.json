@@ -15,5 +15,8 @@
   },
   "opengraph_image": "sjifire-logo-clear.png",
   "enable_cloudinary_rewrites": false,
-  "home_header_backgrounds": ["https://res.cloudinary.com/san-juan-fire-district-3/image/fetch/w_800,q_auto:eco,e_grayscale/https://sjifire.netlify.app/assets/images/Arata-Photo-1-e1635900798243.jpg", "https://res.cloudinary.com/san-juan-fire-district-3/w_800,q_auto:eco,e_grayscale/bg-home-header_o8fjpt.jpg"]
+  "home_header_backgrounds": [
+    "https://res.cloudinary.com/san-juan-fire-district-3/image/fetch/w_800,q_auto:eco,e_grayscale/https://sjifire.netlify.app/assets/images/Arata-Photo-1-e1635900798243.jpg",
+    "https://res.cloudinary.com/san-juan-fire-district-3/w_800,q_auto:eco,e_grayscale/bg-home-header_o8fjpt.jpg"
+  ]
 }

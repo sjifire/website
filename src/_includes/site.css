@@ -66,7 +66,8 @@ select {
 }
 
 :root {
-  --ff-sans: -apple-system, BlinkMacSystemFont, "Roboto", "Arial", "Helvetica Neue", "Helvetica", sans-serif;
+  --ff-sans: -apple-system, BlinkMacSystemFont, "Roboto", "Arial",
+    "Helvetica Neue", "Helvetica", sans-serif;
   --dk-gray: #21262d;
   --black: #161b22;
   --yellow: #f2c700;
@@ -100,10 +101,10 @@ body {
 
 .site-header--home {
   --home-header-bg-image: url("https://res.cloudinary.com/san-juan-fire-district-3/w_800,q_auto:eco,e_grayscale/bg-home-header_o8fjpt.jpg");
-  background-blend-mode: multiply,luminosity;
+  background-blend-mode: multiply, luminosity;
   background-image: var(--home-header-bg-image);
   background-color: var(--dk-red);
-  background-repeat:  no-repeat;
+  background-repeat: no-repeat;
   background-position: center center;
   background-attachment: fixed;
   background-size: cover;
@@ -409,28 +410,50 @@ body {
 
 .rap {
   padding-left: 15px;
-  padding-right: 15px; }
-  @media screen and (min-width: 576px) {
-    .rap {
-      margin-left: auto;
-      margin-right: auto;
-      padding-left: 0;
-      padding-right: 0;
-      max-width: 540px; } }
-  @media screen and (min-width: 768px) {
-    .rap {
-      max-width: 720px; } }
-  @media screen and (min-width: 992px) {
-    .rap {
-      max-width: 960px; } }
-  @media screen and (min-width: 1200px) {
-    .rap {
-      max-width: 1110px; }
+  padding-right: 15px;
+}
+@media screen and (min-width: 576px) {
+  .rap {
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 0;
+    padding-right: 0;
+    max-width: 540px;
+  }
+}
+@media screen and (min-width: 768px) {
+  .rap {
+    max-width: 720px;
+  }
+}
+@media screen and (min-width: 992px) {
+  .rap {
+    max-width: 960px;
+  }
+}
+@media screen and (min-width: 1200px) {
+  .rap {
+    max-width: 1110px;
+  }
 }
 
 .featured__media {
-  background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0,var(--dk-gray)),color-stop(50%,var(--dk-gray)),color-stop(50%,hsla(0,0%,100%,0)),to(hsla(0,0%,100%,0)));
-  background-image: linear-gradient(to bottom,var(--dk-gray) 0,var(--dk-gray) 50%,hsla(0,0%,100%,0) 50%,hsla(0,0%,100%,0) 100%);
+  background-image: -webkit-gradient(
+    linear,
+    left top,
+    left bottom,
+    color-stop(0, var(--dk-gray)),
+    color-stop(50%, var(--dk-gray)),
+    color-stop(50%, hsla(0, 0%, 100%, 0)),
+    to(hsla(0, 0%, 100%, 0))
+  );
+  background-image: linear-gradient(
+    to bottom,
+    var(--dk-gray) 0,
+    var(--dk-gray) 50%,
+    hsla(0, 0%, 100%, 0) 50%,
+    hsla(0, 0%, 100%, 0) 100%
+  );
 }
 
 .featured__media img {
@@ -531,14 +554,14 @@ body {
 
 .l-grid--2col {
   grid-template-areas:
-  "main main"
-  "sidebar sidebar";
+    "main main"
+    "sidebar sidebar";
 }
 
 .l-grid--2col.flipped {
   grid-template-areas:
-  "sidebar sidebar"
-  "main main";
+    "sidebar sidebar"
+    "main main";
 }
 
 .l-grid__sidebar {
@@ -560,8 +583,8 @@ body {
   .l-grid--2col,
   .l-grid--2col.flipped {
     grid-template-areas:
-                          "main sidebar"
-                          "main sidebar";
+      "main sidebar"
+      "main sidebar";
     grid-template-columns: 2.5fr minmax(240px, 1fr);
     gap: 60px;
   }
@@ -757,24 +780,24 @@ body {
 
 .widget__body .level--low,
 .widget__body .level--open {
-  background-color: #CEE8CE;
+  background-color: #cee8ce;
   color: #206220;
 }
 
 .widget__body .level--moderate {
-  background-color: #D8EAFF;
+  background-color: #d8eaff;
   color: var(--blue);
 }
 
 .widget__body .level--high,
 .widget__body .level--restricted {
-  background-color: #FFEAB8;
-  color: #81682C;
+  background-color: #ffeab8;
+  color: #81682c;
 }
 
 .widget__body .level--extreme,
 .widget__body .level--closed {
-  background-color: #FFE0E0;
+  background-color: #ffe0e0;
   color: var(--dk-red);
 }
 
@@ -870,8 +893,6 @@ body {
   text-align: center;
 }
 
-
-
 .pagination {
   display: flex;
   justify-content: center;
@@ -943,14 +964,14 @@ body {
   border: 0 !important;
   clip: rect(1px, 1px, 1px, 1px) !important; /* 1 */
   -webkit-clip-path: inset(50%) !important;
-    clip-path: inset(50%) !important;  /* 2 */
+  clip-path: inset(50%) !important; /* 2 */
   height: 1px !important;
   margin: -1px !important;
   overflow: hidden !important;
   padding: 0 !important;
   position: absolute !important;
   width: 1px !important;
-  white-space: nowrap !important;            /* 3 */
+  white-space: nowrap !important; /* 3 */
 }
 
 .brand-red {
@@ -1101,7 +1122,8 @@ select.form-control:focus::-ms-value {
   font-size: 1rem;
   line-height: 1.5;
   border-radius: 0.25rem;
-  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   text-decoration: none;
 }
 

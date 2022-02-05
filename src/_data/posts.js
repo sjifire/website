@@ -5,8 +5,8 @@ const postsFolder = path.resolve(__dirname, "../posts");
 
 const posts = fs
   .readdirSync(postsFolder)
-  .filter(name => path.extname(name) === ".json")
-  .map(name => ({
+  .filter((name) => path.extname(name) === ".json")
+  .map((name) => ({
     ...require(path.join(postsFolder, name)),
   }))
   .sort((a, b) => new Date(a.date) - new Date(b.date));

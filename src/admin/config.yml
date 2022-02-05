@@ -7,7 +7,6 @@ public_folder: "/assets/images"
 site_url: "https://www.sjifire.org/"
 show_preview_links: true
 collections:
-
   - name: "posts"
     label: "Posts"
     label_singular: "Post"
@@ -45,14 +44,14 @@ collections:
         time_format: false
         format: "YYYY-MM-DDTHH:mm"
         picker_utc: true
-        default: ''
+        default: ""
         hint: Publication date
         required: true
       - label: Teaser (Lede)
         name: lede
         widget: markdown
         minimal: false
-        buttons: ['bold', 'italic', 'link', 'quote']
+        buttons: ["bold", "italic", "link", "quote"]
         modes: [rich_text]
         editor_components: []
         hint: Short snipped of text used in article teasers
@@ -68,7 +67,7 @@ collections:
             widget: image
             allow_multiple: false
             choose_url: false
-            public_folder: ''
+            public_folder: ""
             required: false
           - label: Width
             name: width
@@ -107,7 +106,7 @@ collections:
           - label: Preamble
             name: preamble
             widget: markdown
-            buttons: ['bold', 'italic', 'link']
+            buttons: ["bold", "italic", "link"]
             editor_components: []
             modes: [rich_text]
             hint: >-
@@ -126,7 +125,7 @@ collections:
           - label: Preamble
             name: preamble
             widget: markdown
-            buttons: ['bold', 'italic', 'link']
+            buttons: ["bold", "italic", "link"]
             editor_components: []
             modes: [rich_text]
             hint: >-
@@ -178,7 +177,7 @@ collections:
           - label: "Important Documents"
             name: "important_documents"
             widget: "list"
-            summary: '{{fields.file}}'
+            summary: "{{fields.file}}"
             hint: "Highlight Important Documents"
             allow_add: true
             add_to_top: true
@@ -192,8 +191,8 @@ collections:
                 widget: file
                 allow_multiple: false
                 choose_url: false
-                media_folder: '/src/assets/docs/'
-                public_folder: ''
+                media_folder: "/src/assets/docs/"
+                public_folder: ""
           - label: Body
             name: body
             widget: markdown
@@ -328,7 +327,7 @@ collections:
           - label: Preamble
             name: preamble
             widget: markdown
-            buttons: ['bold', 'italic', 'link']
+            buttons: ["bold", "italic", "link"]
             editor_components: []
             modes: [rich_text]
             hint: >-
@@ -348,7 +347,7 @@ collections:
           - label: Preamble
             name: preamble
             widget: markdown
-            buttons: ['bold', 'italic', 'link']
+            buttons: ["bold", "italic", "link"]
             editor_components: []
             modes: [rich_text]
             hint: >-
@@ -400,13 +399,13 @@ collections:
         time_format: false
         format: "YYYY-MM-DD"
         picker_utc: true
-        default: ''
+        default: ""
         hint: Meeting date
         required: true
       - label: "Documents"
         name: "documents"
         widget: "list"
-        summary: '{{fields.file}}'
+        summary: "{{fields.file}}"
         hint: "Add pre-meeting docs (e.g. 'Agenda') and post-meeting docs (e.g. 'Minutes')."
         allow_add: true
         add_to_top: true
@@ -420,8 +419,8 @@ collections:
             widget: file
             allow_multiple: false
             choose_url: false
-            media_folder: '/src/assets/docs/'
-            public_folder: ''
+            media_folder: "/src/assets/docs/"
+            public_folder: ""
     sortable_fields:
       - date
       - commit_date
@@ -454,13 +453,13 @@ collections:
         time_format: false
         format: "YYYY-MM-DD"
         picker_utc: true
-        default: ''
+        default: ""
         hint: release date
         required: true
       - label: "Documents"
         name: "documents"
         widget: file
-        pattern: ['.pdf$', "Must end with '.pdf'"]
+        pattern: [".pdf$", "Must end with '.pdf'"]
         hint: must be a pdf
         allow_multiple: false
         choose_url: false
@@ -474,4 +473,3 @@ collections:
       - label: Year
         field: date
         pattern: \d{4}
-

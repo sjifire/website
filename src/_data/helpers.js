@@ -1,4 +1,4 @@
 module.exports = {
-  "buildTime" : new Date(),
+  buildTime: new Date(),
   env: process.env.ELEVENTY_ENV,
 };
