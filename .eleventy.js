@@ -2,7 +2,6 @@ const htmlmin = require("html-minifier");
 const { DateTime } = require("luxon");
 const CleanCSS = require("clean-css");
 const util = require("util");
-const slugify = require("slugify");
 const yaml = require("js-yaml");
 const _ = require("lodash");
 const { parseHTML } = require("linkedom");
@@ -86,15 +85,6 @@ module.exports = function (eleventyConfig) {
   // const mdRender = new MarkdownIt();
   eleventyConfig.addFilter("markdownify", function (rawString) {
     return mdRender.render(rawString);
-  });
-
-  // Slugify
-  eleventyConfig.addFilter("slugify", function (str) {
-    return slugify(str, {
-      lower: true,
-      replacement: "-",
-      remove: /[*+~.·,()'"`´%!?¿:@]/g,
-    });
   });
 
   //TODO: cleanup, and perhaps handle both string and obj in one method; future work
