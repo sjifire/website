@@ -7,7 +7,7 @@ const postsFolder = path.resolve(__dirname, "../posts");
 
 const posts = fs
   .readdirSync(postsFolder)
-  .filter((name) => path.extname(name) === ".json")
+  .filter((name) => path.extname(name) === ".json" && !name.match(/posts\.json$/) )
   .map((name) => ({
     ...require(path.join(postsFolder, name)),
   }))

@@ -136,6 +136,10 @@ module.exports = function (eleventyConfig) {
   });
 
   eleventyConfig.addFilter("dump", (obj) => {
+console.log('here----------------')
+console.log(obj)
+console.log(Object.keys(obj))
+// console.log(obj)
     return util.inspect(obj);
   });
 
