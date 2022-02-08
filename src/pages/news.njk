@@ -67,4 +67,5 @@ permalink: "/news/{% if pagination.pageNumber > 0 %}page-{{ pagination.pageNumbe
       {% endif %}
     </nav>
   {% endif %}
+  {{ collections.news | dump }}
 {% endblock %}
