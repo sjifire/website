@@ -23,7 +23,7 @@ jobs:
       - name: primary run
         run: |
           # Retry 3 times before the steps actually fails
-          cmd="./bin/eso_stats_scrapper.js  -v --headless -o ./src/_data/stats.json -r website-DEV";
+          cmd="./bin/eso_stats_scrapper.js  -v --headless -o ./src/_data/stats.json -r website-DEV --csv_output report.csv";
           (echo "===== ESO Scrapper Attempt: 1 ====" && eval "$cmd") || \
           (echo "===== ESO Scrapper Attempt: 2 ====" && sleep 30 && eval "$cmd") || \
           (echo "===== ESO Scrapper Attempt: 3 ====" && sleep 90 && eval "$cmd")
@@ -31,7 +31,14 @@ jobs:
           ESO_REPORT_USERNAME: ${{ secrets.ESO_REPORT_USERNAME }}
           ESO_REPORT_PASSWORD: ${{ secrets.ESO_REPORT_PASSWORD }}
           ESO_REPORT_AGENCY: ${{ secrets.ESO_REPORT_AGENCY }}
-
+      - name: 'Upload Artifact'
+        uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: stat_artifacts
+          path: ./src/_data/stats.json
+          path: report.csv
+          retention-days: 7
       - name: Add & Commit updated stats.json
         uses: EndBug/add-and-commit@v7.5.0
         with:
