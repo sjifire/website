@@ -117,6 +117,15 @@
   to = "{{site.cloudinaryRootUrl}}/image/fetch/f_auto/{{site.rootUrl}}/:splat"
   status = 200
 
+
+#[[redirects]]
+#  from = "/#invite_token=:invite_token"
+#  to = "/admin/#invite_token=:invite_token"
+#  status = 301
+#  force = true
+# https://www.sjifire.org/#invite_token=yN5wDq3ijqMjvBjezw4-GA
+
+
 # disable for now because:
 #  - it causes admin sub-domain to not deploy
 #  - it is REALLY expensive to run and we'll run out of build minutes
