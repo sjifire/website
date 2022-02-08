@@ -66,6 +66,12 @@
   {% set js %}
     {% include "nav-js.njk" %}
     {% if page.url === '/' %}
+      if (location.href.indexOf("#invite_token") != -1) {
+        var urlSplit = document.URL.split("#");
+        window.location = `/admin/#${urlSplit[1]}`;
+        //current url has a #hash in it
+      }
+
       const imgs = ["{{ site.home_header_backgrounds | join('","') | safe }}"];
       const random = Math.floor(Math.random() * imgs.length);
       const image = imgs[random]
