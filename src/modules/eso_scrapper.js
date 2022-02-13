@@ -5,7 +5,7 @@
  * into a stats JSON file.
  *
  *
- * WARNINGS & TODOs:
+ * WARNINGS:
  *  - This module is tightly coupled with the needs
  *    of SJIF&R, such as the stats computed from
  *    the raw data.
@@ -14,6 +14,10 @@
  *    columns per incident for each responder on each apparatus
  *  - tightly coupled to quirks of SJIF&R, such as
  *    zones (south, north, central)
+ * TODO/QUESTIONS:
+ *  - should backfill be counted in general?
+ *  - should backfill be counted on a first-unit response?
+ *
  */
 const fs = require("fs");
 const _ = require("lodash");
