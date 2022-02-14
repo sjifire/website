@@ -34,7 +34,7 @@ jobs:
           ESO_REPORT_USERNAME: ${{ secrets.ESO_REPORT_USERNAME }}
           ESO_REPORT_PASSWORD: ${{ secrets.ESO_REPORT_PASSWORD }}
           ESO_REPORT_AGENCY: ${{ secrets.ESO_REPORT_AGENCY }}
-      - name: 'Upload Artifact'
+      - name: "Upload Artifact"
         uses: actions/upload-artifact@v2
         if: always()
         with:
