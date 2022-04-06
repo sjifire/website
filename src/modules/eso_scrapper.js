@@ -494,6 +494,9 @@ const _createStats = function (rawValues) {
     _.countBy(rawValues.incident_types)
   );
   statsOutput.incident_stats.types = typeStats;
+
+  logger.verbose(`${incidentID}: reactionTimes: ${_.chain(rawValues.reaction_times).flatten().compact().value()}`);
+
   new Map([
     [
       "first_unit_reaction",
