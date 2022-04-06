@@ -320,6 +320,7 @@ const _processRecords = function (records, startDate, stopDate, dayRange) {
       logger.verbose(`${incidentID} has no reaction time`);
       rawValues.parseWarnings++;
     }
+    logger.verbose(`${incidentID}: reaction: ${reactionTime}; travel: ${travelTimes}; toScene: ${toSceneTimes}; onScene: ${onSceneTimes}; incidentTime: ${incidentTime}`);
     rawValues.reaction_times.push(reactionTime);
     rawValues.travel_times.push(travelTimes);
     rawValues.to_scene_times.push(toSceneTimes);
