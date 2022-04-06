@@ -495,7 +495,7 @@ const _createStats = function (rawValues) {
   );
   statsOutput.incident_stats.types = typeStats;
 
-  logger.verbose(`${incidentID}: reactionTimes: ${_.chain(rawValues.reaction_times).flatten().compact().value()}`);
+  logger.verbose(`reactionTimes: ${_.chain(rawValues.reaction_times).flatten().compact().value()}`);
 
   new Map([
     [
