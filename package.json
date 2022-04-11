@@ -27,7 +27,7 @@
     "playwright": "^1.20.2",
     "terser": "^5.12.1",
     "winston": "^3.7.2",
-    "yargs": "^17.4.0"
+    "yargs": "^17.4.1"
   },
   "devDependencies": {
     "@playwright/test": "^1.20.2",
