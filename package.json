@@ -24,7 +24,7 @@
     "lodash": "^4.17.21",
     "markdown-it-attrs": "^4.1.4",
     "markdown-it-video": "^0.6.3",
-    "playwright": "^1.21.1",
+    "playwright": "^1.22.1",
     "terser": "^5.13.1",
     "winston": "^3.7.2",
     "yargs": "^17.5.1"
