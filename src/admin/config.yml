@@ -248,12 +248,12 @@ collections:
             picker_utc: true
             preview: false
           - name: "burn_ban_status"
-            label: "Burn Ban Status"
+            label: "Residential Burn Status"
             widget: "select"
             options: ["Open", "Closed"]
             preview: false
           - name: "commercial_burn_ban_status"
-            label: "Commercial Burn Ban Status"
+            label: "Commercial Burn Status"
             widget: "select"
             options: ["Open", "Closed"]
             preview: false
