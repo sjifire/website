@@ -90,6 +90,9 @@ module.exports = function (eleventyConfig) {
   //TODO: cleanup, and perhaps handle both string and obj in one method; future work
 
   eleventyConfig.addFilter("postDateTerseNoYearISO", (dateObj) => {
+    //NOTE: sometimes a string comes in, sometimes a date... so lets cleanup!
+    if (typeof dateObj.toISOString === "function")
+      dateObj = dateObj.toISOString();
     return DateTime.fromISO(dateObj, { zone: "utc" }).toLocaleString({
       month: "short",
       day: "numeric",
@@ -97,18 +100,27 @@ module.exports = function (eleventyConfig) {
   });
 
   eleventyConfig.addFilter("postDateTerseISO", (dateObj) => {
+    //NOTE: sometimes a string comes in, sometimes a date... so lets cleanup!
+    if (typeof dateObj.toISOString === "function")
+      dateObj = dateObj.toISOString();
     return DateTime.fromISO(dateObj, { zone: "utc" }).toLocaleString(
       DateTime.DATE_MED
     );
   });
 
   eleventyConfig.addFilter("postDateVerboseISO", (dateObj) => {
+    //NOTE: sometimes a string comes in, sometimes a date... so lets cleanup!
+    if (typeof dateObj.toISOString === "function")
+      dateObj = dateObj.toISOString();
     return DateTime.fromISO(dateObj, { zone: "utc" }).toLocaleString(
       DateTime.DATE_HUGE
     );
   });
 
   eleventyConfig.addFilter("htmlDateStringISO", (dateObj) => {
+    //NOTE: sometimes a string comes in, sometimes a date... so lets cleanup!
+    if (typeof dateObj.toISOString === "function")
+      dateObj = dateObj.toISOString();
     return DateTime.fromISO(dateObj, { zone: "utc" }).toFormat("yyyy-LL-dd");
   });
 
@@ -123,6 +135,9 @@ module.exports = function (eleventyConfig) {
   });
 
   eleventyConfig.addFilter("postDateToRfc3339", (dateObj) => {
+    //NOTE: sometimes a string comes in, sometimes a date... so lets cleanup!
+    if (typeof dateObj.toISOString === "function")
+      dateObj = dateObj.toISOString();
     return DateTime.fromISO(dateObj, { zone: "utc" }).toISO();
   });
 
