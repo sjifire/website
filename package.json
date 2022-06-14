@@ -17,7 +17,7 @@
     "@11ty/eleventy": "^1.0",
     "@11ty/eleventy-plugin-rss": "^1.1.2",
     "@netlify/plugin-sitemap": "^v0.8",
-    "csv-parse": "^5.1.0",
+    "csv-parse": "^5.2.0",
     "dotenv": "^16.0.1",
     "js-yaml": "^4.1.0",
     "linkedom": "^0.14.11",
