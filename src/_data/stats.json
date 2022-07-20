@@ -1,6 +1,6 @@
 {
-  "updated_at": "2022-07-19T09:26:40.321Z",
-  "date_range_all_from": "2021-07-19T16:41:17.000Z",
+  "updated_at": "2022-07-20T09:16:39.340Z",
+  "date_range_all_from": "2021-07-20T00:32:50.000Z",
   "date_range_all_to": "2022-07-17T15:42:48.000Z",
   "date_range_from": "2022-06-18T00:00:00.000Z",
   "date_range_to": "2022-07-17T23:59:59.999Z",
@@ -9,54 +9,54 @@
   "_time_dsc": "all times are in seconds",
   "unit_time_stats": {
     "first_unit_reaction": {
-      "sum": 7511,
-      "mean": 98,
-      "q1": 47,
-      "median": 90,
+      "sum": 7799,
+      "mean": 97,
+      "q1": 49,
+      "median": 89,
       "q3": 125,
       "min": 1,
       "max": 378
     },
     "travel": {
-      "sum": 39336,
-      "mean": 532,
-      "q1": 215,
-      "median": 410,
-      "q3": 769,
+      "sum": 40846,
+      "mean": 530,
+      "q1": 214,
+      "median": 420,
+      "q3": 770,
       "min": 75,
       "max": 2720
     },
     "to_scene": {
-      "sum": 51614,
-      "mean": 697,
-      "q1": 320,
-      "median": 573,
-      "q3": 912,
+      "sum": 53412,
+      "mean": 694,
+      "q1": 317,
+      "median": 582,
+      "q3": 937,
       "min": 114,
       "max": 3169
     },
     "on_scene": {
-      "sum": 121046,
-      "mean": 1658,
-      "q1": 823,
-      "median": 1440,
-      "q3": 1850,
+      "sum": 124688,
+      "mean": 1641,
+      "q1": 887,
+      "median": 1357,
+      "q3": 1848,
       "min": 74,
       "max": 11114
     }
   },
   "personnel_stats": {
     "time_on_incidents": {
-      "sum": 406849,
-      "mean": 4571,
-      "q1": 2282,
-      "median": 3726,
-      "q3": 5244,
+      "sum": 420009,
+      "mean": 4565,
+      "q1": 2297,
+      "median": 3622,
+      "q3": 5251,
       "min": 240,
       "max": 35850
     },
     "num_per_incidents": {
-      "mean": 2.2,
+      "mean": 2.3,
       "q1": 2,
       "median": 2,
       "q3": 2,
@@ -68,58 +68,58 @@
   "region_stats": {
     "central": {
       "incident_types": {
-        "medical_rescue": 38,
+        "medical_rescue": 39,
         "fire": 3,
         "downgraded": 7,
         "cancelled": 12,
         "other": 0
       },
-      "num_incidents": 60,
+      "num_incidents": 61,
       "unit_travel_time": {
-        "sum": 22488,
-        "mean": 424,
-        "q1": 201,
-        "median": 283,
-        "q3": 558,
+        "sum": 22588,
+        "mean": 418,
+        "q1": 197,
+        "median": 278,
+        "q3": 546,
         "min": 75,
         "max": 2720
       }
     },
     "north": {
       "incident_types": {
-        "medical_rescue": 10,
+        "medical_rescue": 11,
         "fire": 1,
         "downgraded": 4,
         "cancelled": 8,
         "other": 0
       },
-      "num_incidents": 23,
+      "num_incidents": 24,
       "unit_travel_time": {
-        "sum": 13926,
-        "mean": 819,
-        "q1": 659,
-        "median": 958,
-        "q3": 1038,
+        "sum": 14820,
+        "mean": 823,
+        "q1": 672,
+        "median": 938,
+        "q3": 1026,
         "min": 190,
         "max": 1313
       }
     },
     "south": {
       "incident_types": {
-        "medical_rescue": 2,
+        "medical_rescue": 3,
         "fire": 1,
         "downgraded": 0,
         "cancelled": 2,
         "other": 0
       },
-      "num_incidents": 5,
+      "num_incidents": 6,
       "unit_travel_time": {
-        "sum": 2682,
-        "mean": 894,
-        "q1": 841,
-        "median": 954,
-        "q3": 977,
-        "min": 728,
+        "sum": 3198,
+        "mean": 800,
+        "q1": 675,
+        "median": 841,
+        "q3": 966,
+        "min": 516,
         "max": 1000
       }
     },
@@ -145,28 +145,28 @@
   },
   "incident_stats": {
     "types": {
-      "medical_rescue": 50,
+      "medical_rescue": 53,
       "fire": 5,
       "downgraded": 12,
       "cancelled": 22,
       "other": 0
     },
-    "num_incidents_last_365_days": 997,
-    "num_incidents": 89,
-    "num_daytime_incidents": 43,
-    "num_nighttime_incidents": 46,
+    "num_incidents_last_365_days": 995,
+    "num_incidents": 92,
+    "num_daytime_incidents": 44,
+    "num_nighttime_incidents": 48,
     "incident_times": {
-      "sum": 175201,
-      "mean": 1969,
-      "q1": 1110,
-      "median": 1738,
-      "q3": 2454,
+      "sum": 180641,
+      "mean": 1963,
+      "q1": 1133,
+      "median": 1736,
+      "q3": 2429,
       "min": 120,
       "max": 11842
     },
-    "num_overlapping_incidents": 6,
+    "num_overlapping_incidents": 8,
     "num_per_day": {
-      "sum": 89,
+      "sum": 92,
       "mean": 3,
       "q1": 2,
       "median": 3,
