@@ -1,4 +1,4 @@
-fire_status: High
+fire_status: Moderate
 burn_season_start: 2021-10-04
 burn_season_end: 2022-05-31
 burn_ban_status: Closed
@@ -9,7 +9,7 @@ body: >-
   NOT required.
 
 
-  * **OPEN** All permitted and recreational fires are allowed, unless restrictive conditions exist such as _HIGH FIRE DANGER_.
+  * **OPEN** All permitted and recreational fires are allowed
 
   * **CLOSED** No permitted burns are allowed. Recreational fires may be allowed unless restrictive conditions exist.
 
@@ -18,7 +18,6 @@ body: >-
   * **State Parks** and **San Juan Island National Historical Park** may completely suspend all burning to include BBQs, burn pits, and pressurized liquid or gas grills.  Such tight restrictions may be announced due to extreme fire danger resulting from weather conditions, specific fire conditions, lack of available firefighting personnel or to protect air quality.  This is strictly enforced by state and national Park Rangers.
 
   * **Fireworks** of any kind are banned throughout the county all year long.
-
 
 
   ## Recreational Campfires (permits not required)
@@ -38,7 +37,7 @@ body: >-
 
   * [Purchase Online](https://www.sanjuanco.com/1161/Apply-for-Burn-Permits) from the [San Juan County Fire Marshal](https://www.sanjuanco.com/1088/Fire-Marshal).
 
-  * The cost is $20.00 and is valid through the _OPEN_ burn season.
+  * The cost is $20.00 and is valid through the *OPEN* burn season.
 
   * Allows the burning of only natural, unprocessed vegetation.
 
@@ -65,8 +64,6 @@ body: >-
   * The person attending the burn must know, understand, and follow the permit conditions, check the current fire danger rating, and have the permit in hand at the time of the burn.
 
   * The person named on the permit and/or the property owner agrees to furnish manpower and equipment to suppress the fire if it escapes for ANY cause and to reimburse the local fire agency for all expenses incurred if such suppression is required.
-
-
 
 
   More [Burn Information](https://www.sanjuanco.com/1096/Open-Burn-Info) can be found on the Fire Marshal's website.
