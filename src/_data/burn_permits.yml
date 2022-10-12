@@ -1,8 +1,8 @@
 fire_status: Moderate
-burn_season_start: 2021-10-04
-burn_season_end: 2022-05-31
-burn_ban_status: Closed
-commercial_burn_ban_status: Closed
+burn_season_start: 2022-10-10
+burn_season_end: 2023-05-31
+burn_ban_status: Open
+commercial_burn_ban_status: Open
 rec_campfire_status: Open
 body: >-
   For your safety, burning regulations must be followed, even when a permit is
