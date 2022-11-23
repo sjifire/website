@@ -20,7 +20,7 @@
     "csv-parse": "^5.3.2",
     "dotenv": "^16.0.3",
     "js-yaml": "^4.1.0",
-    "linkedom": "^0.14.19",
+    "linkedom": "^0.14.20",
     "lodash": "^4.17.21",
     "markdown-it-attrs": "^4.1.4",
     "markdown-it-video": "^0.6.3",
