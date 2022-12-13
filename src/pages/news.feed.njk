@@ -28,7 +28,7 @@
   {%- for post in posts | reverse -%}
   {% set absolutePostUrl %}{{metadata.url}}{{ post.url }}/{% endset %}
   <entry>
-    <title>{{ post.title | safe }}</title>
+    <title>{{ post.title | safe | escape }}</title>
     <link href="{{ absolutePostUrl }}"/>
     <updated>{{ post.date | postDateToRfc3339 }}</updated>
     <id>{{ absolutePostUrl }}</id>
