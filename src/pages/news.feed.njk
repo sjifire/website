@@ -15,8 +15,8 @@
 ---
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>{{ metadata.title | escape}}</title>
-  <subtitle>{{ metadata.subtitle | escape }}</subtitle>
+  <title>{{ metadata.title | safe}}</title>
+  <subtitle>{{ metadata.subtitle | safe }}</subtitle>
   <link href="{{ metadata.feedUrl }}" rel="self"/>
   <link href="{{ metadata.url }}/"/>
   <updated>{{ (posts | reverse | first).date | postDateToRfc3339 }}</updated>
