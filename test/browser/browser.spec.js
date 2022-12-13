@@ -54,19 +54,19 @@ test.describe("check main site", () => {
       expect(response.ok()).toBeTruthy();
     });
   });
+});
 
-  // test('landing page', async ({ page }) => {
-  //   page.on('pageerror', exception => {
-  //     console.log(`Uncaught exception: "${exception}"`);
-  //   });
-  //   // Listen for all console logs
-  //   page.on('console', msg => console.log(msg.text()))
+test("check news/feed.xml is a valid ATOM feed", async ({ page, baseURL }) => {
+  const feedResponse = await page.goto("/news/feed.xml");
+  expect(feedResponse.ok()).toBeTruthy();
+  const feedBody = (await feedResponse.body()).toString();
 
-  //   // Listen for all console events and handle errors
-  //   page.on('console', msg => {
-  //     if (msg.type() === 'error')
-  //       console.log(`Error text: "${msg.text()}"`);
-  //   });
-  //   await page.goto('/');
-  // });
+  await page.goto("https://validator.w3.org/feed/#validate_by_input");
+  await page.fill("#rawdata", feedBody);
+
+  await page.click("p.submit_button a.submit:visible", { strict: true });
+  await page.waitForSelector(':text("This is a valid Atom 1.0 feed.")', {
+    state: "visible",
+    timeout: 3000,
+  });
 });

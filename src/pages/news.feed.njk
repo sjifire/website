@@ -15,7 +15,7 @@
 ---
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>{{ metadata.title }}</title>
+  <title>{{ metadata.title}}</title>
   <subtitle>{{ metadata.subtitle }}</subtitle>
   <link href="{{ metadata.feedUrl }}" rel="self"/>
   <link href="{{ metadata.url }}/"/>
@@ -28,7 +28,7 @@
   {%- for post in posts | reverse -%}
   {% set absolutePostUrl %}{{metadata.url}}{{ post.url }}/{% endset %}
   <entry>
-    <title>{{ post.title | safe }}</title>
+    <title>{{ post.title | escape }}</title>
     <link href="{{ absolutePostUrl }}"/>
     <updated>{{ post.date | postDateToRfc3339 }}</updated>
     <id>{{ absolutePostUrl }}</id>
