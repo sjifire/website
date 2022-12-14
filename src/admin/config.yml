@@ -103,6 +103,13 @@ collections:
           preview: false
         file: "src/_data/homepage.yml"
         fields:
+          - label: Header Image(s)
+            name: header_image
+            widget: image
+            allow_multiple: true
+            choose_url: false
+            public_folder: ""
+            required: true
           - label: Preamble
             name: preamble
             widget: markdown

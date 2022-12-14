@@ -73,7 +73,7 @@
         //current url has a #hash in it
       }
 
-      const imgs = ["{{ site.home_header_backgrounds | join('","') | safe }}"];
+      const imgs = [{% for image in homepage.header_image %}"{{ site.home_header_cloudinary_transform + site.rootUrl + '/assets/images/' + image | safe }}"{{ ',' if not loop.last }}{% endfor %}];
       const random = Math.floor(Math.random() * imgs.length);
       const image = imgs[random]
       document.getElementById('home-header').style.setProperty('--home-header-bg-image', 'url('+image+')');
