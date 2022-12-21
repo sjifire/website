@@ -555,13 +555,15 @@ body {
 .l-grid--2col {
   grid-template-areas:
     "main main"
-    "sidebar sidebar";
+    "sidebar sidebar"
+    "subsidebar subsidebar";
 }
 
 .l-grid--2col.flipped {
   grid-template-areas:
     "sidebar sidebar"
-    "main main";
+    "main main"
+    "subsidebar subsidebar";
 }
 
 .l-grid__sidebar {
@@ -571,6 +573,10 @@ body {
 
 .l-grid__main {
   grid-area: main;
+}
+
+.l-grid__subsidebar {
+  grid-area: subsidebar;
 }
 
 @media (min-width: 768px) {
@@ -584,7 +590,7 @@ body {
   .l-grid--2col.flipped {
     grid-template-areas:
       "main sidebar"
-      "main sidebar";
+      "main subsidebar";
     grid-template-columns: 2.5fr minmax(240px, 1fr);
     gap: 60px;
   }
