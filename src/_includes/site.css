@@ -788,20 +788,20 @@ body {
 }
 
 .widget__body .level--moderate {
-  background-color: #d8eaff;
-  color: var(--blue);
+  background-color: #fff3cd;
+  color: #856404;
 }
 
 .widget__body .level--high,
-.widget__body .level--restricted {
-  background-color: #ffeab8;
-  color: #81682c;
-}
-
-.widget__body .level--extreme,
+.widget__body .level--restricted,
 .widget__body .level--closed {
   background-color: #ffe0e0;
   color: var(--bright-red);
+}
+
+.widget__body .level--extreme {
+  background-color: black;
+  color: white;
 }
 
 .widget__foot td {
