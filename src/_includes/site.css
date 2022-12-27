@@ -101,7 +101,6 @@ body {
 }
 
 .site-header--home {
-  --home-header-bg-image: url("https://res.cloudinary.com/san-juan-fire-district-3/w_800,q_auto:eco,e_grayscale/assets/images/Arata-Photo-1-e1635900798243.jpg");
   background-image: var(--home-header-bg-image);
   background-repeat: no-repeat;
   background-position: top 56px center;
