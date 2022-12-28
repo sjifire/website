@@ -1,11 +1,110 @@
 body: Test body
 personnel:
+  - name: Norvin Collins
+    staff: true
+    roles:
+      - FireFighter
+      - Apparatus Operator
+      - Marine Crew
+    rank: Chief
+    file: norvin_collins.jpg
+    bio: >-
+      * 12 years as Fire Chief (10yrs in Small Combination Fire and EMS
+      department)
+
+      * Over 15 years as a Chief Officer
+
+      * Over 32 years as a paramedic (both private and public agencies)
+
+      * 10 years Field Training Officer for Fire and EMS
+
+      * 12 years as lead paramedic and EMT instructor for College and University
+
+      * Over 27 years in fire service as FF/Paramedic and company officer
+  - name: Noel Monin
+    staff: true
+    roles:
+      - FireFighter
+      - Apparatus Operator
+      - Marine Crew
+    rank: Assist. Chief
+    file: noel_monin.jpg
+  - name: Robin Garcia
+    title: Front Office
+    staff: true
+    roles:
+      - Admin
+    file: robin_garcia.jpg
+  - name: Kelsey Venegas
+    title: Public Information Officer
+    staff: true
+    roles:
+      - Support
+      - Admin
+    file: kelsey_venegas.jpg
+  - name: Tad Lean
+    title: Maintenance Officer
+    staff: true
+    roles:
+      - FireFighter
+      - EMT
+      - Apparatus Operator
+    rank: Captain
+    file: tad_lean.jpg
+  - name: Karl Kuetzing
+    title: Training Officer
+    staff: true
+    roles:
+      - FireFighter
+      - EMT
+      - Apparatus Operator
+      - Marine Crew
+    file: karl_kuetzing.jpg
+  - name: Michael Hartzell
+    staff: true
+    roles:
+      - FireFighter
+      - EMT
+      - Apparatus Operator
+      - Marine Crew
+    rank: Lieutenant
+    file: michael_hartzell.jpg
+  - name: Michael Henderson
+    staff: true
+    roles:
+      - FireFighter
+      - EMT
+      - Apparatus Operator
+    rank: Lieutenant
+    file: michael_henderson.jpg
   - name: Brad Smith
     staff: true
     roles:
       - FireFighter
       - Apparatus Operator
     file: brad_smith.jpg
+  - name: Brooke Sevier
+    staff: true
+    roles:
+      - FireFighter
+      - EMT
+      - Apparatus Operator
+      - Marine Crew
+    file: brooke_sevier.jpg
+  - name: Craig McConnell
+    staff: true
+    roles:
+      - FireFighter
+      - EMT
+      - Apparatus Operator
+    file: craig_mcconnell.jpg
+  - name: Katie English
+    staff: true
+    roles:
+      - FireFighter
+      - EMT
+      - Apparatus Operator
+    file: katie_english.jpg
   - name: Tom Eades
     staff: true
     roles:
@@ -25,21 +124,6 @@ personnel:
     roles:
       - Support
     file: bonnie_stanger.jpg
-  - name: Brooke Sevier
-    staff: true
-    roles:
-      - FireFighter
-      - EMT
-      - Marine Crew
-      - Apparatus Operator
-    file: brooke_sevier.jpg
-  - name: Craig McConnell
-    staff: true
-    roles:
-      - FireFighter
-      - EMT
-      - Apparatus Operator
-    file: craig_mcconnell.jpg
   - name: Erin Graham
     roles:
       - FireFighter
@@ -64,22 +148,6 @@ personnel:
     roles:
       - Support
     file: karen_gentry.jpg
-  - name: Karl Kuetzing
-    title: Training Officer
-    staff: true
-    roles:
-      - FireFighter
-      - EMT
-      - Apparatus Operator
-      - Marine Crew
-    file: karl_kuetzing.jpg
-  - name: Kelsey Venegas
-    title: Public Information Officer
-    staff: true
-    roles:
-      - Support
-      - Admin
-    file: kelsey_venegas.jpg
   - name: Mark Wagner
     roles:
       - Apparatus Operator
@@ -91,42 +159,84 @@ personnel:
       - Apparatus Operator
       - Marine Crew
     file: matt_wickey.jpg
-  - name: Noel Monin
-    staff: true
-    roles:
-      - FireFighter
-      - Apparatus Operator
-      - Marine Crew
-    rank: Assist. Chief
-    file: noel_monin.jpg
-  - name: Norvin Collins
-    staff: true
-    roles:
-      - FireFighter
-      - Apparatus Operator
-      - Marine Crew
-    rank: Chief
-    file: norvin_collins.jpg
-    bio: >-
-      * 12 years as Fire Chief (10yrs in Small Combination Fire and EMS
-      department) 
-
-      * Over 15 years as a Chief Officer
-
-      * Over 32 years as a paramedic (both private and public agencies)
-
-      * 10 years Field Training Officer for Fire and EMS
-
-      * 12 years as lead paramedic and EMT instructor for College and University
-
-      * Over 27 years in fire service as FF/Paramedic and company officer
-  - name: Robin Garcia
-    title: Front Office
-    staff: true
-    roles:
-      - Admin
-    file: robin_garcia.jpg
   - name: Ron Stanger
     roles:
       - Apparatus Operator
     file: ron_stanger.jpg
+  - name: Kyle Dodd
+    roles:
+      - FireFighter
+      - EMT
+      - Apparatus Operator
+      - Marine Crew
+    rank: Lieutenant
+    file: kyle_dodd.jpg
+  - name: Eric_Rezabek
+    roles:
+      - FireFighter
+    file: eric_rezabek.jpg
+  - name: Leo DeBruyn
+    roles:
+      - FireFighter
+      - Apparatus Operator
+    file: leo_debruyn.jpg
+  - name: Maria DeBruyn
+    roles:
+      - EMT
+      - Support
+    file: maria_debruyn.jpg
+  - name: John Young
+    roles:
+      - Apparatus Operator
+    file: john_young.jpg
+  - name: Joran Bouwman
+    roles:
+      - FireFighter
+    file: joran_bouwman.jpg
+  - name: Alan Arrowsmith
+    roles:
+      - FireFighter
+      - EMT
+      - Apparatus Operator
+    file: alan_arrowsmith.jpg
+  - name: Chris Jones
+    roles:
+      - FireFighter
+    file: chris_jones.jpg
+  - name: Hella Cascorbi
+    roles:
+      - EMT
+    file: hella_cascorbi.jpg
+  - name: Sean Armstrong
+    roles:
+      - FireFighter
+    file: sean_armstrong.jpg
+  - name: Sue Ann Stabley
+    roles:
+      - Support
+    file: sue_ann_stabley.jpg
+  - name: Kathleen Salinas
+    roles:
+      - FireFighter
+      - EMT
+      - Apparatus Operator
+      - Marine Crew
+    file: kathleen_salinas.jpg
+  - name: John Salinas
+    roles:
+      - FireFighter
+      - EMT
+      - Apparatus Operator
+      - Marine Crew
+    rank: Lieutenant
+    file: john_salinas.jpg
+  - name: Chad Warmenhoven
+    roles:
+      - FireFighter
+    file: chad_warmenhoven.jpg
+  - name: Cynthia Parker & Jet
+    title: NATIONAL Crisis Response Canine Team
+    roles:
+      - Support
+    file: cynthia_parker.jpg
+
