@@ -1,0 +1,8 @@
+body: T﻿est body
+personnel:
+  - Name: Brad Smith
+    Roles:
+      - FireFighter
+      - Apparatus Operator
+      - Staff
+    file: brad_smith.jpg
