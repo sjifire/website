@@ -233,8 +233,12 @@ collections:
             allow_add: true
             add_to_top: true
             fields:
-              - label: Name
-                name: name
+              - label: First Name
+                name: first_name
+                widget: string
+                required: true
+              - label: Last Name
+                name: last_name
                 widget: string
                 required: true
               - label: Title
@@ -250,7 +254,7 @@ collections:
                 name: roles
                 widget: "select"
                 options: ["FireFighter", "EMT", "Medic", "Apparatus Operator", "Marine Crew", "Support", "Admin"]
-                required: false
+                required: true
                 multiple: true
               - label: Rank
                 name: rank

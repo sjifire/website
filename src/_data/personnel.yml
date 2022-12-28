@@ -1,6 +1,7 @@
 body: Test body
 personnel:
-  - name: Norvin Collins
+  - first_name: Norvin
+    last_name: Collins
     staff: true
     roles:
       - FireFighter
@@ -21,7 +22,8 @@ personnel:
       * 12 years as lead paramedic and EMT instructor for College and University
 
       * Over 27 years in fire service as FF/Paramedic and company officer
-  - name: Noel Monin
+  - first_name: Noel
+    last_name: Monin
     staff: true
     roles:
       - FireFighter
@@ -29,20 +31,23 @@ personnel:
       - Marine Crew
     rank: Assist. Chief
     file: noel_monin.jpg
-  - name: Robin Garcia
+  - first_name: Robin
+    last_name: Garcia
     title: Front Office
     staff: true
     roles:
       - Admin
     file: robin_garcia.jpg
-  - name: Kelsey Venegas
+  - first_name: Kelsey
+    last_name: Venegas
     title: Public Information Officer
     staff: true
     roles:
       - Support
       - Admin
     file: kelsey_venegas.jpg
-  - name: Tad Lean
+  - first_name: Tad
+    last_name: Lean
     title: Maintenance Officer
     staff: true
     roles:
@@ -51,7 +56,8 @@ personnel:
       - Apparatus Operator
     rank: Captain
     file: tad_lean.jpg
-  - name: Karl Kuetzing
+  - first_name: Karl
+    last_name: Kuetzing
     title: Training Officer
     staff: true
     roles:
@@ -60,7 +66,8 @@ personnel:
       - Apparatus Operator
       - Marine Crew
     file: karl_kuetzing.jpg
-  - name: Michael Hartzell
+  - first_name: Michael
+    last_name: Hartzell
     staff: true
     roles:
       - FireFighter
@@ -69,7 +76,8 @@ personnel:
       - Marine Crew
     rank: Lieutenant
     file: michael_hartzell.jpg
-  - name: Michael Henderson
+  - first_name: Michael
+    last_name: Henderson
     staff: true
     roles:
       - FireFighter
@@ -77,13 +85,15 @@ personnel:
       - Apparatus Operator
     rank: Lieutenant
     file: michael_henderson.jpg
-  - name: Brad Smith
+  - first_name: Brad
+    last_name: Smith
     staff: true
     roles:
       - FireFighter
       - Apparatus Operator
     file: brad_smith.jpg
-  - name: Brooke Sevier
+  - first_name: Brooke
+    last_name: Sevier
     staff: true
     roles:
       - FireFighter
@@ -91,40 +101,47 @@ personnel:
       - Apparatus Operator
       - Marine Crew
     file: brooke_sevier.jpg
-  - name: Craig McConnell
+  - first_name: Craig
+    last_name: McConnell
     staff: true
     roles:
       - FireFighter
       - EMT
       - Apparatus Operator
     file: craig_mcconnell.jpg
-  - name: Katie English
+  - first_name: Katie
+    last_name: English
     staff: true
     roles:
       - FireFighter
       - EMT
       - Apparatus Operator
     file: katie_english.jpg
-  - name: Tom Eades
+  - first_name: Tom
+    last_name: Eades
     staff: true
     roles:
       - FireFighter
       - EMT
       - Apparatus Operator
     file: tom_eades.jpg
-  - name: Alexa Rust
+  - first_name: Alexa
+    last_name: Rust
     roles:
       - FireFighter
     file: alexa_rust.jpg
-  - name: Eric Eisenhardt
+  - first_name: Eric
+    last_name: Eisenhardt
     roles:
       - FireFighter
     file: eric_eisenhardt.jpg
-  - name: Bonnie Stanger
+  - first_name: Bonnie
+    last_name: Stanger
     roles:
       - Support
     file: bonnie_stanger.jpg
-  - name: Erin Graham
+  - first_name: Erin
+    last_name: Graham
     roles:
       - FireFighter
       - EMT
@@ -132,38 +149,46 @@ personnel:
       - Marine Crew
     rank: Captain
     file: erin_graham.jpg
-  - name: Charles Genther
+  - first_name: Charles
+    last_name: Genther
     roles:
       - Support
     file: charles_genther.jpg
-  - name: Frank Cardinale
+  - first_name: Frank
+    last_name: Cardinale
     roles:
       - Apparatus Operator
     file: frank_cardinale.jpg
-  - name: Harry See
+  - first_name: Harry
+    last_name: See
     roles:
       - Apparatus Operator
     file: harry_see.jpg
-  - name: Karen Gentry
+  - first_name: Karen
+    last_name: Gentry
     roles:
       - Support
     file: karen_gentry.jpg
-  - name: Mark Wagner
+  - first_name: Mark
+    last_name: Wagner
     roles:
       - Apparatus Operator
     file: mark_wagner.jpg
-  - name: Matt Wickey
+  - first_name: Matt
+    last_name: Wickey
     roles:
       - FireFighter
       - EMT
       - Apparatus Operator
       - Marine Crew
     file: matt_wickey.jpg
-  - name: Ron Stanger
+  - first_name: Ron
+    last_name: Stanger
     roles:
       - Apparatus Operator
     file: ron_stanger.jpg
-  - name: Kyle Dodd
+  - first_name: Kyle
+    last_name: Dodd
     roles:
       - FireFighter
       - EMT
@@ -175,54 +200,65 @@ personnel:
     roles:
       - FireFighter
     file: eric_rezabek.jpg
-  - name: Leo DeBruyn
+  - first_name: Leo
+    last_name: DeBruyn
     roles:
       - FireFighter
       - Apparatus Operator
     file: leo_debruyn.jpg
-  - name: Maria DeBruyn
+  - first_name: Maria
+    last_name: DeBruyn
     roles:
       - EMT
       - Support
     file: maria_debruyn.jpg
-  - name: John Young
+  - first_name: John
+    last_name: Young
     roles:
       - Apparatus Operator
     file: john_young.jpg
-  - name: Joran Bouwman
+  - first_name: Joran
+    last_name: Bouwman
     roles:
       - FireFighter
     file: joran_bouwman.jpg
-  - name: Alan Arrowsmith
+  - first_name: Alan
+    last_name: Arrowsmith
     roles:
       - FireFighter
       - EMT
       - Apparatus Operator
     file: alan_arrowsmith.jpg
-  - name: Chris Jones
+  - first_name: Chris
+    last_name: Jones
     roles:
       - FireFighter
     file: chris_jones.jpg
-  - name: Hella Cascorbi
+  - first_name: Hella
+    last_name: Cascorbi
     roles:
       - EMT
     file: hella_cascorbi.jpg
-  - name: Sean Armstrong
+  - first_name: Sean
+    last_name: Armstrong
     roles:
       - FireFighter
     file: sean_armstrong.jpg
-  - name: Sue Ann Stabley
+  - first_name: Sue Ann
+    last_name: Stabley
     roles:
       - Support
     file: sue_ann_stabley.jpg
-  - name: Kathleen Salinas
+  - first_name: Kathleen
+    last_name: Salinas
     roles:
       - FireFighter
       - EMT
       - Apparatus Operator
       - Marine Crew
     file: kathleen_salinas.jpg
-  - name: John Salinas
+  - first_name: John
+    last_name: Salinas
     roles:
       - FireFighter
       - EMT
@@ -230,7 +266,8 @@ personnel:
       - Marine Crew
     rank: Lieutenant
     file: john_salinas.jpg
-  - name: Chad Warmenhoven
+  - first_name: Chad
+    last_name: Warmenhoven
     roles:
       - FireFighter
     file: chad_warmenhoven.jpg
