@@ -236,7 +236,7 @@ collections:
               - label: roles
                 name: Roles
                 widget: "select"
-                options: ["", "FireFighter", "EMT", "Medic", "AO", "Support", "Admin"]
+                options: ["", "FireFighter", "EMT", "Medic", "Apparatus Operator", "Support", "Admin", "Staff"]
                 required: false
                 multiple: true
               - label: rank
