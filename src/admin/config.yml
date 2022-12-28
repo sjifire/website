@@ -234,19 +234,27 @@ collections:
             add_to_top: true
             fields:
               - label: Name
-                name: Name
+                name: name
                 widget: string
                 required: true
-              - label: roles
-                name: Roles
+              - label: Title
+                name: title
+                widget: string
+                required: false
+              - label: staff
+                name: staff
+                widget: boolean
+                default: false
+              - label: Roles
+                name: roles
                 widget: "select"
-                options: ["", "FireFighter", "EMT", "Medic", "Apparatus Operator", "Support", "Admin", "Staff"]
+                options: ["FireFighter", "EMT", "Medic", "Apparatus Operator", "Marine Crew", "Support", "Admin"]
                 required: false
                 multiple: true
-              - label: rank
-                name: Rank
+              - label: Rank
+                name: rank
                 widget: "select"
-                options: ["", "Lieutenant", "Captain", "Assist. Chief", "Chief"]
+                options: ["Lieutenant", "Captain", "Assist. Chief", "Chief"]
                 required: false
                 multiple: false
               - label: Bio

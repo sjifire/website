@@ -1,8 +1,128 @@
-body: T﻿est body
+body: Test body
 personnel:
-  - Name: Brad Smith
-    Roles:
+  - name: Brad Smith
+    staff: true
+    roles:
       - FireFighter
       - Apparatus Operator
-      - Staff
     file: brad_smith.jpg
+  - name: Tom Eades
+    staff: true
+    roles:
+      - FireFighter
+      - EMT
+      - Apparatus Operator
+    file: tom_eades.jpg
+  - name: Alexa Rust
+    roles:
+      - FireFighter
+    file: alexa_rust.jpg
+  - name: Eric Eisenhardt
+    roles:
+      - FireFighter
+    file: eric_eisenhardt.jpg
+  - name: Bonnie Stanger
+    roles:
+      - Support
+    file: bonnie_stanger.jpg
+  - name: Brooke Sevier
+    staff: true
+    roles:
+      - FireFighter
+      - EMT
+      - Marine Crew
+      - Apparatus Operator
+    file: brooke_sevier.jpg
+  - name: Craig McConnell
+    staff: true
+    roles:
+      - FireFighter
+      - EMT
+      - Apparatus Operator
+    file: craig_mcconnell.jpg
+  - name: Erin Graham
+    roles:
+      - FireFighter
+      - EMT
+      - Apparatus Operator
+      - Marine Crew
+    rank: Captain
+    file: erin_graham.jpg
+  - name: Charles Genther
+    roles:
+      - Support
+    file: charles_genther.jpg
+  - name: Frank Cardinale
+    roles:
+      - Apparatus Operator
+    file: frank_cardinale.jpg
+  - name: Harry See
+    roles:
+      - Apparatus Operator
+    file: harry_see.jpg
+  - name: Karen Gentry
+    roles:
+      - Support
+    file: karen_gentry.jpg
+  - name: Karl Kuetzing
+    title: Training Officer
+    staff: true
+    roles:
+      - FireFighter
+      - EMT
+      - Apparatus Operator
+      - Marine Crew
+    file: karl_kuetzing.jpg
+  - name: Kelsey Venegas
+    title: Public Information Officer
+    staff: true
+    roles:
+      - Support
+      - Admin
+    file: kelsey_venegas.jpg
+  - name: Mark Wagner
+    roles:
+      - Apparatus Operator
+    file: mark_wagner.jpg
+  - name: Matt Wickey
+    roles:
+      - FireFighter
+      - EMT
+      - Apparatus Operator
+      - Marine Crew
+    file: matt_wickey.jpg
+  - name: Noel Monin
+    staff: true
+    roles:
+      - FireFighter
+      - Apparatus Operator
+      - Marine Crew
+    rank: Assist. Chief
+    file: noel_monin.jpg
+  - name: Norvin Collins
+    staff: true
+    roles:
+      - FireFighter
+      - Apparatus Operator
+      - Marine Crew
+    rank: Chief
+    bio: body: >-
+* 12 years as Fire Chief (10yrs in Small Combination Fire and EMS department)
+* Over 15 years as a Chief Officer
+* Over 32 years as a paramedic (both private and public agencies)
+* 10 years Field Training Officer for Fire and EMS
+* 12 years as lead paramedic and EMT instructor for College and University
+* Over 27 years in fire service as FF/Paramedic and company officer
+    file: norvin_collins.jpg
+  - name: Robin Garcia
+    title: Front Office
+    staff: true
+    roles:
+      - Admin
+    file: robin_garcia.jpg
+  - name: Ron Stanger
+    roles:
+      - Apparatus Operator
+    file: ron_stanger.jpg
+
+
