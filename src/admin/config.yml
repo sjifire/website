@@ -245,6 +245,7 @@ collections:
                 name: staff
                 widget: boolean
                 default: false
+                required: false
               - label: Roles
                 name: roles
                 widget: "select"
