@@ -53,6 +53,7 @@ jobs:
         env:
           VALIDATE_ALL_CODEBASE: false
           VALIDATE_CSS: false #too tight
+          VALIDATE_JSCPD: false # doesn't like src/admin/config
           JAVASCRIPT_DEFAULT_STYLE: prettier
           DEFAULT_BRANCH: main
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
