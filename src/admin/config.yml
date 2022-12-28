@@ -222,6 +222,10 @@ collections:
           preview: false
         file: "src/_data/personnel.yml"
         fields:
+          - label: Body
+            name: body
+            widget: markdown
+            required: true
           - label: "Personnel"
             name: "personnel"
             widget: "list"
@@ -245,10 +249,6 @@ collections:
                 options: ["", "Lieutenant", "Captain", "Assist. Chief", "Chief"]
                 required: false
                 multiple: false
-              - label: Title
-                name: title
-                widget: string
-                required: false
               - label: Bio
                 name: bio
                 widget: markdown
@@ -260,10 +260,6 @@ collections:
                 choose_url: false
                 media_folder: "/src/assets/personnel_imgs/"
                 public_folder: ""
-          - label: Body
-            name: body
-            widget: markdown
-            required: true
       - label: "Services/24-7 Emergency Services"
         name: "emergency_services"
         delete: false
