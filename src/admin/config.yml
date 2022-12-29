@@ -235,11 +235,12 @@ collections:
                 name: title
                 widget: string
                 required: false
-              - label: staff
-                name: staff
-                widget: boolean
-                default: false
-                required: false
+              - label: Type
+                name: staff_type
+                widget: "select"
+                options: ["staff", "volunteer"]
+                required: true
+                multiple: false
               - label: Roles
                 name: roles
                 widget: "select"
