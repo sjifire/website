@@ -164,53 +164,12 @@ collections:
             name: sidebar
             widget: markdown
             required: false
-      - label: "About/Incidents"
-        name: "incidents"
+      - label: "About/Emergency Personnel"
+        name: "emergency personnel"
         delete: false
         editor:
           preview: false
-        file: "src/_data/incidents.yml"
-        fields:
-          - label: Body
-            name: body
-            widget: markdown
-            required: true
-      - label: "About/Governance"
-        name: "governance"
-        delete: false
-        editor:
-          preview: false
-        file: "src/_data/governance.yml"
-        fields:
-          - label: "Important Documents"
-            name: "important_documents"
-            widget: "list"
-            summary: "{{fields.file}}"
-            hint: "Highlight Important Documents"
-            allow_add: true
-            add_to_top: true
-            fields:
-              - label: Title
-                name: title
-                widget: string
-                required: true
-              - label: File
-                name: file
-                widget: file
-                allow_multiple: false
-                choose_url: false
-                media_folder: "/src/assets/docs/"
-                public_folder: ""
-          - label: Body
-            name: body
-            widget: markdown
-            required: true
-      - label: "About/Personnel"
-        name: "personnel"
-        delete: false
-        editor:
-          preview: false
-        file: "src/_data/personnel.yml"
+        file: "src/_data/emergency_personnel.yml"
         fields:
           - label: Body
             name: body
@@ -269,6 +228,47 @@ collections:
                 choose_url: false
                 media_folder: "/src/assets/personnel_imgs/"
                 public_folder: ""
+      - label: "About/Incidents"
+        name: "incidents"
+        delete: false
+        editor:
+          preview: false
+        file: "src/_data/incidents.yml"
+        fields:
+          - label: Body
+            name: body
+            widget: markdown
+            required: true
+      - label: "About/Governance"
+        name: "governance"
+        delete: false
+        editor:
+          preview: false
+        file: "src/_data/governance.yml"
+        fields:
+          - label: "Important Documents"
+            name: "important_documents"
+            widget: "list"
+            summary: "{{fields.file}}"
+            hint: "Highlight Important Documents"
+            allow_add: true
+            add_to_top: true
+            fields:
+              - label: Title
+                name: title
+                widget: string
+                required: true
+              - label: File
+                name: file
+                widget: file
+                allow_multiple: false
+                choose_url: false
+                media_folder: "/src/assets/docs/"
+                public_folder: ""
+          - label: Body
+            name: body
+            widget: markdown
+            required: true
       - label: "Services/24-7 Emergency Services"
         name: "emergency_services"
         delete: false
