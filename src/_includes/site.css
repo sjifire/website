@@ -528,6 +528,43 @@ body {
   color: var(--blue);
 }
 
+.l-grid--personnel {
+  grid-template-columns: repeat(auto-fill, minmax(156px, 1fr));
+  gap: 60px 30px;
+}
+
+.personnel-section {
+  padding-block: 2rem;
+  border-top: 1px dashed #979797;
+}
+
+.personnel-section:first-of-type {
+  margin-top: 2rem;
+}
+
+.personnel-section h2 {
+  color: var(--bright-red);
+}
+
+.personnel-section h3 {
+  font-size: 0.9rem;
+}
+
+.person ul {
+  padding-inline-start: 0;
+  font-size: 0.8rem;
+  color: #777;
+}
+.person ul li {
+  display: inline;
+}
+.person ul li:after {
+  content: ", ";
+}
+.person ul li:last-of-type::after {
+  content: "";
+}
+
 .document-list {
   list-style: none;
   margin: 0;
@@ -544,23 +581,22 @@ body {
 
 .l-grid {
   display: grid;
-  gap: 30px;
   margin: 0;
   padding: 0;
 }
 
 .l-grid--2col {
   grid-template-areas:
-    "main main"
-    "sidebar sidebar"
-    "subsidebar subsidebar";
+  "main main"
+  "sidebar sidebar"
+  "subsidebar subsidebar";
 }
 
 .l-grid--2col.flipped {
   grid-template-areas:
-    "sidebar sidebar"
-    "main main"
-    "subsidebar subsidebar";
+  "sidebar sidebar"
+  "main main"
+  "subsidebar subsidebar";
 }
 
 .l-grid__sidebar {
@@ -594,11 +630,6 @@ body {
 
   .l-grid--auto {
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 30px;
-  }
-
-  .l-grid--personnel {
-    grid-template-columns: repeat(auto-fill, minmax(165px, 1fr));
     gap: 30px;
   }
 }
