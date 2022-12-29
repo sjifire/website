@@ -262,10 +262,6 @@ collections:
                 options: ["Lieutenant", "Captain", "Assist. Chief", "Chief"]
                 required: false
                 multiple: false
-              - label: Bio
-                name: bio
-                widget: markdown
-                required: false
               - label: File
                 name: file
                 widget: file
