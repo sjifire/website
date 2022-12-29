@@ -168,7 +168,7 @@ module.exports = function (eleventyConfig) {
     assetPath = assetPath.replace(/^\/+/, "");
     if (!cloudinaryCmds) cloudinaryCmds = "f_auto";
     if (isProduction && siteData.enable_cloudinary_rewrites) {
-      if(/^(\/)?optim\//.test(assetPath)){
+      if (/^(\/)?optim\//.test(assetPath)) {
         // already exists...
         // can be called twice if called directly in a template then again from a transform
         // so just use what the orig assetPath was.

@@ -244,7 +244,16 @@ collections:
               - label: Roles
                 name: roles
                 widget: "select"
-                options: ["FireFighter", "EMT", "Medic", "Apparatus Operator", "Marine Crew", "Support", "Admin"]
+                options:
+                  [
+                    "FireFighter",
+                    "EMT",
+                    "Medic",
+                    "Apparatus Operator",
+                    "Marine Crew",
+                    "Support",
+                    "Admin",
+                  ]
                 required: true
                 multiple: true
               - label: Rank
