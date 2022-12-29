@@ -1,3 +1,4 @@
+---
 backend:
   name: git-gateway
   branch: main
@@ -200,17 +201,6 @@ collections:
                 choose_url: false
                 media_folder: "/src/assets/docs/"
                 public_folder: ""
-          - label: Body
-            name: body
-            widget: markdown
-            required: true
-      - label: "About/Board of Commissioners"
-        name: "board-of-commissioners"
-        delete: false
-        editor:
-          preview: false
-        file: "src/_data/board_of_commissioners.yml"
-        fields:
           - label: Body
             name: body
             widget: markdown
