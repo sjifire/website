@@ -19,7 +19,7 @@ permalink: "/about/emergency-personnel/index.html"
     <section class="personnel-section">
       <h2>Staff</h2>
       <div class="l-grid l-grid--personnel">
-        {% for person in staffOnly | sort(attribute='last_name') %}
+        {% for person in staffOnly %}
           <div class="person">
             <img src="{%- imgPath '/assets/personnel_imgs/' + person.file, 'f_auto,q_auto:good,c_fill,w_330,h_344' -%}" alt="Headshot of {{ person.first_name }} {{ person.last_name }}" width="165" height="172">
             <h3>{{ person.first_name }} {{ person.last_name }}</h3>
