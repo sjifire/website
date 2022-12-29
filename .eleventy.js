@@ -168,12 +168,11 @@ module.exports = function (eleventyConfig) {
     assetPath = assetPath.replace(/^\/+/, "");
     if (!cloudinaryCmds) cloudinaryCmds = "f_auto";
     if (isProduction && siteData.enable_cloudinary_rewrites) {
-      console.log("imgPath: ", assetPath);
-      console.trace();
       if(/^(\/)?optim\//.test(assetPath)){
-        // already exists... just add additional cloudinaryCmds
+        // already exists...
         // can be called twice if called directly in a template then again from a transform
-        return `/${assetPath}&${cloudinaryCmds}`;
+        // so just use what the orig assetPath was.
+        return `/${assetPath}`;
       }
       return `/optim/${assetPath}?c_param=${cloudinaryCmds}`;
     }
