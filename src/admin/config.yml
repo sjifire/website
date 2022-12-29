@@ -171,8 +171,8 @@ collections:
           preview: false
         file: "src/_data/emergency_personnel.yml"
         fields:
-          - label: Body
-            name: body
+          - label: Preamble
+            name: preamble
             widget: markdown
             required: true
           - label: "Personnel"
