@@ -173,7 +173,7 @@ module.exports = function (eleventyConfig) {
       if(/^(\/)?optim\//.test(assetPath)){
         // already exists... just add additional cloudinaryCmds
         // can be called twice if called directly in a template then again from a transform
-        return `${assetPath}&${cloudinaryCmds}`;
+        return `/${assetPath}&${cloudinaryCmds}`;
       }
       return `/optim/${assetPath}?c_param=${cloudinaryCmds}`;
     }
