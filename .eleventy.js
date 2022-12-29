@@ -168,7 +168,8 @@ module.exports = function (eleventyConfig) {
     assetPath = assetPath.replace(/^\/+/, "");
     if (!cloudinaryCmds) cloudinaryCmds = "f_auto";
     if (isProduction && siteData.enable_cloudinary_rewrites) {
-      console.log("imgPath: ", assetPath)
+      console.log("imgPath: ", assetPath);
+      console.trace();
       return `/optim/${assetPath}?c_param=${cloudinaryCmds}`;
     }
     return `${siteData.cloudinaryRootUrl}/image/fetch/${cloudinaryCmds}/${siteData.rootUrl}/${assetPath}`;
