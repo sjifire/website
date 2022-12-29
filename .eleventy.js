@@ -40,8 +40,8 @@ module.exports = function (eleventyConfig) {
     return new CleanCSS({}).minify(code).styles;
   });
 
-  eleventyConfig.addFilter("pluck", function (arr, selections, attr) {
-    return arr.filter((item) => selections.includes(item[attr]));
+  eleventyConfig.addFilter("pluckByValue", function (arr, value, attr) {
+    return arr.filter((item) => item[attr] === value);
   });
 
   eleventyConfig.addFilter("exclude", function (arr, selections, attr) {

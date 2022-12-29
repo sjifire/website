@@ -1,0 +1,52 @@
+---
+title: "Emergency Personnel"
+permalink: "/about/emergency-personnel/index.html"
+---
+
+{% extends "default_single_col_page.njk" %}
+{% set pageData = personnel %}
+
+{% block content %}
+  <div class="l-squeezed block-content">
+    <h1>
+      {{ title | safe }}
+    </h1>
+    <div class="lede">
+      {{ pageData.preamble | markdownify | safe }}
+    </div>
+    {% set staffOnly = pageData.personnel | pluckByValue('staff', 'staff_type') %}
+    {% set volunteersOnly = pageData.personnel | pluckByValue('volunteer', 'staff_type') %}
+    <section class="personnel-section">
+      <h2>Staff</h2>
+      <div class="l-grid l-grid--personnel">
+        {% for person in staffOnly | sort(attribute='last_name') %}
+          <div class="person">
+            {#<img src="{%- imgPath '/assets/images/' + person.file, 'f_auto,q_auto:good,c_fill,w_330,h_344' -%}" alt="Headshot of {{ person.first_name }} {{ person.last_name }}" width="165" height="172">#}
+            <h3>{{ person.first_name }} {{ person.last_name }}</h3>
+            <ul>
+              {% for role in person.roles %}
+                <li>{{ role }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% endfor %}
+      </div>
+    </section>
+    <section class="personnel-section">
+      <h2>Volunteers</h2>
+      <div class="l-grid l-grid--personnel">
+        {% for person in volunteersOnly | sort(attribute='last_name') %}
+          <div class="person">
+            {#<img src="{%- imgPath '/assets/images/' + person.file, 'f_auto,q_auto:good,c_fill,w_330,h_344' -%}" alt="Headshot of {{ person.first_name }} {{ person.last_name }}" width="165" height="172">#}
+            <h3>{{ person.first_name }} {{ person.last_name }}</h3>
+            <ul>
+              {% for role in person.roles %}
+                <li>{{ role }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% endfor %}
+      </div>
+    </section>
+  </div>
+{% endblock %}
