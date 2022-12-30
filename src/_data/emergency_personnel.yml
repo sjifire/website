@@ -10,7 +10,7 @@ personnel:
       - Apparatus Operator
       - Marine Crew
     rank: Chief
-    file: norvin_collins.jpg
+    img_file: norvin_collins.jpg
   - first_name: Noel
     last_name: Monin
     staff_type: staff
@@ -19,14 +19,14 @@ personnel:
       - Apparatus Operator
       - Marine Crew
     rank: Assist. Chief
-    file: noel_monin.jpg
+    img_file: noel_monin.jpg
   - first_name: Robin
     last_name: Garcia
     title: Front Office
     staff_type: staff
     roles:
       - Admin
-    file: robin_garcia.jpg
+    img_file: robin_garcia.jpg
   - first_name: Kelsey
     last_name: Venegas
     title: Public Information Officer
@@ -34,7 +34,7 @@ personnel:
     roles:
       - Support
       - Admin
-    file: kelsey_venegas.jpg
+    img_file: kelsey_venegas.jpg
   - first_name: Tad
     last_name: Lean
     title: Maintenance Officer
@@ -44,7 +44,7 @@ personnel:
       - EMT
       - Apparatus Operator
     rank: Captain
-    file: tad_lean.jpg
+    img_file: tad_lean.jpg
   - first_name: Karl
     last_name: Kuetzing
     title: Training Officer
@@ -54,7 +54,7 @@ personnel:
       - EMT
       - Apparatus Operator
       - Marine Crew
-    file: karl_kuetzing.jpg
+    img_file: karl_kuetzing.jpg
   - first_name: Michael
     last_name: Hartzell
     staff_type: staff
@@ -64,7 +64,7 @@ personnel:
       - Apparatus Operator
       - Marine Crew
     rank: Lieutenant
-    file: michael_hartzell.jpg
+    img_file: michael_hartzell.jpg
   - first_name: Michael
     last_name: Henderson
     staff_type: staff
@@ -73,14 +73,14 @@ personnel:
       - EMT
       - Apparatus Operator
     rank: Lieutenant
-    file: michael_henderson.jpg
+    img_file: michael_henderson.jpg
   - first_name: Brad
     last_name: Smith
     staff_type: staff
     roles:
       - FireFighter
       - Apparatus Operator
-    file: brad_smith.jpg
+    img_file: brad_smith.jpg
   - first_name: Brooke
     last_name: Sevier
     staff_type: staff
@@ -89,7 +89,7 @@ personnel:
       - EMT
       - Apparatus Operator
       - Marine Crew
-    file: brooke_sevier.jpg
+    img_file: brooke_sevier.jpg
   - first_name: Craig
     last_name: McConnell
     staff_type: staff
@@ -97,7 +97,7 @@ personnel:
       - FireFighter
       - EMT
       - Apparatus Operator
-    file: craig_mcconnell.jpg
+    img_file: craig_mcconnell.jpg
   - first_name: Katie
     last_name: English
     staff_type: staff
@@ -105,7 +105,7 @@ personnel:
       - FireFighter
       - EMT
       - Apparatus Operator
-    file: katie_english.jpg
+    img_file: katie_english.jpg
   - first_name: Tom
     last_name: Eades
     staff_type: staff
@@ -113,25 +113,25 @@ personnel:
       - FireFighter
       - EMT
       - Apparatus Operator
-    file: tom_eades.jpg
+    img_file: tom_eades.jpg
   - first_name: Alexa
     last_name: Rust
     staff_type: volunteer
     roles:
       - FireFighter
-    file: alexa_rust.jpg
+    img_file: alexa_rust.jpg
   - first_name: Eric
     last_name: Eisenhardt
     staff_type: volunteer
     roles:
       - FireFighter
-    file: eric_eisenhardt.jpg
+    img_file: eric_eisenhardt.jpg
   - first_name: Bonnie
     last_name: Stanger
     staff_type: volunteer
     roles:
       - Support
-    file: bonnie_stanger.jpg
+    img_file: bonnie_stanger.jpg
   - first_name: Erin
     last_name: Graham
     staff_type: volunteer
@@ -141,37 +141,37 @@ personnel:
       - Apparatus Operator
       - Marine Crew
     rank: Captain
-    file: erin_graham.jpg
+    img_file: erin_graham.jpg
   - first_name: Charles
     last_name: Genther
     staff_type: volunteer
     roles:
       - Support
-    file: charles_genther.jpg
+    img_file: charles_genther.jpg
   - first_name: Frank
     last_name: Cardinale
     staff_type: volunteer
     roles:
       - Apparatus Operator
-    file: frank_cardinale.jpg
+    img_file: frank_cardinale.jpg
   - first_name: Harry
     last_name: See
     staff_type: volunteer
     roles:
       - Apparatus Operator
-    file: harry_see.jpg
+    img_file: harry_see.jpg
   - first_name: Karen
     last_name: Gentry
     staff_type: volunteer
     roles:
       - Support
-    file: karen_gentry.jpg
+    img_file: karen_gentry.jpg
   - first_name: Mark
     last_name: Wagner
     staff_type: volunteer
     roles:
       - Apparatus Operator
-    file: mark_wagner.jpg
+    img_file: mark_wagner.jpg
   - first_name: Matt
     last_name: Wickey
     staff_type: volunteer
@@ -180,13 +180,13 @@ personnel:
       - EMT
       - Apparatus Operator
       - Marine Crew
-    file: matt_wickey.jpg
+    img_file: matt_wickey.jpg
   - first_name: Ron
     last_name: Stanger
     staff_type: volunteer
     roles:
       - Apparatus Operator
-    file: ron_stanger.jpg
+    img_file: ron_stanger.jpg
   - first_name: Kyle
     last_name: Dodd
     staff_type: volunteer
@@ -196,39 +196,39 @@ personnel:
       - Apparatus Operator
       - Marine Crew
     rank: Lieutenant
-    file: kyle_dodd.jpg
+    img_file: kyle_dodd.jpg
   - first_name: Eric
     last_name: Rezabek
     staff_type: volunteer
     roles:
       - FireFighter
-    file: eric_rezabek.jpg
+    img_file: eric_rezabek.jpg
   - first_name: Leo
     last_name: DeBruyn
     staff_type: volunteer
     roles:
       - FireFighter
       - Apparatus Operator
-    file: leo_debruyn.jpg
+    img_file: leo_debruyn.jpg
   - first_name: Maria
     last_name: DeBruyn
     staff_type: volunteer
     roles:
       - EMT
       - Support
-    file: maria_debruyn.jpg
+    img_file: maria_debruyn.jpg
   - first_name: John
     last_name: Young
     staff_type: volunteer
     roles:
       - Apparatus Operator
-    file: john_young.jpg
+    img_file: john_young.jpg
   - first_name: Joran
     last_name: Bouwman
     staff_type: volunteer
     roles:
       - FireFighter
-    file: joran_bouwman.jpg
+    img_file: joran_bouwman.jpg
   - first_name: Alan
     last_name: Arrowsmith
     staff_type: volunteer
@@ -236,31 +236,31 @@ personnel:
       - FireFighter
       - EMT
       - Apparatus Operator
-    file: alan_arrowsmith.jpg
+    img_file: alan_arrowsmith.jpg
   - first_name: Chris
     last_name: Jones
     staff_type: volunteer
     roles:
       - FireFighter
-    file: chris_jones.jpg
+    img_file: chris_jones.jpg
   - first_name: Hella
     last_name: Cascorbi
     staff_type: volunteer
     roles:
       - EMT
-    file: hella_cascorbi.jpg
+    img_file: hella_cascorbi.jpg
   - first_name: Sean
     last_name: Armstrong
     staff_type: volunteer
     roles:
       - FireFighter
-    file: sean_armstrong.jpg
+    img_file: sean_armstrong.jpg
   - first_name: Sue Ann
     last_name: Stabley
     staff_type: volunteer
     roles:
       - Support
-    file: sue_ann_stabley.jpg
+    img_file: sue_ann_stabley.jpg
   - first_name: Kathleen
     last_name: Salinas
     staff_type: volunteer
@@ -269,7 +269,7 @@ personnel:
       - EMT
       - Apparatus Operator
       - Marine Crew
-    file: kathleen_salinas.jpg
+    img_file: kathleen_salinas.jpg
   - first_name: John
     last_name: Salinas
     staff_type: volunteer
@@ -279,24 +279,24 @@ personnel:
       - Apparatus Operator
       - Marine Crew
     rank: Lieutenant
-    file: john_salinas.jpg
+    img_file: john_salinas.jpg
   - first_name: Chad
     last_name: Warmenhoven
     staff_type: volunteer
     roles:
       - FireFighter
-    file: chad_warmenhoven.jpg
+    img_file: chad_warmenhoven.jpg
   - first_name: Cynthia
     last_name: Parker
     title: NATIONAL Crisis Response Canine Team
     staff_type: volunteer
     roles:
       - Support
-    file: cynthia_parker.jpg
+    img_file: cynthia_parker.jpg
   - first_name: Jet
     last_name: Parker
     title: NATIONAL Crisis Response Canine Team
     staff_type: volunteer
     roles:
       - Support
-    file: cynthia_parker.jpg
+    img_file: cynthia_parker.jpg

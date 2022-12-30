@@ -221,8 +221,8 @@ collections:
                 options: ["Lieutenant", "Captain", "Assist. Chief", "Chief"]
                 required: false
                 multiple: false
-              - label: File
-                name: file
+              - label: Image File
+                name: img_file
                 widget: file
                 allow_multiple: false
                 choose_url: false
