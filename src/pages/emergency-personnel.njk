@@ -5,6 +5,7 @@ permalink: "/about/emergency-personnel/index.html"
 
 {% extends "default_single_col_page.njk" %}
 {% set pageData = emergency_personnel %}
+{% set cloudinaryDefaults = "f_auto,q_auto:good,g_face,c_fill,w_330,h_344" %}
 
 {% block content %}
   <div class="l-squeezed block-content">
@@ -21,7 +22,7 @@ permalink: "/about/emergency-personnel/index.html"
       <div class="l-grid l-grid--personnel">
         {% for person in staffOnly %}
           <div class="person">
-            <img src="{%- imgPath '/assets/personnel_imgs/' + person.file, 'f_auto,q_auto:good,c_fill,w_330,h_344' -%}" alt="Headshot of {{ person.first_name }} {{ person.last_name }}" width="165" height="172">
+            <img src="{%- imgPath '/assets/personnel_imgs/' + person.file, cloudinaryDefaults -%}" alt="Headshot of {{ person.first_name }} {{ person.last_name }}" width="165" height="172">
             <h3>{{ person.first_name }} {{ person.last_name }}</h3>
             <ul>
               {% for role in person.roles %}
@@ -37,7 +38,7 @@ permalink: "/about/emergency-personnel/index.html"
       <div class="l-grid l-grid--personnel">
         {% for person in volunteersOnly | sort(attribute='last_name') %}
           <div class="person">
-            <img src="{%- imgPath '/assets/personnel_imgs/' + person.file, 'f_auto,q_auto:good,c_fill,w_330,h_344' -%}" alt="Headshot of {{ person.first_name }} {{ person.last_name }}" width="165" height="172">
+            <img src="{%- imgPath '/assets/personnel_imgs/' + person.file, cloudinaryDefaults -%}" alt="Headshot of {{ person.first_name }} {{ person.last_name }}" width="165" height="172">
             <h3>{{ person.first_name }} {{ person.last_name }}</h3>
             <ul>
               {% for role in person.roles %}
