@@ -300,3 +300,10 @@ personnel:
     roles:
       - Support
     img_file: cynthia_parker.jpg
+  - first_name: Adam
+    last_name: Greene
+    staff_type: volunteer
+    roles:
+      - FireFighter
+      - EMT
+      - Apparatus Operator
