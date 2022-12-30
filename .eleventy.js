@@ -40,8 +40,8 @@ module.exports = function (eleventyConfig) {
     return new CleanCSS({}).minify(code).styles;
   });
 
-  eleventyConfig.addFilter("pluck", function (arr, selections, attr) {
-    return arr.filter((item) => selections.includes(item[attr]));
+  eleventyConfig.addFilter("pluckByValue", function (arr, value, attr) {
+    return arr.filter((item) => item[attr] === value);
   });
 
   eleventyConfig.addFilter("exclude", function (arr, selections, attr) {
@@ -168,6 +168,12 @@ module.exports = function (eleventyConfig) {
     assetPath = assetPath.replace(/^\/+/, "");
     if (!cloudinaryCmds) cloudinaryCmds = "f_auto";
     if (isProduction && siteData.enable_cloudinary_rewrites) {
+      if (/^(\/)?optim\//.test(assetPath)) {
+        // already exists...
+        // can be called twice if called directly in a template then again from a transform
+        // so just use what the orig assetPath was.
+        return `/${assetPath}`;
+      }
       return `/optim/${assetPath}?c_param=${cloudinaryCmds}`;
     }
     return `${siteData.cloudinaryRootUrl}/image/fetch/${cloudinaryCmds}/${siteData.rootUrl}/${assetPath}`;

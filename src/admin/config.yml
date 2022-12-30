@@ -164,6 +164,70 @@ collections:
             name: sidebar
             widget: markdown
             required: false
+      - label: "About/Emergency Personnel"
+        name: "emergency personnel"
+        delete: false
+        editor:
+          preview: false
+        file: "src/_data/emergency_personnel.yml"
+        fields:
+          - label: Preamble
+            name: preamble
+            widget: markdown
+            required: true
+          - label: "Personnel"
+            name: "personnel"
+            widget: "list"
+            summary: "{{fields.file}}"
+            allow_add: true
+            add_to_top: true
+            fields:
+              - label: First Name
+                name: first_name
+                widget: string
+                required: true
+              - label: Last Name
+                name: last_name
+                widget: string
+                required: true
+              - label: Title
+                name: title
+                widget: string
+                required: false
+              - label: Type
+                name: staff_type
+                widget: "select"
+                options: ["staff", "volunteer"]
+                required: true
+                multiple: false
+              - label: Roles
+                name: roles
+                widget: "select"
+                options:
+                  [
+                    "FireFighter",
+                    "EMT",
+                    "Medic",
+                    "Apparatus Operator",
+                    "Marine Crew",
+                    "Support",
+                    "Admin",
+                  ]
+                required: true
+                multiple: true
+              - label: Rank
+                name: rank
+                widget: "select"
+                options: ["Lieutenant", "Captain", "Assist. Chief", "Chief"]
+                required: false
+                multiple: false
+              - label: File
+                name: file
+                widget: file
+                allow_multiple: false
+                choose_url: false
+                media_folder: "/src/assets/personnel_imgs/"
+                public_folder: ""
       - label: "About/Incidents"
         name: "incidents"
         delete: false
@@ -205,64 +269,6 @@ collections:
             name: body
             widget: markdown
             required: true
-      - label: "About/Personnel"
-        name: "personnel"
-        delete: false
-        editor:
-          preview: false
-        file: "src/_data/personnel.yml"
-        fields:
-          - label: Body
-            name: body
-            widget: markdown
-            required: true
-          - label: "Personnel"
-            name: "personnel"
-            widget: "list"
-            summary: "{{fields.file}}"
-            allow_add: true
-            add_to_top: true
-            fields:
-              - label: First Name
-                name: first_name
-                widget: string
-                required: true
-              - label: Last Name
-                name: last_name
-                widget: string
-                required: true
-              - label: Title
-                name: title
-                widget: string
-                required: false
-              - label: staff
-                name: staff
-                widget: boolean
-                default: false
-                required: false
-              - label: Roles
-                name: roles
-                widget: "select"
-                options: ["FireFighter", "EMT", "Medic", "Apparatus Operator", "Marine Crew", "Support", "Admin"]
-                required: true
-                multiple: true
-              - label: Rank
-                name: rank
-                widget: "select"
-                options: ["Lieutenant", "Captain", "Assist. Chief", "Chief"]
-                required: false
-                multiple: false
-              - label: Bio
-                name: bio
-                widget: markdown
-                required: false
-              - label: File
-                name: file
-                widget: file
-                allow_multiple: false
-                choose_url: false
-                media_folder: "/src/assets/personnel_imgs/"
-                public_folder: ""
       - label: "Services/24-7 Emergency Services"
         name: "emergency_services"
         delete: false
