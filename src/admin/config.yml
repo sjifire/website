@@ -226,6 +226,7 @@ collections:
                 widget: file
                 allow_multiple: false
                 choose_url: false
+                required: false
                 media_folder: "/src/assets/personnel_imgs/"
                 public_folder: ""
       - label: "About/Incidents"
