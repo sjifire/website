@@ -1041,3 +1041,53 @@ describe("generateStats", function () {
     assert.equal(shortParsedStats.incident_stats.incident_times.median, 1890);
   });
 });
+
+
+describe("test start and stop datees", function () {
+  let records = null;
+  let parsedStats = null;
+
+  before(() => {
+    records = esoScrapper.parseCSV(sampleCSVPath);
+  });
+
+  it("should throw an error if the start date is after the stop date", function () {
+    startDate = new Date('12/19/2020');
+    stopDate = new Date('12/28/2020');
+    badParams = { records: records, startDate: stopDate, stopDate: startDate }
+    goodParams = { records: records, startDate: startDate, stopDate: stopDate }
+    assert.throws(function () { esoScrapper.generateStats(badParams) }, Error, "Start Date cannot be after stop date");
+    esoScrapper.generateStats(goodParams);
+  })
+
+  it("should handle a day range, inclusive", function () {
+    startDate = new Date('12/28/2020'); // include all records in 12/28!
+    stopDate = new Date('1/1/2021'); // include all records in 1/1!
+    parsedStats = esoScrapper.generateStats({ records: records, startDate: startDate, stopDate: stopDate });
+    assert.deepEqual(
+      parsedStats.date_range_from,
+      new Date("2020-12-28T00:00:00.000Z")
+    );
+    assert.deepEqual(
+      parsedStats.date_range_to,
+      new Date("2021-01-01T23:59:59.999Z")
+    );
+    assert.equal(parsedStats.incident_stats.num_incidents, 5)
+    assert.equal(parsedStats.incident_stats.num_daytime_incidents, 1)
+    assert.equal(parsedStats.incident_stats.num_nighttime_incidents, 4)
+  })
+  it("should default to a 30 day date range IF only a stopDate is added", function () {
+    stopDate = new Date('1/30/2021');
+    parsedStats = esoScrapper.generateStats({ records: records, stopDate: stopDate });
+    assert.deepEqual(
+      parsedStats.date_range_from,
+      new Date("2021-01-01T00:00:00.000Z")
+    );
+    assert.deepEqual(
+      parsedStats.date_range_to,
+      new Date("2021-01-30T23:59:59.999Z")
+    );
+    assert.equal(parsedStats.incident_stats.num_incidents, 53)
+  })
+
+});
