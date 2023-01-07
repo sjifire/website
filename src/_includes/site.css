@@ -70,7 +70,7 @@ select {
     "Helvetica Neue", "Helvetica", sans-serif;
   --dk-gray: #21262d;
   --black: #161b22;
-  --gold: #d4af37;
+  --home_header_bg: #334155;
   --yellow: #f2c700;
   --bright-red: #c42414;
   --dk-red: #72150C;
@@ -98,7 +98,7 @@ body {
 }
 
 .site-header {
-  background-color: var(--gold);
+  background-color: var(--home_header_bg);
 }
 
 .site-header--home {
@@ -140,8 +140,13 @@ body {
   padding: 0;
 }
 
+.logo a {
+  display: block;
+}
+
 .logo img {
-  max-width: 120px;
+  display: block;
+  max-width: 150px;
   height: auto;
 }
 
@@ -300,7 +305,6 @@ body {
 
 .page-header {
   padding-bottom: 40px;
-  /* background-color: var(--dk-gray); */
   color: #fff;
 }
 
