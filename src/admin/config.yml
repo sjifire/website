@@ -104,7 +104,7 @@ collections:
         file: "src/_data/homepage.yml"
         fields:
           - label: Header Image(s)
-            name: header_image
+            name: header_image_source
             widget: image
             allow_multiple: true
             choose_url: false

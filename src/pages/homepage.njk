@@ -1,6 +1,7 @@
 ---
 title: San Juan Island Fire and Rescue
 permalink: /
+mobile_layout_flipped: true
 ---
 
 {% block sidebar_content %}
@@ -10,12 +11,18 @@ permalink: /
   <div class="sidebar-block">
     {% include "call-stats-widget.njk" %}
   </div>
-  <div class="sidebar-block">
-    <figure class='embed-responsive embed-responsive-1by2'>
-      <iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2FSJIFire%2F&tabs=timeline&width=300&height=800&small_header=true&adapt_container_width=true&hide_cover=false&show_facepile=false&appId" width="300" height="800" style="border:none;overflow:hidden" scrolling="yes" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" title="SJIFire Facebook Page"></iframe>
-    </figure>
-  </div>
 {% endblock %}
+
+{% block subsidebar_content %}
+  <aside class="l-grid__subsidebar">
+    <div class="subsidebar-block">
+      <figure class='embed-responsive embed-responsive-1by2'>
+        <iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2FSJIFire%2F&tabs=timeline&width=300&height=800&small_header=true&adapt_container_width=true&hide_cover=false&show_facepile=false&appId" width="300" height="800" style="border:none;overflow:hidden" scrolling="yes" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" title="SJIFire Facebook Page"></iframe>
+      </figure>
+    </div>
+  </aside>
+{% endblock %}
+
 
 {% block main_content %}
   <ul class="l-grid l-grid--auto">

@@ -102,7 +102,6 @@ body {
 }
 
 .site-header--home {
-  --home-header-bg-image: url("https://res.cloudinary.com/san-juan-fire-district-3/w_800,q_auto:eco,e_grayscale/assets/images/Arata-Photo-1-e1635900798243.jpg");
   background-image: var(--home-header-bg-image);
   background-repeat: no-repeat;
   background-position: top 56px center;
@@ -554,13 +553,15 @@ body {
 .l-grid--2col {
   grid-template-areas:
     "main main"
-    "sidebar sidebar";
+    "sidebar sidebar"
+    "subsidebar subsidebar";
 }
 
 .l-grid--2col.flipped {
   grid-template-areas:
     "sidebar sidebar"
-    "main main";
+    "main main"
+    "subsidebar subsidebar";
 }
 
 .l-grid__sidebar {
@@ -570,6 +571,10 @@ body {
 
 .l-grid__main {
   grid-area: main;
+}
+
+.l-grid__subsidebar {
+  grid-area: subsidebar;
 }
 
 @media (min-width: 768px) {
@@ -583,7 +588,7 @@ body {
   .l-grid--2col.flipped {
     grid-template-areas:
       "main sidebar"
-      "main sidebar";
+      "main subsidebar";
     grid-template-columns: 2.5fr minmax(240px, 1fr);
     gap: 60px;
   }
