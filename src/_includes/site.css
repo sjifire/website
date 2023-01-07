@@ -70,6 +70,7 @@ select {
     "Helvetica Neue", "Helvetica", sans-serif;
   --dk-gray: #21262d;
   --black: #161b22;
+  --gold: #B08F26;
   --yellow: #f2c700;
   --bright-red: #c42414;
   --dk-red: #72150C;
@@ -97,7 +98,7 @@ body {
 }
 
 .site-header {
-  background-color: var(--dk-gray);
+  background-color: var(--gold);
 }
 
 .site-header--home {
