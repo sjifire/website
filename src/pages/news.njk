@@ -8,9 +8,33 @@ pagination:
 permalink: "/news/{% if pagination.pageNumber > 0 %}page-{{ pagination.pageNumber + 1 }}/{% endif %}index.html"
 ---
 
-{% extends 'base.njk' %}
+{% extends "default_double_col_page.njk" %}
 
-{% block content %}
+{% block sidebar_content %}
+  <h4 class="sidebar__heading">Media Releases</h4>
+  <dl class="sidebar__desc-list">
+    {% for year, releases in media_releases | groupby('year') | dictsort | reverse %}
+      <dt>
+        {{ year }}
+      </dt>
+      <dd>
+        <ul>
+          {% for media_release in releases | reverse %}
+            <li>
+              <a href="{{ media_release.document }}">
+                {{ media_release.title -}}
+              </a>
+              ({{ media_release.date | postDateTerseNoYearISO }})
+            </li>
+          {% endfor %}
+        </ul>
+      </dd>
+    {% endfor %}
+  </dl>
+{% endblock %}
+
+
+{% block main_content %}
   <header class="hgroup">
     <h1>
       {{ title | safe }}
