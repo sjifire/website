@@ -98,7 +98,7 @@ personnel:
       - EMT
       - Apparatus Operator
     img_file: craig_mcconnell.jpg
-  - first_name: Katie
+  - first_name: Kati
     last_name: English
     staff_type: staff
     roles:
@@ -204,14 +204,14 @@ personnel:
       - FireFighter
     img_file: eric_rezabek.jpg
   - first_name: Leo
-    last_name: DeBruyn
+    last_name: De Bruyn
     staff_type: volunteer
     roles:
       - FireFighter
       - Apparatus Operator
     img_file: leo_debruyn.jpg
   - first_name: Maria
-    last_name: DeBruyn
+    last_name: De Bruyn
     staff_type: volunteer
     roles:
       - EMT
@@ -307,3 +307,74 @@ personnel:
       - FireFighter
       - EMT
       - Apparatus Operator
+  - first_name: Shaun
+    last_name: Armstrong
+    staff_type: volunteer
+    roles:
+      - FireFighter
+  - first_name: Trevor
+    last_name: Bolton
+    staff_type: volunteer
+    roles:
+      - FireFighter
+      - EMT
+  - first_name: Chuck
+    last_name: Dalldorf
+    staff_type: volunteer
+    roles:
+      - Support
+  - first_name: Sarah
+    last_name: Hill
+    staff_type: volunteer
+    roles:
+      - FireFighter
+      - EMT
+  - first_name: David
+    last_name: Howitt
+    staff_type: volunteer
+    roles:
+      - FireFighter
+      - Apparatus Operator
+  - first_name: John
+    last_name: McDowell
+    staff_type: volunteer
+    roles:
+      - Support
+  - first_name: Gilbert
+    last_name: Venegas
+    staff_type: staff
+    roles:
+      - FireFighter
+      - EMT
+      - Apparatus Operator
+  - first_name: Michelangelo
+    last_name: von Dassow
+    staff_type: volunteer
+    roles:
+      - FireFighter
+      - Apparatus Operator
+  - first_name: Robert
+    last_name: Brunkow
+    staff_type: volunteer
+    roles:
+      - Support
+  - first_name: Raquel
+    last_name: Lackey
+    staff_type: volunteer
+    roles:
+      - Support
+  - first_name: Jenny
+    last_name: Shrum
+    staff_type: volunteer
+    roles:
+      - Support
+  - first_name: Rhys
+    last_name: Spoor
+    staff_type: volunteer
+    roles:
+      - Support
+  - first_name: Yasmin
+    last_name: von Dassow
+    staff_type: volunteer
+    roles:
+      - Support
