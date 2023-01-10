@@ -74,6 +74,14 @@ personnel:
       - Apparatus Operator
     rank: Lieutenant
     img_file: michael_henderson.jpg
+  - first_name: Gilbert
+    last_name: Venegas
+    staff_type: staff
+    rank: Lieutenant
+    roles:
+      - FireFighter
+      - EMT
+      - Apparatus Operator
   - first_name: Brad
     last_name: Smith
     staff_type: staff
@@ -340,13 +348,6 @@ personnel:
     staff_type: volunteer
     roles:
       - Support
-  - first_name: Gilbert
-    last_name: Venegas
-    staff_type: staff
-    roles:
-      - FireFighter
-      - EMT
-      - Apparatus Operator
   - first_name: Michelangelo
     last_name: von Dassow
     staff_type: volunteer
