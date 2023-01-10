@@ -23,6 +23,7 @@ const fs = require("fs");
 const _ = require("lodash");
 const logger = require("./logger");
 
+// logger.level = 'debug'
 process.env.TZ = "UTC";
 
 const DEFAULT_DETAILED_STATS_DAY_RANGE = 30;
@@ -168,13 +169,17 @@ const _processRecords = function (records, startDate, stopDate, dayRange) {
   stopDate.setUTCHours(23, 59, 59, 999); // set to the very end of day
   // NOTE: this date range makes it exclusive, NOT inclusive...
   // so if 30 days, it would go from 12/25/21 23:59:59 back to 11/26/21 00:00:00
-  let tmpDate = _addDays(stopDate, -dayRange);
-  tmpDate = _addDays(tmpDate, 1);
-  const dateCutoff = startDate || tmpDate;
-  dateCutoff.setHours(0, 0, 0, 0);
+  if (!startDate) {
+    startDate = _addDays(stopDate, -dayRange);
+    startDate = _addDays(startDate, 1);
+  }
+  startDate.setHours(0, 0, 0, 0);
+  if (stopDate < startDate) {
+    throw new Error("Start Date cannot be after stop date");
+  }
   const recordsInRange = records.filter(
     (record) =>
-      record["Alarm Date"] >= dateCutoff && record["Alarm Date"] <= stopDate
+      record["Alarm Date"] >= startDate && record["Alarm Date"] <= stopDate
   );
   // the groupBy sorts by lexographical ordering of the Incident Number; this isn't
   // always entered in correctly nor is the order of the incident the same order
@@ -205,7 +210,7 @@ const _processRecords = function (records, startDate, stopDate, dayRange) {
     total_calls: _.uniqBy(records, "Incident Number").length,
     date_range_all_from: _.first(records)["Dispatched Date"],
     date_range_all_to: _.last(records)["Dispatched Date"],
-    date_range_from: dateCutoff,
+    date_range_from: startDate,
     date_range_to: stopDate,
     parseWarnings: 0,
   };
@@ -213,7 +218,7 @@ const _processRecords = function (records, startDate, stopDate, dayRange) {
   // this way we log the days that have no activit.
   // eslint-disable-next-line
   for (
-    let day = new Date(dateCutoff.getTime());
+    let day = new Date(startDate.getTime());
     day <= stopDate;
     day.setDate(day.getDate() + 1)
   ) {
