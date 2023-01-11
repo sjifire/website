@@ -5,8 +5,6 @@ permalink: "/about/emergency-personnel/index.html"
 
 {% extends "default_single_col_page.njk" %}
 {% set pageData = emergency_personnel %}
-{% set cloudinaryDefaults = "f_auto,q_auto:good,g_faces,c_fill,w_330,h_344" %}
-{% set defaultImgName = "default_person.jpg" %}
 
 {% block content %}
   <div class="l-squeezed block-content">
@@ -23,8 +21,20 @@ permalink: "/about/emergency-personnel/index.html"
       <div class="l-grid l-grid--personnel">
         {% for person in staffOnly %}
           <div class="person">
-            <img src="{%- imgPath '/assets/personnel_imgs/' + (person.img_file or defaultImgName), cloudinaryDefaults -%}" alt="Headshot of {{ person.first_name }} {{ person.last_name }}" width="165" height="172">
+            <div class="person__img{{ ' noimg' if not person.img_file }}">
+              {% if person.img_file %}
+                <img src="{%- imgPath '/assets/personnel_imgs/' + person.img_file, 'f_auto,q_auto:good,c_fill,w_315,h_328,g_face' -%}" alt="Headshot of {{ person.first_name }} {{ person.last_name }}" width="157.5" height="164">
+              {% else %}
+                <div>
+                  <svg><use xlink:href='#profile' /></svg>
+                </div>
+              {% endif %}
+            </div>
             <h3>{{ person.first_name }} {{ person.last_name }}</h3>
+            {# Styling ready for Rank, Title as such:
+            <h4>Rank</h4>
+            <h5>Title</h5
+            >#}
             <ul>
               {% for role in person.roles %}
                 <li>{{ role }}</li>
@@ -39,8 +49,20 @@ permalink: "/about/emergency-personnel/index.html"
       <div class="l-grid l-grid--personnel">
         {% for person in volunteersOnly | sort(attribute='last_name') %}
           <div class="person">
-            <img src="{%- imgPath '/assets/personnel_imgs/' + (person.img_file or defaultImgName), cloudinaryDefaults -%}" alt="Headshot of {{ person.first_name }} {{ person.last_name }}" width="165" height="172">
+            <div class="person__img{{ ' noimg' if not person.img_file }}">
+              {% if person.img_file %}
+                <img src="{%- imgPath '/assets/personnel_imgs/' + person.img_file, 'f_auto,q_auto:good,c_fill,w_315,h_328,g_face' -%}" alt="Headshot of {{ person.first_name }} {{ person.last_name }}" width="157.5" height="164">
+              {% else %}
+                <div>
+                  <svg><use xlink:href='#profile' /></svg>
+                </div>
+              {% endif %}
+            </div>
             <h3>{{ person.first_name }} {{ person.last_name }}</h3>
+            {# Styling ready for Rank, Title as such:
+            <h4>Rank</h4>
+            <h5>Title</h5
+            >#}
             <ul>
               {% for role in person.roles %}
                 <li>{{ role }}</li>
