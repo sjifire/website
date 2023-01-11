@@ -1,0 +1,44 @@
+---
+title: "Media Releases"
+permalink: "/news/media-releases/index.html"
+---
+
+{% extends "default_single_col_page.njk" %}
+{% set pageData = media_releases_page %}
+
+{% block content %}
+  <div class="l-squeezed block-content">
+    <h1>
+      {{ title | safe }}
+    </h1>
+    <div class="lede">
+      {{ pageData.preamble | markdownify | safe }}
+    </div>
+  </div>
+  <section class="l-squeezed media-releases">
+    {% for year, set in media_releases | groupby('year') | dictsort | reverse %}
+      <details{{ ' open' if loop.first }}>
+        <summary class="media-release__toggle">
+          <h2>{{ year }}</h2>
+        </summary>
+        <ul class="l-grid l-grid--media" style="padding-bottom:3rem;">
+          {% for release in set %}
+            <li>
+              <a class="media_container" href="{{ release.document }}">
+                <img src="{{ cloudinaryRootUrl }}/{{ release.document }}" width="120" height="150" alt="Thumbnail preview of {{ release.date | postDateTerseISO }} press release">
+              </a>
+              <h3>
+                {{ release.date | postDateTerseNoYearISO }}
+              </h3>
+              <p>
+                <a href="{{ release.document }}">
+                  {{ release.title }}
+                </a>
+              </p>
+            </li>
+          {% endfor %}
+        </ul>
+      </details>
+    {% endfor %}
+  </section>
+{% endblock %}
