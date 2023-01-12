@@ -31,8 +31,12 @@ permalink: "/about/emergency-personnel/index.html"
               {% endif %}
             </div>
             <h3>{{ person.first_name }} {{ person.last_name }}</h3>
-            {% if person.title %}<h4>{{ person.title }}</h4>{% endif %}
-            {% if person.rank %}<h5>{{ person.rank }}</h5>{% endif %}
+            {% if person.rank or person.title %}<h4>
+              {% if person.rank %}{{ person.rank }}{% endif %}
+              {% if person.rank and person.title %} - {% endif %}
+              {% if person.title %}{{ person.title }}{% endif %}
+            </h4>
+            {% endif %}
             <ul>
               {% for role in person.roles %}
                 <li>{{ role }}</li>
@@ -57,8 +61,12 @@ permalink: "/about/emergency-personnel/index.html"
               {% endif %}
             </div>
             <h3>{{ person.first_name }} {{ person.last_name }}</h3>
-            {% if person.title %}<h4>{{ person.title }}</h4>{% endif %}
-            {% if person.rank %}<h5>{{ person.rank }}</h5>{% endif %}
+            {% if person.rank or person.title %}<h4>
+              {% if person.rank %}{{ person.rank }}{% endif %}
+              {% if person.rank and person.title %} - {% endif %}
+              {% if person.title %}{{ person.title }}{% endif %}
+            </h4>
+            {% endif %}
             <ul>
               {% for role in person.roles %}
                 <li>{{ role }}</li>
