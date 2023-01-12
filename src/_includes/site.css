@@ -16,7 +16,9 @@
   --lt-blue-gray: #E2E8F0;
   --md-blue-gray: #cbd5e1;
   --blue: #20528d;
+  --home_header_bg: #334155;
 }
+
 
 /* Box sizing rules */
 *,
@@ -85,23 +87,6 @@ select {
   }
 }
 
-:root {
-  --ff-sans: -apple-system, BlinkMacSystemFont, "Roboto", "Arial",
-    "Helvetica Neue", "Helvetica", sans-serif;
-  --dk-gray: #21262d;
-  --black: #161b22;
-  --home_header_bg: #334155;
-  --yellow: #f2c700;
-  --bright-red: #c42414;
-  --dk-red: #72150C;
-  --md-gray: #515559;
-  --muted-gray: #919599;
-  --btn-gray: #e1e5e9;
-  --lt-gray: #f1f5f9;
-  --rule-gray: #e1e5e9;
-  --link-blue: #3182e4;
-  --blue: #20528d;
-}
 
 h1 {
   font-weight: 900;
