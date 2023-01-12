@@ -259,12 +259,6 @@ personnel:
     roles:
       - EMT
     img_file: hella_cascorbi.jpg
-  - first_name: Sean
-    last_name: Armstrong
-    staff_type: volunteer
-    roles:
-      - FireFighter
-    img_file: sean_armstrong.jpg
   - first_name: Sue Ann
     last_name: Stabley
     staff_type: volunteer
@@ -320,6 +314,7 @@ personnel:
   - first_name: Shaun
     last_name: Armstrong
     staff_type: volunteer
+    img_file: shaun_armstrong.jpg
     roles:
       - FireFighter
   - first_name: Trevor
