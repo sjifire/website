@@ -1,6 +1,5 @@
 ---
 preamble: |+
-  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque et dolor ac massa tempus euismod. Nullam purus justo, faucibus nec ligula id, fermentum bibendum enim. Pellentesque pulvinar sagittis dapibus.
 personnel:
   - first_name: Norvin
     last_name: Collins
@@ -8,7 +7,6 @@ personnel:
     staff_type: staff
     roles:
       - FireFighter
-      - Apparatus Operator
       - Marine Crew
     rank: Chief
     img_file: norvin_collins.jpg
@@ -18,7 +16,6 @@ personnel:
     staff_type: staff
     roles:
       - FireFighter
-      - Apparatus Operator
       - Marine Crew
     rank: Assist. Chief
     img_file: noel_monin.jpg
@@ -34,8 +31,8 @@ personnel:
     title: Public Information Officer
     staff_type: staff
     roles:
-      - Support
       - Admin
+      - Support
     img_file: kelsey_venegas.jpg
   - first_name: Tad
     last_name: Lean
@@ -135,6 +132,7 @@ personnel:
     staff_type: volunteer
     roles:
       - FireFighter
+      - Marine Crew
     img_file: eric_eisenhardt.jpg
   - first_name: Bonnie
     last_name: Stanger
@@ -232,6 +230,7 @@ personnel:
     staff_type: volunteer
     roles:
       - Apparatus Operator
+      - Marine Crew
     img_file: john_young.jpg
   - first_name: Joran
     last_name: Bouwman
@@ -328,6 +327,7 @@ personnel:
     staff_type: volunteer
     roles:
       - Support
+      - Marine Crew
   - first_name: Sarah
     last_name: Hill
     staff_type: volunteer
@@ -340,6 +340,7 @@ personnel:
     roles:
       - FireFighter
       - Apparatus Operator
+      - Marine Crew
   - first_name: John
     last_name: McDowell
     staff_type: volunteer
@@ -358,6 +359,7 @@ personnel:
       - Support
   - first_name: Raquel
     last_name: Lackey
+    title: NATIONAL Crisis Response Canine Team
     staff_type: volunteer
     roles:
       - Support
@@ -366,6 +368,7 @@ personnel:
     staff_type: volunteer
     roles:
       - Support
+      - Marine Crew
   - first_name: Rhys
     last_name: Spoor
     staff_type: volunteer
