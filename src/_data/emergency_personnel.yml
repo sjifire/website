@@ -4,6 +4,7 @@ preamble: |+
 personnel:
   - first_name: Norvin
     last_name: Collins
+    title: ESO
     staff_type: staff
     roles:
       - FireFighter
@@ -13,6 +14,7 @@ personnel:
     img_file: norvin_collins.jpg
   - first_name: Noel
     last_name: Monin
+    title: Dir. Operations
     staff_type: staff
     roles:
       - FireFighter
