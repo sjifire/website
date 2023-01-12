@@ -21,8 +21,18 @@ permalink: "/about/emergency-personnel/index.html"
       <div class="l-grid l-grid--personnel">
         {% for person in staffOnly %}
           <div class="person">
-            <img src="{%- imgPath '/assets/personnel_imgs/' + person.file, 'f_auto,q_auto:good,c_fill,w_330,h_344' -%}" alt="Headshot of {{ person.first_name }} {{ person.last_name }}" width="165" height="172">
+            <div class="person__img{{ ' noimg' if not person.img_file }}">
+              {% if person.img_file %}
+                <img src="{%- imgPath '/assets/personnel_imgs/' + person.img_file, 'f_auto,q_auto:good,c_fill,w_315,h_328,g_face' -%}" alt="Headshot of {{ person.first_name }} {{ person.last_name }}" width="157.5" height="164">
+              {% else %}
+                <div>
+                  <svg><use xlink:href='#profile' /></svg>
+                </div>
+              {% endif %}
+            </div>
             <h3>{{ person.first_name }} {{ person.last_name }}</h3>
+            {% if person.title %}<h4>{{ person.title }}</h4>{% endif %}
+            {% if person.rank %}<h5>{{ person.rank }}</h5>{% endif %}
             <ul>
               {% for role in person.roles %}
                 <li>{{ role }}</li>
@@ -37,8 +47,18 @@ permalink: "/about/emergency-personnel/index.html"
       <div class="l-grid l-grid--personnel">
         {% for person in volunteersOnly | sort(attribute='last_name') %}
           <div class="person">
-            <img src="{%- imgPath '/assets/personnel_imgs/' + person.file, 'f_auto,q_auto:good,c_fill,w_330,h_344' -%}" alt="Headshot of {{ person.first_name }} {{ person.last_name }}" width="165" height="172">
+            <div class="person__img{{ ' noimg' if not person.img_file }}">
+              {% if person.img_file %}
+                <img src="{%- imgPath '/assets/personnel_imgs/' + person.img_file, 'f_auto,q_auto:good,c_fill,w_315,h_328,g_face' -%}" alt="Headshot of {{ person.first_name }} {{ person.last_name }}" width="157.5" height="164">
+              {% else %}
+                <div>
+                  <svg><use xlink:href='#profile' /></svg>
+                </div>
+              {% endif %}
+            </div>
             <h3>{{ person.first_name }} {{ person.last_name }}</h3>
+            {% if person.title %}<h4>{{ person.title }}</h4>{% endif %}
+            {% if person.rank %}<h5>{{ person.rank }}</h5>{% endif %}
             <ul>
               {% for role in person.roles %}
                 <li>{{ role }}</li>

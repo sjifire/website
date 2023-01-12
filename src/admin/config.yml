@@ -150,7 +150,7 @@ collections:
             widget: markdown
             required: true
       - label: "About/Who We Are"
-        name: "who we are"
+        name: "who_we_are"
         delete: false
         editor:
           preview: false
@@ -165,7 +165,7 @@ collections:
             widget: markdown
             required: false
       - label: "About/Emergency Personnel"
-        name: "emergency personnel"
+        name: "emergency_personnel"
         delete: false
         editor:
           preview: false
@@ -221,11 +221,12 @@ collections:
                 options: ["Lieutenant", "Captain", "Assist. Chief", "Chief"]
                 required: false
                 multiple: false
-              - label: File
-                name: file
+              - label: Image File
+                name: img_file
                 widget: file
                 allow_multiple: false
                 choose_url: false
+                required: false
                 media_folder: "/src/assets/personnel_imgs/"
                 public_folder: ""
       - label: "About/Incidents"
@@ -344,7 +345,7 @@ collections:
             widget: markdown
             required: false
       - label: "Services/Smoke & CO Alarms"
-        name: "smoke & CO alarms"
+        name: "smoke_CO_alarms"
         delete: false
         editor:
           preview: false
@@ -432,8 +433,8 @@ collections:
             minimal: false
             required: true
             hint: "Add a chunk of text (rich text editor)"
-  - name: "meetings"
-    label: "Board Meetings"
+  - label: "Board Meetings"
+    name: "board_meetings"
     label_singular: "Board Meeting"
     folder: "src/meetings/"
     slug: "{{fields.date}}-{{slug}}"
@@ -489,8 +490,8 @@ collections:
       - label: Year
         field: date
         pattern: \d{4}
-  - name: "media releases"
-    label: "Media Releases"
+  - label: "Media Releases"
+    name: "media_releases"
     label_singular: "Media Release"
     folder: "src/media_releases/"
     slug: "{{fields.date}}-{{slug}}"
