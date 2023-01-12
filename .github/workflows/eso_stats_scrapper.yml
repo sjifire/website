@@ -44,7 +44,7 @@ jobs:
             ./report.csv
           retention-days: 7
       - name: Add & Commit updated stats.json
-        uses: EndBug/add-and-commit@v7.5.0
+        uses: EndBug/add-and-commit@v9
         with:
           push: true
           add: ./src/_data/stats.json
