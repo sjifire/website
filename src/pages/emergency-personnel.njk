@@ -5,6 +5,7 @@ permalink: "/about/emergency-personnel/index.html"
 
 {% extends "default_single_col_page.njk" %}
 {% set pageData = emergency_personnel %}
+{% set cloudinaryDefaults = "f_auto,q_auto:good,g_faces,c_fill,w_315,h_328" %}
 
 {% block content %}
   <div class="l-squeezed block-content">
@@ -23,7 +24,7 @@ permalink: "/about/emergency-personnel/index.html"
           <div class="person">
             <div class="person__img{{ ' noimg' if not person.img_file }}">
               {% if person.img_file %}
-                <img src="{%- imgPath '/assets/personnel_imgs/' + person.img_file, 'f_auto,q_auto:good,c_fill,w_315,h_328,g_face' -%}" alt="Headshot of {{ person.first_name }} {{ person.last_name }}" width="157.5" height="164">
+                <img src="{%- imgPath '/assets/personnel_imgs/' + (person.img_file or defaultImgName), cloudinaryDefaults -%}" alt="Headshot of {{ person.first_name }} {{ person.last_name }}" width="157.5" height="164">
               {% else %}
                 <div>
                   <svg><use xlink:href='#profile' /></svg>
@@ -53,7 +54,7 @@ permalink: "/about/emergency-personnel/index.html"
           <div class="person">
             <div class="person__img{{ ' noimg' if not person.img_file }}">
               {% if person.img_file %}
-                <img src="{%- imgPath '/assets/personnel_imgs/' + person.img_file, 'f_auto,q_auto:good,c_fill,w_315,h_328,g_face' -%}" alt="Headshot of {{ person.first_name }} {{ person.last_name }}" width="157.5" height="164">
+                <img src="{%- imgPath '/assets/personnel_imgs/' + (person.img_file or defaultImgName), cloudinaryDefaults -%}" alt="Headshot of {{ person.first_name }} {{ person.last_name }}" width="157.5" height="164">
               {% else %}
                 <div>
                   <svg><use xlink:href='#profile' /></svg>
