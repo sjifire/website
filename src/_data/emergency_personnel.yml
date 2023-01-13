@@ -290,19 +290,19 @@ personnel:
       - FireFighter
     img_file: chad_warmenhoven.jpg
   - first_name: Cynthia
-    last_name: Parker
+    last_name: Parkin
     title: NATIONAL Crisis Response Canine Team
     staff_type: volunteer
     roles:
       - Support
-    img_file: cynthia_parker.jpg
+    img_file: cynthia_parkin.jpg
   - first_name: Jet
-    last_name: Parker
+    last_name: Parkin
     title: NATIONAL Crisis Response Canine Team
     staff_type: volunteer
     roles:
       - Support
-    img_file: cynthia_parker.jpg
+    img_file: cynthia_parkin.jpg
   - first_name: Adam
     last_name: Greene
     staff_type: volunteer
