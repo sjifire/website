@@ -56,5 +56,21 @@ mobile_layout_flipped: true
       News Archive »
     </a>
   </div>
+
+  <section class="gallery">
+    <div aria-hidden="true" class="gallery-showcase">
+      {% set rangeArray = [106,1015,1039,1037,108] %}
+      {% for i in rangeArray %}
+        <img id="pic{{ loop.index }}" class="gallery-showcase__item{{ ' active' if loop.first }}" src="https://picsum.photos/id/{{ i }}/1000/800.jpg" alt="" >
+      {% endfor %}
+    </div>
+    <div class="gallery-nav">
+      {% set rangeArray = [106,1015,1039,1037,108] %}
+      {% for i in rangeArray %}
+        <img class="gallery-nav__item{{ ' active' if loop.first }}" data-target-id="pic{{ loop.index }}" src="https://picsum.photos/id/{{ i }}/150/100.jpg" alt="Fantastic alt text for item {{ i }}" >
+      {% endfor %}
+    </div>
+  </section>
+
 {% endblock %}
 {% extends "default_double_col_page.njk" %}
