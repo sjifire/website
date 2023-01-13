@@ -178,7 +178,7 @@ collections:
           - label: "Personnel"
             name: "personnel"
             widget: "list"
-            summary: "{{fields.first_name}} {{fields.last_name}}"
+            summary: "{{fields.first_name}} {{fields.last_name}} {% if not fields.img_file %}(missing photo){% endif %}"
             allow_add: true
             add_to_top: true
             fields:
