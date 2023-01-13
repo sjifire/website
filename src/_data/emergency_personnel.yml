@@ -362,6 +362,7 @@ personnel:
     staff_type: volunteer
     roles:
       - Support
+    img_file: raquel_lackey.jpg
   - first_name: Jenny
     last_name: Shrum
     staff_type: volunteer
