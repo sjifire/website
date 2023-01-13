@@ -1,5 +1,26 @@
 preamble: ""
 personnel:
+  - roles:
+      - Support
+    first_name: Bungee
+    last_name: Lackey
+    staff_type: volunteer
+    title: NATIONAL Crisis Response Canine Team
+    img_file: bungee_lackey.jpg
+  - roles:
+      - Support
+    first_name: Ruffles
+    last_name: Lackey
+    staff_type: volunteer
+    title: NATIONAL Crisis Response Canine Team
+    img_file: ruffles_lackey.jpg
+  - roles:
+      - Support
+    first_name: Pickles
+    last_name: Lackey
+    staff_type: volunteer
+    title: NATIONAL Crisis Response Canine Team
+    img_file: pickles_lackey.jpg
   - first_name: Norvin
     last_name: Collins
     title: ESO
