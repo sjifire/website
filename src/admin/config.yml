@@ -178,7 +178,7 @@ collections:
           - label: "Personnel"
             name: "personnel"
             widget: "list"
-            summary: "{{fields.file}}"
+            summary: "{{fields.first_name}} {{fields.last_name}}"
             allow_add: true
             add_to_top: true
             fields:
