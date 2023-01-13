@@ -1,5 +1,4 @@
----
-preamble: |+
+preamble: ""
 personnel:
   - first_name: Norvin
     last_name: Collins
@@ -302,7 +301,7 @@ personnel:
     staff_type: volunteer
     roles:
       - Support
-    img_file: cynthia_parkin.jpg
+    img_file: jet_parkin.jpg
   - first_name: Adam
     last_name: Greene
     staff_type: volunteer
