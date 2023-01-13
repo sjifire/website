@@ -174,7 +174,7 @@ collections:
           - label: Preamble
             name: preamble
             widget: markdown
-            required: true
+            required: false
           - label: "Personnel"
             name: "personnel"
             widget: "list"
@@ -190,10 +190,6 @@ collections:
                 name: last_name
                 widget: string
                 required: true
-              - label: Title
-                name: title
-                widget: string
-                required: false
               - label: Type
                 name: staff_type
                 widget: "select"
@@ -215,6 +211,10 @@ collections:
                   ]
                 required: true
                 multiple: true
+              - label: Title
+                name: title
+                widget: string
+                required: false
               - label: Rank
                 name: rank
                 widget: "select"
