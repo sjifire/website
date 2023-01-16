@@ -392,6 +392,7 @@ personnel:
     roles:
       - Support
       - Marine Crew
+    img_file: images.jpg
   - first_name: Rhys
     last_name: Spoor
     staff_type: volunteer
