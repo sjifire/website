@@ -1,4 +1,3 @@
----
 body: >-
   ## Wildfire Risk
 
@@ -29,7 +28,7 @@ body: >-
 
   USA](https://www.nfpa.org/Public-Education/Fire-causes-and-risks/Wildfire/Firewise-USA)
 
-  is a national program that teaches and encourages home owners and residents to
+  is a national program that teaches and encourages homeowners and residents to
 
   take steps to protect their home by managing vegetation and debris near their
 
@@ -41,7 +40,7 @@ body: >-
   ## Firewise Locally
 
 
-  Currently, Firewise on the islands is consists of twenty-eight active
+  Currently, Firewise on the islands consists of twenty-eight active
 
   communities each with a designated leader who have made the commitment to
 
@@ -50,6 +49,7 @@ body: >-
   Firewise
 
   USA](https://www.nfpa.org/Public-Education/Fire-causes-and-risks/Wildfire/Preparing-homes-for-wildfire).
+
 
   <figure class="post__media">
     <div class="embed-responsive embed-responsive-16by9">
@@ -109,5 +109,5 @@ body: >-
 
   an appointment.
 sidebar: >
-
+  
   ![Firewise Defensible Space](/assets/images/firewise_space.png "Firewise Defensible Space"){.med_img}
