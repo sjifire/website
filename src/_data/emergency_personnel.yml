@@ -309,6 +309,7 @@ personnel:
       - FireFighter
       - EMT
       - Apparatus Operator
+    img_file: images.jpg
   - first_name: Shaun
     last_name: Armstrong
     staff_type: volunteer
@@ -321,19 +322,21 @@ personnel:
     roles:
       - FireFighter
       - EMT
-    img_file: istockphoto-905087416-612x612.jpg
+    img_file: images.jpg
   - first_name: Chuck
     last_name: Dalldorf
     staff_type: volunteer
     roles:
       - Support
       - Marine Crew
+    img_file: images.jpg
   - first_name: Sarah
     last_name: Hill
     staff_type: volunteer
     roles:
       - FireFighter
       - EMT
+    img_file: images.jpg
   - first_name: David
     last_name: Howitt
     staff_type: volunteer
@@ -341,17 +344,20 @@ personnel:
       - FireFighter
       - Apparatus Operator
       - Marine Crew
+    img_file: images.jpg
   - first_name: John
     last_name: McDowell
     staff_type: volunteer
     roles:
       - Support
+    img_file: images.jpg
   - first_name: Michelangelo
     last_name: von Dassow
     staff_type: volunteer
     roles:
       - FireFighter
       - Apparatus Operator
+    img_file: images.jpg
   - first_name: Raquel
     last_name: Lackey
     title: NATIONAL Crisis Response Canine Team
@@ -391,8 +397,10 @@ personnel:
     staff_type: volunteer
     roles:
       - Support
+    img_file: images.jpg
   - first_name: Yasmin
     last_name: von Dassow
     staff_type: volunteer
     roles:
       - Support
+    img_file: images.jpg
