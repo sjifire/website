@@ -28,9 +28,8 @@ personnel:
   - first_name: Kelsey
     last_name: Venegas
     title: Public Information Officer
-    staff_type: staff
+    staff_type: volunteer
     roles:
-      - Admin
       - Support
     img_file: kelsey_venegas.jpg
   - first_name: Tad
