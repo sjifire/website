@@ -321,6 +321,7 @@ personnel:
     roles:
       - FireFighter
       - EMT
+    img_file: istockphoto-905087416-612x612.jpg
   - first_name: Chuck
     last_name: Dalldorf
     staff_type: volunteer
@@ -351,11 +352,6 @@ personnel:
     roles:
       - FireFighter
       - Apparatus Operator
-  - first_name: Robert
-    last_name: Brunkow
-    staff_type: volunteer
-    roles:
-      - Support
   - first_name: Raquel
     last_name: Lackey
     title: NATIONAL Crisis Response Canine Team
