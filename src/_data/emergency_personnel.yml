@@ -18,6 +18,16 @@ personnel:
       - Marine Crew
     rank: Assist. Chief
     img_file: noel_monin.jpg
+  - first_name: Karl
+    last_name: Kuetzing
+    title: Training Officer
+    staff_type: staff
+    roles:
+      - FireFighter
+      - EMT
+      - Apparatus Operator
+      - Marine Crew
+    img_file: karl_kuetzing.jpg
   - first_name: Robin
     last_name: Garcia
     title: Front Office
@@ -42,16 +52,6 @@ personnel:
       - Apparatus Operator
     rank: Captain
     img_file: tad_lean.jpg
-  - first_name: Karl
-    last_name: Kuetzing
-    title: Training Officer
-    staff_type: staff
-    roles:
-      - FireFighter
-      - EMT
-      - Apparatus Operator
-      - Marine Crew
-    img_file: karl_kuetzing.jpg
   - first_name: Michael
     last_name: Hartzell
     staff_type: staff
@@ -79,6 +79,7 @@ personnel:
       - FireFighter
       - EMT
       - Apparatus Operator
+    img_file: images.jpg
   - first_name: Brad
     last_name: Smith
     staff_type: staff
