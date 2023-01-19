@@ -229,8 +229,8 @@ personnel:
     staff_type: volunteer
     roles:
       - Apparatus Operator
-      - Marine Crew
     img_file: john_young.jpg
+    title: Safety Officer
   - first_name: Joran
     last_name: Bouwman
     staff_type: volunteer
