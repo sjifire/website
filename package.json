@@ -32,7 +32,7 @@
   "devDependencies": {
     "@playwright/test": "^1.29.2",
     "chai": "^4.3.7",
-    "clean-css": "^5.3.1",
+    "clean-css": "^5.3.2",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.6.0",
     "eslint-config-standard": "^16.0.3",
