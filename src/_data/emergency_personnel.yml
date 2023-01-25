@@ -193,6 +193,7 @@ personnel:
     staff_type: volunteer
     roles:
       - Apparatus Operator
+      - Marine Crew
     img_file: ron_stanger.jpg
   - first_name: Kyle
     last_name: Dodd
