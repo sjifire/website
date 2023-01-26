@@ -1,4 +1,3 @@
----
 preamble: Providing emergency response to all of San Juan Island, including Town
   of Friday Harbor, as well as Brown, Henry, Johns, Pearl, Spieden, and Stuart
   Islands.
@@ -7,3 +6,14 @@ header_image_transform: /h_520,q_auto:eco,b_rgb:334155/e_art:incognito/o_30/e_gr
 header_image_source:
   - alldeptphoto2022_washout.jpg
   - deptvehicles_washout.jpg
+image_gallery:
+  - image: 20210722-_mg_6797.jpg
+    image_alt: Fireboat in transit
+  - image: fire_training_class.jpg
+    image_alt: Never not learning
+  - image: ssfire_l31.png
+    image_alt: fire scene
+  - image: easter_bunny_2021.png
+    image_alt: Easter bunny
+  - image: jet.bmp
+    image_alt: Jet
