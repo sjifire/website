@@ -61,8 +61,8 @@ test("check news/feed.xml is a valid ATOM feed", async ({ page, baseURL }) => {
   expect(feedResponse.ok()).toBeTruthy();
   const feedBody = (await feedResponse.body()).toString();
 
-  await page.goto("https://validator.w3.org/#validate_by_input");
-  await page.fill("#fragment", feedBody);
+  await page.goto("https://validator.w3.org/feed/#validate_by_input");
+  await page.fill("#rawdata", feedBody);
 
   await page.click("p.submit_button a.submit:visible", { strict: true });
   await page.waitForSelector(':text("This is a valid Atom 1.0 feed.")', {
