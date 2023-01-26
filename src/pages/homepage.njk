@@ -59,15 +59,13 @@ mobile_layout_flipped: true
 
   <section class="gallery">
     <div aria-hidden="true" class="gallery-showcase">
-      {% set rangeArray = [106,1015,1039,1037,108] %}
-      {% for i in rangeArray %}
-        <img id="pic{{ loop.index }}" class="gallery-showcase__item{{ ' active' if loop.first }}" src="https://picsum.photos/id/{{ i }}/1000/800.jpg" alt="" >
+      {% for img in homepage.image_gallery %}
+        <img id="pic{{ loop.index }}" class="gallery-showcase__item{{ ' active' if loop.first }}" src="{%- imgPath '/assets/images/' + img.image | safe,  'f_auto,q_auto:good,c_fill,w_1000,h_800' -%}" alt="{{ img.image_alt }}" >
       {% endfor %}
     </div>
     <div class="gallery-nav">
-      {% set rangeArray = [106,1015,1039,1037,108] %}
-      {% for i in rangeArray %}
-        <img class="gallery-nav__item{{ ' active' if loop.first }}" data-target-id="pic{{ loop.index }}" src="https://picsum.photos/id/{{ i }}/150/100.jpg" alt="Fantastic alt text for item {{ i }}" >
+      {% for img in homepage.image_gallery %}
+        <img class="gallery-nav__item{{ ' active' if loop.first }}" data-target-id="pic{{ loop.index }}" src="{%- imgPath '/assets/images/' + img.image | safe,  'f_auto,q_auto:good,c_fill,w_150,h_100' -%}" alt="{{ img.image_alt }}" >
       {% endfor %}
     </div>
   </section>

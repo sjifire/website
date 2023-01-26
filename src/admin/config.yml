@@ -128,7 +128,6 @@ collections:
             widget: "list"
             allow_add: true
             add_to_top: true
-            min: 1
             max: 5
             fields:
               - label: Image
@@ -136,7 +135,6 @@ collections:
                 widget: image
                 allow_multiple: false
                 choose_url: false
-                media_folder: "/src/assets/gallery/"
                 public_folder: ""
                 required: true
               - label: Image Alt
