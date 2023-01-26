@@ -247,6 +247,9 @@ module.exports = function (eleventyConfig) {
   //   return content;
   // });
 
+  //FIXME: this is kind of bad form as it hides what is going on;
+  //should probably move this to a helper that wraps internal images during build time
+  //and not as a site-wide transform.
   eleventyConfig.addTransform(
     "wrap internal images",
     (content, outputPath, obj) => {
@@ -259,48 +262,47 @@ module.exports = function (eleventyConfig) {
         ];
         if (imgs.length == 0) return content;
         imgs.map((img) => {
+          if(img.className.includes('leave-alone')) return img
+          if (!/^\//i.test(img.src)) return img
           //modify if local img
-          if (/^\//i.test(img.src)) {
-            if (/small_img/i.test(img.className)) imgSize = "w_400,h_200";
-            else if (/med_img/i.test(img.className)) imgSize = "w_800,h_400";
-            else imgSize = "w_1200,h_800";
-            cloudinaryCmds = `f_auto,q_auto:good,c_limit,${imgSize}`;
-            newImgURL = imgPath(img.src, cloudinaryCmds);
-            // newImgURL = imgPath(img.src.replace('/assets', ''), cloudinaryCmds);
-            // newImgURL = `${siteData.cloudinaryRootUrl}/image/fetch/f_auto,q_auto:good,c_limit,${imgSize}/${siteData.rootUrl}`
-            parentDiv = img.parentNode;
-            const figure = document.createElement("figure");
-            figure.innerHTML = `
-  <img src="${newImgURL}" alt="${img.alt}" title="${img.title}" loading="lazy" />
-  <figcaption>
-    ${img.title}
-  </figcaption>
+          if (/small_img/i.test(img.className)) imgSize = "w_400,h_200";
+          else if (/med_img/i.test(img.className)) imgSize = "w_800,h_400";
+          else imgSize = "w_1200,h_800";
+          cloudinaryCmds = `f_auto,q_auto:good,c_limit,${imgSize}`;
+          newImgURL = imgPath(img.src, cloudinaryCmds);
+          // newImgURL = imgPath(img.src.replace('/assets', ''), cloudinaryCmds);
+          // newImgURL = `${siteData.cloudinaryRootUrl}/image/fetch/f_auto,q_auto:good,c_limit,${imgSize}/${siteData.rootUrl}`
+          parentDiv = img.parentNode;
+          const figure = document.createElement("figure");
+          figure.innerHTML = `
+<img src="${newImgURL}" alt="${img.alt}" title="${img.title}" loading="lazy" />
+<figcaption>
+  ${img.title}
+</figcaption>
 `;
-            if (parentDiv.localName === "p") {
-              // markdown adds a <p> for every 2 \n that exist;
-              // this is just a bit of extra cleanup to remove orphaned
-              // <p> which may impact markdown.
-              // we also move the figure up and out of the <p> tag so
-              // you don't have to have two sets of styles, with one for
-              // the figure inside a p tag, and one outside.
-              origParentDiv = parentDiv;
-              parentDiv = parentDiv.parentNode;
+          if (parentDiv.localName === "p") {
+            // markdown adds a <p> for every 2 \n that exist;
+            // this is just a bit of extra cleanup to remove orphaned
+            // <p> which may impact markdown.
+            // we also move the figure up and out of the <p> tag so
+            // you don't have to have two sets of styles, with one for
+            // the figure inside a p tag, and one outside.
+            origParentDiv = parentDiv;
+            parentDiv = parentDiv.parentNode;
 
-              parentDiv.insertBefore(figure, origParentDiv);
-              origParentDiv.removeChild(img);
-              if (
-                parentDiv.childNodes.length <= 1 ||
-                origParentDiv.innerHTML.trim() === ""
-              ) {
-                parentDiv.removeChild(origParentDiv);
-              }
-            } else {
-              parentDiv.insertBefore(figure, img);
-              parentDiv.removeChild(img);
+            parentDiv.insertBefore(figure, origParentDiv);
+            origParentDiv.removeChild(img);
+            if (
+              parentDiv.childNodes.length <= 1 ||
+              origParentDiv.innerHTML.trim() === ""
+            ) {
+              parentDiv.removeChild(origParentDiv);
             }
-            return figure;
+          } else {
+            parentDiv.insertBefore(figure, img);
+            parentDiv.removeChild(img);
           }
-          return img;
+          return figure;
         });
         content = document.toString();
       } catch (error) {

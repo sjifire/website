@@ -60,12 +60,12 @@ mobile_layout_flipped: true
   <section class="gallery">
     <div aria-hidden="true" class="gallery-showcase">
       {% for img in homepage.image_gallery %}
-        <img id="pic{{ loop.index }}" class="gallery-showcase__item{{ ' active' if loop.first }}" src="{%- imgPath '/assets/images/' + img.image | safe,  'f_auto,q_auto:good,c_fill,w_1000,h_800' -%}" alt="{{ img.image_alt }}" >
+        <img id="pic{{ loop.index }}" class="gallery-showcase__item{{ ' active' if loop.first }} leave-alone" src="{%- imgPath '/assets/images/' + img.image | safe,  'f_auto,q_auto:good,c_fill,w_1000,h_800' -%}" alt="{{ img.image_alt }}" >
       {% endfor %}
     </div>
     <div class="gallery-nav">
       {% for img in homepage.image_gallery %}
-        <img class="gallery-nav__item{{ ' active' if loop.first }}" data-target-id="pic{{ loop.index }}" src="{%- imgPath '/assets/images/' + img.image | safe,  'f_auto,q_auto:good,c_fill,w_150,h_100' -%}" alt="{{ img.image_alt }}" >
+        <img class="gallery-nav__item{{ ' active' if loop.first }} leave-alone" data-target-id="pic{{ loop.index }}" src="{%- imgPath '/assets/images/' + img.image | safe,  'f_auto,q_auto:good,c_fill,w_150,h_100' -%}" alt="{{ img.image_alt }}" >
       {% endfor %}
     </div>
   </section>
