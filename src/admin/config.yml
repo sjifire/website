@@ -123,6 +123,26 @@ collections:
             name: "number_news_stories"
             widget: "select"
             options: ["4", "6", "8", "10", "12"]
+          - label: "Image Gallery"
+            name: "image_gallery"
+            widget: "list"
+            allow_add: true
+            add_to_top: true
+            min: 1
+            max: 5
+            fields:
+              - label: Image
+                name: image
+                widget: image
+                allow_multiple: false
+                choose_url: false
+                media_folder: "/src/assets/gallery/"
+                public_folder: ""
+                required: true
+              - label: Image Alt
+                name: image_alt
+                widget: string
+                required: true
       - label: "News"
         name: "news"
         delete: false
