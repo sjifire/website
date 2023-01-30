@@ -182,6 +182,24 @@ collections:
             name: sidebar
             widget: markdown
             required: false
+          - label: "Image Gallery"
+            name: "image_gallery"
+            widget: "list"
+            allow_add: true
+            add_to_top: true
+            max: 5
+            fields:
+              - label: Image
+                name: image
+                widget: image
+                allow_multiple: false
+                choose_url: false
+                public_folder: ""
+                required: true
+              - label: Image Alt
+                name: image_alt
+                widget: string
+                required: true
       - label: "About/Emergency Personnel"
         name: "emergency_personnel"
         delete: false
