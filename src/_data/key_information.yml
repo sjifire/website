@@ -1,5 +1,4 @@
----
-body: >
+body: >-
   ## Governance
 
 
@@ -15,24 +14,19 @@ body: >
   see [Governance page](/about/governance) for details
 
 
-
   ## District
 
 
   * **District Population (2021):**
+
     * Registered Voters: 7,052
     * Permanent: 9,000 (est.)
     * Summer Effective Population: 21,000 (est.);
-
   * **District Area:** 61 Sq. Miles - San Juan Island, including Town of
+    Friday Harbor, as well as Brown, Henry, Johns, Pearl, Spieden, and Stuart
+    Islands.
 
-  Friday Harbor, as well as Brown, Henry, Johns, Pearl, Spieden, and Stuart
-
-  Islands.
-
-
-  ![District Map](/assets/images/district_map.png "District Map"){.med_img }
-
+  ![District Map](/assets/images/district_map.png "District Map"){.med_img}
 
 
   ## Administrative Staff
@@ -49,21 +43,19 @@ body: >
   * **Training Officer:** Karl Kuetzing
 
 
+  ## Finance (2023)
 
-  ## Finance (2022)
 
+  * **Assessed Valuation of property within District:** $5,577,964,337
 
-  * **Assessed Valuation of property within District:** $4,481,351,335
+  * **Levy rate:** $0.3446727146 per $1000 assessed value
 
-  * **Levy rate:** $0.4188417131 per $1000 assessed value
-
-  * **District Funding:** $1,876,976.87 from Regular Levy
+  * **District Funding:** $1,922,572.11 from Regular Levy
 
   * **State Audit:** [Accountability Report 2018](https://portal.sao.wa.gov/ReportSearch/Home/ViewReportFile?arn=1024025&isFinding=false&sp=false)
 
 
   see [County Assessor](https://www.sanjuanco.com/164/Detail---Tax-Distribution-by-Taxing-Dist) and [Governance page](/about/governance) for details and budgets
-
 
 
   ## Staff & Volunteer Responders (Jan 2022)
@@ -79,12 +71,9 @@ body: >
 
   * **EMS specific Responders:**
 
-    -  18 EMTs
-
-    -  1 Senior EMS Instructor
-
-    -  7 EMT Evaluators
-
+    * 18 EMTs
+    * 1 Senior EMS Instructor
+    * 7 EMT Evaluators
   * **Total Active Members:** 56
 
 
@@ -101,7 +90,6 @@ body: >
   see [Contact page](/contact) for details
 
 
-
   ## Insurance Providers and Washington Survey & Ratings Bureau
 
 
@@ -116,16 +104,17 @@ body: >
 
 
   * **Station locations:**
+
     * *Station 31:* Friday Harbor **(staffed 24/7)**
     * *Station 32:* Cape San Juan
     * *Station 33:* Bailer Hill/Little Mnt.
     * *Station 34:* Sunset Point
     * *Station 35:* Roche Harbor
     * *Station 36:* Eagle Crest
-
   * **Equipment Caches:** Brown, Henry, Johns, Pearl, and Stuart Islands
 
   * **Emergency Apparatus:**
+
     * 6 - Type 1 Engines (1000 gal, 1000gpm, dump tank)
     * 1 - Quint Ladder
     * 1 - Type 3 Brush Engine
@@ -139,9 +128,11 @@ body: >
     * 1 - Mobile Mechanic Vehicle
     * 1 - Utility Vehicle
 
-
   ## Response Radio Frequencies
 
-    * Dispatch "Fire South": 155.79750
-    * Dispatch "Fire North": 155.14500
-    * Dispatch "EMS": 155.28000
+
+  * Dispatch "Fire South": 155.79750
+
+  * Dispatch "Fire North": 155.14500
+
+  * Dispatch "EMS": 155.28000
