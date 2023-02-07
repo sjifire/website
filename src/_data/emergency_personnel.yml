@@ -79,7 +79,7 @@ personnel:
       - FireFighter
       - EMT
       - Apparatus Operator
-    img_file: images.jpg
+    img_file: gilbert_venegas.jpg
   - first_name: Brad
     last_name: Smith
     staff_type: staff
@@ -323,7 +323,7 @@ personnel:
     roles:
       - FireFighter
       - EMT
-    img_file: images.jpg
+    img_file: trevor_bolton.jpg
   - first_name: Chuck
     last_name: Dalldorf
     staff_type: volunteer
@@ -345,7 +345,7 @@ personnel:
       - FireFighter
       - Apparatus Operator
       - Marine Crew
-    img_file: images.jpg
+    img_file: david_howitt.jpg
   - first_name: John
     last_name: McDowell
     staff_type: volunteer
