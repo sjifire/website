@@ -457,8 +457,8 @@ body {
   );
   background-image: linear-gradient(
     to bottom,
-    var(--dk-gray) 0,
-    var(--dk-gray) 50%,
+    var(--home_header_bg) 0,
+    var(--home_header_bg) 50%,
     hsla(0, 0%, 100%, 0) 50%,
     hsla(0, 0%, 100%, 0) 100%
   );
