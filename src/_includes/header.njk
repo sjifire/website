@@ -23,8 +23,12 @@
 
 #}
     </li>
-    <li class="item{{ ' active' if page.url.includes('/news/') }}">
-      <a href="/news/">News</a>
+    <li class="item has-submenu{{ ' active' if page.url.includes('/news/') }}">
+      <a tabindex="0">News</a>
+      <ul class="submenu">
+        <li class="subitem"><a href="/news/">News Home</a></li>
+        <li class="subitem"><a href="/news/media-releases/">Media Releases</a></li>
+      </ul>
     </li>
     <li class="item has-submenu{{ ' active' if page.url.includes('/services/') }}">
       <a tabindex="0">Services</a>

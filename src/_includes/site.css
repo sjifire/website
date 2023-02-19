@@ -749,6 +749,11 @@ body {
   grid-area: subsidebar;
 }
 
+.l-grid--media {
+  display: grid;
+  gap: 1rem 0;
+}
+
 @media (min-width: 768px) {
   .l-squeezed {
     max-width: 720px;
@@ -772,7 +777,7 @@ body {
 
   .l-grid--media {
     grid-template-columns: repeat(4, 1fr);
-    gap: 30px;
+    gap: 1rem 30px;
   }
 }
 
