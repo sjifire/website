@@ -8,9 +8,7 @@ pagination:
 permalink: "/news/{% if pagination.pageNumber > 0 %}page-{{ pagination.pageNumber + 1 }}/{% endif %}index.html"
 ---
 
-{% extends "default_double_col_page.njk" %}
-
-{% block content %}
+{% block main_content %}
   <header class="hgroup">
     <h1>
       {{ title | safe }}
@@ -88,3 +86,5 @@ permalink: "/news/{% if pagination.pageNumber > 0 %}page-{{ pagination.pageNumbe
     </details>
   {% endfor %}
 {% endblock %}
+
+{% extends "default_double_col_page.njk" %}
