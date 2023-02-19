@@ -24,6 +24,9 @@ permalink: "/news/media-releases/index.html"
         <ul class="l-grid l-grid--media" style="padding-bottom:3rem;">
           {% for release in set %}
             <li>
+              <a class="media_container" href="{{ release.document }}">
+                <img src="{{ cloudinaryRootUrl }}/{{ release.document }}" width="120" height="150" alt="Thumbnail preview of {{ release.date | postDateTerseISO }} press release">
+              </a>
               <h3>
                 {{ release.date | postDateTerseNoYearISO }}
               </h3>
