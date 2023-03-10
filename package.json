@@ -25,7 +25,7 @@
     "markdown-it-attrs": "^4.1.6",
     "markdown-it-video": "^0.6.3",
     "playwright": "^1.31.2",
-    "terser": "^5.16.5",
+    "terser": "^5.16.6",
     "winston": "^3.8.2",
     "yargs": "^17.7.1"
   },
