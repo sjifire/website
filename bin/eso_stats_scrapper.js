@@ -6,6 +6,8 @@
  *
  */
 const fs = require("fs");
+require("dotenv").config();
+
 const logger = require("../src/modules/logger");
 const _ = require("lodash");
 

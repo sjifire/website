@@ -76,7 +76,7 @@ const retrieveCSVReport = async function (
   await page.fill('input[name="username"]', username);
   await page.fill('input[name="password"]', password);
   await page.fill('input[name="agency"]', agency);
-  await page.click('button[type="submit"]');
+  await page.click('button[type="submit"].login-button');
 
   // go to ad-hoc reporting engine and run report
   await page.click("text=Ad-Hoc");
