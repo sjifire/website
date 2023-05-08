@@ -1,4 +1,10 @@
 {
   "date": "2023-05-09",
-  "title": "Regular Meeting"
+  "title": "Regular Meeting",
+  "documents": [
+    {
+      "title": "Agenda",
+      "file": "agenda-may-9-2023.pdf"
+    }
+  ]
 }
