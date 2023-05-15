@@ -1,90 +1,71 @@
 {
-  "updated_at": "2023-05-14T09:11:47.638Z",
-  "date_range_all_from": "2022-05-14T15:32:53.000Z",
-  "date_range_all_to": "2023-05-13T16:17:34.000Z",
-  "date_range_from": "2023-04-14T00:00:00.000Z",
-  "date_range_to": "2023-05-13T23:59:59.999Z",
+  "updated_at": "2023-05-15T09:13:40.375Z",
+  "date_range_all_from": "2022-05-15T17:45:33.000Z",
+  "date_range_all_to": "2023-05-14T21:41:29.000Z",
+  "date_range_from": "2023-04-15T00:00:00.000Z",
+  "date_range_to": "2023-05-14T23:59:59.999Z",
   "parseWarnings": 8,
   "_comment": "auto generated; do not manually modify",
   "_time_dsc": "all times are in seconds",
   "unit_time_stats": {
     "first_unit_reaction": {
-      "sum": 8814,
-      "mean": 128,
-      "q1": 56,
+      "sum": 9036,
+      "mean": 126,
+      "q1": 54,
       "median": 100,
-      "q3": 127,
+      "q3": 126,
       "min": 1,
       "max": 750
     },
     "travel": {
-      "sum": 41234,
-      "mean": 515,
-      "q1": 174,
-      "median": 362,
-      "q3": 635,
+      "sum": 37447,
+      "mean": 468,
+      "q1": 169,
+      "median": 315,
+      "q3": 559,
       "min": 28,
       "max": 2742
     },
     "to_scene": {
-      "sum": 55187,
-      "mean": 690,
-      "q1": 277,
-      "median": 496,
-      "q3": 897,
+      "sum": 47888,
+      "mean": 599,
+      "q1": 257,
+      "median": 447,
+      "q3": 777,
       "min": 29,
-      "max": 3723
+      "max": 3346
     },
     "on_scene": {
-      "sum": 180666,
-      "mean": 2230,
-      "q1": 794,
-      "median": 1399,
-      "q3": 2167,
+      "sum": 152797,
+      "mean": 1910,
+      "q1": 791,
+      "median": 1364,
+      "q3": 1984,
       "min": 127,
       "max": 10650
     }
   },
   "personnel_stats": {
     "time_on_incidents": {
-      "sum": 498854,
-      "mean": 6929,
-      "q1": 2485,
-      "median": 4036,
-      "q3": 5134,
+      "sum": 438349,
+      "mean": 5845,
+      "q1": 2478,
+      "median": 3668,
+      "q3": 4974,
       "min": 644,
       "max": 97328
     },
     "num_per_incidents": {
-      "mean": 2.5,
+      "mean": 2.4,
       "q1": 2,
       "median": 2,
-      "q3": 2.3,
+      "q3": 2,
       "min": 1,
       "max": 10
     },
     "num_unique_responders": 27
   },
   "region_stats": {
-    "central": {
-      "incident_types": {
-        "medical_rescue": 43,
-        "fire": 6,
-        "downgraded": 6,
-        "cancelled": 4,
-        "other": 1
-      },
-      "num_incidents": 60,
-      "unit_travel_time": {
-        "sum": 27706,
-        "mean": 414,
-        "q1": 169,
-        "median": 302,
-        "q3": 511,
-        "min": 28,
-        "max": 1928
-      }
-    },
     "south": {
       "incident_types": {
         "medical_rescue": 5,
@@ -102,6 +83,25 @@
         "q3": 1087,
         "min": 475,
         "max": 2020
+      }
+    },
+    "central": {
+      "incident_types": {
+        "medical_rescue": 47,
+        "fire": 5,
+        "downgraded": 6,
+        "cancelled": 4,
+        "other": 1
+      },
+      "num_incidents": 63,
+      "unit_travel_time": {
+        "sum": 23919,
+        "mean": 357,
+        "q1": 156,
+        "median": 269,
+        "q3": 445,
+        "min": 28,
+        "max": 1928
       }
     },
     "north": {
@@ -126,32 +126,32 @@
   },
   "incident_stats": {
     "types": {
-      "medical_rescue": 50,
-      "fire": 6,
+      "medical_rescue": 54,
+      "fire": 5,
       "downgraded": 10,
       "cancelled": 5,
       "other": 1
     },
-    "num_incidents_last_365_days": 989,
-    "num_incidents": 71,
-    "num_daytime_incidents": 45,
-    "num_nighttime_incidents": 27,
+    "num_incidents_last_365_days": 993,
+    "num_incidents": 74,
+    "num_daytime_incidents": 47,
+    "num_nighttime_incidents": 28,
     "incident_times": {
-      "sum": 158458,
-      "mean": 2201,
-      "q1": 1227,
-      "median": 1737,
-      "q3": 2469,
+      "sum": 153986,
+      "mean": 2053,
+      "q1": 1222,
+      "median": 1717,
+      "q3": 2443,
       "min": 322,
       "max": 11186
     },
     "num_overlapping_incidents": 6,
     "num_per_day": {
-      "sum": 72,
-      "mean": 2,
+      "sum": 75,
+      "mean": 3,
       "q1": 1,
       "median": 2,
-      "q3": 3,
+      "q3": 4,
       "min": 0,
       "max": 6
     }
@@ -165,6 +165,6 @@
       "min": 1,
       "max": 5
     },
-    "num_unique_used": 11
+    "num_unique_used": 8
   }
 }
