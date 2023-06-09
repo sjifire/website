@@ -361,7 +361,7 @@ personnel:
     img_file: images.jpg
   - first_name: Raquel
     last_name: Lackey
-    title: NATIONAL Crisis Response Canine Team
+    title: HOPE Crisis Response Canine Team
     staff_type: volunteer
     roles:
       - Support
@@ -371,21 +371,21 @@ personnel:
     first_name: Pickles
     last_name: Lackey
     staff_type: volunteer
-    title: NATIONAL Crisis Response Canine Team
+    title: HOPE Crisis Response Canine Team
     img_file: pickles_lackey.jpg
   - roles:
       - Support
     first_name: Bungee
     last_name: Lackey
     staff_type: volunteer
-    title: NATIONAL Crisis Response Canine Team
+    title: HOPE Crisis Response Canine Team
     img_file: bungee_lackey.jpg
   - roles:
       - Support
     first_name: Ruffles
     last_name: Lackey
     staff_type: volunteer
-    title: NATIONAL Crisis Response Canine Team
+    title: HOPE Crisis Response Canine Team
     img_file: ruffles_lackey.jpg
   - first_name: Jenny
     last_name: Shrum
