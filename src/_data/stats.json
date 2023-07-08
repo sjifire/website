@@ -1,57 +1,57 @@
 {
-  "updated_at": "2023-07-07T09:16:03.086Z",
-  "date_range_all_from": "2022-07-07T03:52:58.000Z",
-  "date_range_all_to": "2023-07-06T18:22:54.000Z",
-  "date_range_from": "2023-06-07T00:00:00.000Z",
-  "date_range_to": "2023-07-06T23:59:59.999Z",
+  "updated_at": "2023-07-08T09:12:25.999Z",
+  "date_range_all_from": "2022-07-08T09:37:15.000Z",
+  "date_range_all_to": "2023-07-07T09:55:21.000Z",
+  "date_range_from": "2023-06-08T00:00:00.000Z",
+  "date_range_to": "2023-07-07T23:59:59.999Z",
   "parseWarnings": 25,
   "_comment": "auto generated; do not manually modify",
   "_time_dsc": "all times are in seconds",
   "unit_time_stats": {
     "first_unit_reaction": {
-      "sum": 7755,
-      "mean": 125,
-      "q1": 62,
+      "sum": 7568,
+      "mean": 126,
+      "q1": 67,
       "median": 106,
-      "q3": 141,
+      "q3": 138,
       "min": 27,
       "max": 990
     },
     "travel": {
-      "sum": 34203,
-      "mean": 462,
-      "q1": 206,
-      "median": 454,
-      "q3": 652,
+      "sum": 34321,
+      "mean": 477,
+      "q1": 212,
+      "median": 463,
+      "q3": 685,
       "min": 15,
       "max": 1201
     },
     "to_scene": {
-      "sum": 52308,
-      "mean": 679,
-      "q1": 312,
-      "median": 608,
-      "q3": 857,
+      "sum": 52239,
+      "mean": 697,
+      "q1": 346,
+      "median": 644,
+      "q3": 966,
       "min": 111,
       "max": 2182
     },
     "on_scene": {
-      "sum": 148798,
-      "mean": 1908,
-      "q1": 766,
-      "median": 1213,
-      "q3": 2223,
+      "sum": 147309,
+      "mean": 1938,
+      "q1": 789,
+      "median": 1235,
+      "q3": 2287,
       "min": 81,
       "max": 7525
     }
   },
   "personnel_stats": {
     "time_on_incidents": {
-      "sum": 381329,
-      "mean": 5153,
-      "q1": 1756,
-      "median": 3164,
-      "q3": 4764,
+      "sum": 378213,
+      "mean": 5253,
+      "q1": 1763,
+      "median": 3188,
+      "q3": 4858,
       "min": 262,
       "max": 90938
     },
@@ -68,39 +68,39 @@
   "region_stats": {
     "central": {
       "incident_types": {
-        "medical_rescue": 27,
+        "medical_rescue": 26,
         "fire": 6,
         "downgraded": 9,
         "cancelled": 13,
         "other": 0
       },
-      "num_incidents": 55,
+      "num_incidents": 54,
       "unit_travel_time": {
-        "sum": 22295,
-        "mean": 391,
-        "q1": 176,
-        "median": 347,
-        "q3": 528,
+        "sum": 22926,
+        "mean": 409,
+        "q1": 192,
+        "median": 362,
+        "q3": 555,
         "min": 15,
         "max": 1015
       }
     },
     "south": {
       "incident_types": {
-        "medical_rescue": 3,
+        "medical_rescue": 2,
         "fire": 4,
         "downgraded": 0,
         "cancelled": 0,
         "other": 0
       },
-      "num_incidents": 7,
+      "num_incidents": 6,
       "unit_travel_time": {
-        "sum": 4216,
-        "mean": 602,
-        "q1": 561,
-        "median": 594,
-        "q3": 647,
-        "min": 513,
+        "sum": 3703,
+        "mean": 617,
+        "q1": 590,
+        "median": 602,
+        "q3": 666,
+        "min": 534,
         "max": 693
       }
     },
@@ -126,28 +126,28 @@
   },
   "incident_stats": {
     "types": {
-      "medical_rescue": 32,
+      "medical_rescue": 30,
       "fire": 11,
       "downgraded": 13,
       "cancelled": 18,
       "other": 0
     },
-    "num_incidents_last_365_days": 992,
-    "num_incidents": 74,
+    "num_incidents_last_365_days": 988,
+    "num_incidents": 72,
     "num_daytime_incidents": 43,
-    "num_nighttime_incidents": 31,
+    "num_nighttime_incidents": 29,
     "incident_times": {
-      "sum": 135727,
-      "mean": 1834,
-      "q1": 855,
-      "median": 1503,
-      "q3": 2319,
+      "sum": 134169,
+      "mean": 1863,
+      "q1": 876,
+      "median": 1553,
+      "q3": 2411,
       "min": 131,
       "max": 8305
     },
     "num_overlapping_incidents": 8,
     "num_per_day": {
-      "sum": 74,
+      "sum": 72,
       "mean": 2,
       "q1": 1,
       "median": 2,
