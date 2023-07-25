@@ -26,7 +26,7 @@
     "markdown-it-video": "^0.6.3",
     "playwright": "^1.35.1",
     "terser": "^5.19.2",
-    "winston": "^3.9.0",
+    "winston": "^3.10.0",
     "yargs": "^17.7.2"
   },
   "devDependencies": {
