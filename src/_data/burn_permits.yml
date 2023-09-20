@@ -1,9 +1,9 @@
 fire_status: High
 burn_season_start: 2023-10-10
 burn_season_end: 2024-05-31
-burn_ban_status: Open
+burn_ban_status: Closed
 commercial_burn_ban_status: Closed
-rec_campfire_status: Closed
+rec_campfire_status: Open
 body: >-
   For your safety, burning regulations must be followed, even when a permit is
   NOT required.
