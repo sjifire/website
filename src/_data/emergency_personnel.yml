@@ -1,22 +1,13 @@
 preamble: ""
 personnel:
-  - first_name: Norvin
-    last_name: Collins
-    title: ""
+  - first_name: Noel
+    last_name: Monin
+    title: Interim Chief
     staff_type: staff
     roles:
       - FireFighter
       - Marine Crew
     rank: Chief
-    img_file: collins_norvin_.jpg
-  - first_name: Noel
-    last_name: Monin
-    title: ""
-    staff_type: staff
-    roles:
-      - FireFighter
-      - Marine Crew
-    rank: Assist. Chief
     img_file: noel_monin.jpg
   - first_name: Karl
     last_name: Kuetzing
