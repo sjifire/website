@@ -54,8 +54,13 @@
     </tr>
     <tr class="{{ cls.next() }}">
       <td>
-        {{ (stats.region_stats.south.unit_travel_time.median/60) | round(1) }}
-        <aside>South ({{((stats.region_stats.south.num_incidents/stats.incident_stats.num_incidents) * 100) | round }}%)</aside>
+        {% if stats.region_stats.south && stats.region_stats.south.num_incidents > 0 %}
+          {{ (stats.region_stats.south.unit_travel_time.median/60) | round(1) }}
+          <aside>South ({{((stats.region_stats.south.num_incidents/stats.incident_stats.num_incidents) * 100) | round }}%)</aside>
+        {% else %}
+           --
+          <aside>South (0%)</aside>
+        {% endif %}
       </td>
     </tr>
     <tr class="{{ cls.next() }}">
