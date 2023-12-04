@@ -315,13 +315,6 @@ personnel:
       - FireFighter
       - EMT
     img_file: trevor_bolton.jpg
-  - first_name: Chuck
-    last_name: Dalldorf
-    staff_type: volunteer
-    roles:
-      - Support
-      - Marine Crew
-    img_file: images.jpg
   - first_name: Sarah
     last_name: Hill
     staff_type: volunteer
