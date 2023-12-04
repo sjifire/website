@@ -164,12 +164,6 @@ personnel:
     roles:
       - Support
     img_file: karen_gentry.jpg
-  - first_name: Mark
-    last_name: Wagner
-    staff_type: volunteer
-    roles:
-      - Apparatus Operator
-    img_file: mark_wagner.jpg
   - first_name: Matt
     last_name: Wickey
     staff_type: volunteer
@@ -377,12 +371,6 @@ personnel:
     roles:
       - Support
       - Marine Crew
-    img_file: images.jpg
-  - first_name: Rhys
-    last_name: Spoor
-    staff_type: volunteer
-    roles:
-      - Support
     img_file: images.jpg
   - first_name: Yasmin
     last_name: von Dassow
