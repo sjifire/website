@@ -58,7 +58,7 @@ const retrieveCSVReport = async function (
   password,
   agency,
   reportName,
-  headless
+  headless,
 ) {
   const os = require("os");
   const path = require("path");
@@ -160,14 +160,16 @@ const _processRecords = function (records, startDate, stopDate, dayRange) {
     } else {
       stopDate = new Date(stopDate); // copy date so we can modify OR parse if it comes in as a string
       dayRange = Math.round(
-        (stopDate.getTime() - startDate.getTime()) / 1000 / 60 / 60 / 24
+        (stopDate.getTime() - startDate.getTime()) / 1000 / 60 / 60 / 24,
       );
     }
   }
-  var firstRecord = _.first(records)
-  var lastRecord  = _.last(records)
-  var firstRecordDate = firstRecord["Dispatched Date"] || firstRecord["Alarm Date"]
-  var lastRecordDate  = lastRecord["Dispatched Date"] || lastRecord["Alarm Date"]
+  var firstRecord = _.first(records);
+  var lastRecord = _.last(records);
+  var firstRecordDate =
+    firstRecord["Dispatched Date"] || firstRecord["Alarm Date"];
+  var lastRecordDate =
+    lastRecord["Dispatched Date"] || lastRecord["Alarm Date"];
   if (!stopDate) stopDate = lastRecordDate.getTime();
 
   stopDate = new Date(stopDate); // copy date so we can modify OR parse if it comes in as a string
@@ -184,14 +186,14 @@ const _processRecords = function (records, startDate, stopDate, dayRange) {
   }
   const recordsInRange = records.filter(
     (record) =>
-      record["Alarm Date"] >= startDate && record["Alarm Date"] <= stopDate
+      record["Alarm Date"] >= startDate && record["Alarm Date"] <= stopDate,
   );
   // the groupBy sorts by lexographical ordering of the Incident Number; this isn't
   // always entered in correctly nor is the order of the incident the same order
   // as when pages go out.  SO we list the incidents by dispatch date order,
   // yet use the groupBy to then process those records within each incident
   const incidentsInDispatchedDateOrder = _.uniq(
-    _.map(recordsInRange, "Incident Number")
+    _.map(recordsInRange, "Incident Number"),
   );
   const byIncidentInRange = _.groupBy(recordsInRange, "Incident Number");
 
@@ -238,7 +240,8 @@ const _processRecords = function (records, startDate, stopDate, dayRange) {
     // baseRecord is used for all columns that are the same within the incidentID grouping
     const baseRecord = incidentRecords[0];
 
-    const dispatchedDate = baseRecord["Dispatched Date"] || baseRecord["Alarm Date"];
+    const dispatchedDate =
+      baseRecord["Dispatched Date"] || baseRecord["Alarm Date"];
     const incidentTypeCall = baseRecord["Incident Type Code"].toString();
     rawValues.calls_per_day[dispatchedDate.toLocaleDateString()]++;
 
@@ -257,7 +260,7 @@ const _processRecords = function (records, startDate, stopDate, dayRange) {
         _.isDate(baseRecord["Arrival Date"]))
     )
       logger.verbose(
-        `${incidentID} is a standby yet has en route or arrival dates set`
+        `${incidentID} is a standby yet has en route or arrival dates set`,
       );
 
     if (prevCallEnd && prevCallEnd > dispatchedDate) {
@@ -283,14 +286,14 @@ const _processRecords = function (records, startDate, stopDate, dayRange) {
     const incidentUnitRecords = _.chain(incidentRecords)
       .map((r) => _.omit(r, "User Login ID"))
       .filter((r, loc, allRecords) =>
-        loc === 0 ? true : !_.isEqual(r, allRecords[loc - 1])
+        loc === 0 ? true : !_.isEqual(r, allRecords[loc - 1]),
       )
       .value();
     // COMPUTE times based upon the Unit/Apparatus time, NOT each individual time
     const firstEnRouteUnit = _findFirst(
       incidentUnitRecords,
       "Dispatched Date",
-      "En Route Date"
+      "En Route Date",
     );
     let reactionTime =
       (firstEnRouteUnit["En Route Date"] - dispatchedDate) / 1000;
@@ -299,18 +302,18 @@ const _processRecords = function (records, startDate, stopDate, dayRange) {
     const travelTimes = _extractTimes(
       incidentUnitRecords,
       "En Route Date",
-      "Arrival Date"
+      "Arrival Date",
     );
     const toSceneTimes = _extractTimes(
       incidentUnitRecords,
       "Dispatched Date",
-      "Arrival Date"
+      "Arrival Date",
     );
     // let onSceneTime   = (baseRecord['Last Unit Cleared Date'] - firstArrivedUnit['Arrival Date'])/1000;
     const onSceneTimes = _extractTimes(
       incidentUnitRecords,
       "Arrival Date",
-      "Clear Date"
+      "Clear Date",
     );
     if (_.isEmpty(_.compact(travelTimes))) {
       logger.debug(`${incidentID} has empty travel times`);
@@ -331,7 +334,7 @@ const _processRecords = function (records, startDate, stopDate, dayRange) {
       rawValues.parseWarnings++;
     }
     logger.verbose(
-      `${incidentID}: reaction: ${reactionTime}; travel: ${travelTimes}; toScene: ${toSceneTimes}; onScene: ${onSceneTimes}; incidentTime: ${incidentTime}`
+      `${incidentID}: reaction: ${reactionTime}; travel: ${travelTimes}; toScene: ${toSceneTimes}; onScene: ${onSceneTimes}; incidentTime: ${incidentTime}`,
     );
     rawValues.reaction_times.push(reactionTime);
     rawValues.travel_times.push(travelTimes);
@@ -341,7 +344,7 @@ const _processRecords = function (records, startDate, stopDate, dayRange) {
 
     let personnelTimes = _.map(
       incidentRecords,
-      (v) => (v["Clear Date"] - v["Dispatched Date"]) / 1000
+      (v) => (v["Clear Date"] - v["Dispatched Date"]) / 1000,
     );
     let personnel = _.map(incidentRecords, (v) => v["User Login ID"]);
     const uniqPersonnel = _.uniq(personnel);
@@ -379,14 +382,14 @@ const _processRecords = function (records, startDate, stopDate, dayRange) {
         // they will be in multiple units in a serial manner (go get one apparatus, return, get a different one, etc)
         const personnelRecords = _.filter(
           incidentRecords,
-          (v) => v["User Login ID"] === p
+          (v) => v["User Login ID"] === p,
         );
         const earliestDispatchDate = _.sortBy(
           personnelRecords,
-          "Dispatched Date"
+          "Dispatched Date",
         )[0]["Dispatched Date"];
         const latestClearDate = _.reverse(
-          _.sortBy(personnelRecords, "Clear Date")
+          _.sortBy(personnelRecords, "Clear Date"),
         )[0]["Clear Date"];
         const newPersonnelTime =
           (latestClearDate - earliestDispatchDate) / 1000;
@@ -434,7 +437,7 @@ const _processRecords = function (records, startDate, stopDate, dayRange) {
   });
   if (rawValues.incident_ids.length !== incidentsInDispatchedDateOrder.length) {
     logger.warn(
-      `mismatch on incident counters: ${rawValues.incident_ids.length} (incident_ids) vs ${incidentsInDispatchedDateOrder.length} (incidentArr)`
+      `mismatch on incident counters: ${rawValues.incident_ids.length} (incident_ids) vs ${incidentsInDispatchedDateOrder.length} (incidentArr)`,
     );
   }
   logger.debug("_processRecords", rawValues);
@@ -503,7 +506,7 @@ const _createStats = function (rawValues) {
     typeStats,
     defaultIncidentTypes,
     statsOutput.incident_stats.types,
-    _.countBy(rawValues.incident_types)
+    _.countBy(rawValues.incident_types),
   );
   statsOutput.incident_stats.types = typeStats;
 
@@ -511,7 +514,7 @@ const _createStats = function (rawValues) {
     `reactionTimes: ${_.chain(rawValues.reaction_times)
       .flatten()
       .compact()
-      .value()}`
+      .value()}`,
   );
 
   new Map([
@@ -538,7 +541,7 @@ const _createStats = function (rawValues) {
     rawValues.personnel_times,
     function (pt) {
       return sum(pt);
-    }
+    },
   );
   const incident = {
     sum: sum(collapsedPersonnelTimes),
@@ -562,7 +565,7 @@ const _createStats = function (rawValues) {
     max: max(personnelCount),
   };
   statsOutput.personnel_stats.num_unique_responders = _.uniq(
-    _.flatten(rawValues.personnel)
+    _.flatten(rawValues.personnel),
   ).length;
 
   const apparatusCount = _.map(rawValues.apparatus, function (a) {
@@ -597,7 +600,7 @@ const _createStats = function (rawValues) {
       statsOutput.region_stats[region].num_incidents = 0;
       Object.assign(
         statsOutput.region_stats[region].incident_types,
-        defaultIncidentTypes
+        defaultIncidentTypes,
       );
     }
     statsOutput.region_stats[region].incident_types[callType] += 1;
@@ -680,7 +683,7 @@ const min = (arr) =>
     Math,
     arr.map(function (v) {
       return v == null ? Infinity : v;
-    })
+    }),
   );
 const q25 = (arr) => quantile(arr, 0.25);
 const q50 = (arr) => quantile(arr, 0.5);
