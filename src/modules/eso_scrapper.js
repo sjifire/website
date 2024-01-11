@@ -164,7 +164,12 @@ const _processRecords = function (records, startDate, stopDate, dayRange) {
       );
     }
   }
-  if (!stopDate) stopDate = _.last(records)["Dispatched Date"].getTime();
+  var firstRecord = _.first(records)
+  var lastRecord  = _.last(records)
+  var firstRecordDate = firstRecord["Dispatched Date"] || firstRecord["Alarm Date"]
+  var lastRecordDate  = lastRecord["Dispatched Date"] || lastRecord["Alarm Date"]
+  if (!stopDate) stopDate = lastRecordDate.getTime();
+
   stopDate = new Date(stopDate); // copy date so we can modify OR parse if it comes in as a string
   stopDate.setUTCHours(23, 59, 59, 999); // set to the very end of day
   // NOTE: this date range makes it exclusive, NOT inclusive...
@@ -208,8 +213,8 @@ const _processRecords = function (records, startDate, stopDate, dayRange) {
     nighttime_calls: 0,
     in_range_calls: _.size(byIncidentInRange),
     total_calls: _.uniqBy(records, "Incident Number").length,
-    date_range_all_from: _.first(records)["Dispatched Date"],
-    date_range_all_to: _.last(records)["Dispatched Date"],
+    date_range_all_from: firstRecordDate,
+    date_range_all_to: lastRecordDate,
     date_range_from: startDate,
     date_range_to: stopDate,
     parseWarnings: 0,
