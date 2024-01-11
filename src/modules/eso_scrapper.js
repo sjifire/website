@@ -238,7 +238,7 @@ const _processRecords = function (records, startDate, stopDate, dayRange) {
     // baseRecord is used for all columns that are the same within the incidentID grouping
     const baseRecord = incidentRecords[0];
 
-    const dispatchedDate = baseRecord["Dispatched Date"];
+    const dispatchedDate = baseRecord["Dispatched Date"] || baseRecord["Alarm Date"];
     const incidentTypeCall = baseRecord["Incident Type Code"].toString();
     rawValues.calls_per_day[dispatchedDate.toLocaleDateString()]++;
 
