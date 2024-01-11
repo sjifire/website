@@ -128,7 +128,9 @@ const parseCSV = function (csvPath) {
   });
   // sort by early to latest; and sort by the time dispatch pages us, NOT when
   // dispatch received the call as they don't always page in the same order
-  return _.sortBy(records, "Dispatched Date");
+  // UPDATE: dispatch date is NOT always set; this occurs for calls which
+  // are entered but not through dispatch, like controlled burns.
+  return _.sortBy(records, "Alarm Date");
 };
 
 /**
