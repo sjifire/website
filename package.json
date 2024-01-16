@@ -30,7 +30,7 @@
     "yargs": "^17.7.2"
   },
   "devDependencies": {
-    "@playwright/test": "^1.40.1",
+    "@playwright/test": "^1.41.0",
     "chai": "^5.0.0",
     "clean-css": "^5.3.3",
     "eslint": "^7.32.0",
