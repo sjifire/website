@@ -150,12 +150,8 @@ body {
   height: auto;
 }
 
-.item {
-  padding: 10px;
-}
-
 .item:not(:last-child) {
-  margin-right: 8px;
+  margin-right: 12px;
 }
 
 .item a {
@@ -173,6 +169,17 @@ body {
   color: white;
 }
 
+.item--shop a {
+  color: black;
+  background-color: var(--yellow);
+}
+
+.item--shop a:hover,
+.item--shop a:focus,
+.item--shop a:active {
+  background-color: var(--bright-red);
+}
+
 /* Mobile menu */
 .menu {
   display: flex;
@@ -184,7 +191,8 @@ body {
 
 .menu li:not(.logo) a {
   display: block;
-  padding: 0 10px;
+  padding: 6px 10px;
+  border-radius: 0.15rem;
 }
 
 .menu li.subitem a {
@@ -293,7 +301,7 @@ body {
     display: block;
     position: absolute;
     right: 0;
-    top: 44px;
+    top: 36px;
     z-index: 10;
     background: var(--black);
   }
