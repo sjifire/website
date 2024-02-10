@@ -1,69 +1,69 @@
 {
-  "updated_at": "2024-02-09T09:12:02.001Z",
-  "date_range_all_from": "2023-02-09T11:06:27.000Z",
-  "date_range_all_to": "2024-02-08T01:12:22.000Z",
-  "date_range_from": "2024-01-10T00:00:00.000Z",
-  "date_range_to": "2024-02-08T23:59:59.999Z",
-  "parseWarnings": 6,
+  "updated_at": "2024-02-10T09:10:39.594Z",
+  "date_range_all_from": "2023-02-10T00:13:26.000Z",
+  "date_range_all_to": "2024-02-09T16:11:13.000Z",
+  "date_range_from": "2024-01-11T00:00:00.000Z",
+  "date_range_to": "2024-02-09T23:59:59.999Z",
+  "parseWarnings": 7,
   "_comment": "auto generated; do not manually modify",
   "_time_dsc": "all times are in seconds",
   "unit_time_stats": {
     "first_unit_reaction": {
-      "sum": 4997,
-      "mean": 139,
-      "q1": 107,
-      "median": 132,
-      "q3": 183,
-      "min": 10,
+      "sum": 5270,
+      "mean": 129,
+      "q1": 94,
+      "median": 115,
+      "q3": 159,
+      "min": 1,
       "max": 394
     },
     "travel": {
-      "sum": 19546,
-      "mean": 465,
-      "q1": 213,
-      "median": 343,
-      "q3": 688,
+      "sum": 21747,
+      "mean": 444,
+      "q1": 204,
+      "median": 300,
+      "q3": 666,
       "min": 34,
       "max": 1269
     },
     "to_scene": {
-      "sum": 29350,
-      "mean": 699,
-      "q1": 360,
-      "median": 560,
-      "q3": 860,
+      "sum": 36447,
+      "mean": 744,
+      "q1": 359,
+      "median": 530,
+      "q3": 821,
       "min": 195,
-      "max": 3662
+      "max": 4455
     },
     "on_scene": {
-      "sum": 56043,
-      "mean": 1334,
-      "q1": 632,
-      "median": 942,
-      "q3": 1282,
+      "sum": 75733,
+      "mean": 1546,
+      "q1": 645,
+      "median": 982,
+      "q3": 1931,
       "min": 31,
-      "max": 5322
+      "max": 5462
     }
   },
   "personnel_stats": {
     "time_on_incidents": {
-      "sum": 168957,
-      "mean": 4446,
-      "q1": 1941,
-      "median": 3304,
-      "q3": 4517,
-      "min": 230,
+      "sum": 223129,
+      "mean": 5189,
+      "q1": 1861,
+      "median": 3283,
+      "q3": 4662,
+      "min": 216,
       "max": 35559
     },
     "num_per_incidents": {
-      "mean": 2.5,
+      "mean": 2.6,
       "q1": 2,
       "median": 2,
-      "q3": 2.8,
+      "q3": 3,
       "min": 1,
       "max": 7
     },
-    "num_unique_responders": 25
+    "num_unique_responders": 26
   },
   "region_stats": {
     "south": {
@@ -87,19 +87,19 @@
     },
     "central": {
       "incident_types": {
-        "medical_rescue": 11,
+        "medical_rescue": 14,
         "fire": 6,
         "downgraded": 10,
-        "cancelled": 3,
+        "cancelled": 5,
         "other": 0
       },
-      "num_incidents": 30,
+      "num_incidents": 35,
       "unit_travel_time": {
-        "sum": 13359,
-        "mean": 382,
-        "q1": 191,
-        "median": 258,
-        "q3": 567,
+        "sum": 15560,
+        "mean": 370,
+        "q1": 195,
+        "median": 249,
+        "q3": 543,
         "min": 34,
         "max": 1189
       }
@@ -126,28 +126,28 @@
   },
   "incident_stats": {
     "types": {
-      "medical_rescue": 11,
+      "medical_rescue": 14,
       "fire": 6,
       "downgraded": 16,
-      "cancelled": 5,
+      "cancelled": 7,
       "other": 0
     },
-    "num_incidents_last_365_days": 718,
-    "num_incidents": 38,
-    "num_daytime_incidents": 29,
+    "num_incidents_last_365_days": 722,
+    "num_incidents": 43,
+    "num_daytime_incidents": 34,
     "num_nighttime_incidents": 9,
     "incident_times": {
-      "sum": 64392,
-      "mean": 1695,
-      "q1": 920,
-      "median": 1379,
-      "q3": 2059,
-      "min": 115,
-      "max": 6256
+      "sum": 78922,
+      "mean": 1835,
+      "q1": 858,
+      "median": 1421,
+      "q3": 2136,
+      "min": 108,
+      "max": 8780
     },
     "num_overlapping_incidents": 0,
     "num_per_day": {
-      "sum": 38,
+      "sum": 43,
       "mean": 1,
       "q1": 1,
       "median": 1,
@@ -165,6 +165,6 @@
       "min": 1,
       "max": 3
     },
-    "num_unique_used": 6
+    "num_unique_used": 7
   }
 }
