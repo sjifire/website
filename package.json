@@ -9,7 +9,7 @@
     "start": "npm-run-all clean watch:*",
     "build": "npm-run-all clean build:*",
     "test": "npm run test:mocha; npm run test:browser",
-    "test:browser": "npx playwright install; playwright test",
+    "test:browser": "npx playwright install --with-deps chromium; playwright test",
     "test:mocha": "mocha",
     "clean": "rimraf public"
   },
