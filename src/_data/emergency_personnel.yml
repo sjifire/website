@@ -2,7 +2,7 @@ preamble: ""
 personnel:
   - first_name: Noel
     last_name: Monin
-    title: Interim
+    title: ""
     staff_type: staff
     roles:
       - FireFighter
@@ -19,6 +19,7 @@ personnel:
       - Apparatus Operator
       - Marine Crew
     img_file: karl_kuetzing.jpg
+    rank: Lieutenant
   - first_name: Robin
     last_name: Garcia
     title: Front Office
@@ -111,6 +112,7 @@ personnel:
       - EMT
       - Apparatus Operator
     img_file: tom_eades.jpg
+    rank: Lieutenant
   - first_name: Alexa
     last_name: Rust
     staff_type: volunteer
@@ -146,12 +148,6 @@ personnel:
     roles:
       - Support
     img_file: charles_genther.jpg
-  - first_name: Frank
-    last_name: Cardinale
-    staff_type: volunteer
-    roles:
-      - Apparatus Operator
-    img_file: frank_cardinale.jpg
   - first_name: Harry
     last_name: See
     staff_type: volunteer
@@ -214,7 +210,7 @@ personnel:
     last_name: Young
     staff_type: volunteer
     roles:
-      - Apparatus Operator
+      - Support
     img_file: john_young.jpg
     title: Safety Officer
   - first_name: Joran
@@ -293,7 +289,6 @@ personnel:
     staff_type: volunteer
     roles:
       - FireFighter
-      - EMT
       - Apparatus Operator
     img_file: adam_greene.jpg
   - first_name: Shaun
