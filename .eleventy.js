@@ -166,7 +166,6 @@ module.exports = function (eleventyConfig) {
     //HOWEVER, a double // seems to make it hard for Cloudinary to find the src img...
     // so stripping all leading /
     assetPath = assetPath.replace(/^\/+/, "");
-    return `/${assetPath}`;
     if (!cloudinaryCmds) cloudinaryCmds = "f_auto";
     if (isProduction && siteData.enable_cloudinary_rewrites) {
       if (/^(\/)?optim\//.test(assetPath)) {
