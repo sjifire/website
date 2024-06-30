@@ -176,7 +176,7 @@ module.exports = function (eleventyConfig) {
       }
       return `/optim/${assetPath}?c_param=${cloudinaryCmds}`;
     }
-    return `${siteData.cloudinaryRootUrl}/image/fetch/${cloudinaryCmds}/${siteData.rootUrl}/${assetPath}`;
+    return `${siteData.cloudinaryRootUrl}/image/fetch/${cloudinaryCmds}/${siteData.prodUrl}/${assetPath}`;
   };
 
   eleventyConfig.addShortcode("imgPath", function (assetPath, cloudinaryCmds) {
@@ -271,7 +271,7 @@ module.exports = function (eleventyConfig) {
           cloudinaryCmds = `f_auto,q_auto:good,c_limit,${imgSize}`;
           newImgURL = imgPath(img.src, cloudinaryCmds);
           // newImgURL = imgPath(img.src.replace('/assets', ''), cloudinaryCmds);
-          // newImgURL = `${siteData.cloudinaryRootUrl}/image/fetch/f_auto,q_auto:good,c_limit,${imgSize}/${siteData.rootUrl}`
+          // newImgURL = `${siteData.cloudinaryRootUrl}/image/fetch/f_auto,q_auto:good,c_limit,${imgSize}/${siteData.prodUrl}`
           parentDiv = img.parentNode;
           const figure = document.createElement("figure");
           figure.innerHTML = `
