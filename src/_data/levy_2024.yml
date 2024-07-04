@@ -1,11 +1,17 @@
 documents:
-  - file: approved-2024-budget.pdf
-    title: 2024 Approved Budget
-  - title: 2022-budget-adopted.pdf
-    file: budget-cy2022-adopted.pdf
-  - title: 2021-operations-report.pdf
-    file: jan22-annual-ops-report-v2.pdf
-  - file: san-juan-island-2021-goals.pdf
-    title: 2021-department-goals.pdf
+  - file: 2024-budget-vs-current-needs.pdf
+    title: 2024 Budget vs Current Needs
+  - file: current-millage.pdf
+    title: Current Millage (taxing rate)
+  - title: 20 Year Plan
+    file: 20-year-plan.pdf
+  - title: 15 Year Plan
+    file: 15-year-plan.pdf
+  - file: capital-improvement-plan.pdf
+    title: Capital Improvement Plan
+  - file: map-of-serviced-area.pdf
+    title: Map of Current Service Area
+  - file: fire-dist-3-levy-history.pdf
+    title: Levy History
 body: >-
   Summary of levy (perhaps summary paragraph then legal language?)
