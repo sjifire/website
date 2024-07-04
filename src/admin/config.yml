@@ -306,6 +306,36 @@ collections:
             name: body
             widget: markdown
             required: true
+      - label: "About/2024 Levy"
+        name: "levy_2024"
+        delete: false
+        editor:
+          preview: false
+        file: "src/_data/levy_2024.yml"
+        fields:
+          - label: "Documents & Resources"
+            name: "documents"
+            widget: "list"
+            summary: "{{fields.file}}"
+            hint: "Highlight Important Documents & Resources"
+            allow_add: true
+            add_to_top: true
+            fields:
+              - label: Title
+                name: title
+                widget: string
+                required: true
+              - label: File
+                name: file
+                widget: file
+                allow_multiple: false
+                choose_url: false
+                media_folder: "/src/assets/docs/"
+                public_folder: ""
+          - label: Body
+            name: body
+            widget: markdown
+            required: true
       - label: "Services/24-7 Emergency Services"
         name: "emergency_services"
         delete: false
