@@ -51,7 +51,7 @@
     </figure>
   {% endif %}
 
-  <main class="site-main{{ ' site-main--overlap' if page.url === '/' }}" role="main">
+  <main id='site-main' class="site-main{{ ' site-main--overlap' if page.url === '/' }}" role="main">
     <div class="rap">
       {% block content %}
         {{ content | safe }}
