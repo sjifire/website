@@ -179,6 +179,17 @@ body {
   color: white;
 }
 
+.item--highlight a {
+  color: black;
+  background-color: var(--yellow);
+}
+
+.item--highlight a:hover,
+.item--highlight a:focus,
+.item--highlight a:active {
+  background-color: var(--bright-red);
+}
+
 /* Mobile menu */
 .menu {
   display: flex;
@@ -190,7 +201,8 @@ body {
 
 .menu li:not(.logo) a {
   display: block;
-  padding: 0 10px;
+  padding: 6px 10px;
+  border-radius: 0.15rem;
 }
 
 .menu li.subitem a {
@@ -299,7 +311,7 @@ body {
     display: block;
     position: absolute;
     right: 0;
-    top: 44px;
+    top: 36px;
     z-index: 10;
     background: var(--black);
   }
