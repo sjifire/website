@@ -757,6 +757,10 @@ body {
   grid-area: main;
 }
 
+.l-grid__main table {
+    width: 100%;
+}
+
 .l-grid__subsidebar {
   grid-area: subsidebar;
 }
