@@ -3,7 +3,7 @@ burn_season_start: 2023-10-02
 burn_season_end: 2024-06-15
 burn_ban_status: Closed
 commercial_burn_ban_status: Closed
-rec_campfire_status: Open
+rec_campfire_status: Restricted
 body: >-
   For your safety, burning regulations must be followed, even when a permit is
   NOT required.
@@ -30,6 +30,8 @@ body: >-
   * Clear area around the fire: 2 feet or more.
 
   * Only clean and dry firewood may be burned.
+
+  * **R﻿ESTRICTED:** only propane fueled appliances (e.g. BBQ, outdoor fireplace, patio heaters), and pellet BBQ and smokers are allowed.  No charcoal or firewood fires (even in pits), or open-flamed devices (e.g. tiki torches) are allowed.
 
 
   ## Residential Burn Pile Permits
