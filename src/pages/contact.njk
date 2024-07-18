@@ -12,6 +12,7 @@ permalink: "/contact/index.html"
         {{ title | safe }}
       </h1>
       {{ contact.body | markdownify | safe }}
+      <!-- form disabled
       <form name="contact" method="POST" netlify-honeypot="bot-field" data-netlify="true" action="/thank-you/">
         <p class="sr-only">
           <label>Don't fill this out if you're human: <input name="bot-field" /></label>
@@ -49,6 +50,7 @@ permalink: "/contact/index.html"
           </button>
         </div>
       </form>
+      -->
     </div>
     <aside class="l-grid__sidebar">
       <div class="sidebar-block">
