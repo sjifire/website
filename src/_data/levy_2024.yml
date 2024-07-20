@@ -11,8 +11,6 @@ documents:
     title: Map of Current Service Area
   - file: fire-dist-3-levy-history.pdf
     title: Levy History
-  - file: budget-and-levy-work.xlsx
-    title: master spreadsheet
 
 body: >-
   * [Intro](#intro)
