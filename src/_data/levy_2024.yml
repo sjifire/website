@@ -1,6 +1,4 @@
 documents:
-  - file: 2024-budget-vs-current-needs.pdf
-    title: 2024 Budget vs Current Needs
   - file: current-millage.pdf
     title: Current Millage (taxing rate)
   - title: 20 Year Plan
@@ -13,6 +11,9 @@ documents:
     title: Map of Current Service Area
   - file: fire-dist-3-levy-history.pdf
     title: Levy History
+  - file: budget-and-levy-work.xlsx
+    title: master spreadsheet
+
 body: >-
   * [Intro](#intro)
 
