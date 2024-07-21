@@ -390,6 +390,11 @@ collections:
             widget: "select"
             options: ["Open", "Restricted", "Closed"]
             preview: false
+          - name: "state_campfire_status"
+            label: "State Park/DNR Campfire Status"
+            widget: "select"
+            options: ["Open", "Restricted", "Closed"]
+            preview: false
           - label: Body
             name: body
             widget: markdown

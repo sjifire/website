@@ -32,6 +32,14 @@
         {{ burn_permits.rec_campfire_status }}
       </td>
     </tr>
+    <tr class="even">
+      <th>
+        State Park & DNR Campfires
+      </th>
+      <td class="level level--{{burn_permits.state_campfire_status | slugify}}">
+        {{ burn_permits.state_campfire_status }}
+      </td>
+    </tr>
     <tr class="odd">
       <th>
         Residential Burn Permits
