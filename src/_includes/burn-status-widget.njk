@@ -26,18 +26,26 @@
     </tr>
     <tr class="even">
       <th>
-        Rec Campfires: County
+        Recreational Fires: County
       </th>
       <td class="level level--{{burn_permits.rec_campfire_status | slugify}}">
         {{ burn_permits.rec_campfire_status }}
       </td>
     </tr>
-    <tr class="even">
+    <tr class="odd">
       <th>
-        Rec Campfires: State Park & DNR
+        Recreational Fires: State Park & DNR
       </th>
       <td class="level level--{{burn_permits.state_campfire_status | slugify}}">
         {{ burn_permits.state_campfire_status }}
+      </td>
+    </tr>
+    <tr class="even">
+      <th>
+        Recreational Fires: National Parks
+      </th>
+      <td class="level level--{{burn_permits.np_campfire_status | slugify}}">
+        {{ burn_permits.np_campfire_status }}
       </td>
     </tr>
     <tr class="odd">

@@ -5,6 +5,7 @@ burn_ban_status: Closed
 commercial_burn_ban_status: Closed
 rec_campfire_status: Open
 state_campfire_status: Closed
+np_campfire_status: Closed
 body: >-
   For your safety, burning regulations must be followed, even when a permit is
   NOT required.

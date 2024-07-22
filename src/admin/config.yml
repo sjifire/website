@@ -386,12 +386,17 @@ collections:
             options: ["Open", "Closed"]
             preview: false
           - name: "rec_campfire_status"
-            label: "Recreational Campfire Status"
+            label: "Recreational Fire Status"
             widget: "select"
             options: ["Open", "Restricted", "Closed"]
             preview: false
           - name: "state_campfire_status"
-            label: "State Park/DNR Campfire Status"
+            label: "State Park/DNR Recreational Fire Status"
+            widget: "select"
+            options: ["Open", "Restricted", "Closed"]
+            preview: false
+          - name: "np_campfire_status"
+            label: "National Park Recreational Fire Status"
             widget: "select"
             options: ["Open", "Restricted", "Closed"]
             preview: false
