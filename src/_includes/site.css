@@ -976,6 +976,10 @@ body {
   font-weight: 300;
 }
 
+.widget--burn-status .widget__body th {
+  padding: 15px 10px;
+}
+
 .widget__body .level {
   font-weight: 600;
 }
