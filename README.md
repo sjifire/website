@@ -5,7 +5,7 @@
 1. GitHub account and repository
 2. Azure subscription
 3. Microsoft 365 tenant with Azure AD
-4. Node.js 18+ installed
+4. Node.js 25+ installed
 
 ## Setup Instructions
 
@@ -100,3 +100,15 @@ Add these secrets:
 Replace `<TENANT_ID>` in `staticwebapp.config.json` with your Azure AD tenant ID
 
 ### 8. Deploy
+
+
+## Local Development
+
+
+```bash
+
+npm install
+npm run tina:dev
+
+
+```
