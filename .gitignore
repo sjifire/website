@@ -1,3 +1,14 @@
+# tina cms
+admin/
+.tina/__generated__
+api/dist
+_site/
+
+
+
+# osx crud
+.DS_Store
+
 # Logs
 logs
 *.log

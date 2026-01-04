@@ -1,0 +1,17 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "func start",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@azure/functions": "^4.0.0",
+    "@octokit/rest": "^20.0.0",
+    "jsonwebtoken": "^9.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  }
+}
