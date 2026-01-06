@@ -17,7 +17,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@11ty/eleventy-plugin-rss": "^2.0.4",
     "@azure/functions": "^4.10.0",
     "@azure/identity": "^4.13.0",
     "@azure/msal-node": "^3.8.4",

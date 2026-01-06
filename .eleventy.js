@@ -1,7 +1,6 @@
 const CleanCSS = require("clean-css");
 const { DateTime } = require("luxon");
 const { minify } = require("terser");
-const pluginRss = require("@11ty/eleventy-plugin-rss");
 const util = require("util");
 
 const isProduction = process.env.ELEVENTY_ENV === "production";
@@ -31,12 +30,6 @@ module.exports = function(eleventyConfig) {
     key: "md",  // Treat MDX as markdown
   });
 
-  eleventyConfig.addPlugin(pluginRss, {
-    posthtmlRenderOptions: {
-      closingSingleTag: "default", // opt-out of <img/>-style XHTML single tags
-    },
-  });
-
   // Collection for content includes (MDX files that feed into NJK templates)
   eleventyConfig.addCollection("contentIncludes", function(collectionApi) {
     return collectionApi.getFilteredByTag("content-include");
@@ -56,9 +49,6 @@ module.exports = function(eleventyConfig) {
       month: "long",
       day: "numeric"
     });
-  });
-  eleventyConfig.addFilter("yearOnlyJS", (dateObj) => {
-    return DateTime.fromJSDate(dateObj, { zone: "utc" }).toFormat("yyyy");
   });
   eleventyConfig.addFilter("postDateTerseNoYearISO", (dateObj) => {
     if(!dateObj) return; // sometimes we get an undefined through here
@@ -92,14 +82,6 @@ module.exports = function(eleventyConfig) {
       DateTime.DATE_HUGE
     );
   });
-  eleventyConfig.addFilter("postDateToRfc3339", (dateObj) => {
-    //NOTE: sometimes a string comes in, sometimes a date... so lets cleanup!
-    if (typeof dateObj.toISOString === "function")
-      dateObj = dateObj.toISOString();
-    return DateTime.fromISO(dateObj, { zone: "utc" }).toISO();
-  });
-
-
   eleventyConfig.addFilter("dump", (obj) => {
     return util.inspect(obj);
   });
