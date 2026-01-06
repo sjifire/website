@@ -37,6 +37,10 @@ module.exports = function(eleventyConfig) {
     },
   });
 
+  // Collection for content includes (MDX files that feed into NJK templates)
+  eleventyConfig.addCollection("contentIncludes", function(collectionApi) {
+    return collectionApi.getFilteredByTag("content-include");
+  });
 
   // // Add collections
   // eleventyConfig.addCollection("posts", function(collectionApi) {

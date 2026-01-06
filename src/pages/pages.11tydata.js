@@ -1,5 +1,9 @@
 module.exports = {
 	permalink: function (data) {
+		// Respect explicit permalink: false in frontmatter
+		if (data.permalink === false) {
+			return false;
+		}
 		var url = data.page.filePathStem;
 		//remove pages
 		url = url.replace('/pages', '');
@@ -8,6 +12,14 @@ module.exports = {
 		return url;
 		// return `/recipes/${this.slugify(title)}`;
 	},
-	layout: "pages.njk"
+	eleventyComputed: {
+		layout: function (data) {
+			// No layout for content-include files or explicit layout: false
+			if (data.permalink === false || data.layout === false) {
+				return false;
+			}
+			return "pages.njk";
+		}
+	}
 };
 
