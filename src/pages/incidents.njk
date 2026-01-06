@@ -2,7 +2,9 @@
 title: "Incidents"
 permalink: "/about/incidents/index.html"
 mobile_layout_flipped: true
+layout: false
 ---
+{% extends "default_double_col_page.njk" %}
 
 {% set pageData = incidents %}
 
@@ -11,4 +13,3 @@ mobile_layout_flipped: true
     {% include "call-stats-widget.njk" %}
   </div>
 {% endblock %}
-{% extends "default_double_col_page.njk" %}

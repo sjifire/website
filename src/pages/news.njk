@@ -6,7 +6,9 @@ pagination:
   alias: post
   reverse: true
 permalink: "/news/{% if pagination.pageNumber > 0 %}page-{{ pagination.pageNumber + 1 }}/{% endif %}index.html"
+layout: false
 ---
+{% extends "default_double_col_page.njk" %}
 
 {% block main_content %}
   <header class="hgroup">
@@ -86,5 +88,3 @@ permalink: "/news/{% if pagination.pageNumber > 0 %}page-{{ pagination.pageNumbe
     </details>
   {% endfor %}
 {% endblock %}
-
-{% extends "default_double_col_page.njk" %}

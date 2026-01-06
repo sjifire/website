@@ -4,10 +4,10 @@ const { minify } = require("terser");
 const pluginRss = require("@11ty/eleventy-plugin-rss");
 const util = require("util");
 
-const isProduction = process.env.ELEVENTY_ENV === `production`;
+const isProduction = process.env.ELEVENTY_ENV === "production";
 
 module.exports = function(eleventyConfig) {
-  siteData = require("./src/_data/site.json");
+  const siteData = require("./src/_data/site.json");
 
   // Copy static assets
   eleventyConfig.addPassthroughCopy("src/assets/");
@@ -47,10 +47,10 @@ module.exports = function(eleventyConfig) {
 
   // Date filter
   eleventyConfig.addFilter("dateDisplay", (dateObj) => {
-    return new Date(dateObj).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
+    return new Date(dateObj).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric"
     });
   });
   eleventyConfig.addFilter("yearOnlyJS", (dateObj) => {
@@ -97,7 +97,6 @@ module.exports = function(eleventyConfig) {
 
 
   eleventyConfig.addFilter("dump", (obj) => {
-console.log(`here: ${obj}`)
     return util.inspect(obj);
   });
 
@@ -137,18 +136,18 @@ console.log(`here: ${obj}`)
   );
 
   // Minify HTML Output
-  eleventyConfig.addTransform("htmlmin", function (content, outputPath) {
-    // Eleventy 1.0+: use this.inputPath and this.outputPath instead
-    if (isProduction && outputPath && outputPath.endsWith(".html")) {
-      let minified = htmlmin.minify(content, {
-        useShortDoctype: true,
-        removeComments: true,
-        collapseWhitespace: true,
-      });
-      return minified;
-    }
-    return content;
-  });
+  // eleventyConfig.addTransform("htmlmin", function (content, outputPath) {
+  //   // Eleventy 1.0+: use this.inputPath and this.outputPath instead
+  //   if (isProduction && outputPath && outputPath.endsWith(".html")) {
+  //     let minified = htmlmin.minify(content, {
+  //       useShortDoctype: true,
+  //       removeComments: true,
+  //       collapseWhitespace: true,
+  //     });
+  //     return minified;
+  //   }
+  //   return content;
+  // });
 
 
   // REVIEW -- Can we remove these?
@@ -167,10 +166,10 @@ console.log(`here: ${obj}`)
     if (!content) return content;
     const regex = /<(?:styled-image|StyledImage)\s+([^>]*)(?:\/>|><\/(?:styled-image|StyledImage)>)/g;
     return content.replace(regex, (match, attrs) => {
-      const src = attrs.match(/src=["']([^"']+)["']/)?.[1] || '';
-      const alt = attrs.match(/alt=["']([^"']+)["']/)?.[1] || '';
-      const size = attrs.match(/size=["']([^"']+)["']/)?.[1] || 'full';
-      const align = attrs.match(/align=["']([^"']+)["']/)?.[1] || 'center';
+      const src = attrs.match(/src=["']([^"']+)["']/)?.[1] || "";
+      const alt = attrs.match(/alt=["']([^"']+)["']/)?.[1] || "";
+      const size = attrs.match(/size=["']([^"']+)["']/)?.[1] || "full";
+      const align = attrs.match(/align=["']([^"']+)["']/)?.[1] || "center";
       const classes = `styled-image styled-image--${size} styled-image--${align}`;
       return `<figure class="${classes}"><img src="${src}" alt="${alt}" /><figcaption>${alt}</figcaption></figure>`;
     });
@@ -194,7 +193,7 @@ console.log(`here: ${obj}`)
     }
     var url = `${siteData.cloudinaryRootUrl}/image/fetch/${cloudinaryCmds}/${siteData.cloudinarySiteId}/${assetPath}`;
     // console.log(`imgPath-2: '${assetPath}' -- ${url}`);
-    return url
+    return url;
   };
   eleventyConfig.addShortcode("imgPath", function (assetPath, cloudinaryCmds) {
     return imgPath(assetPath, cloudinaryCmds);

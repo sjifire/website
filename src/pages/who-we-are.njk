@@ -1,7 +1,9 @@
 ---
 title: "Who We Are"
 permalink: "/about/who-we-are/index.html"
+layout: false
 ---
+{% extends "default_double_col_page.njk" %}
 
 {% set pageData = who_we_are %}
 {% block main_content %}
@@ -18,7 +20,5 @@ permalink: "/about/who-we-are/index.html"
     </div>
   </section>
 {% endblock %}
-
-{% extends "default_double_col_page.njk" %}
 
 

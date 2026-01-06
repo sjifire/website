@@ -85,7 +85,7 @@ const retrieveCSVReport = async function (
   await page.fill('input[name="username-input"]', username);
   await page.fill('input[type="password"]', password);
   page.screenshot({ path: `./eso_login2_page.${runTime}.png`, fullPage: true });
-  await page.click('#login-button');
+  await page.click("#login-button");
   await page.waitForLoadState("networkidle", { timeout: ESO_TIMEOUT });
   page.screenshot({ path: `./eso_main_page.${runTime}.png`, fullPage: true });
 
@@ -237,7 +237,7 @@ const _processRecords = function (records, startDate, stopDate, dayRange) {
   };
   // loop for every day in the detailed range and set it up with zero.
   // this way we log the days that have no activit.
-  // eslint-disable-next-line
+   
   for (
     let day = new Date(startDate.getTime());
     day <= stopDate;
