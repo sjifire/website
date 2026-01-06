@@ -1,0 +1,21 @@
+---
+mobile_layout_flipped: true
+sidebar: " "
+layout: false
+---
+{% extends "pages.njk" %}
+
+{% block sidebar_content %}
+  <div class="sidebar-block">
+    {% include "call-stats-widget.njk" %}
+  </div>
+{% endblock %}
+
+{% block main_content %}
+{# Pull body content from the editable MDX file #}
+{% for item in collections.contentIncludes %}
+  {% if item.data.contentFor == "incidents" %}
+    {{ item.content | processStyledImages | safe }}
+  {% endif %}
+{% endfor %}
+{% endblock %}

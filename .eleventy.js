@@ -159,7 +159,7 @@ module.exports = function(eleventyConfig) {
     linkify: true,
     typographer: true,
     html: true,
-  });
+  }).use(require("markdown-it-attrs"));
   eleventyConfig.addFilter("markdownify", function (rawString) {
     if(!rawString) return; // sometimes we get an undefined through here
     return mdRender.render(rawString);
