@@ -1,5 +1,5 @@
-{% set pageTitle = (site.site_name if page.url === '/' else title + ' | ' + site.site_name) | safe %}
-{% set pageDsc = (description or site.site_desc) | safe %}
+{%- set pageTitle = (site.site_name if page.url === '/' else title + ' | ' + site.site_name) | safe -%}
+{%- set pageDsc = (description or site.site_desc) | safe -%}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,12 +30,7 @@
     <link rel="preconnect" href="//googletagmanager.com" />
     <link rel="preconnect" href="//clarity.ms/ "/>
 
-  {%- set css -%}
-    {% include "site.css" %}
-  {%- endset -%}
-  <style>
-    {{ css | cssmin | safe }}
-  </style>
+  <link rel="stylesheet" href="/css/site.css">
 </head>
 <body>
 
@@ -73,7 +68,7 @@
         //current url has a #hash in it
       }
 
-      const imgs = [{% for image in homepage.header_image_source %}"{{ site.cloudinaryRootUrl + '/image/fetch' + homepage.header_image_transform + site.rootUrl + '/assets/images/' + image | safe }}"{{ ',' if not loop.last }}{% endfor %}];
+      const imgs = [{% for image in homepage.header_image_source %}"{{ site.cloudinaryRootUrl + '/image/fetch' + homepage.header_image_transform + site.cloudinarySiteId + '/assets/images/' + image | safe }}"{{ ',' if not loop.last }}{% endfor %}];
       const random = Math.floor(Math.random() * imgs.length);
       const image = imgs[random]
       document.getElementById('home-header').style.setProperty('--home-header-bg-image', 'url('+image+')');

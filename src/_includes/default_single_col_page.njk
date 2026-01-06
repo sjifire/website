@@ -1,4 +1,3 @@
-
 {% extends 'base.njk' %}
 
 {% block content %}
@@ -6,11 +5,11 @@
     <h1>
       {{ title | safe }}
     </h1>
-    {% if pageData.preamble %}
+    {% if preamble %}
       <div class="lede">
-        {{ pageData.preamble | markdownify | safe }}
+        {{ preamble | markdownify | safe }}
       </div>
     {% endif %}
-    {{ pageData.body | markdownify | safe }}
+    {{ content | markdownify | processStyledImages | safe }}
   </div>
 {% endblock %}

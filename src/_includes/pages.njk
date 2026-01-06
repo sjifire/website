@@ -1,0 +1,38 @@
+{% extends 'base.njk' %}
+
+{% set main_section %}
+	<h1>
+	  {{ title | safe }}
+	</h1>
+	{% if preamble %}
+	  <div class="lede">
+	    {{ preamble | markdownify | safe }}
+	  </div>
+	{% endif %}
+	{{ content | markdownify | processStyledImages | safe }}
+{% endset %}
+
+{% block content %}
+  {% if sidebar %}
+	  <div class="l-grid l-grid--2col{{ ' flipped' if mobile_layout_flipped === true }}">
+	    <div class="l-grid__main block-content">
+        {{ main_section | safe }}
+
+	      {% block main_content %}
+	        {{ main_content | safe }}
+	      {% endblock %}
+	    </div>
+
+	    <aside class="l-grid__sidebar">
+        {{ sidebar | markdownify | processStyledImages | safe }}
+	      {% block sidebar_content %}
+	        {{ sidebar_content | markdownify | processStyledImages | safe }}
+	      {% endblock %}
+	    </aside>
+	  </div>
+  {% else %}
+    <div class="l-squeezed block-content">
+      {{ main_section | safe }}
+    </div>
+  {% endif %}
+{% endblock %}

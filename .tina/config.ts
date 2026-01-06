@@ -1,9 +1,9 @@
 import { defineConfig } from "tinacms";
 
 export default defineConfig({
-  branch: process.env.TINA_BRANCH || "main",
+  branch:   process.env.TINA_BRANCH || "main",
   clientId: process.env.TINA_CLIENT_ID || "",
-  token: process.env.TINA_TOKEN || "",
+  token:    process.env.TINA_TOKEN || "",
 
   build: {
     outputFolder: "admin",
@@ -12,7 +12,7 @@ export default defineConfig({
 
   media: {
     tina: {
-      mediaRoot: "src/images",
+      mediaRoot: "assets/images",
       publicFolder: "src",
     },
   },
@@ -20,48 +20,172 @@ export default defineConfig({
   schema: {
     collections: [
       {
-        name: "post",
-        label: "Blog Posts",
-        path: "src/posts",
-        format: "md",
+        name: "configBurnStatus",
+        label: "Config: Burn Status",
+        path: "src/_data",
+        format: "json",
+        match: {
+          include: "burn_status",
+        },
+        ui: {
+          allowedActions: {
+            create: false,
+            delete: false,
+          },
+        },
         fields: [
           {
             type: "string",
-            name: "title",
-            label: "Title",
-            isTitle: true,
+            name: "fire_status",
+            label: "Fire Danger Level",
+            options: ["Low", "Moderate", "High", "Very High", "Extreme"],
             required: true,
           },
           {
             type: "datetime",
-            name: "date",
-            label: "Date",
+            name: "burn_season_start",
+            label: "Burn Season Start",
+          },
+          {
+            type: "datetime",
+            name: "burn_season_end",
+            label: "Burn Season End",
+          },
+          {
+            type: "string",
+            name: "burn_ban_status",
+            label: "Residential Burn Permits Status",
+            options: ["Open", "Closed"],
             required: true,
           },
           {
             type: "string",
-            name: "author",
-            label: "Author",
+            name: "commercial_burn_ban_status",
+            label: "Commercial Burn Permits Status",
+            options: ["Open", "Closed"],
             required: true,
           },
           {
-            type: "image",
-            name: "featuredImage",
-            label: "Featured Image",
+            type: "string",
+            name: "rec_campfire_status",
+            label: "Recreational Fires (San Juan County)",
+            options: ["Open", "Restricted", "Closed"],
+            required: true,
           },
           {
             type: "string",
-            name: "excerpt",
-            label: "Excerpt",
+            name: "state_campfire_status",
+            label: "Recreational Fires (State Park & DNR)",
+            options: ["Open", "Restricted", "Closed"],
+            required: true,
+          },
+          {
+            type: "string",
+            name: "np_campfire_status",
+            label: "Recreational Fires (National Parks)",
+            options: ["Open", "Restricted", "Closed"],
+            required: true,
+          },
+        ],
+      },
+      {
+        name: "configSite",
+        label: "Config: Site",
+        path: "src/_data",
+        format: "json",
+        match: {
+          include: "site",
+        },
+        ui: {
+          allowedActions: {
+            create: false,
+            delete: false,
+          },
+        },
+        fields: [
+          {
+            type: "string",
+            name: "site_name",
+            label: "Site Name",
+            required: true,
+          },
+          {
+            type: "string",
+            name: "formal_site_name",
+            label: "Formal Site Name",
+          },
+          {
+            type: "string",
+            name: "site_desc",
+            label: "Site Description",
             ui: {
               component: "textarea",
             },
           },
           {
-            type: "rich-text",
-            name: "body",
-            label: "Body",
-            isBody: true,
+            type: "string",
+            name: "prodUrl",
+            label: "Production URL",
+          },
+          {
+            type: "string",
+            name: "cloudinarySiteId",
+            label: "Cloudinary Site ID",
+          },
+          {
+            type: "string",
+            name: "cloudinaryRootUrl",
+            label: "Cloudinary Root URL",
+          },
+          {
+            type: "boolean",
+            name: "enable_cloudinary_rewrites",
+            label: "Enable Cloudinary Rewrites",
+          },
+          {
+            type: "string",
+            name: "opengraph_image",
+            label: "OpenGraph Image Filename",
+          },
+          {
+            type: "object",
+            name: "address",
+            label: "Address",
+            fields: [
+              {
+                type: "string",
+                name: "street",
+                label: "Street",
+              },
+              {
+                type: "string",
+                name: "city",
+                label: "City",
+              },
+              {
+                type: "string",
+                name: "state",
+                label: "State",
+              },
+              {
+                type: "string",
+                name: "zip",
+                label: "ZIP Code",
+              },
+              {
+                type: "string",
+                name: "phone",
+                label: "Phone",
+              },
+              {
+                type: "string",
+                name: "map",
+                label: "Google Maps Embed URL",
+                ui: {
+                  component: "textarea",
+                },
+              },
+            ],
           },
         ],
       },
@@ -69,7 +193,7 @@ export default defineConfig({
         name: "page",
         label: "Pages",
         path: "src/pages",
-        format: "md",
+        format: "mdx",
         fields: [
           {
             type: "string",
@@ -79,15 +203,61 @@ export default defineConfig({
             required: true,
           },
           {
-            type: "string",
-            name: "permalink",
-            label: "URL Path",
+            type: "rich-text",
+            name: "sidebar",
+            label: "Sidebar"
           },
           {
             type: "rich-text",
             name: "body",
             label: "Body",
             isBody: true,
+            templates: [
+              {
+                name: "StyledImage",
+                label: "Styled Image",
+                ui: {
+                  defaultItem: {
+                    size: "medium",
+                    align: "center",
+                  },
+                },
+                fields: [
+                  {
+                    type: "image",
+                    name: "src",
+                    label: "Image",
+                    required: true,
+                  },
+                  {
+                    type: "string",
+                    name: "alt",
+                    label: "Alt Text"
+                  },
+                  {
+                    type: "string",
+                    name: "size",
+                    label: "Size",
+                    options: [
+                      { value: "small", label: "Small (25%)" },
+                      { value: "medium", label: "Medium (50%)" },
+                      { value: "large", label: "Large (75%)" },
+                      { value: "full", label: "Full Width" },
+                    ],
+                  },
+                  {
+                    type: "string",
+                    name: "align",
+                    label: "Alignment",
+                    options: [
+                      { value: "left", label: "Float Left" },
+                      { value: "center", label: "Center" },
+                      { value: "right", label: "Float Right" },
+                    ],
+                  },
+                ],
+              },
+            ],
           },
         ],
       },

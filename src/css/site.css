@@ -1361,3 +1361,44 @@ select.form-control:focus::-ms-value {
 .btn-secondary:focus svg {
   fill: var(--yellow);
 }
+
+/* Styled Images (TinaCMS) */
+.styled-image {
+  margin: 1.5rem 0;
+}
+
+.styled-image img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.styled-image figcaption {
+  font-size: 0.875rem;
+  color: var(--muted-gray);
+  margin-top: 0.5rem;
+}
+
+/* Sizes */
+.styled-image--small img { max-width: 25%; }
+.styled-image--medium img { max-width: 50%; }
+.styled-image--large img { max-width: 75%; }
+.styled-image--full img { max-width: 100%; }
+
+/* Alignment */
+.styled-image--center {
+  text-align: center;
+}
+.styled-image--center img {
+  margin: 0 auto;
+}
+
+.styled-image--left {
+  float: left;
+  margin: 0 1.5rem 1rem 0;
+}
+
+.styled-image--right {
+  float: right;
+  margin: 0 0 1rem 1.5rem;
+}
