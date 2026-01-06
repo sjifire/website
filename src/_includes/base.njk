@@ -68,7 +68,7 @@
         //current url has a #hash in it
       }
 
-      const imgs = [{% for image in homepage.header_image_source %}"{{ site.cloudinaryRootUrl + '/image/fetch' + homepage.header_image_transform + site.cloudinarySiteId + '/assets/images/' + image | safe }}"{{ ',' if not loop.last }}{% endfor %}];
+      const imgs = [{% for image in header_image_source %}"{{ site.cloudinaryRootUrl + '/image/fetch' + header_image_transform + site.cloudinarySiteId + '/assets/images/' + image | safe }}"{{ ',' if not loop.last }}{% endfor %}];
       const random = Math.floor(Math.random() * imgs.length);
       const image = imgs[random]
       document.getElementById('home-header').style.setProperty('--home-header-bg-image', 'url('+image+')');
