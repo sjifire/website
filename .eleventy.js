@@ -107,7 +107,8 @@ module.exports = function(eleventyConfig) {
 
   eleventyConfig.addFilter("limit", function(array, limit) {
     if(!array) return;
-    return array.slice(0, limit);
+    if(!limit) return array;
+    return array.slice(0, parseInt(limit, 10));
   });
 
   eleventyConfig.addFilter("pluckByValue", function (arr, value, attr) {

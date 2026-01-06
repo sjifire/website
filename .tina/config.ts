@@ -190,10 +190,154 @@ export default defineConfig({
         ],
       },
       {
+        name: "emergencyPersonnel",
+        label: "Emergency Personnel",
+        path: "src/pages/about",
+        format: "mdx",
+        match: {
+          include: "emergency-personnel",
+        },
+        ui: {
+          allowedActions: {
+            create: false,
+            delete: false,
+          },
+        },
+        fields: [
+          {
+            type: "string",
+            name: "title",
+            label: "Title",
+            isTitle: true,
+            required: true,
+          },
+          {
+            type: "object",
+            name: "personnel",
+            label: "Personnel",
+            list: true,
+            ui: {
+              itemProps: (item) => ({
+                label: item?.first_name && item?.last_name
+                  ? `${item.first_name} ${item.last_name}`
+                  : "New Person",
+              }),
+            },
+            fields: [
+              {
+                type: "string",
+                name: "first_name",
+                label: "First Name",
+                required: true,
+              },
+              {
+                type: "string",
+                name: "last_name",
+                label: "Last Name",
+                required: true,
+              },
+              {
+                type: "string",
+                name: "title",
+                label: "Title",
+              },
+              {
+                type: "string",
+                name: "rank",
+                label: "Rank",
+                options: ["Chief", "Division Chief", "Battalion Chief", "Captain", "Lieutenant"],
+              },
+              {
+                type: "string",
+                name: "staff_type",
+                label: "Type",
+                options: ["staff", "volunteer"],
+                required: true,
+              },
+              {
+                type: "string",
+                name: "roles",
+                label: "Roles",
+                options: [ "FireFighter", "Wildland Firefighter", "EMT", "Medic", "Apparatus Operator",  "Marine Crew", "Support", "Admin"],
+                list: true,
+              },
+              {
+                type: "image",
+                name: "photo",
+                label: "Photo",
+              },
+            ],
+          },
+          {
+            type: "rich-text",
+            name: "body",
+            label: "Body",
+            isBody: true,
+          },
+        ],
+      },
+      {
+        name: "homepage",
+        label: "Homepage",
+        path: "src/pages",
+        format: "mdx",
+        match: {
+          include: "homepage",
+        },
+        ui: {
+          allowedActions: {
+            create: false,
+            delete: false,
+          },
+        },
+        fields: [
+          {
+            type: "string",
+            name: "title",
+            label: "Title",
+            isTitle: true,
+            required: true,
+          },
+          {
+            type: "number",
+            name: "number_news_stories",
+            label: "Number of News Stories to Display",
+          },
+          {
+            type: "object",
+            name: "image_gallery",
+            label: "Image Gallery",
+            list: true,
+            ui: {
+              itemProps: (item) => ({
+                label: item?.image_alt || item?.image || "New Image",
+              }),
+            },
+            fields: [
+              {
+                type: "image",
+                name: "image",
+                label: "Image",
+                required: true,
+              },
+              {
+                type: "string",
+                name: "image_alt",
+                label: "Alt Text",
+                required: true,
+              },
+            ],
+          },
+        ],
+      },
+      {
         name: "page",
         label: "Pages",
         path: "src/pages",
         format: "mdx",
+        match: {
+          exclude: "{about/emergency-personnel,homepage}",
+        },
         fields: [
           {
             type: "string",
