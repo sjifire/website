@@ -1,0 +1,26 @@
+---
+title: "Burn Regulations & Permits"
+permalink: "/services/burn-permits/index.html"
+mobile_layout_flipped: true
+---
+
+{% set pageData = burn_permits %}
+
+{% block sidebar_content %}
+  <div class="sidebar-block">
+    {% include "burn-status-widget.njk" %}
+  </div>
+  <div class="sidebar-block">
+    <h4 class="sidebar__heading">Residential Burn Permit</h4>
+    <a class="btn btn-secondary" href="https://www.sanjuanco.com/1161/Apply-for-Burn-Permits">
+      Purchase <svg><use xlink:href="#right-arrow"></svg>
+    </a>
+  </div>
+  <div class="sidebar-block">
+    <h4 class="sidebar__heading">Commercial Burn Inspection</h4>
+    <a class="btn btn-secondary" href="https://www.sanjuanco.com/FormCenter/Fire-Marshal-12/Request-an-Inspection-55">
+      Schedule <svg><use xlink:href="#right-arrow"></svg>
+    </a>
+  </div>
+{% endblock %}
+{% extends "default_double_col_page.njk" %}

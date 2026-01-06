@@ -1,0 +1,77 @@
+<aside class="site-header__911">
+  <span>Emergency? Call <em>911</em></span>
+</aside>
+
+<nav class="rap">
+  <ul class="menu">
+    <li class="logo">
+      <a href="/"><img src="{% imgPath '/assets/sjifire-logo-clear.png' %}" width="320" height="317" alt="San Juan Island Fire and Rescue Logo"></a>
+    </li>
+    <li class="item has-submenu{{ ' active' if page.url.includes('/about/') }}">
+      <a tabindex="0">About</a>
+      <ul class="submenu">
+        <li class="subitem"><a href="/about/who-we-are/">Who We Are</a></li>
+        <li class="subitem"><a href="/about/join/">Join Us</a></li>
+        <li class="subitem"><a href="/about/emergency-personnel/">Emergency Personnel</a></li>
+        <li class="subitem"><a href="/about/key-information/">Key Information</a></li>
+        <li class="subitem"><a href="/about/incidents/">Incidents</a></li>
+        <li class="subitem"><a href="/about/governance/">Governance</a></li>
+        <li class="subitem"><a href="/about/levy-2024/">2024 Levy Renewal</a></li>
+      </ul>
+{#
+        <li class="subitem"><a href="#">Staff & Volunteers</a></li>
+        <li class="subitem"><a href="#">Stations</a></li>
+        <li class="subitem"><a href="#">Join Our Team</a></li>
+
+#}
+    </li>
+    <li class="item has-submenu{{ ' active' if page.url.includes('/news/') }}">
+      <a tabindex="0">News</a>
+      <ul class="submenu">
+        <li class="subitem"><a href="/news/">News</a></li>
+        <li class="subitem"><a href="/news/media-releases/">Media Releases</a></li>
+      </ul>
+    </li>
+    <li class="item has-submenu{{ ' active' if page.url.includes('/services/') }}">
+      <a tabindex="0">Services</a>
+      <ul class="submenu">
+        <li class="subitem"><a href="/services/emergency-services/">24/7 Emergency Services</a></li>
+        <li class="subitem"><a href="/services/burn-permits/">Burn Permits</a></li>
+        <li class="subitem"><a href="/services/firewise/">Firewise</a></li>
+        <li class="subitem"><a href="/services/knoxbox/">KnoxBox</a></li>
+        <li class="subitem"><a href="/services/fire-alarms/">Smoke and CO Alarms</a></li>
+      </ul>
+    {% if join.header_display == 'Show' %}
+    <li class="item item--highlight">
+      <a href="/about/join/">Join Us</a>
+    </li>
+    {% endif %}
+    <li class="item{{ ' active' if page.url.includes('/contact/') }}">
+      <a href="/contact">Contact</a>
+    </li>
+    <li class="toggle">
+      <a href="#"><svg><use xlink:href='#menu' /></svg></a>
+    </li>
+  </ul>
+</nav>
+
+{% if page.url === '/' or page.fileSlug === 'news-article' %}
+  <header class="page-header page-header--{{ 'home' if page.url === '/' else 'news' }}">
+    <div class="rap">
+      <article class="l-squeezed">
+          <h1>
+            {{ title | safe if page.url === '/' else post.title | safe }}
+          </h1>
+          {% if page.fileSlug === 'news-article' %}
+            <time datetime="{{ post.date | htmlDateStringISO }}" pubdate="pubdate">
+              {{ post.date | postDateVerboseISO }}
+            </time>
+          {% endif %}
+          <div class="lede">
+            {{ (homepage.preamble if page.url === '/' else post.lede) | markdownify | safe }}
+          </div>
+      </article>
+    </div>
+  </header>
+{% endif %}
+

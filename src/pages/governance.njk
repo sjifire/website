@@ -1,0 +1,75 @@
+---
+title: "Governance"
+permalink: "/about/governance/index.html"
+---
+
+{% set pageData = governance %}
+
+{% block sidebar_content %}
+  {% if governance.important_documents.length %}
+    <div class="sidebar-block">
+      <h4 class="sidebar__heading">Important Documents</h4>
+      <ul>
+        {% for doc in governance.important_documents %}
+          <li>
+            <a href="/assets/docs/{{ doc.file }}">
+              {{ doc.title }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+  <div class="sidebar-block">
+    <h4 class="sidebar__heading">Upcoming Meetings</h4>
+    {% if collections.futureMeetings.length %}
+      <dl class="sidebar__desc-list">
+        {% for meeting in collections.futureMeetings %}
+          <dt>
+            {{ meeting.date | postDateTerseNoYearISO }} - {{ meeting.title }}
+          </dt>
+          <dd>
+            <ul>
+              {% for doc in meeting.documents %}
+                <li>
+                  <a href="/assets/docs/{{ doc.file }}" target="_blank">
+                    {{ doc.title }}
+                  </a>
+                </li>
+              {% endfor %}
+            </ul>
+          </dd>
+        {% endfor %}
+      </dl>
+    {% else %}
+      <p>Next regular scheduled board meeting is on <strong><span id='next-board-meeting'>{% nextBoardMeetingDate %}</span> at 3pm</strong>.</p>
+    {% endif %}
+  </div>
+  <div class="sidebar-block">
+    {% for year, set in collections.pastMeetings | groupby('year') | dictsort | reverse %}
+      <details class="sidebar__accordion" {{ 'open' if loop.first }}>
+        <summary class="sidebar__heading">Past Meetings: {{ year }}</summary>
+        <dl class="sidebar__desc-list">
+          {% for meeting in set %}
+            <dt>
+              {{ meeting.date | postDateTerseNoYearISO }} - {{ meeting.title }}
+            </dt>
+            <dd>
+              <ul>
+                {% for doc in meeting.documents %}
+                  <li>
+                    <a href="/assets/docs/{{ doc.file }}">
+                      {{ doc.title }}
+                    </a>
+                  </li>
+                {% endfor %}
+              </ul>
+            </dd>
+          {% endfor %}
+        </ul>
+      </details>
+    {% endfor %}
+  </div>
+{% endblock %}
+{% extends "default_double_col_page.njk" %}
+

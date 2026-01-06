@@ -1,26 +1,105 @@
+{% set pageTitle = (site.site_name if page.url === '/' else title + ' | ' + site.site_name) | safe %}
+{% set pageDsc = (description or site.site_desc) | safe %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ title }} | My Site</title>
-    <link rel="stylesheet" href="/css/style.css">
+  {# preload font? #}
+  <meta charset="utf-8">
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+  <title>{{ pageTitle }}</title>
+  {# meta-desc #}
+    <meta name="description" content="{{ pageDsc }}" />
+  {# icon tags #}
+    <link rel="icon" type="image/png" href="{% imgPath '/assets/sjifire-logo-clear.png' %}" />
+  {# og #}
+    <meta property="og:url" content="{{ site.prodUrl + page.url}}" key="ogurl" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="
+      {%- if page.fileSlug === 'news-article' and post.featured_image and post.featured_image.source %}
+        {%- imgPath '/assets/images/' + post.featured_image.source, 'f_auto,q_auto:good,c_fill,w_1200,h_630' -%}
+      {% else %}
+        {%- imgPath '/assets/images/' + site.opengraph_image, 'f_auto,q_auto:good,c_fill,w_1200,h_630' -%}
+      {% endif -%}" key="ogimage" />
+    <meta property="og:site_name" content="{{site.site_name}}" key="ogsitename" />
+    <meta property="og:title" content="{{pageTitle}}" key="ogtitle" />
+    <meta property="og:description" content="{{ pageDsc }}" key="ogdesc" />
+    <link rel="preconnect" href="//google-analytics.com" />
+    <link rel="preconnect" href="//googleapis.com" />
+    <link rel="preconnect" href="//gstatic.com" />
+    <link rel="preconnect" href="//googletagmanager.com" />
+    <link rel="preconnect" href="//clarity.ms/ "/>
+
+  {%- set css -%}
+    {% include "site.css" %}
+  {%- endset -%}
+  <style>
+    {{ css | cssmin | safe }}
+  </style>
 </head>
 <body>
-    <header>
-        <nav>
-            <a href="/">Home</a>
-            <a href="/blog/">Blog</a>
-            <a href="/about/">About</a>
-        </nav>
-    </header>
 
-    <main>
+  {% include "svg-sprite.svg" %}
+
+  <header id="home-header" class="site-header{{ ' site-header--home' if page.url === '/'}}" role="banner">
+    {% include "header.njk" %}
+  </header>
+
+  {% if page.fileSlug === 'news-article' and post.featured_image and post.featured_image.source != "" %}
+    <figure class="featured__media">
+      <img src="{% imgPath '/assets/images/' + post.featured_image.source, 'f_auto,c_limit,w_900,h_500' %}" alt="{{ post.featured_image.alt }}" loading="eager">
+    </figure>
+  {% endif %}
+
+  <main id='site-main' class="site-main{{ ' site-main--overlap' if page.url === '/' }}" role="main">
+    <div class="rap">
+      {% block content %}
         {{ content | safe }}
-    </main>
+      {% endblock %}
+    </div>
+  </main>
 
-    <footer>
-        <p>&copy; 2024 My Organization</p>
-    </footer>
+  <footer class="site-footer" role="contentinfo">
+    <div class="rap">
+      {% include "footer.njk" %}
+    </div>
+  </footer>
+  {% set js %}
+    {% include "nav-js.njk" %}
+    {% if page.url === '/' %}
+      if (location.href.indexOf("#invite_token") != -1) {
+        var urlSplit = document.URL.split("#");
+        window.location = `/admin/#${urlSplit[1]}`;
+        //current url has a #hash in it
+      }
+
+      const imgs = [{% for image in homepage.header_image_source %}"{{ site.cloudinaryRootUrl + '/image/fetch' + homepage.header_image_transform + site.rootUrl + '/assets/images/' + image | safe }}"{{ ',' if not loop.last }}{% endfor %}];
+      const random = Math.floor(Math.random() * imgs.length);
+      const image = imgs[random]
+      document.getElementById('home-header').style.setProperty('--home-header-bg-image', 'url('+image+')');
+    {% endif %}
+
+    let navItems = Array.from(document.querySelectorAll('.gallery-nav__item'));
+
+    const handleClick = (e) => {
+      e.preventDefault();
+      const activeNav = document.querySelector('.gallery-nav__item.active');
+      const activeShowcase = document.querySelector('.gallery-showcase__item.active');
+      const target = document.getElementById(e.currentTarget.dataset.targetId)
+      if(activeNav){
+        activeNav.classList.remove('active');
+        activeShowcase.classList.remove('active');
+      }
+      e.currentTarget.classList.add('active');
+      target.classList.add('active');
+    }
+
+    navItems.forEach(node => {
+      node.addEventListener('click', handleClick)
+    });
+  {% endset %}
+  <script defer>
+    {{ js | jsmin | safe }}
+  </script>
 </body>
 </html>

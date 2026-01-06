@@ -1,0 +1,45 @@
+---json
+{
+  "permalink": "/news/feed.xml",
+  "metadata": {
+    "title": "SJIF&R News & Announcements",
+    "subtitle": "Latest happenings and news from San Juan Island Fire & Rescue",
+    "url": "https://www.sjifire.org",
+    "feedUrl": "https://www.sjifire.org/news/feed.xml",
+    "author": {
+      "name": "Public Information Officer",
+      "email": "pio@sjifire.org"
+    }
+  }
+}
+---
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>{{ metadata.title}}</title>
+  <subtitle>{{ metadata.subtitle }}</subtitle>
+  <link href="{{ metadata.feedUrl }}" rel="self"/>
+  <link href="{{ metadata.url }}/"/>
+  <updated>{{ (posts | reverse | first).date | postDateToRfc3339 }}</updated>
+  <id>{{ metadata.url }}/</id>
+  <author>
+    <name>{{ metadata.author.name }}</name>
+    <email>{{ metadata.author.email }}</email>
+  </author>
+  {%- for post in posts | reverse -%}
+  {% set absolutePostUrl %}{{metadata.url}}{{ post.url }}/{% endset %}
+  <entry>
+    <title>{{ post.title | escape }}</title>
+    <link href="{{ absolutePostUrl }}"/>
+    <updated>{{ post.date | postDateToRfc3339 }}</updated>
+    <id>{{ absolutePostUrl }}</id>
+    <category term="{{ post.post_type }}"/>
+    <summary type="html">
+      {{- post.lede | markdownify | htmlToAbsoluteUrls(metadata.url) | escape -}}
+    </summary>
+    <content type="html">
+      {{- post.lede | markdownify | htmlToAbsoluteUrls(metadata.url) | escape -}}
+      {{- post.body | markdownify | htmlToAbsoluteUrls(metadata.url) | escape -}}
+    </content>
+  </entry>
+  {%- endfor %}
+</feed>

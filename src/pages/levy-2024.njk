@@ -1,0 +1,27 @@
+---
+title: "Fire Levy Renewal FAQ (Nov. 2024)"
+permalink: "/about/levy-2024/index.html"
+---
+
+{% set pageData = levy_2024 %}
+
+{% block sidebar_content %}
+  <div class="sidebar-block">
+    <h4 class="sidebar__heading">Documents & Resources</h4>
+    <ul>
+      {% for doc in levy_2024.documents %}
+        <li>
+          {%- if doc.file %}
+          <a href="/assets/docs/{{ doc.file }}">
+          {%- else %}
+          <a href="{{ doc.url }}">
+          {% endif -%}
+            {{ doc.title }}
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endblock %}
+
+{% extends "default_double_col_page.njk" %}

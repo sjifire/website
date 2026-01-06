@@ -1,0 +1,107 @@
+<table class="widget widget--station-stats">
+  <thead class="widget__header">
+    <th colspan="2">
+      <div class="flex">
+        <svg><use xlink:href='#stats' /></svg>
+        <div>
+          <h4>
+            SJIF&R Statistics
+          </h4>
+          <div class="timeframe">
+            Last 30 days
+          </div>
+        </div>
+      </div>
+    </th>
+  </thead>
+  <tbody class="widget__body">
+    {% set cls = cycler("odd", "even") %}
+    <tr class="{{ cls.next() }}">
+      <th>
+        Calls
+      </th>
+      <td>
+        {{ stats.incident_stats.num_incidents }}
+      </td>
+    </tr>
+    <tr class="{{ cls.next() }}">
+      <th>
+        Calls
+        <aside>Last 365 Days</aside>
+      </th>
+      <td>
+        {{ stats.incident_stats.num_incidents_last_365_days | formatNumber }}
+      </td>
+    </tr>
+    <tr class="{{ cls.next() }}">
+      <th>
+        Reaction Time
+        <aside>Seconds</aside>
+      </th>
+      <td>
+        {{ stats.unit_time_stats.first_unit_reaction.median }}
+      </td>
+    </tr>
+    <tr class="{{ cls.next() }}">
+      <th rowspan=3>
+        Travel Time
+        <aside>Minutes (% of calls)</aside>
+      </th>
+      <td>
+        {% if stats.region_stats.central and stats.region_stats.central.num_incidents > 0 -%}
+          {{ (stats.region_stats.central.unit_travel_time.median/60) | round(1) }}
+          <aside>Central ({{((stats.region_stats.central.num_incidents/stats.incident_stats.num_incidents) * 100) | round }}%)</aside>
+        {% else %}
+           --
+          <aside>Central (0%)</aside>
+        {% endif -%}
+      </td>
+    </tr>
+    <tr class="{{ cls.next() }}">
+      <td>
+        {% if stats.region_stats.south and stats.region_stats.south.num_incidents > 0 -%}
+          {{ (stats.region_stats.south.unit_travel_time.median/60) | round(1) }}
+          <aside>South ({{((stats.region_stats.south.num_incidents/stats.incident_stats.num_incidents) * 100) | round }}%)</aside>
+        {% else %}
+           --
+          <aside>South (0%)</aside>
+        {% endif -%}
+      </td>
+    </tr>
+    <tr class="{{ cls.next() }}">
+      <td>
+        {% if stats.region_stats.north and stats.region_stats.north.num_incidents > 0 -%}
+          {{ (stats.region_stats.north.unit_travel_time.median/60) | round(1) }}
+          <aside>North ({{((stats.region_stats.north.num_incidents/stats.incident_stats.num_incidents) * 100) | round }}%)</aside>
+        {% else %}
+           --
+          <aside>North (0%)</aside>
+        {% endif -%}
+      </td>
+    </tr>
+    <tr class="{{ cls.next() }}">
+      <th>
+        Responder Time on Calls
+        <aside>Minutes</aside>
+      </th>
+      <td>
+        {{ (stats.personnel_stats.time_on_incidents.sum/60) | round | formatNumber }}
+      </td>
+    </tr>
+    <tr class="{{ cls.next() }}">
+      <th>
+        Unique Responders
+      </th>
+      <td>
+        {{ stats.personnel_stats.num_unique_responders }}
+      </td>
+    </tr>
+  </tbody>
+  {% if page.url === '/' %}
+    <tfoot class="widget__foot">
+      <td colspan="2">
+        <a href="/about/incidents/">More Info »</a>
+      </td>
+    </tfoot>
+  {% endif %}
+</table>

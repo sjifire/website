@@ -1,0 +1,86 @@
+---
+title: "Questions or Comments?"
+permalink: "/contact/index.html"
+---
+
+{% extends 'base.njk' %}
+
+{% block content %}
+  <div class="l-grid l-grid--2col">
+    <div class="l-grid__main block-content">
+      <h1>
+        {{ title | safe }}
+      </h1>
+      {{ contact.body | markdownify | safe }}
+      <!-- form disabled
+      <form name="contact" method="POST" netlify-honeypot="bot-field" data-netlify="true" action="/thank-you/">
+        <p class="sr-only">
+          <label>Don't fill this out if you're human: <input name="bot-field" /></label>
+        </p>
+        <div>
+          <label for="name">
+            Name
+          </label>
+          <input id="name" type="text" name="name" class="form-control" required>
+          <label for="email" style="margin-top:1.5rem;">
+            Email Address
+          </label>
+          <input id="email" type="email" name="email-address" class="form-control" required>
+          <label for="inquiry_category" required style="margin-top:1.5rem;">
+            Inquiry Category
+          </label>
+          <select id="inquiry_category" name="inquiry_category" class="form-control">
+            <option value="general" selected>General Inquiry</option>
+            <option value="feedback">Feedback & Concerns</option>
+            <option value="fire_safety">Fire Safety & Prevention</option>
+            <option value="med_classes">CPR & First Aid Classes</option>
+            <option value="pub_ed">Public Education & Trainings</option>
+            <option value="media">Media</option>
+            <option value="opportunities">Volunteer & Career Opportunities</option>
+          </select>
+          <label for="message" required style="margin-top:1.5rem;">
+            Message
+          </label>
+          <textarea id="message" name="message" rows="5" class="form-control" required></textarea>
+          <input type="hidden" id="subject" name="subject" value="Website Contact Form Submission">
+        </div>
+        <div style="margin-top:1.5rem;">
+          <button type="submit" class="btn btn-primary">
+            Send
+          </button>
+        </div>
+      </form>
+      -->
+    </div>
+    <aside class="l-grid__sidebar">
+      <div class="sidebar-block">
+        <h4 class="sidebar__heading">Emergency: CALL 911</h4>
+      </div>
+      <div class="sidebar-block">
+        <h4 class="sidebar__heading">Address</h4>
+        <address>
+          San Juan County Fire District 3<br>
+          1011 Mullis Street<br>
+          Friday Harbor, WA 98250
+        </address>
+        <address>
+          Office: <a href="tel:+13603785334">(360) 378-5334</a><br/>
+          Fax: (360) 378-2591<br/>
+          Dispatch Non Emergency: <a href="tel:+13603784151">(360) 378-4151</a>
+        </address>
+      </div>
+      <div class="sidebar-block">
+        <h4 class="sidebar__heading">Office Hours</h4>
+        <p>
+          8 a.m. to 4 p.m., Monday through Friday<br/>
+          Except Holidays
+        </p>
+      </div>
+      <div class="sidebar-block">
+        <figure class="embed-responsive embed-responsive-16by9">
+          <iframe title="HQ location" src="{{ site.address.map }}" loading="lazy"></iframe>
+        </figure>
+      </div>
+    </aside>
+  </div>
+{% endblock %}

@@ -1,0 +1,14 @@
+---
+title: "Incidents"
+permalink: "/about/incidents/index.html"
+mobile_layout_flipped: true
+---
+
+{% set pageData = incidents %}
+
+{% block sidebar_content %}
+  <div class="sidebar-block">
+    {% include "call-stats-widget.njk" %}
+  </div>
+{% endblock %}
+{% extends "default_double_col_page.njk" %}
