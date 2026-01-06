@@ -1,44 +1,34 @@
 <nav class="footer-nav">
-  <dl class="footer-navgroup">
-    <dt class="footer-heading">About</dt>
-    <dd class="footer-navlink"><a href="/about/who-we-are/">Who We Are</a></dd>
-    <dd class="footer-navlink"><a href="/about/join/">Join Us</a></dd>
-    <dd class="footer-navlink"><a href="/about/emergency-personnel/">Emergency Personnel</a></dd>
-    <dd class="footer-navlink"><a href="/about/key-information/">Key Information</a></dd>
-    <dd class="footer-navlink"><a href="/about/incidents/">Incidents</a></dd>
-    <dd class="footer-navlink"><a href="/about/governance/">Governance</a></dd>
-    <dd class="footer-navlink"><a href="/about/levy-2024/">2024 Levy Renewal</a></dd>
-    <dd class="footer-navlink"><a href="/disclaimer/">Disclaimer</a></dd>
-    <dd class="footer-navlink"><a href="https://www.office.com/?auth=2">Member Login</a></dd>
-  </dl>
-
-  <dl class="footer-navgroup">
-    <dt class="footer-heading">News</dt>
-    <dd class="footer-navlink"><a href="/news/">News & Advisories</a></dd>
-    <dd class="footer-navlink"><a href="/news/media-releases/">Media Releases</a></dd>
-    <dd class="footer-navlink"><a href="/news/feed.xml">RSS Feed</a></dd>
-    {# <dd class="footer-navlink"><a href="/news/">Media Releases</a></dd> #}
-    {# <dd class="footer-navlink"><a href="/news/">Videos and Photos</a></dd> #}
-  </dl>
-
-  <dl class="footer-navgroup">
-    <dt class="footer-heading">Services</dt>
-    <dd class="footer-navlink"><a href="/services/emergency-services/">24/7 Emergency Services</a></dd>
-    <dd class="footer-navlink"><a href="/services/burn-permits/">Burn Permits</a></dd>
-    <dd class="footer-navlink"><a href="/services/firewise/">Firewise</a></dd>
-    <dd class="footer-navlink"><a href="/services/knoxbox/">KnoxBox</a></dd>
-    <dd class="footer-navlink"><a href="/services/fire-alarms/">Smoke & CO Alarms</a></dd>
-  </dl>
-
-  <dl class="footer-navgroup">
-    <dt class="footer-heading">Contact</dt>
-    <dd class="footer-navlink"><a href="/contact/">Contact Form</a></dd>
-    <dd class="footer-navlink"><a href="https://www.facebook.com/SJIFire/">Facebook</a></dd>
-    <dd class="footer-navlink"><a href="https://www.instagram.com/sjifire/">Instagram</a></dd>
-  </dl>
+  {% for item in nav %}
+    {% if item.children and item.children.length > 0 %}
+      <dl class="footer-navgroup">
+        <dt class="footer-heading">{{ item.label }}</dt>
+        {% for child in item.children %}
+          <dd class="footer-navlink"><a href="{{ child.url }}">{{ child.nav_title or child.label }}</a></dd>
+        {% endfor %}
+        {% if item.label == "News" %}
+          <dd class="footer-navlink"><a href="/news/feed.xml"><svg class="footer-icon"><use xlink:href="#rss"></use></svg> RSS Feed</a></dd>
+        {% endif %}
+      </dl>
+    {% elif item.url %}
+      <dl class="footer-navgroup">
+        <dt class="footer-heading">{{ item.label }}</dt>
+        <dd class="footer-navlink"><a href="{{ item.url }}">{{ item.label }}</a></dd>
+        {% if item.label == "Contact" %}
+          <dd class="footer-navlink">
+            <a href="https://www.facebook.com/SJIFire/"><svg class="footer-icon"><use xlink:href="#facebook"></use></svg> Facebook</a>
+          </dd>
+          <dd class="footer-navlink">
+            <a href="https://www.instagram.com/sjifire/"><svg class="footer-icon"><use xlink:href="#instagram"></use></svg> Instagram</a>
+          </dd>
+        {% endif %}
+      </dl>
+    {% endif %}
+  {% endfor %}
 
   <dl class="footer-navgroup">
     <dt class="footer-heading">Resources</dt>
+    <dd class="footer-navlink"><a href="https://www.office.com/?auth=2">Member Login</a></dd>
     <dd class="footer-navlink"><a href="https://www.islandsready.org/">SJC Department of Emergency Management</a></dd>
     <dd class="footer-navlink"><a href="https://www.sanjuanco.com/418/Community-Health">SJC Community Health</a></dd>
     <dd class="footer-navlink"><a href="https://www.sanjuanco.com/1088/Fire-Marshal">SJC Fire Marshal</a></dd>
@@ -47,7 +37,7 @@
 </nav>
 
 <aside class="footer-legal">
-  <p>&copy; {{ helpers.buildTime | yearOnlyJS }} {{ site.site_name | safe }}</p>
+  <p>&copy; {{ helpers.buildTime | yearOnlyJS }} {{ site.site_name | safe }} | <a href="/disclaimer/">Disclaimer</a></p>
   <address>
     San Juan County Fire District 3, 1011 Mullis Street, Friday Harbor, WA 98250<br>
     Office: <a href="tel:(360) 378-5334">(360) 378-5334</a> | Fax: (360) 378-2591 | Dispatch Non Emergency: <a href="tel:(360) 378-4151">(360) 378-4151</a>
