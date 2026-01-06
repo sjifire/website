@@ -203,6 +203,14 @@ export default defineConfig({
             required: true,
           },
           {
+            type: "boolean",
+            name: "draft",
+            label: "Draft (hide from site)",
+            ui: {
+              defaultValue: false,
+            },
+          },
+          {
             type: "rich-text",
             name: "sidebar",
             label: "Sidebar"
