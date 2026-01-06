@@ -24,6 +24,10 @@ module.exports = {
 			if (data.permalink === false || data.layout === false) {
 				return false;
 			}
+			// Respect explicit layout in frontmatter
+			if (data.layout) {
+				return data.layout;
+			}
 			return "pages.njk";
 		}
 	}
