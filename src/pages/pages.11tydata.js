@@ -1,13 +1,7 @@
-const isProduction = process.env.ELEVENTY_ENV === "production";
-
 module.exports = {
 	permalink: function (data) {
 		// Respect explicit permalink: false in frontmatter
 		if (data.permalink === false) {
-			return false;
-		}
-		// Hide drafts in production
-		if (data.draft && isProduction) {
 			return false;
 		}
 		var url = data.page.filePathStem;

@@ -7,48 +7,22 @@
     <li class="logo">
       <a href="/"><img src="{% imgPath '/assets/sjifire-logo-clear.png' %}" width="320" height="317" alt="San Juan Island Fire and Rescue Logo"></a>
     </li>
-    <li class="item has-submenu{{ ' active' if page.url.includes('/about/') }}">
-      <a tabindex="0">About</a>
-      <ul class="submenu">
-        <li class="subitem"><a href="/about/who-we-are/">Who We Are</a></li>
-        <li class="subitem"><a href="/about/join/">Join Us</a></li>
-        <li class="subitem"><a href="/about/emergency-personnel/">Emergency Personnel</a></li>
-        <li class="subitem"><a href="/about/key-information/">Key Information</a></li>
-        <li class="subitem"><a href="/about/incidents/">Incidents</a></li>
-        <li class="subitem"><a href="/about/governance/">Governance</a></li>
-        <li class="subitem"><a href="/about/levy-2024/">2024 Levy Renewal</a></li>
-      </ul>
-{#
-        <li class="subitem"><a href="#">Staff & Volunteers</a></li>
-        <li class="subitem"><a href="#">Stations</a></li>
-        <li class="subitem"><a href="#">Join Our Team</a></li>
-
-#}
-    </li>
-    <li class="item has-submenu{{ ' active' if page.url.includes('/news/') }}">
-      <a tabindex="0">News</a>
-      <ul class="submenu">
-        <li class="subitem"><a href="/news/">News</a></li>
-        <li class="subitem"><a href="/news/media-releases/">Media Releases</a></li>
-      </ul>
-    </li>
-    <li class="item has-submenu{{ ' active' if page.url.includes('/services/') }}">
-      <a tabindex="0">Services</a>
-      <ul class="submenu">
-        <li class="subitem"><a href="/services/emergency-services/">24/7 Emergency Services</a></li>
-        <li class="subitem"><a href="/services/burn-permits/">Burn Permits</a></li>
-        <li class="subitem"><a href="/services/firewise/">Firewise</a></li>
-        <li class="subitem"><a href="/services/knoxbox/">KnoxBox</a></li>
-        <li class="subitem"><a href="/services/fire-alarms/">Smoke and CO Alarms</a></li>
-      </ul>
-    {% if join.header_display == 'Show' %}
-    <li class="item item--highlight">
-      <a href="/about/join/">Join Us</a>
-    </li>
-    {% endif %}
-    <li class="item{{ ' active' if page.url.includes('/contact/') }}">
-      <a href="/contact">Contact</a>
-    </li>
+    {% for item in nav %}
+      {% if item.children and item.children.length > 0 %}
+        <li class="item has-submenu{{ ' active' if page.url.includes('/' + item.folder + '/') }}">
+          <a tabindex="0">{{ item.label }}</a>
+          <ul class="submenu">
+            {% for child in item.children %}
+              <li class="subitem"><a href="{{ child.url }}">{{ child.nav_title or child.label }}</a></li>
+            {% endfor %}
+          </ul>
+        </li>
+      {% elif item.url %}
+        <li class="item{{ ' active' if page.url.includes(item.url) }}">
+          <a href="{{ item.url }}">{{ item.label }}</a>
+        </li>
+      {% endif %}
+    {% endfor %}
     <li class="toggle">
       <a href="#"><svg><use xlink:href='#menu' /></svg></a>
     </li>
@@ -68,10 +42,9 @@
             </time>
           {% endif %}
           <div class="lede">
-            {{ (homepage.preamble if page.url === '/' else post.lede) | markdownify | safe }}
+            {{ (preamble if page.url === '/' else post.lede) | markdownify | safe }}
           </div>
       </article>
     </div>
   </header>
 {% endif %}
-

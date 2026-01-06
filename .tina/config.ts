@@ -89,6 +89,80 @@ export default defineConfig({
         ],
       },
       {
+        name: "configNavigation",
+        label: "Config: Navigation",
+        path: "src/_data",
+        format: "json",
+        match: {
+          include: "navigation",
+        },
+        ui: {
+          allowedActions: {
+            create: false,
+            delete: false,
+          },
+        },
+        fields: [
+          {
+            type: "object",
+            name: "items",
+            label: "Menu Items",
+            list: true,
+            ui: {
+              itemProps: (item) => ({
+                label: item?.label || "New Item",
+              }),
+            },
+            fields: [
+              {
+                type: "string",
+                name: "label",
+                label: "Label",
+                required: true,
+              },
+              {
+                type: "string",
+                name: "folder",
+                label: "Auto-populate from folder",
+                description: "Folder name (e.g., 'about', 'services') to auto-populate children from pages",
+              },
+              {
+                type: "string",
+                name: "url",
+                label: "URL",
+                description: "Direct link URL (for items without dropdown)",
+              },
+              {
+                type: "object",
+                name: "children",
+                label: "Static Children",
+                description: "Manual child links (used when folder is not set)",
+                list: true,
+                ui: {
+                  itemProps: (item) => ({
+                    label: item?.label || "New Link",
+                  }),
+                },
+                fields: [
+                  {
+                    type: "string",
+                    name: "label",
+                    label: "Label",
+                    required: true,
+                  },
+                  {
+                    type: "string",
+                    name: "url",
+                    label: "URL",
+                    required: true,
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+      {
         name: "configSite",
         label: "Config: Site",
         path: "src/_data",
@@ -347,12 +421,22 @@ export default defineConfig({
             required: true,
           },
           {
+            type: "number",
+            name: "nav_order",
+            label: "Navigation Order",
+            description: "Order in navigation menu (lower numbers appear first)",
+          },
+          {
+            type: "string",
+            name: "nav_title",
+            label: "Navigation Title",
+            description: "Override title shown in navigation (optional)",
+          },
+          {
             type: "boolean",
-            name: "draft",
-            label: "Draft (hide from site)",
-            ui: {
-              defaultValue: false,
-            },
+            name: "nav_hidden",
+            label: "Hide from Navigation",
+            description: "Page will still be accessible but won't appear in menu",
           },
           {
             type: "rich-text",
