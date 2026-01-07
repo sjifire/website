@@ -26,7 +26,7 @@ layout: false
           {% for release in set %}
             <li>
               <a class="media_container" href="{{ release.document }}">
-                <img src="{{ cloudinaryRootUrl }}/{{ release.document }}" width="120" height="150" alt="Thumbnail preview of {{ release.date | postDateTerseISO }} press release">
+                <img src="{{ site.cloudinaryRootUrl }}/image/fetch/f_auto,pg_1/{{ site.cloudinarySiteId }}{{ release.document }}" width="120" height="150" alt="Thumbnail preview of {{ release.date | postDateTerseISO }} press release">
               </a>
               <h3>
                 {{ release.date | postDateTerseNoYearISO }}
