@@ -7,8 +7,9 @@ pagination:
   reverse: true
 permalink: "/news/{% if pagination.pageNumber > 0 %}page-{{ pagination.pageNumber + 1 }}/{% endif %}index.html"
 layout: false
+sidebar: " "
 ---
-{% extends "default_double_col_page.njk" %}
+{% extends "page.njk" %}
 
 {% block main_content %}
   <header class="hgroup">

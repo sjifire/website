@@ -1,6 +1,7 @@
 ---
 title: Emergency Personnel
 nav_order: 3
+layout: false
 personnel:
   - first_name: Noel
     last_name: Monin
@@ -342,5 +343,66 @@ personnel:
     roles:
       - Wildland Firefighter
 ---
+{% extends "page.njk" %}
 
-San Juan Island Fire & Rescue is proud to serve our community with dedicated staff and volunteer firefighters.
+{% set cloudinaryDefaults = "f_auto,q_auto:good,g_faces,c_fill,w_315,h_328" %}
+{% set defaultPersonImg = "/assets/images/personnel_imgs/images.jpg" %}
+
+{% block main_content_single %}
+<p>San Juan Island Fire & Rescue is proud to serve our community with dedicated staff and volunteer firefighters.</p>
+
+{% set staffOnly = personnel | pluckByValue('staff', 'staff_type') %}
+{% set volunteersOnly = personnel | pluckByValue('volunteer', 'staff_type') %}
+
+<section class="personnel-section">
+  <h2>Staff</h2>
+  <div class="l-grid l-grid--personnel">
+    {% for person in staffOnly %}
+      {% set imgSrc = person.photo if person.photo else defaultPersonImg %}
+      <div class="person">
+        <div class="person__img">
+          <img src="{%- imgPath imgSrc, cloudinaryDefaults -%}" alt="{{ person.first_name }} {{ person.last_name }}" width="157.5" height="164">
+        </div>
+        <h3>{{ person.first_name }} {{ person.last_name }}</h3>
+        {% if person.rank or person.title %}<h4>
+          {% if person.rank %}{{ person.rank }}{% endif %}
+          {% if person.rank and person.title %} - {% endif %}
+          {% if person.title %}{{ person.title }}{% endif %}
+        </h4>
+        {% endif %}
+        <ul>
+          {% for role in person.roles | sort %}
+            <li>{{ role }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="personnel-section">
+  <h2>Volunteers</h2>
+  <div class="l-grid l-grid--personnel">
+    {% for person in volunteersOnly | sort(attribute='last_name') %}
+      {% set imgSrc = person.photo if person.photo else defaultPersonImg %}
+      <div class="person">
+        <div class="person__img">
+          <img src="{%- imgPath imgSrc, cloudinaryDefaults -%}" alt="Headshot of {{ person.first_name }} {{ person.last_name }}" width="157.5" height="164">
+        </div>
+        <h3>{{ person.first_name }} {{ person.last_name }}</h3>
+        {% if person.rank or person.title %}<h4>
+          {% if person.rank %}{{ person.rank }}{% endif %}
+          {% if person.rank and person.title %} - {% endif %}
+          {% if person.title %}{{ person.title }}{% endif %}
+        </h4>
+        {% endif %}
+        <ul>
+          {% for role in person.roles | sort %}
+            <li>{{ role }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}
