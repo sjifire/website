@@ -6,7 +6,7 @@ module.exports = {
 		}
 		var url = data.page.filePathStem;
 		//remove pages
-		url = url.replace('/pages', '');
+		url = url.replace("/pages", "");
 		//add index.html
 		url = `${url}/index.${data.page.outputFileExtension}`;
 		return url;
