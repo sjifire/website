@@ -32,9 +32,7 @@ jobs:
         run: npm ci
 
       - name: Build TinaCMS
-        run: npx tinacms build
-        env:
-          TINA_PUBLIC_IS_LOCAL: "true"
+        run: npx tinacms build --local --skip-cloud-checks
 
       - name: Build 11ty site
         run: npm run build
