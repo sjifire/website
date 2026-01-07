@@ -1,6 +1,6 @@
 const CleanCSS = require("clean-css");
-const { DateTime } = require("luxon");
 const { minify } = require("terser");
+const { dateFilters } = require("./src/_lib/date-filters");
 
 const isProduction = process.env.ELEVENTY_ENV === "production";
 
@@ -34,21 +34,10 @@ module.exports = function(eleventyConfig) {
     return collectionApi.getFilteredByTag("content-include");
   });
 
-  // Date filters - factory to reduce duplication
-  // Handles both Date objects and ISO strings, always uses UTC to avoid DST issues
-  const createDateFilter = (formatter) => (dateObj) => {
-    if (!dateObj) return;
-    if (typeof dateObj.toISOString === "function") {
-      dateObj = dateObj.toISOString();
-    }
-    const dt = DateTime.fromISO(dateObj, { zone: "utc" });
-    return typeof formatter === "string" ? dt.toFormat(formatter) : dt.toLocaleString(formatter);
-  };
-
-  eleventyConfig.addFilter("postDateTerseNoYearISO", createDateFilter({ month: "short", day: "numeric" }));
-  eleventyConfig.addFilter("htmlDateStringISO", createDateFilter("yyyy-LL-dd"));
-  eleventyConfig.addFilter("postDateTerseISO", createDateFilter(DateTime.DATE_MED));
-  eleventyConfig.addFilter("postDateVerboseISO", createDateFilter(DateTime.DATE_HUGE));
+  // Date filters (see src/_lib/date-filters.js for implementation)
+  Object.entries(dateFilters).forEach(([name, filter]) => {
+    eleventyConfig.addFilter(name, filter);
+  });
   eleventyConfig.addFilter("limit", function(array, limit) {
     if(!array) return;
     if(!limit) return array;

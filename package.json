@@ -9,9 +9,11 @@
     "api:dev": "cd api && npm install && func start",
     "start": "npm-run-all --parallel dev api:dev",
     "lint": "npm run lint:js && npm run lint:css",
-    "lint:js": "eslint -c tests/eslint.config.mjs .eleventy.js src/_data/ src/pages/",
+    "lint:js": "eslint -c tests/eslint.config.mjs .eleventy.js src/_data/ src/_lib/ src/pages/",
     "lint:css": "stylelint --config tests/stylelint.config.json src/css/**/*.css",
-    "test": "playwright test --config=tests/playwright.config.js"
+    "test": "npm run test:unit && npm run test:e2e",
+    "test:unit": "node --test tests/*.test.js",
+    "test:e2e": "playwright test --config=tests/playwright.config.js"
   },
   "keywords": [],
   "author": "",
