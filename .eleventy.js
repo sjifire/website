@@ -34,39 +34,21 @@ module.exports = function(eleventyConfig) {
     return collectionApi.getFilteredByTag("content-include");
   });
 
-  // Date filters
-  eleventyConfig.addFilter("postDateTerseNoYearISO", (dateObj) => {
-    if(!dateObj) return; // sometimes we get an undefined through here
-    //NOTE: sometimes a string comes in, sometimes a date... so lets cleanup!
-    if (typeof dateObj.toISOString === "function")
+  // Date filters - factory to reduce duplication
+  // Handles both Date objects and ISO strings, always uses UTC to avoid DST issues
+  const createDateFilter = (formatter) => (dateObj) => {
+    if (!dateObj) return;
+    if (typeof dateObj.toISOString === "function") {
       dateObj = dateObj.toISOString();
-    return DateTime.fromISO(dateObj, { zone: "utc" }).toLocaleString({
-      month: "short",
-      day: "numeric",
-    });
-  });
-  eleventyConfig.addFilter("htmlDateStringISO", (dateObj) => {
-    //NOTE: sometimes a string comes in, sometimes a date... so lets cleanup!
-    if (typeof dateObj.toISOString === "function")
-      dateObj = dateObj.toISOString();
-    return DateTime.fromISO(dateObj, { zone: "utc" }).toFormat("yyyy-LL-dd");
-  });
-  eleventyConfig.addFilter("postDateTerseISO", (dateObj) => {
-    //NOTE: sometimes a string comes in, sometimes a date... so lets cleanup!
-    if (typeof dateObj.toISOString === "function")
-      dateObj = dateObj.toISOString();
-    return DateTime.fromISO(dateObj, { zone: "utc" }).toLocaleString(
-      DateTime.DATE_MED
-    );
-  });
-  eleventyConfig.addFilter("postDateVerboseISO", (dateObj) => {
-    //NOTE: sometimes a string comes in, sometimes a date... so lets cleanup!
-    if (typeof dateObj.toISOString === "function")
-      dateObj = dateObj.toISOString();
-    return DateTime.fromISO(dateObj, { zone: "utc" }).toLocaleString(
-      DateTime.DATE_HUGE
-    );
-  });
+    }
+    const dt = DateTime.fromISO(dateObj, { zone: "utc" });
+    return typeof formatter === "string" ? dt.toFormat(formatter) : dt.toLocaleString(formatter);
+  };
+
+  eleventyConfig.addFilter("postDateTerseNoYearISO", createDateFilter({ month: "short", day: "numeric" }));
+  eleventyConfig.addFilter("htmlDateStringISO", createDateFilter("yyyy-LL-dd"));
+  eleventyConfig.addFilter("postDateTerseISO", createDateFilter(DateTime.DATE_MED));
+  eleventyConfig.addFilter("postDateVerboseISO", createDateFilter(DateTime.DATE_HUGE));
   eleventyConfig.addFilter("limit", function(array, limit) {
     if(!array) return;
     if(!limit) return array;
