@@ -1,0 +1,48 @@
+{% extends 'base.njk' %}
+
+{% block content %}
+  {% if sidebar or sidebar_content %}
+    {# Two-column layout #}
+    <div class="l-grid l-grid--2col{{ ' flipped' if mobile_layout_flipped === true }}">
+      <div class="l-grid__main block-content">
+        <h1>{{ title | safe }}</h1>
+        {% if preamble %}
+          <div class="lede">
+            {{ preamble | markdownify | safe }}
+          </div>
+        {% endif %}
+        {{ content | markdownify | processStyledImages | safe }}
+        {% block main_content %}
+          {{ main_content | safe }}
+        {% endblock %}
+      </div>
+
+      <aside class="l-grid__sidebar">
+        {% if sidebar %}
+          {{ sidebar | markdownify | processStyledImages | safe }}
+        {% endif %}
+        {% block sidebar_content %}
+          {{ sidebar_content | markdownify | processStyledImages | safe }}
+        {% endblock %}
+      </aside>
+
+      {% block subsidebar_content %}
+        {{ subsidebar_content | safe }}
+      {% endblock %}
+    </div>
+  {% else %}
+    {# Single-column layout #}
+    <div class="l-squeezed block-content">
+      <h1>{{ title | safe }}</h1>
+      {% if preamble %}
+        <div class="lede">
+          {{ preamble | markdownify | safe }}
+        </div>
+      {% endif %}
+      {{ content | markdownify | processStyledImages | safe }}
+      {% block main_content_single %}
+        {{ main_content | safe }}
+      {% endblock %}
+    </div>
+  {% endif %}
+{% endblock %}
