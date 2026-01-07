@@ -104,11 +104,60 @@ Replace `<TENANT_ID>` in `staticwebapp.config.json` with your Azure AD tenant ID
 
 ## Local Development
 
+### Prerequisites
+
+- Node.js 25+ (check with `node --version`)
+- npm (comes with Node.js)
+
+### Quick Start
 
 ```bash
+# Clone the repository
+git clone <repository-url>
+cd website
 
+# Install dependencies
 npm install
-npm run tina:dev
 
+# Start local development server with TinaCMS
+npm run tina:dev
+```
+
+This will start:
+- **Eleventy** at http://localhost:8080 (site preview)
+- **TinaCMS** at http://localhost:4001/admin (content editor)
+
+### Available Commands
+
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start Eleventy only (no CMS) |
+| `npm run tina:dev` | Start Eleventy + TinaCMS admin |
+| `npm run build` | Build the site for production |
+| `npm run tina:build` | Build TinaCMS + site (requires TinaCloud credentials) |
+| `npm run lint` | Run ESLint and Stylelint |
+| `npm test` | Run Playwright tests |
+
+### Project Structure
 
 ```
+src/
+├── _data/          # Global data files (JSON, YAML)
+├── _includes/      # Nunjucks templates and partials
+├── assets/         # Static assets (images, PDFs)
+│   └── images/     # Image files (managed by TinaCMS)
+├── css/            # Stylesheets
+├── pages/          # Page content (MDX files)
+│   ├── about/      # About section pages
+│   └── services/   # Services section pages
+└── posts/          # News/blog posts (JSON)
+
+.tina/
+└── config.ts       # TinaCMS schema configuration
+```
+
+### Notes
+
+- TinaCMS runs in local mode during development - no cloud credentials needed
+- Changes made in the CMS are saved directly to the file system
+- The site auto-reloads when files change

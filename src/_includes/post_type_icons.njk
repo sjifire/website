@@ -1,0 +1,16 @@
+{%- switch post.post_type %}
+  {%- case 'News' -%}
+    <svg><use xlink:href='#news' /></svg>
+  {%- case 'Advisory' -%}
+    <svg><use xlink:href='#alert' /></svg>
+  {%- case 'Announcement' -%}
+    <svg><use xlink:href='#warning' /></svg>
+  {%- case 'On Scene' -%}
+    <svg><use xlink:href='#rescue' /></svg>
+  {%- case 'Member Profile' -%}
+    <svg><use xlink:href='#profile' /></svg>
+  {%- case 'Fact Check' -%}
+    <svg><use xlink:href='#fact-check' /></svg>
+  {%- case 'Department Highlight' -%}
+    <svg><use xlink:href='#highlight' /></svg>
+{% endswitch -%}

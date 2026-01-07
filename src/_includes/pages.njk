@@ -1,0 +1,96 @@
+{% extends 'base.njk' %}
+
+{% set cloudinaryDefaults = "f_auto,q_auto:good,g_faces,c_fill,w_315,h_328" %}
+{% set defaultPersonImg = "/assets/images/personnel_imgs/images.jpg" %}
+
+{% set main_section %}
+	<h1>
+	  {{ title | safe }}
+	</h1>
+	{% if preamble %}
+	  <div class="lede">
+	    {{ preamble | markdownify | safe }}
+	  </div>
+	{% endif %}
+	{{ content | markdownify | processStyledImages | safe }}
+	{% if personnel and personnel.length %}
+	  {% set staffOnly = personnel | pluckByValue('staff', 'staff_type') %}
+	  {% set volunteersOnly = personnel | pluckByValue('volunteer', 'staff_type') %}
+
+	  <section class="personnel-section">
+	    <h2>Staff</h2>
+	    <div class="l-grid l-grid--personnel">
+	      {% for person in staffOnly %}
+	        {% set imgSrc = person.photo if person.photo else defaultPersonImg %}
+	        <div class="person">
+	          <div class="person__img">
+	            <img src="{%- imgPath imgSrc, cloudinaryDefaults -%}" alt="{{ person.first_name }} {{ person.last_name }}" width="157.5" height="164">
+	          </div>
+	          <h3>{{ person.first_name }} {{ person.last_name }}</h3>
+	          {% if person.rank or person.title %}<h4>
+	            {% if person.rank %}{{ person.rank }}{% endif %}
+	            {% if person.rank and person.title %} - {% endif %}
+	            {% if person.title %}{{ person.title }}{% endif %}
+	          </h4>
+	          {% endif %}
+	          <ul>
+	            {% for role in person.roles | sort %}
+	              <li>{{ role }}</li>
+	            {% endfor %}
+	          </ul>
+	        </div>
+	      {% endfor %}
+	    </div>
+	  </section>
+	  <section class="personnel-section">
+	    <h2>Volunteers</h2>
+	    <div class="l-grid l-grid--personnel">
+	      {% for person in volunteersOnly | sort(attribute='last_name') %}
+	        {% set imgSrc = person.photo if person.photo else defaultPersonImg %}
+	        <div class="person">
+	          <div class="person__img">
+	            <img src="{%- imgPath imgSrc, cloudinaryDefaults -%}" alt="Headshot of {{ person.first_name }} {{ person.last_name }}" width="157.5" height="164">
+	          </div>
+	          <h3>{{ person.first_name }} {{ person.last_name }}</h3>
+	          {% if person.rank or person.title %}<h4>
+	            {% if person.rank %}{{ person.rank }}{% endif %}
+	            {% if person.rank and person.title %} - {% endif %}
+	            {% if person.title %}{{ person.title }}{% endif %}
+	          </h4>
+	          {% endif %}
+	          <ul>
+	            {% for role in person.roles | sort %}
+	              <li>{{ role }}</li>
+	            {% endfor %}
+	          </ul>
+	        </div>
+	      {% endfor %}
+	    </div>
+	  </section>
+	{% endif %}
+{% endset %}
+
+{% block content %}
+  {% if sidebar %}
+	  <div class="l-grid l-grid--2col{{ ' flipped' if mobile_layout_flipped === true }}">
+	    <div class="l-grid__main block-content">
+        {{ main_section | safe }}
+
+	      {% block main_content %}
+	        {{ main_content | safe }}
+	      {% endblock %}
+	    </div>
+
+	    <aside class="l-grid__sidebar">
+        {{ sidebar | markdownify | processStyledImages | safe }}
+	      {% block sidebar_content %}
+	        {{ sidebar_content | markdownify | processStyledImages | safe }}
+	      {% endblock %}
+	    </aside>
+	  </div>
+  {% else %}
+    <div class="l-squeezed block-content">
+      {{ main_section | safe }}
+    </div>
+  {% endif %}
+{% endblock %}

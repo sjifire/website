@@ -1,0 +1,30 @@
+{
+  "header_highlight_url": "about/join/",
+  "items": [
+    {
+      "label": "About",
+      "folder": "about"
+    },
+    {
+      "label": "News",
+      "children": [
+        {
+          "label": "News",
+          "url": "/news/"
+        },
+        {
+          "label": "Media Releases",
+          "url": "/news/media-releases/"
+        }
+      ]
+    },
+    {
+      "label": "Services",
+      "folder": "services"
+    },
+    {
+      "label": "Contact",
+      "url": "/contact/"
+    }
+  ]
+}

@@ -1,0 +1,69 @@
+{% extends 'base.njk' %}
+
+{% block content %}
+  <div class="l-grid l-grid--2col flipped">
+    <div class="l-grid__main block-content">
+      <ul class="l-grid l-grid--auto">
+        {% for post in posts | reverse | limit(number_news_stories) %}
+          <li class="card">
+            <div class="card__body">
+              <div class="news__type">
+                {% include "post_type_icons.njk" %}
+                {{ post.post_type }}
+              </div>
+              <h3 class="news__headline">
+                <a href="{{ post.url }}/">
+                  {{ post.title | safe }}
+                </a>
+              </h3>
+              <time datetime="{{ post.date | htmlDateStringISO }}" pubdate="pubdate" class="news__date">
+                {{ post.date | postDateTerseISO }}
+              </time>
+              <div class="news__lede">
+                {{ post.lede | markdownify | safe }}
+              </div>
+            </div>
+            <div class="card__footer">
+              <a href="{{ post.url }}/" class="news__readmore">Read more <svg><use xlink:href="#right-arrow"></svg></a>
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+      <div style="margin-top:3rem" class="text-center">
+        <a class="btn btn-secondary" href="/news/">
+          News Archive »
+        </a>
+      </div>
+
+      <section class="gallery">
+        <div aria-hidden="true" class="gallery-showcase">
+          {% for img in image_gallery %}
+            <img id="gallery-pic{{ loop.index }}" class="gallery-showcase__item{{ ' active' if loop.first }} leave-alone" src="{%- imgPath img.image | safe,  'f_auto,q_auto:good,c_fill,w_1000,h_800' -%}" alt="{{ img.image_alt }}" >
+          {% endfor %}
+        </div>
+        <div class="gallery-nav">
+          {% for img in image_gallery %}
+            <img class="gallery-nav__item{{ ' active' if loop.first }} leave-alone" data-target-id="gallery-pic{{ loop.index }}" src="{%- imgPath img.image | safe,  'f_auto,q_auto:good,c_fill,w_150,h_100' -%}" alt="{{ img.image_alt }}" >
+          {% endfor %}
+        </div>
+      </section>
+    </div>
+
+    <aside class="l-grid__sidebar">
+      <div class="sidebar-block">
+        {% include "burn-status-widget.njk" %}
+      </div>
+      <div class="sidebar-block">
+        {% include "call-stats-widget.njk" %}
+      </div>
+    </aside>
+
+    <aside class="l-grid__subsidebar">
+      <div class="subsidebar-block">
+        <figure class='embed-responsive embed-responsive-1by2'>
+          <iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2FSJIFire%2F&tabs=timeline&width=300&height=800&small_header=true&adapt_container_width=true&hide_cover=false&show_facepile=false&appId" width="300" height="800" style="border:none;overflow:hidden" scrolling="yes" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" title="SJIFire Facebook Page"></iframe>
+        </figure>
+      </div>
+    </aside>
+  </div>
+{% endblock %}
