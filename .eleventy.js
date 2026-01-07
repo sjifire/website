@@ -1,11 +1,13 @@
 const CleanCSS = require("clean-css");
 const { minify } = require("terser");
+const createCloudinary = require("./src/_lib/cloudinary");
 const { dateFilters } = require("./src/_lib/date-filters");
 
 const isProduction = process.env.ELEVENTY_ENV === "production";
 
 module.exports = function(eleventyConfig) {
   const siteData = require("./src/_data/site.json");
+  const cloudinary = createCloudinary(siteData, isProduction);
 
   // Copy static assets
   eleventyConfig.addPassthroughCopy("src/assets/");
@@ -89,33 +91,17 @@ module.exports = function(eleventyConfig) {
       const size = attrs.match(/size=["']([^"']+)["']/)?.[1] || "full";
       const align = attrs.match(/align=["']([^"']+)["']/)?.[1] || "center";
       const classes = `styled-image styled-image--${size} styled-image--${align}`;
-      return `<figure class="${classes}"><img src="${src}" alt="${alt}" /><figcaption>${alt}</figcaption></figure>`;
+      // Process image through Cloudinary for optimization
+      const optimizedSrc = cloudinary.imgPath(src, "f_auto,q_auto:good");
+      return `<figure class="${classes}"><img src="${optimizedSrc}" alt="${alt}" /><figcaption>${alt}</figcaption></figure>`;
     });
   });
 
 
-  const imgPath = (assetPath, cloudinaryCmds) => {
-    // if(helpers.env !== 'production') return ''
-    //HOWEVER, a double // seems to make it hard for Cloudinary to find the src img...
-    // so stripping all leading /
-    assetPath = assetPath.replace(/^\/+/, "");
-    if (!cloudinaryCmds) cloudinaryCmds = "f_auto";
-    if (isProduction && siteData.enable_cloudinary_rewrites) {
-      if (/^(\/)?optim\//.test(assetPath)) {
-        // already exists...
-        // can be called twice if called directly in a template then again from a transform
-        // so just use what the orig assetPath was.
-        return `/${assetPath}`;
-      }
-      return `/optim/${assetPath}?c_param=${cloudinaryCmds}`;
-    }
-    var url = `${siteData.cloudinaryRootUrl}/image/fetch/${cloudinaryCmds}/${siteData.cloudinarySiteId}/${assetPath}`;
-    // console.log(`imgPath-2: '${assetPath}' -- ${url}`);
-    return url;
-  };
-  eleventyConfig.addShortcode("imgPath", function (assetPath, cloudinaryCmds) {
-    return imgPath(assetPath, cloudinaryCmds);
-  });
+  // Cloudinary image path shortcode and filters
+  eleventyConfig.addShortcode("imgPath", cloudinary.imgPath);
+  eleventyConfig.addFilter("imgPath", cloudinary.imgPath);
+  eleventyConfig.addFilter("headerImageUrls", cloudinary.headerImageUrls);
 
   return {
     dir: {
