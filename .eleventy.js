@@ -1,7 +1,6 @@
 const CleanCSS = require("clean-css");
 const { DateTime } = require("luxon");
 const { minify } = require("terser");
-const util = require("util");
 
 const isProduction = process.env.ELEVENTY_ENV === "production";
 
@@ -35,21 +34,7 @@ module.exports = function(eleventyConfig) {
     return collectionApi.getFilteredByTag("content-include");
   });
 
-  // // Add collections
-  // eleventyConfig.addCollection("posts", function(collectionApi) {
-  //   return collectionApi.getFilteredByGlob("src/posts/*.md").sort((a, b) => {
-  //     return b.date - a.date;
-  //   });
-  // });
-
-  // Date filter
-  eleventyConfig.addFilter("dateDisplay", (dateObj) => {
-    return new Date(dateObj).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric"
-    });
-  });
+  // Date filters
   eleventyConfig.addFilter("postDateTerseNoYearISO", (dateObj) => {
     if(!dateObj) return; // sometimes we get an undefined through here
     //NOTE: sometimes a string comes in, sometimes a date... so lets cleanup!
@@ -82,11 +67,6 @@ module.exports = function(eleventyConfig) {
       DateTime.DATE_HUGE
     );
   });
-  eleventyConfig.addFilter("dump", (obj) => {
-    return util.inspect(obj);
-  });
-
-
   eleventyConfig.addFilter("limit", function(array, limit) {
     if(!array) return;
     if(!limit) return array;
@@ -103,10 +83,6 @@ module.exports = function(eleventyConfig) {
   });
 
 
-  eleventyConfig.addFilter("cssmin", function (code) {
-    return new CleanCSS({}).minify(code).styles;
-  });
-
   eleventyConfig.addNunjucksAsyncFilter(
     "jsmin",
     async function (code, callback) {
@@ -122,22 +98,6 @@ module.exports = function(eleventyConfig) {
     }
   );
 
-  // Minify HTML Output
-  // eleventyConfig.addTransform("htmlmin", function (content, outputPath) {
-  //   // Eleventy 1.0+: use this.inputPath and this.outputPath instead
-  //   if (isProduction && outputPath && outputPath.endsWith(".html")) {
-  //     let minified = htmlmin.minify(content, {
-  //       useShortDoctype: true,
-  //       removeComments: true,
-  //       collapseWhitespace: true,
-  //     });
-  //     return minified;
-  //   }
-  //   return content;
-  // });
-
-
-  // REVIEW -- Can we remove these?
   const mdRender = require("markdown-it")({
     linkify: true,
     typographer: true,
@@ -186,15 +146,6 @@ module.exports = function(eleventyConfig) {
     return imgPath(assetPath, cloudinaryCmds);
   });
 
-
-
-//   // Remove .html from `page.url`
-// eleventyConfig.addUrlTransform(({ url }) => {
-//     var newUrl = url.replace('/pages', '');
-//     console.log(`here: ${url} -- ${newUrl}`)
-//     return newUrl;
-//   });
-
   return {
     dir: {
       input: "src",
@@ -207,12 +158,3 @@ module.exports = function(eleventyConfig) {
     htmlTemplateEngine: "njk"
   };
 };
-
-
-
-  // return {
-  //   dir: {
-  //     input: "src",
-  //     output: "public",
-  //   },
-  // };
