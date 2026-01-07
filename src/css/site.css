@@ -179,15 +179,21 @@ body {
   color: white;
 }
 
-.item--highlight a {
-  color: black;
-  background-color: var(--yellow);
+.item--highlight a,
+.menu .submenu .item--highlight a,
+.menu li.subitem.item--highlight a {
+  color: black !important;
+  background-color: var(--yellow) !important;
 }
 
 .item--highlight a:hover,
 .item--highlight a:focus,
-.item--highlight a:active {
-  background-color: var(--bright-red);
+.item--highlight a:active,
+.menu .submenu .item--highlight a:hover,
+.menu .submenu .item--highlight a:focus,
+.menu .submenu .item--highlight a:active {
+  color: white !important;
+  background-color: var(--bright-red) !important;
 }
 
 /* Mobile menu */

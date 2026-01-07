@@ -104,6 +104,12 @@ export default defineConfig({
         },
         fields: [
           {
+            type: "string",
+            name: "header_highlight_url",
+            label: "Header Highlight URL",
+            description: "URL of page to highlight in navigation (e.g., /about/join/). Label is pulled from page title.",
+          },
+          {
             type: "object",
             name: "items",
             label: "Menu Items",

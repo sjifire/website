@@ -7,7 +7,7 @@
     <li class="logo">
       <a href="/"><img src="{% imgPath '/assets/sjifire-logo-clear.png' %}" width="320" height="317" alt="San Juan Island Fire and Rescue Logo"></a>
     </li>
-    {% for item in nav %}
+    {% for item in nav.items %}
       {% if item.children and item.children.length > 0 %}
         <li class="item has-submenu{{ ' active' if page.url.includes('/' + item.folder + '/') }}">
           <a tabindex="0">{{ item.label }}</a>
@@ -26,6 +26,12 @@
     <li class="toggle">
       <a href="#"><svg><use xlink:href='#menu' /></svg></a>
     </li>
+    {% if nav.headerHighlight %}
+    <li class="item item--highlight">
+      <a href="{{ nav.headerHighlight.url }}">{{ nav.headerHighlight.nav_title }}</a>
+    </li>
+    {% endif %}
+
   </ul>
 </nav>
 

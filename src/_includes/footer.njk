@@ -1,5 +1,5 @@
 <nav class="footer-nav">
-  {% for item in nav %}
+  {% for item in nav.items %}
     {% if item.children and item.children.length > 0 %}
       <dl class="footer-navgroup">
         <dt class="footer-heading">{{ item.label }}</dt>
