@@ -1,9 +1,12 @@
 import { defineConfig } from "tinacms";
 
+const isLocal = process.env.TINA_PUBLIC_IS_LOCAL === "true";
+
 export default defineConfig({
-  branch:   process.env.TINA_BRANCH || "main",
-  clientId: process.env.TINA_CLIENT_ID || "",
-  token:    process.env.TINA_TOKEN || "",
+  branch: process.env.TINA_BRANCH || "main",
+
+  // Self-hosted: use custom backend in production, local mode for development
+  ...(isLocal ? {} : { contentApiUrlOverride: "/api/tina" }),
 
   build: {
     outputFolder: "admin",

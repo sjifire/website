@@ -4,7 +4,7 @@
   "scripts": {
     "dev": "eleventy --serve",
     "build": "eleventy",
-    "tina:dev": "tinacms dev -c \"npm run dev\"",
+    "tina:dev": "TINA_PUBLIC_IS_LOCAL=true tinacms dev -c \"npm run dev\"",
     "tina:build": "tinacms build && npm run build",
     "api:dev": "cd api && npm install && func start",
     "start": "npm-run-all --parallel dev api:dev",
