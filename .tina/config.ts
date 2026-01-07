@@ -270,12 +270,12 @@ export default defineConfig({
         ],
       },
       {
-        name: "emergencyPersonnel",
-        label: "Emergency Personnel",
+        name: "configPersonnel",
+        label: "Config: Personnel",
         path: "src/pages/about",
         format: "mdx",
         match: {
-          include: "emergency-personnel",
+          include: "emergency-personnel-data",
         },
         ui: {
           allowedActions: {
@@ -416,7 +416,7 @@ export default defineConfig({
         path: "src/pages",
         format: "mdx",
         match: {
-          exclude: "{about/emergency-personnel,homepage}",
+          exclude: "{about/emergency-personnel-data,homepage}",
         },
         fields: [
           {

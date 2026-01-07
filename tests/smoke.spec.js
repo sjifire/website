@@ -83,4 +83,54 @@ test.describe("Smoke Tests", () => {
     await page.goto("/contact/");
     await expect(page.locator("h1").first()).toContainText("Questions");
   });
+
+  test("Emergency Personnel page displays staff and volunteers with images", async ({ page }) => {
+    await page.goto("/about/emergency-personnel/");
+
+    // Should have Staff section
+    await expect(page.locator("h2").filter({ hasText: "Staff" })).toBeVisible();
+
+    // Should have Volunteers section
+    await expect(page.locator("h2").filter({ hasText: "Volunteers" })).toBeVisible();
+
+    // Should have personnel cards (minimum 40 total - staff + volunteers)
+    const personnelCards = page.locator(".person");
+    const cardCount = await personnelCards.count();
+    expect(cardCount).toBeGreaterThanOrEqual(40);
+
+    // Each personnel card should have an image
+    const personnelImages = page.locator(".person__img img");
+    const imageCount = await personnelImages.count();
+    expect(imageCount).toBeGreaterThanOrEqual(40);
+
+    // Verify images have valid Cloudinary src URLs (not broken/empty)
+    const firstImage = personnelImages.first();
+    const src = await firstImage.getAttribute("src");
+    expect(src).toContain("cloudinary.com");
+    expect(src).toContain("/assets/images/personnel_imgs/");
+  });
+
+  test("Media Releases page displays releases with PDF thumbnails", async ({ page }) => {
+    await page.goto("/news/media-releases/");
+
+    // Should have media releases section
+    await expect(page.locator(".media-releases")).toBeVisible();
+
+    // Should have release toggles (grouped by year)
+    const releaseToggles = page.locator(".media-release__toggle");
+    const toggleCount = await releaseToggles.count();
+    expect(toggleCount).toBeGreaterThanOrEqual(1);
+
+    // Should have PDF thumbnail images
+    const thumbnails = page.locator(".media_container img");
+    const thumbnailCount = await thumbnails.count();
+    expect(thumbnailCount).toBeGreaterThanOrEqual(1);
+
+    // Verify thumbnails have valid Cloudinary URLs for PDF rendering
+    const firstThumbnail = thumbnails.first();
+    const src = await firstThumbnail.getAttribute("src");
+    expect(src).toContain("cloudinary.com");
+    expect(src).toContain("/assets/media_releases/");
+    expect(src).toContain(".pdf");
+  });
 });
