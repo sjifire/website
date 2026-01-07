@@ -1,0 +1,52 @@
+name: Update Incident Stats
+
+on:
+  schedule:
+    # Run daily at 6 AM UTC (10 PM PST / 11 PM PDT)
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+    # Allow manual trigger from GitHub Actions UI
+
+jobs:
+  update-stats:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Generate incident statistics
+        env:
+          NERIS_CLIENT_ID: ${{ secrets.NERIS_CLIENT_ID }}
+          NERIS_CLIENT_SECRET: ${{ secrets.NERIS_CLIENT_SECRET }}
+          NERIS_ENTITY_ID: ${{ secrets.NERIS_ENTITY_ID }}
+          NERIS_USE_TEST_API: ${{ vars.NERIS_USE_TEST_API || 'false' }}
+          STATS_DAYS: '30'
+        run: node src/scripts/generate-stats.mjs
+
+      - name: Check for changes
+        id: changes
+        run: |
+          if git diff --quiet src/_data/stats.json; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit and push changes
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add src/_data/stats.json
+          git commit -m "chore: update incident statistics from NERIS
+
+          Auto-generated daily update of incident statistics."
+          git push
