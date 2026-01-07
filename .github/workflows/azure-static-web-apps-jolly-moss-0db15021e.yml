@@ -33,6 +33,8 @@ jobs:
 
       - name: Build TinaCMS
         run: npx tinacms build
+        env:
+          TINA_PUBLIC_IS_LOCAL: "true"
 
       - name: Build 11ty site
         run: npm run build
