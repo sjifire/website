@@ -28,7 +28,7 @@ Requires Node.js 25+. Output goes to `_site/`.
 - `src/pages/` - Content pages (`.njk`/`.md`) - URLs generated without `/pages/` prefix via `pages.11tydata.js`
 - `src/posts/` - News posts as JSON files (`YYYY-MM-DD-slug.json`)
 - `src/media_releases/` - Press release metadata (JSON) linking to PDFs in `src/assets/media_releases/`
-- `src/modules/` - Utility JS: ESO incident scraper, board meeting date calculator
+- `src/scripts/` - Standalone scripts: NERIS API client and incident stats generator
 - `api/` - Azure Functions backend (TypeScript) for GitHub content operations and auth
 
 ### Key Patterns
@@ -50,3 +50,30 @@ Requires Node.js 25+. Output goes to `_site/`.
 ### Authentication
 
 Admin routes (`/admin/*`, `/api/*`) require Azure AD authentication configured via `staticwebapp.config.json`. See README.md for Azure AD setup.
+
+### Incident Statistics (NERIS)
+
+Incident statistics are pulled daily from NERIS (National Emergency Response Information System) via a scheduled GitHub Action.
+
+**Files:**
+- `src/scripts/neris-client.mjs` - ESM API client for NERIS REST API
+- `src/scripts/generate-stats.mjs` - Fetches incidents and generates `src/_data/stats.json`
+- `.github/workflows/update-stats.yml` - Daily scheduled workflow (6 AM UTC)
+
+**Required GitHub Secrets:**
+- `NERIS_CLIENT_ID` - OAuth2 client ID from NERIS
+- `NERIS_CLIENT_SECRET` - OAuth2 client secret from NERIS
+- `NERIS_ENTITY_ID` - Fire department NERIS ID (e.g., "FD53055103" for San Juan County FD #3)
+
+**Optional Variables:**
+- `NERIS_USE_TEST_API` - Set to "true" to use test API (vars, not secrets)
+
+**Local Testing:**
+```bash
+export NERIS_CLIENT_ID="your-client-id"
+export NERIS_CLIENT_SECRET="your-client-secret"
+export NERIS_ENTITY_ID="FD53055103"
+npm run stats
+```
+
+NERIS API docs: https://neris.fsri.org/technical-reference
