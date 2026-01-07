@@ -5,8 +5,20 @@ const pages = [
   { path: "/", name: "Homepage" },
   { path: "/contact/", name: "Contact" },
   { path: "/news/", name: "News" },
+  // About pages
   { path: "/about/governance/", name: "Governance" },
+  { path: "/about/who-we-are/", name: "Who We Are" },
+  { path: "/about/join/", name: "Join" },
+  { path: "/about/emergency-personnel/", name: "Emergency Personnel" },
+  { path: "/about/key-information/", name: "Key Information" },
+  { path: "/about/levy-2024/", name: "Levy 2024" },
+  { path: "/about/stations-equipment/", name: "Stations & Equipment" },
+  // Services pages
   { path: "/services/burn-permits/", name: "Burn Permits" },
+  { path: "/services/emergency-services/", name: "Emergency Services" },
+  { path: "/services/fire-alarms/", name: "Fire Alarms" },
+  { path: "/services/firewise/", name: "Firewise" },
+  { path: "/services/knoxbox/", name: "Knox Box" },
 ];
 
 test.describe("Smoke Tests", () => {
