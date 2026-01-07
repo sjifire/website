@@ -43,7 +43,7 @@
         </div>
         <div class="gallery-nav">
           {% for img in image_gallery %}
-            <img class="gallery-nav__item{{ ' active' if loop.first }} leave-alone" data-target-id="gallery-pic{{ loop.index }}" src="{%- imgPath '/assets/images/' + img.image | safe,  'f_auto,q_auto:good,c_fill,w_150,h_100' -%}" alt="{{ img.image_alt }}" >
+            <img class="gallery-nav__item{{ ' active' if loop.first }} leave-alone" data-target-id="gallery-pic{{ loop.index }}" src="{%- imgPath img.image | safe,  'f_auto,q_auto:good,c_fill,w_150,h_100' -%}" alt="{{ img.image_alt }}" >
           {% endfor %}
         </div>
       </section>
