@@ -1,6 +1,6 @@
 const CleanCSS = require("clean-css");
-const { DateTime } = require("luxon");
 const { minify } = require("terser");
+const { dateFilters } = require("./src/_lib/date-filters");
 
 const isProduction = process.env.ELEVENTY_ENV === "production";
 
@@ -34,38 +34,9 @@ module.exports = function(eleventyConfig) {
     return collectionApi.getFilteredByTag("content-include");
   });
 
-  // Date filters
-  eleventyConfig.addFilter("postDateTerseNoYearISO", (dateObj) => {
-    if(!dateObj) return; // sometimes we get an undefined through here
-    //NOTE: sometimes a string comes in, sometimes a date... so lets cleanup!
-    if (typeof dateObj.toISOString === "function")
-      dateObj = dateObj.toISOString();
-    return DateTime.fromISO(dateObj, { zone: "utc" }).toLocaleString({
-      month: "short",
-      day: "numeric",
-    });
-  });
-  eleventyConfig.addFilter("htmlDateStringISO", (dateObj) => {
-    //NOTE: sometimes a string comes in, sometimes a date... so lets cleanup!
-    if (typeof dateObj.toISOString === "function")
-      dateObj = dateObj.toISOString();
-    return DateTime.fromISO(dateObj, { zone: "utc" }).toFormat("yyyy-LL-dd");
-  });
-  eleventyConfig.addFilter("postDateTerseISO", (dateObj) => {
-    //NOTE: sometimes a string comes in, sometimes a date... so lets cleanup!
-    if (typeof dateObj.toISOString === "function")
-      dateObj = dateObj.toISOString();
-    return DateTime.fromISO(dateObj, { zone: "utc" }).toLocaleString(
-      DateTime.DATE_MED
-    );
-  });
-  eleventyConfig.addFilter("postDateVerboseISO", (dateObj) => {
-    //NOTE: sometimes a string comes in, sometimes a date... so lets cleanup!
-    if (typeof dateObj.toISOString === "function")
-      dateObj = dateObj.toISOString();
-    return DateTime.fromISO(dateObj, { zone: "utc" }).toLocaleString(
-      DateTime.DATE_HUGE
-    );
+  // Date filters (see src/_lib/date-filters.js for implementation)
+  Object.entries(dateFilters).forEach(([name, filter]) => {
+    eleventyConfig.addFilter(name, filter);
   });
   eleventyConfig.addFilter("limit", function(array, limit) {
     if(!array) return;
