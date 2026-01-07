@@ -26,12 +26,17 @@ test.describe("Smoke Tests", () => {
     test(`${page.name} loads without errors`, async ({ page: browserPage }) => {
       const errors = [];
 
-      // Capture console errors (ignore 404s for external resources)
+      // Capture console errors (ignore expected third-party issues)
       browserPage.on("console", (msg) => {
         if (msg.type() === "error") {
           const text = msg.text();
-          // Ignore 404s - they're usually external resources
-          if (!text.includes("404") && !text.includes("Failed to load resource")) {
+          // Ignore 404s - usually external resources
+          // Ignore X-Frame-Options errors from social media embeds (Facebook, etc.)
+          if (
+            !text.includes("404") &&
+            !text.includes("Failed to load resource") &&
+            !text.includes("X-Frame-Options")
+          ) {
             errors.push(text);
           }
         }
