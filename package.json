@@ -2,6 +2,7 @@
   "name": "SJIFIRE",
   "version": "2.0.0",
   "scripts": {
+    "stats": "node src/scripts/generate-stats.mjs",
     "dev": "eleventy --serve",
     "build": "eleventy",
     "tina:dev": "TINA_PUBLIC_IS_LOCAL=true tinacms dev -c \"npm run dev\"",
