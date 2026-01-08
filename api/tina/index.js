@@ -101,6 +101,16 @@ module.exports = async function (context, req) {
         const path = req.params?.path || '';
         context.log('TinaCMS path:', path);
 
+        // Health check endpoint
+        if (path === 'health') {
+            context.res = {
+                status: 200,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ status: 'ok', timestamp: new Date().toISOString() })
+            };
+            return;
+        }
+
         const tinaBackend = await getBackend();
         context.log('TinaCMS backend initialized');
 
