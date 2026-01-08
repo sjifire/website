@@ -18,8 +18,17 @@ async function getGitHubToken() {
         );
     }
 
-    // Handle private key formatting (Azure may store it with escaped newlines)
-    const formattedPrivateKey = privateKey.replace(/\\n/g, '\n');
+    // Handle private key formatting (Azure may store it with escaped newlines or other formats)
+    let formattedPrivateKey = privateKey
+        .replace(/\\n/g, '\n')           // Handle escaped newlines
+        .replace(/\\r/g, '')              // Remove escaped carriage returns
+        .replace(/^["']|["']$/g, '')      // Remove surrounding quotes
+        .trim();
+
+    // If key doesn't have PEM headers, it might be base64 encoded
+    if (!formattedPrivateKey.includes('-----BEGIN')) {
+        formattedPrivateKey = `-----BEGIN RSA PRIVATE KEY-----\n${formattedPrivateKey}\n-----END RSA PRIVATE KEY-----`;
+    }
 
     const auth = createAppAuth({
         appId,
