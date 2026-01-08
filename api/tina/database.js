@@ -76,7 +76,7 @@ async function getDatabase() {
 
     // Wrap the level store with TinaCMS database
     database = createDatabase({
-        level,
+        databaseAdapter: level,
         gitProvider,
     });
 
