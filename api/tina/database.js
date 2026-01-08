@@ -1,5 +1,6 @@
 const { MongoClient } = require('mongodb');
 const { MongodbLevel } = require('mongodb-level');
+const { createDatabase } = require('@tinacms/datalayer');
 
 let client = null;
 let database = null;
@@ -15,9 +16,14 @@ async function getDatabase() {
     client = new MongoClient(connectionString);
     await client.connect();
 
-    database = new MongodbLevel({
+    const level = new MongodbLevel({
         client,
         dbName: process.env.COSMOS_DB_NAME || 'tinacms',
+    });
+
+    // Wrap the level store with TinaCMS database
+    database = createDatabase({
+        level,
     });
 
     return database;
