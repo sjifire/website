@@ -9,7 +9,7 @@ async function loadModules() {
         const datalayer = await import('@tinacms/datalayer');
         TinaNodeBackend = datalayer.TinaNodeBackend;
         LocalBackendAuthProvider = datalayer.LocalBackendAuthProvider;
-        const database = await import('./database.js');
+        const database = await import('./database.mjs');
         getDatabaseClient = database.getDatabaseClient;
         modulesLoaded = true;
     } catch (err) {
