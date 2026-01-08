@@ -1,8 +1,9 @@
-const { MongoClient } = require('mongodb');
-const { MongodbLevel } = require('mongodb-level');
-const { createDatabase, resolve } = require('@tinacms/datalayer');
-const { GitHubProvider } = require('tinacms-gitprovider-github');
-const { createAppAuth } = require('@octokit/auth-app');
+// TinaCMS datalayer is ESM-only in v2, so this file uses ESM
+import { MongoClient } from 'mongodb';
+import { MongodbLevel } from 'mongodb-level';
+import { createDatabase, resolve } from '@tinacms/datalayer';
+import { GitHubProvider } from 'tinacms-gitprovider-github';
+import { createAppAuth } from '@octokit/auth-app';
 
 let client = null;
 let database = null;
@@ -48,7 +49,7 @@ async function getGitHubToken() {
     return token;
 }
 
-async function getDatabaseClient() {
+export async function getDatabaseClient() {
     if (databaseClient) return databaseClient;
 
     const connectionString = process.env.COSMOS_DB_CONNECTION_STRING;
@@ -97,7 +98,7 @@ async function getDatabaseClient() {
     return databaseClient;
 }
 
-async function closeDatabase() {
+export async function closeDatabase() {
     if (client) {
         await client.close();
         client = null;
@@ -105,5 +106,3 @@ async function closeDatabase() {
         databaseClient = null;
     }
 }
-
-module.exports = { getDatabaseClient, closeDatabase };

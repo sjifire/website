@@ -1,20 +1,27 @@
-// Wrap requires in try-catch to capture loading errors
-let TinaNodeBackend, LocalBackendAuthProvider, getDatabaseClient;
+// TinaCMS datalayer is ESM-only, so we need dynamic imports
 let loadError = null;
+let modulesLoaded = false;
+let TinaNodeBackend, LocalBackendAuthProvider, getDatabaseClient;
 
-try {
-    const datalayer = require('@tinacms/datalayer');
-    TinaNodeBackend = datalayer.TinaNodeBackend;
-    LocalBackendAuthProvider = datalayer.LocalBackendAuthProvider;
-    const database = require('./database');
-    getDatabaseClient = database.getDatabaseClient;
-} catch (err) {
-    loadError = err;
+async function loadModules() {
+    if (modulesLoaded) return;
+    try {
+        const datalayer = await import('@tinacms/datalayer');
+        TinaNodeBackend = datalayer.TinaNodeBackend;
+        LocalBackendAuthProvider = datalayer.LocalBackendAuthProvider;
+        const database = await import('./database.js');
+        getDatabaseClient = database.getDatabaseClient;
+        modulesLoaded = true;
+    } catch (err) {
+        loadError = err;
+        throw err;
+    }
 }
 
 let backend = null;
 
 async function getBackend() {
+    await loadModules();
     if (backend) return backend;
 
     const databaseClient = await getDatabaseClient();
@@ -114,21 +121,23 @@ module.exports = async function (context, req) {
 
         // Health check endpoint - also reports module loading errors
         if (path === 'health') {
-            if (loadError) {
+            // Try to load modules to check for errors
+            try {
+                await loadModules();
+                context.res = {
+                    status: 200,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ status: 'ok', timestamp: new Date().toISOString(), modulesLoaded })
+                };
+            } catch (err) {
                 context.res = {
                     status: 500,
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         status: 'error',
-                        loadError: loadError.message,
-                        stack: loadError.stack
+                        loadError: err.message,
+                        stack: err.stack
                     })
-                };
-            } else {
-                context.res = {
-                    status: 200,
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ status: 'ok', timestamp: new Date().toISOString() })
                 };
             }
             return;
