@@ -1,5 +1,16 @@
-const { TinaNodeBackend, LocalBackendAuthProvider } = require('@tinacms/datalayer');
-const { getDatabaseClient } = require('./database');
+// Wrap requires in try-catch to capture loading errors
+let TinaNodeBackend, LocalBackendAuthProvider, getDatabaseClient;
+let loadError = null;
+
+try {
+    const datalayer = require('@tinacms/datalayer');
+    TinaNodeBackend = datalayer.TinaNodeBackend;
+    LocalBackendAuthProvider = datalayer.LocalBackendAuthProvider;
+    const database = require('./database');
+    getDatabaseClient = database.getDatabaseClient;
+} catch (err) {
+    loadError = err;
+}
 
 let backend = null;
 
@@ -101,13 +112,25 @@ module.exports = async function (context, req) {
         const path = req.params?.path || '';
         context.log('TinaCMS path:', path);
 
-        // Health check endpoint
+        // Health check endpoint - also reports module loading errors
         if (path === 'health') {
-            context.res = {
-                status: 200,
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ status: 'ok', timestamp: new Date().toISOString() })
-            };
+            if (loadError) {
+                context.res = {
+                    status: 500,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        status: 'error',
+                        loadError: loadError.message,
+                        stack: loadError.stack
+                    })
+                };
+            } else {
+                context.res = {
+                    status: 200,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ status: 'ok', timestamp: new Date().toISOString() })
+                };
+            }
             return;
         }
 
