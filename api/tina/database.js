@@ -1,5 +1,5 @@
 const { MongoClient } = require('mongodb');
-const { MongodbLevel } = require('@tinacms/datalayer');
+const { MongodbLevel } = require('mongodb-level');
 
 let client = null;
 let database = null;
