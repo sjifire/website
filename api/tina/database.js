@@ -1,11 +1,12 @@
 const { MongoClient } = require('mongodb');
 const { MongodbLevel } = require('mongodb-level');
-const { createDatabase } = require('@tinacms/datalayer');
+const { createDatabase, resolve } = require('@tinacms/datalayer');
 const { GitHubProvider } = require('tinacms-gitprovider-github');
 const { createAppAuth } = require('@octokit/auth-app');
 
 let client = null;
 let database = null;
+let databaseClient = null;
 
 // Generate a GitHub installation access token from App credentials
 async function getGitHubToken() {
@@ -47,8 +48,8 @@ async function getGitHubToken() {
     return token;
 }
 
-async function getDatabase() {
-    if (database) return database;
+async function getDatabaseClient() {
+    if (databaseClient) return databaseClient;
 
     const connectionString = process.env.COSMOS_DB_CONNECTION_STRING;
     if (!connectionString) {
@@ -74,13 +75,26 @@ async function getDatabase() {
         token: githubToken,
     });
 
-    // Wrap the level store with TinaCMS database
+    // Create the TinaCMS database
     database = createDatabase({
         databaseAdapter: level,
         gitProvider,
     });
 
-    return database;
+    // Create a databaseClient wrapper with .request() method
+    // TinaNodeBackend expects this interface to execute GraphQL queries
+    databaseClient = {
+        request: async ({ query, variables, user }) => {
+            return await resolve({
+                database,
+                query,
+                variables,
+                ctxUser: user ? { sub: user.sub || user.id || user } : undefined,
+            });
+        }
+    };
+
+    return databaseClient;
 }
 
 async function closeDatabase() {
@@ -88,7 +102,8 @@ async function closeDatabase() {
         await client.close();
         client = null;
         database = null;
+        databaseClient = null;
     }
 }
 
-module.exports = { getDatabase, closeDatabase };
+module.exports = { getDatabaseClient, closeDatabase };

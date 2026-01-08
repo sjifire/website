@@ -1,12 +1,12 @@
 const { TinaNodeBackend, LocalBackendAuthProvider } = require('@tinacms/datalayer');
-const { getDatabase } = require('./database');
+const { getDatabaseClient } = require('./database');
 
 let backend = null;
 
 async function getBackend() {
     if (backend) return backend;
 
-    const databaseClient = await getDatabase();
+    const databaseClient = await getDatabaseClient();
 
     // Use LocalBackendAuthProvider since Azure Static Web Apps
     // handles authentication at the platform level via staticwebapp.config.json
