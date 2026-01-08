@@ -42,7 +42,7 @@ jobs:
         run: npm ci
 
       - name: Build TinaCMS
-        run: npx tinacms build --local --skip-cloud-checks
+        run: npx tinacms build --skip-cloud-checks --skip-indexing
 
       - name: Build 11ty site
         run: npm run build
