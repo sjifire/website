@@ -47,12 +47,11 @@ function createResponseAdapter(context) {
         end: (chunk) => {
             if (chunk) chunks.push(chunk);
             const body = chunks.join('');
+            // Azure Functions expects body as string for proper content-type handling
             context.res = {
                 status: statusCode,
                 headers,
-                body: headers['content-type']?.includes('application/json')
-                    ? JSON.parse(body || '{}')
-                    : body
+                body: body || ''
             };
         },
         // Express-style helpers
@@ -83,18 +82,39 @@ function createResponseAdapter(context) {
 
 module.exports = async function (context, req) {
     context.log('TinaCMS backend request:', req.method, req.url);
+    context.log('Request path params:', JSON.stringify(req.params));
+
+    // Ensure we always return a response
+    const sendError = (statusCode, message, details = {}) => {
+        context.res = {
+            status: statusCode,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                error: message,
+                ...details
+            })
+        };
+    };
 
     try {
+        // Extract the path after /api/tina/
+        const path = req.params?.path || '';
+        context.log('TinaCMS path:', path);
+
         const tinaBackend = await getBackend();
+        context.log('TinaCMS backend initialized');
 
         // Convert Azure Functions request to Node-like request
+        // TinaCMS expects the URL to include the path for routing
         const nodeReq = {
             method: req.method,
-            url: req.url,
+            url: `/api/tina/${path}`,
             headers: req.headers,
             body: req.body,
             query: req.query
         };
+
+        context.log('Node request URL:', nodeReq.url);
 
         const res = createResponseAdapter(context);
 
@@ -103,23 +123,15 @@ module.exports = async function (context, req) {
 
         // Ensure response is set
         if (!context.res) {
-            context.res = {
-                status: 200,
-                headers: { 'Content-Type': 'application/json' },
-                body: { message: 'OK' }
-            };
+            sendError(500, 'No response generated');
         }
     } catch (error) {
-        context.log.error('TinaCMS backend error:', error);
-        context.res = {
-            status: 500,
-            headers: { 'Content-Type': 'application/json' },
-            body: {
-                error: 'Internal server error',
-                message: error.message,
-                stack: error.stack,
-                name: error.name
-            }
-        };
+        context.log.error('TinaCMS backend error:', error.message);
+        context.log.error('Stack:', error.stack);
+        sendError(500, 'Internal server error', {
+            message: error.message,
+            stack: error.stack,
+            name: error.name
+        });
     }
 };
