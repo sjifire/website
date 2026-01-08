@@ -1,70 +1,19 @@
-const { TinaNodeBackend, LocalBackendAuthentication } = require('@tinacms/datalayer');
+const { TinaNodeBackend, LocalBackendAuthProvider } = require('@tinacms/datalayer');
 const { getDatabase } = require('./database');
-
-// Azure AD authentication verification
-async function verifyAzureADAuth(req) {
-    const header = req.headers['x-ms-client-principal'];
-    if (!header) return null;
-
-    try {
-        const encoded = Buffer.from(header, 'base64');
-        const decoded = JSON.parse(encoded.toString('ascii'));
-
-        // Check if user has required roles/groups
-        const allowedGroups = process.env.ALLOWED_EDITOR_GROUPS?.split(',') || [];
-        const userRoles = decoded.userRoles || [];
-
-        // Allow if user is authenticated (has 'authenticated' role)
-        // or is in an allowed group
-        const isAuthenticated = userRoles.includes('authenticated');
-        const hasGroupAccess = allowedGroups.length === 0 ||
-            allowedGroups.some(group => userRoles.includes(group));
-
-        if (isAuthenticated && hasGroupAccess) {
-            return {
-                isAuthorized: true,
-                user: {
-                    id: decoded.userId,
-                    name: decoded.userDetails || decoded.userId,
-                    email: decoded.userDetails || `${decoded.userId}@cms.local`
-                }
-            };
-        }
-    } catch (error) {
-        console.error('Auth verification error:', error);
-    }
-
-    return null;
-}
-
-// Custom Azure AD authentication provider for TinaCMS
-class AzureADBackendAuthentication {
-    async isAuthorized(req) {
-        const auth = await verifyAzureADAuth(req);
-        return auth?.isAuthorized || false;
-    }
-
-    async getUser(req) {
-        const auth = await verifyAzureADAuth(req);
-        return auth?.user || null;
-    }
-}
 
 let backend = null;
 
 async function getBackend() {
     if (backend) return backend;
 
-    const database = await getDatabase();
-    const isLocal = process.env.TINA_PUBLIC_IS_LOCAL === 'true';
+    const databaseClient = await getDatabase();
 
+    // Use LocalBackendAuthProvider since Azure Static Web Apps
+    // handles authentication at the platform level via staticwebapp.config.json
+    // Only authenticated users can reach /api/* routes
     backend = TinaNodeBackend({
-        authentication: isLocal
-            ? LocalBackendAuthentication()
-            : new AzureADBackendAuthentication(),
-        datalayer: {
-            database
-        }
+        authProvider: LocalBackendAuthProvider(),
+        databaseClient,
     });
 
     return backend;
