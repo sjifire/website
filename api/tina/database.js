@@ -1,6 +1,7 @@
 const { MongoClient } = require('mongodb');
 const { MongodbLevel } = require('mongodb-level');
-const { createDatabase, GitHubProvider } = require('@tinacms/datalayer');
+const { createDatabase } = require('@tinacms/datalayer');
+const { GitHubProvider } = require('tinacms-gitprovider-github');
 const { createAppAuth } = require('@octokit/auth-app');
 
 let client = null;
