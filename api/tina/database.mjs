@@ -50,8 +50,8 @@ async function getGitHubToken() {
   return token;
 }
 
-// For local development, use the simple local database
-const localDatabase = isLocal ? createLocalDatabase() : null;
+// For local development, use the simple createLocalDatabase
+
 // For production, create the database with GitHub App auth
 async function createProdDatabase() {
   const githubToken = await getGitHubToken();
@@ -86,14 +86,10 @@ function createDatabaseClient(database) {
 
 // Export a function that returns the databaseClient (handles async for prod)
 export async function getDatabase() {
-  if (isLocal) {
-    return createDatabaseClient(localDatabase);
-  }
-  const database = await createProdDatabase();
+  var database = isLocal ? createLocalDatabase() : await createProdDatabase()
   return createDatabaseClient(database);
 }
 
-export default isLocal ? createDatabaseClient(localDatabase) : (async () => {
-  const database = await createProdDatabase();
-  return createDatabaseClient(database);
+export default (async () => {
+  return getDatabase();
 })();
