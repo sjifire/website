@@ -7,7 +7,8 @@ dotenv.config({ path: resolve(__dirname, "../../.env") });
 import { createDatabase, createLocalDatabase, resolve as tinaResolve } from "@tinacms/datalayer";
 import mongodbLevel from "mongodb-level";
 const { MongodbLevel } = mongodbLevel;
-import { GitHubProvider } from "tinacms-gitprovider-github";
+import githubProvider from "tinacms-gitprovider-github";
+const { GitHubProvider } = githubProvider;
 import { createAppAuth } from "@octokit/auth-app";
 
 const isLocal = process.env.TINA_PUBLIC_IS_LOCAL === "true";
