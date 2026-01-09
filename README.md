@@ -109,7 +109,7 @@ Replace `<TENANT_ID>` in `staticwebapp.config.json` with your Azure AD tenant ID
 - Node.js 22+ (check with `node --version`)
 - npm (comes with Node.js)
 
-### Quick Start
+### Quick Start (Local Mode)
 
 ```bash
 # Clone the repository
@@ -125,16 +125,46 @@ npm run tina:dev
 
 This will start:
 - **Eleventy** at http://localhost:8080 (site preview)
-- **TinaCMS** at http://localhost:4001/admin (content editor)
+- **TinaCMS** at http://localhost:8080/admin (content editor)
+
+Changes are saved directly to local files. No credentials needed.
+
+### Testing with Cosmos DB (Local-Prod Mode)
+
+To test the full production setup locally (connecting to Azure Cosmos DB):
+
+**Terminal 1 - Start the API:**
+```bash
+# Install API dependencies (first time only)
+npm run api:install
+
+# Start Azure Functions API
+npm run api:dev
+```
+
+**Terminal 2 - Start TinaCMS:**
+```bash
+npm run tina:local-prod
+```
+
+This connects to your Cosmos DB instance. Requires `.env` file with:
+- `COSMOS_DB_CONNECTION_STRING`
+- `GITHUB_APP_ID`, `GITHUB_APP_PRIVATE_KEY`, `GITHUB_APP_INSTALLATION_ID`
+- `GITHUB_OWNER`, `GITHUB_REPO`
+
+See `.env.example` for all required variables.
 
 ### Available Commands
 
 | Command | Description |
 |---------|-------------|
 | `npm run dev` | Start Eleventy only (no CMS) |
-| `npm run tina:dev` | Start Eleventy + TinaCMS admin |
+| `npm run tina:dev` | Start Eleventy + TinaCMS in local mode |
+| `npm run tina:local-prod` | Start TinaCMS connecting to local API (requires api:dev) |
+| `npm run api:dev` | Start Azure Functions API locally |
+| `npm run api:install` | Install API dependencies |
 | `npm run build` | Build the site for production |
-| `npm run tina:build` | Build TinaCMS + site (requires TinaCloud credentials) |
+| `npm run tina:build` | Build TinaCMS + site for deployment |
 | `npm run lint` | Run ESLint and Stylelint |
 | `npm test` | Run Playwright tests |
 
@@ -152,12 +182,19 @@ src/
 │   └── services/   # Services section pages
 └── posts/          # News/blog posts (JSON)
 
-.tina/
-└── config.ts       # TinaCMS schema configuration
+tina/
+├── config.ts       # TinaCMS schema configuration
+├── database.ts     # Database config for build
+└── __generated__/  # Auto-generated types and client
+
+api/
+├── tina/           # TinaCMS API backend
+│   └── database.mjs  # Cosmos DB + GitHub App connection
+└── src/functions/  # Azure Functions
 ```
 
 ### Notes
 
-- TinaCMS runs in local mode during development - no cloud credentials needed
-- Changes made in the CMS are saved directly to the file system
+- **Local mode** (`tina:dev`): No credentials needed, changes saved to local files
+- **Local-prod mode** (`tina:local-prod`): Tests full Cosmos DB integration locally
 - The site auto-reloads when files change
