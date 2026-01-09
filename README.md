@@ -5,7 +5,7 @@
 1. GitHub account and repository
 2. Azure subscription
 3. Microsoft Entra ID (Azure AD) tenant
-4. Node.js 22+ installed
+4. Node.js 20+ installed
 
 ## Setup Instructions
 
@@ -135,7 +135,7 @@ After deployment:
 
 ### Prerequisites
 
-- Node.js 22+ (check with `node --version`)
+- Node.js 20+ (check with `node --version`)
 - npm (comes with Node.js)
 
 ### Quick Start (Local Mode)
