@@ -4,7 +4,7 @@
   "type": "module",
   "main": "src/functions/*.mjs",
   "engines": {
-    "node": ">=24"
+    "node": ">=22"
   },
   "dependencies": {
     "@azure/functions": "^4.0.0",
