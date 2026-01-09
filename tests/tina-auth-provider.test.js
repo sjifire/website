@@ -80,4 +80,146 @@ describe("tina/auth-provider", () => {
       assert.strictEqual(await provider.isAuthenticated(), true);
     });
   });
+
+  describe("AzureADAuthProvider with Azure AD validation", () => {
+    // Mock fetch for testing Azure AD endpoint
+    let originalFetch;
+    let mockFetchResponse;
+
+    function createMockFetch(response) {
+      return async () => ({
+        ok: true,
+        json: async () => response,
+      });
+    }
+
+    function createFailingFetch(status = 500) {
+      return async () => ({
+        ok: false,
+        status,
+      });
+    }
+
+    // Recreate validated provider logic
+    class TestAzureADAuthProviderWithValidation {
+      constructor() {
+        this.cachedPrincipal = null;
+        this.authChecked = false;
+      }
+
+      async getClientPrincipal() {
+        if (this.authChecked) {
+          return this.cachedPrincipal;
+        }
+
+        try {
+          const response = await global.fetch("/.auth/me");
+          if (!response.ok) {
+            this.authChecked = true;
+            return null;
+          }
+
+          const data = await response.json();
+          this.cachedPrincipal = data.clientPrincipal;
+          this.authChecked = true;
+          return this.cachedPrincipal;
+        } catch {
+          this.authChecked = true;
+          return null;
+        }
+      }
+
+      async authenticate() {
+        const principal = await this.getClientPrincipal();
+        return principal !== null;
+      }
+
+      async isAuthenticated() {
+        const principal = await this.getClientPrincipal();
+        return principal !== null;
+      }
+
+      async isAuthorized() {
+        const principal = await this.getClientPrincipal();
+        return principal !== null;
+      }
+
+      getUser() {
+        return this.cachedPrincipal || this.authChecked;
+      }
+    }
+
+    it("returns true when Azure AD returns valid clientPrincipal", async () => {
+      global.fetch = createMockFetch({
+        clientPrincipal: {
+          identityProvider: "aad",
+          userId: "user123",
+          userDetails: "user@example.com",
+          userRoles: ["authenticated"],
+        },
+      });
+
+      const provider = new TestAzureADAuthProviderWithValidation();
+      assert.strictEqual(await provider.isAuthenticated(), true);
+      assert.strictEqual(await provider.isAuthorized(), true);
+      assert.strictEqual(await provider.authenticate(), true);
+    });
+
+    it("returns false when Azure AD returns null clientPrincipal", async () => {
+      global.fetch = createMockFetch({ clientPrincipal: null });
+
+      const provider = new TestAzureADAuthProviderWithValidation();
+      assert.strictEqual(await provider.isAuthenticated(), false);
+      assert.strictEqual(await provider.isAuthorized(), false);
+    });
+
+    it("returns false when /.auth/me endpoint fails", async () => {
+      global.fetch = createFailingFetch(500);
+
+      const provider = new TestAzureADAuthProviderWithValidation();
+      assert.strictEqual(await provider.isAuthenticated(), false);
+      assert.strictEqual(await provider.isAuthorized(), false);
+    });
+
+    it("returns false when fetch throws an error", async () => {
+      global.fetch = async () => {
+        throw new Error("Network error");
+      };
+
+      const provider = new TestAzureADAuthProviderWithValidation();
+      assert.strictEqual(await provider.isAuthenticated(), false);
+    });
+
+    it("caches the clientPrincipal after first check", async () => {
+      let fetchCallCount = 0;
+      global.fetch = async () => {
+        fetchCallCount++;
+        return {
+          ok: true,
+          json: async () => ({
+            clientPrincipal: { userId: "user123" },
+          }),
+        };
+      };
+
+      const provider = new TestAzureADAuthProviderWithValidation();
+      await provider.isAuthenticated();
+      await provider.isAuthenticated();
+      await provider.isAuthorized();
+
+      assert.strictEqual(fetchCallCount, 1, "Should only fetch once due to caching");
+    });
+
+    it("getUser returns cached principal when available", async () => {
+      global.fetch = createMockFetch({
+        clientPrincipal: { userId: "user123", userDetails: "test@example.com" },
+      });
+
+      const provider = new TestAzureADAuthProviderWithValidation();
+      await provider.isAuthenticated(); // Triggers fetch and cache
+      const user = provider.getUser();
+
+      assert.deepStrictEqual(user, { userId: "user123", userDetails: "test@example.com" });
+    });
+  });
 });
