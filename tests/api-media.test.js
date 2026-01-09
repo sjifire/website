@@ -371,6 +371,88 @@ describe("media module", () => {
       const putCall = calls.find((c) => c.options?.method === "PUT");
       assert.ok(putCall.endpoint.includes("events/photo.jpg"));
     });
+
+    it("normalizes directory with leading slash", async () => {
+      const calls = [];
+      const mockGithubRequest = async (endpoint, options) => {
+        calls.push({ endpoint, options });
+        if (!options?.method) {
+          throw new Error("404");
+        }
+        return {
+          content: {
+            path: "src/assets/images/photo.jpg",
+            name: "photo.jpg",
+          },
+        };
+      };
+
+      const mediaOps = createMediaOperations({
+        getGitHubConfig: mockGetGitHubConfig,
+        githubRequest: mockGithubRequest,
+      });
+
+      await mediaOps.uploadMedia("photo.jpg", "content", "/");
+
+      const putCall = calls.find((c) => c.options?.method === "PUT");
+      // Should not have double slashes - path should be src/assets/images/photo.jpg
+      assert.ok(!putCall.endpoint.includes("//"), "Path should not contain double slashes");
+      assert.ok(putCall.endpoint.includes("src/assets/images/photo.jpg"));
+    });
+
+    it("normalizes directory with leading and trailing slashes", async () => {
+      const calls = [];
+      const mockGithubRequest = async (endpoint, options) => {
+        calls.push({ endpoint, options });
+        if (!options?.method) {
+          throw new Error("404");
+        }
+        return {
+          content: {
+            path: "src/assets/images/events/photo.jpg",
+            name: "photo.jpg",
+          },
+        };
+      };
+
+      const mediaOps = createMediaOperations({
+        getGitHubConfig: mockGetGitHubConfig,
+        githubRequest: mockGithubRequest,
+      });
+
+      await mediaOps.uploadMedia("photo.jpg", "content", "/events/");
+
+      const putCall = calls.find((c) => c.options?.method === "PUT");
+      assert.ok(!putCall.endpoint.includes("//"), "Path should not contain double slashes");
+      assert.ok(putCall.endpoint.includes("src/assets/images/events/photo.jpg"));
+    });
+
+    it("URL-encodes filenames with spaces", async () => {
+      const calls = [];
+      const mockGithubRequest = async (endpoint, options) => {
+        calls.push({ endpoint, options });
+        if (!options?.method) {
+          throw new Error("404");
+        }
+        return {
+          content: {
+            path: "src/assets/images/my photo.jpg",
+            name: "my photo.jpg",
+          },
+        };
+      };
+
+      const mediaOps = createMediaOperations({
+        getGitHubConfig: mockGetGitHubConfig,
+        githubRequest: mockGithubRequest,
+      });
+
+      await mediaOps.uploadMedia("my photo.jpg", "content", "");
+
+      const putCall = calls.find((c) => c.options?.method === "PUT");
+      // Filename should be URL-encoded
+      assert.ok(putCall.endpoint.includes("my%20photo.jpg"), "Filename with space should be URL-encoded");
+    });
   });
 
   describe("deleteMedia (with dependency injection)", () => {
