@@ -17,7 +17,7 @@ npm run api:dev      # Run Azure Functions API locally
 npm start            # Parallel: dev + api:dev
 ```
 
-Requires Node.js 25+. Output goes to `_site/`.
+Requires Node.js 24+. Output goes to `_site/`.
 
 ## Architecture
 

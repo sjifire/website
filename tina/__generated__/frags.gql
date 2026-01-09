@@ -1,0 +1,85 @@
+fragment ConfigBurnStatusParts on ConfigBurnStatus {
+  __typename
+  fire_status
+  burn_season_start
+  burn_season_end
+  burn_ban_status
+  commercial_burn_ban_status
+  rec_campfire_status
+  state_campfire_status
+  np_campfire_status
+}
+
+fragment ConfigNavigationParts on ConfigNavigation {
+  __typename
+  header_highlight_url
+  items {
+    __typename
+    label
+    folder
+    url
+    children {
+      __typename
+      label
+      url
+    }
+  }
+}
+
+fragment ConfigSiteParts on ConfigSite {
+  __typename
+  site_name
+  formal_site_name
+  site_desc
+  prodUrl
+  cloudinarySiteId
+  cloudinaryRootUrl
+  enable_cloudinary_rewrites
+  opengraph_image
+  address {
+    __typename
+    street
+    city
+    state
+    zip
+    phone
+    map
+  }
+}
+
+fragment ConfigPersonnelParts on ConfigPersonnel {
+  __typename
+  title
+  personnel {
+    __typename
+    first_name
+    last_name
+    title
+    rank
+    staff_type
+    roles
+    photo
+  }
+  body
+}
+
+fragment HomepageParts on Homepage {
+  __typename
+  title
+  number_news_stories
+  image_gallery {
+    __typename
+    image
+    image_alt
+  }
+}
+
+fragment PageParts on Page {
+  __typename
+  title
+  nav_order
+  nav_title
+  nav_hidden
+  sidebar
+  body
+}

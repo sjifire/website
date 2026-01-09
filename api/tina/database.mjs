@@ -1,108 +1,99 @@
-// TinaCMS datalayer is ESM-only in v2, so this file uses ESM
-import { MongoClient } from 'mongodb';
-import { MongodbLevel } from 'mongodb-level';
-import { createDatabase, resolve } from '@tinacms/datalayer';
-import { GitHubProvider } from 'tinacms-gitprovider-github';
-import { createAppAuth } from '@octokit/auth-app';
+import dotenv from "dotenv";
+import { fileURLToPath } from "url";
+import { dirname, resolve } from "path";
 
-let client = null;
-let database = null;
-let databaseClient = null;
+const __dirname = dirname(fileURLToPath(import.meta.url));
+dotenv.config({ path: resolve(__dirname, "../../.env") });
+import { createDatabase, createLocalDatabase, resolve as tinaResolve } from "@tinacms/datalayer";
+import mongodbLevel from "mongodb-level";
+const { MongodbLevel } = mongodbLevel;
+import { GitHubProvider } from "tinacms-gitprovider-github";
+import { createAppAuth } from "@octokit/auth-app";
+
+const isLocal = process.env.TINA_PUBLIC_IS_LOCAL === "true";
+
+const branch =
+  process.env.GITHUB_BRANCH ||
+  process.env.HEAD ||
+  "main";
 
 // Generate a GitHub installation access token from App credentials
 async function getGitHubToken() {
-    const appId = process.env.GITHUB_APP_ID;
-    const privateKey = process.env.GITHUB_APP_PRIVATE_KEY;
-    const installationId = process.env.GITHUB_APP_INSTALLATION_ID;
+  const appId = process.env.GITHUB_APP_ID;
+  const privateKey = process.env.GITHUB_APP_PRIVATE_KEY;
+  const installationId = process.env.GITHUB_APP_INSTALLATION_ID;
 
-    if (!appId || !privateKey || !installationId) {
-        throw new Error(
-            'GitHub App credentials required: GITHUB_APP_ID, GITHUB_APP_PRIVATE_KEY, GITHUB_APP_INSTALLATION_ID'
-        );
-    }
+  if (!appId || !privateKey || !installationId) {
+    throw new Error(
+      "GitHub App credentials required: GITHUB_APP_ID, GITHUB_APP_PRIVATE_KEY, GITHUB_APP_INSTALLATION_ID"
+    );
+  }
 
-    // Handle private key formatting (Azure may store it with escaped newlines or base64 encoded)
-    let formattedPrivateKey = privateKey
-        .replace(/\\n/g, '\n')           // Handle escaped newlines
-        .replace(/\\r/g, '')              // Remove escaped carriage returns
-        .replace(/^["']|["']$/g, '')      // Remove surrounding quotes
-        .trim();
+  // Handle private key formatting (may be base64 encoded or have escaped newlines)
+  let formattedKey = privateKey
+    .replace(/\\n/g, "\n")
+    .replace(/\\r/g, "")
+    .replace(/^["']|["']$/g, "")
+    .trim();
 
-    // If key doesn't have PEM headers, assume it's base64 encoded
-    if (!formattedPrivateKey.includes('-----BEGIN')) {
-        try {
-            formattedPrivateKey = Buffer.from(formattedPrivateKey, 'base64').toString('utf8');
-        } catch (e) {
-            // If base64 decode fails, wrap as-is
-            formattedPrivateKey = `-----BEGIN RSA PRIVATE KEY-----\n${formattedPrivateKey}\n-----END RSA PRIVATE KEY-----`;
-        }
-    }
+  if (!formattedKey.includes("-----BEGIN")) {
+    formattedKey = Buffer.from(formattedKey, "base64").toString("utf8");
+  }
 
-    const auth = createAppAuth({
-        appId,
-        privateKey: formattedPrivateKey,
-        installationId,
-    });
+  const auth = createAppAuth({
+    appId,
+    privateKey: formattedKey,
+    installationId,
+  });
 
-    // Get an installation access token
-    const { token } = await auth({ type: 'installation' });
-    return token;
+  const { token } = await auth({ type: "installation" });
+  return token;
 }
 
-export async function getDatabaseClient() {
-    if (databaseClient) return databaseClient;
-
-    const connectionString = process.env.COSMOS_DB_CONNECTION_STRING;
-    if (!connectionString) {
-        throw new Error('COSMOS_DB_CONNECTION_STRING environment variable is required');
-    }
-
-    // Get GitHub token from App authentication
-    const githubToken = await getGitHubToken();
-
-    client = new MongoClient(connectionString);
-    await client.connect();
-
-    const level = new MongodbLevel({
-        client,
-        dbName: process.env.COSMOS_DB_NAME || 'tinacms',
-    });
-
-    // Configure GitHub provider for content
-    const gitProvider = new GitHubProvider({
-        owner: process.env.GITHUB_OWNER || 'sjifire',
-        repo: process.env.GITHUB_REPO || 'website',
-        branch: process.env.GITHUB_BRANCH || 'main',
-        token: githubToken,
-    });
-
-    // Create the TinaCMS database
-    database = createDatabase({
-        databaseAdapter: level,
-        gitProvider,
-    });
-
-    // Create a databaseClient wrapper with .request() method
-    // TinaNodeBackend expects this interface to execute GraphQL queries
-    databaseClient = {
-        request: async ({ query, variables, user }) => {
-            return await resolve({
-                database,
-                query,
-                variables,
-                ctxUser: user ? { sub: user.sub || user.id || user } : undefined,
-            });
-        }
-    };
-
-    return databaseClient;
+// For local development, use the simple local database
+const localDatabase = isLocal ? createLocalDatabase() : null;
+// For production, create the database with GitHub App auth
+async function createProdDatabase() {
+  const githubToken = await getGitHubToken();
+  return createDatabase({
+    gitProvider: new GitHubProvider({
+      branch,
+      owner: process.env.GITHUB_OWNER,
+      repo: process.env.GITHUB_REPO,
+      token: githubToken,
+    }),
+    databaseAdapter: new MongodbLevel({
+      collectionName: branch,
+      dbName: process.env.COSMOS_DB_NAME || "tinacms",
+      mongoUri: process.env.COSMOS_DB_CONNECTION_STRING,
+    }),
+  });
 }
 
-export async function closeDatabase() {
-    if (client) {
-        await client.close();
-        client = null;
-        database = null;
-        databaseClient = null;
+// Wrap database in a client with .request() method that TinaNodeBackend expects
+function createDatabaseClient(database) {
+  return {
+    request: async ({ query, variables, user }) => {
+      return await tinaResolve({
+        database,
+        query,
+        variables,
+        ctxUser: user ? { sub: user.sub || user.id || user } : undefined,
+      });
     }
+  };
 }
+
+// Export a function that returns the databaseClient (handles async for prod)
+export async function getDatabase() {
+  if (isLocal) {
+    return createDatabaseClient(localDatabase);
+  }
+  const database = await createProdDatabase();
+  return createDatabaseClient(database);
+}
+
+export default isLocal ? createDatabaseClient(localDatabase) : (async () => {
+  const database = await createProdDatabase();
+  return createDatabaseClient(database);
+})();

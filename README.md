@@ -5,7 +5,7 @@
 1. GitHub account and repository
 2. Azure subscription
 3. Microsoft 365 tenant with Azure AD
-4. Node.js 25+ installed
+4. Node.js 24+ installed
 
 ## Setup Instructions
 
@@ -106,7 +106,7 @@ Replace `<TENANT_ID>` in `staticwebapp.config.json` with your Azure AD tenant ID
 
 ### Prerequisites
 
-- Node.js 25+ (check with `node --version`)
+- Node.js 24+ (check with `node --version`)
 - npm (comes with Node.js)
 
 ### Quick Start
