@@ -47,12 +47,29 @@ async function getGitHubToken() {
 
 // For production, create the database with GitHub App auth
 async function createProdDatabase() {
+  const owner = process.env.GITHUB_OWNER;
+  const repo = process.env.GITHUB_REPO;
+
+  console.log("Creating production database with GitHub provider:");
+  console.log("  Owner:", owner || "(NOT SET)");
+  console.log("  Repo:", repo || "(NOT SET)");
+  console.log("  Branch:", branch);
+  console.log("  App ID:", process.env.GITHUB_APP_ID ? "set" : "(NOT SET)");
+  console.log("  Installation ID:", process.env.GITHUB_APP_INSTALLATION_ID ? "set" : "(NOT SET)");
+  console.log("  Private Key:", process.env.GITHUB_APP_PRIVATE_KEY ? "set (length: " + process.env.GITHUB_APP_PRIVATE_KEY.length + ")" : "(NOT SET)");
+
+  if (!owner || !repo) {
+    throw new Error("GITHUB_OWNER and GITHUB_REPO environment variables are required");
+  }
+
   const githubToken = await getGitHubToken();
+  console.log("  GitHub token generated successfully");
+
   return createDatabase({
     gitProvider: new GitHubProvider({
       branch,
-      owner: process.env.GITHUB_OWNER,
-      repo: process.env.GITHUB_REPO,
+      owner,
+      repo,
       token: githubToken,
     }),
     databaseAdapter: new MongodbLevel({
