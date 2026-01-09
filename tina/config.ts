@@ -3,13 +3,24 @@ if (typeof window === "undefined") {
   require("dotenv/config");
 }
 import { defineConfig, LocalAuthProvider } from "tinacms";
-import type { MediaStore } from "tinacms";
+import type { AbstractAuthProvider, MediaStore } from "tinacms";
 
 const isLocal = process.env.TINA_PUBLIC_IS_LOCAL === "true";
 const isLocalProd = process.env.TINA_PUBLIC_LOCAL_PROD === "true";
 
-// Use LocalAuthProvider - Azure AD handles auth at platform level
-const authProvider = new LocalAuthProvider();
+// Custom auth provider for production - Azure AD handles auth at platform level
+// This skips the "enter edit mode" dialog since users are already authenticated
+class AzureADAuthProvider implements AbstractAuthProvider {
+  async authenticate() { return true; }
+  async isAuthenticated() { return true; }
+  async isAuthorized() { return true; }
+  getToken() { return { id_token: "azure-ad-authenticated" }; }
+  getUser() { return true; }
+  async logout() { window.location.href = "/.auth/logout"; }
+}
+
+// Use LocalAuthProvider for local dev (shows edit mode dialog), AzureADAuthProvider for production
+const authProvider = isLocal ? new LocalAuthProvider() : new AzureADAuthProvider();
 
 // API URL: undefined for local, localhost:7071 for local-prod testing, relative for production
 const getApiUrl = () => {
