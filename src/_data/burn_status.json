@@ -1,7 +1,7 @@
 {
-  "fire_status": "Low",
-  "burn_season_start": "2025-10-06",
-  "burn_season_end": "2026-06-15",
+  "fire_status": "Moderate",
+  "burn_season_start": "2025-10-06T00:00:00.000Z",
+  "burn_season_end": "2026-06-15T00:00:00.000Z",
   "burn_ban_status": "Open",
   "commercial_burn_ban_status": "Open",
   "rec_campfire_status": "Open",
