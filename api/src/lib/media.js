@@ -42,13 +42,22 @@ function getCorsHeaders(request) {
 function createMediaOperations(deps = {}) {
   const { getGitHubConfig, githubRequest } = { ...github, ...deps };
 
+  // Encode path segments for GitHub API URLs
+  function encodePathForGitHub(path) {
+    return path
+      .split("/")
+      .map((segment) => encodeURIComponent(segment))
+      .join("/");
+  }
+
   // List files in the media directory
   async function listMedia(directory = "") {
     const { branch } = getGitHubConfig();
     const mediaPath = directory ? `${MEDIA_ROOT}/${directory}` : MEDIA_ROOT;
+    const encodedPath = encodePathForGitHub(mediaPath);
 
     try {
-      const contents = await githubRequest(`/contents/${mediaPath}?ref=${branch}`);
+      const contents = await githubRequest(`/contents/${encodedPath}?ref=${branch}`);
 
       if (!Array.isArray(contents)) return [];
 
@@ -81,11 +90,12 @@ function createMediaOperations(deps = {}) {
     const filePath = directory
       ? `${MEDIA_ROOT}/${directory}/${filename}`
       : `${MEDIA_ROOT}/${filename}`;
+    const encodedPath = encodePathForGitHub(filePath);
 
     // Check if file exists to get its SHA (required for updates)
     let sha;
     try {
-      const existing = await githubRequest(`/contents/${filePath}?ref=${branch}`);
+      const existing = await githubRequest(`/contents/${encodedPath}?ref=${branch}`);
       sha = existing.sha;
     } catch (e) {
       // File doesn't exist, that's fine
@@ -98,7 +108,7 @@ function createMediaOperations(deps = {}) {
       ...(sha && { sha }),
     };
 
-    const result = await githubRequest(`/contents/${filePath}`, {
+    const result = await githubRequest(`/contents/${encodedPath}`, {
       method: "PUT",
       body: JSON.stringify(body),
     });
@@ -109,9 +119,10 @@ function createMediaOperations(deps = {}) {
   // Delete a file from the media directory
   async function deleteMedia(filepath) {
     const { branch } = getGitHubConfig();
-    const existing = await githubRequest(`/contents/${filepath}?ref=${branch}`);
+    const encodedPath = encodePathForGitHub(filepath);
+    const existing = await githubRequest(`/contents/${encodedPath}?ref=${branch}`);
 
-    await githubRequest(`/contents/${filepath}`, {
+    await githubRequest(`/contents/${encodedPath}`, {
       method: "DELETE",
       body: JSON.stringify({
         message: `Delete media: ${filepath.split("/").pop()}`,
