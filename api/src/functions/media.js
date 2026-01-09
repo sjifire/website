@@ -31,10 +31,10 @@ async function githubRequest(endpoint, options = {}) {
 // List files in the media directory
 async function listMedia(directory = "") {
   const { branch } = getGitHubConfig();
-  const path = directory ? `${MEDIA_ROOT}/${directory}` : MEDIA_ROOT;
+  const mediaPath = directory ? `${MEDIA_ROOT}/${directory}` : MEDIA_ROOT;
 
   try {
-    const contents = await githubRequest(`/contents/${path}?ref=${branch}`);
+    const contents = await githubRequest(`/contents/${mediaPath}?ref=${branch}`);
 
     if (!Array.isArray(contents)) {
       return [];
@@ -43,12 +43,20 @@ async function listMedia(directory = "") {
     const items = [];
     for (const item of contents) {
       if (item.type === "file" && isMediaFile(item.name)) {
+        // Remove 'src/' prefix from path for public URL
+        const publicPath = item.path.replace(/^src\//, "/");
         items.push({
           type: "file",
           id: item.path,
           filename: item.name,
           directory: directory || "",
-          src: `/${item.path}`,
+          src: publicPath,
+          previewSrc: publicPath,
+          thumbnails: {
+            "75x75": publicPath,
+            "400x400": publicPath,
+            "1000x1000": publicPath,
+          },
         });
       } else if (item.type === "dir") {
         items.push({
@@ -77,12 +85,12 @@ function isMediaFile(filename) {
 // Upload a file to the media directory
 async function uploadMedia(filename, content, directory = "") {
   const { branch } = getGitHubConfig();
-  const path = directory ? `${MEDIA_ROOT}/${directory}/${filename}` : `${MEDIA_ROOT}/${filename}`;
+  const filePath = directory ? `${MEDIA_ROOT}/${directory}/${filename}` : `${MEDIA_ROOT}/${filename}`;
 
   // Check if file exists to get its SHA (required for updates)
   let sha;
   try {
-    const existing = await githubRequest(`/contents/${path}?ref=${branch}`);
+    const existing = await githubRequest(`/contents/${filePath}?ref=${branch}`);
     sha = existing.sha;
   } catch (e) {
     // File doesn't exist, that's fine
@@ -99,17 +107,25 @@ async function uploadMedia(filename, content, directory = "") {
     body.message = `Update media: ${filename}`;
   }
 
-  const result = await githubRequest(`/contents/${path}`, {
+  const result = await githubRequest(`/contents/${filePath}`, {
     method: "PUT",
     body: JSON.stringify(body),
   });
 
+  // Remove 'src/' prefix from path for public URL
+  const publicPath = result.content.path.replace(/^src\//, "/");
   return {
     type: "file",
     id: result.content.path,
     filename: result.content.name,
     directory: directory || "",
-    src: `/${result.content.path}`,
+    src: publicPath,
+    previewSrc: publicPath,
+    thumbnails: {
+      "75x75": publicPath,
+      "400x400": publicPath,
+      "1000x1000": publicPath,
+    },
   };
 }
 
@@ -132,13 +148,28 @@ async function deleteMedia(filepath) {
   return { success: true };
 }
 
+// CORS headers helper
+function getCorsHeaders(request) {
+  const origin = request.headers.get("origin") || "*";
+  return {
+    "Access-Control-Allow-Origin": origin,
+    "Access-Control-Allow-Credentials": "true",
+    "Access-Control-Allow-Methods": "GET, POST, DELETE, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type",
+  };
+}
+
 app.http("media", {
-  methods: ["GET", "POST", "DELETE"],
+  methods: ["GET", "POST", "DELETE", "OPTIONS"],
   authLevel: "anonymous",
   route: "media/{*path}",
   handler: async (request, context) => {
-    const path = request.params.path || "";
-    context.log("Media request:", request.method, path);
+    const corsHeaders = getCorsHeaders(request);
+
+    // Handle preflight
+    if (request.method === "OPTIONS") {
+      return { status: 204, headers: corsHeaders };
+    }
 
     try {
       if (request.method === "GET") {
@@ -147,6 +178,7 @@ app.http("media", {
         const items = await listMedia(directory);
         return {
           status: 200,
+          headers: corsHeaders,
           jsonBody: items,
         };
       }
@@ -160,6 +192,7 @@ app.http("media", {
         if (!file) {
           return {
             status: 400,
+            headers: corsHeaders,
             jsonBody: { error: "No file provided" },
           };
         }
@@ -170,6 +203,7 @@ app.http("media", {
         const result = await uploadMedia(file.name, base64Content, directory);
         return {
           status: 200,
+          headers: corsHeaders,
           jsonBody: result,
         };
       }
@@ -177,11 +211,12 @@ app.http("media", {
       if (request.method === "DELETE") {
         // Delete media file
         const body = await request.json();
-        const filepath = body.filepath || path;
+        const filepath = body.filepath || request.params.path;
 
         if (!filepath) {
           return {
             status: 400,
+            headers: corsHeaders,
             jsonBody: { error: "No filepath provided" },
           };
         }
@@ -189,18 +224,21 @@ app.http("media", {
         await deleteMedia(filepath);
         return {
           status: 200,
+          headers: corsHeaders,
           jsonBody: { success: true },
         };
       }
 
       return {
         status: 405,
+        headers: corsHeaders,
         jsonBody: { error: "Method not allowed" },
       };
     } catch (error) {
-      context.error("Media error:", error.message, error.stack);
+      context.error("Media error:", error.message);
       return {
         status: 500,
+        headers: corsHeaders,
         jsonBody: { error: error.message },
       };
     }
