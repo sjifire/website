@@ -1,24 +1,126 @@
-import { defineConfig } from "tinacms";
+// Load .env on server-side only (not in browser)
+if (typeof window === "undefined") {
+  require("dotenv/config");
+}
+import { defineConfig, LocalAuthProvider } from "tinacms";
+import type { Media, MediaStore, MediaUploadOptions, MediaListOptions } from "tinacms";
 
 const isLocal = process.env.TINA_PUBLIC_IS_LOCAL === "true";
+const isLocalProd = process.env.TINA_PUBLIC_LOCAL_PROD === "true"; // Local testing with Cosmos DB
+
+// Custom media store for production - stores media in GitHub repo
+function createGitHubMediaStore(): MediaStore {
+  const apiBase = isLocalProd ? "http://localhost:7071/api/media" : "/api/media";
+
+  return {
+    accept: "image/*,application/pdf",
+
+    async persist(files: MediaUploadOptions[]): Promise<Media[]> {
+      const uploaded: Media[] = [];
+
+      for (const { file, directory } of files) {
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("directory", directory || "");
+
+        const response = await fetch(apiBase, {
+          method: "POST",
+          body: formData,
+          credentials: "include",
+        });
+
+        if (!response.ok) {
+          const error = await response.json();
+          throw new Error(error.error || "Upload failed");
+        }
+
+        const result = await response.json();
+        uploaded.push({
+          type: "file",
+          id: result.id,
+          filename: result.filename,
+          directory: result.directory,
+          src: result.src,
+        } as Media);
+      }
+
+      return uploaded;
+    },
+
+    async list(options?: MediaListOptions): Promise<{ items: Media[]; nextOffset?: number }> {
+      const directory = options?.directory || "";
+      const url = `${apiBase}?directory=${encodeURIComponent(directory)}`;
+
+      const response = await fetch(url, {
+        credentials: "include",
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || "Failed to list media");
+      }
+
+      const items = await response.json();
+      return { items };
+    },
+
+    async delete(media: Media): Promise<void> {
+      const response = await fetch(apiBase, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ filepath: media.id }),
+        credentials: "include",
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || "Delete failed");
+      }
+    },
+  };
+}
+
+// Use LocalAuthProvider - Azure AD handles auth at platform level
+const authProvider = new LocalAuthProvider();
+
+// API URL: undefined for local, localhost:7071 for local-prod testing, relative for production
+const getApiUrl = () => {
+  var url;
+  if (isLocal){
+    url = undefined;
+  } else if(isLocalProd){
+    url = "http://localhost:7071/api/tina/gql";
+  }else{
+    url = "/api/tina/gql";
+  }
+  return url
+
+};
 
 export default defineConfig({
   branch: process.env.TINA_BRANCH || "main",
 
   // Self-hosted: use custom backend in production, local mode for development
-  ...(isLocal ? {} : { contentApiUrlOverride: "/api/tina" }),
+  contentApiUrlOverride: getApiUrl(),
+  authProvider,
 
   build: {
     outputFolder: "admin",
     publicFolder: "_site",
   },
 
-  media: {
-    tina: {
-      mediaRoot: "assets/images",
-      publicFolder: "src",
-    },
-  },
+  media: isLocal
+    ? {
+        tina: {
+          mediaRoot: "assets/images",
+          publicFolder: "src",
+        },
+      }
+    : {
+        loadCustomStore: async () => {
+          return createGitHubMediaStore();
+        },
+      },
 
   schema: {
     collections: [

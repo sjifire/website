@@ -1,34 +1,59 @@
-const { MongoClient } = require('mongodb');
-const { MongodbLevel } = require('@tinacms/datalayer');
+const { createDatabase, createLocalDatabase, resolve: tinaResolve } = require("@tinacms/datalayer");
+const { MongodbLevel } = require("mongodb-level");
+const { GitHubProvider } = require("tinacms-gitprovider-github");
+const { getGitHubToken, getGitHubConfig } = require("../src/lib/github.js");
 
-let client = null;
-let database = null;
+const isLocal = process.env.TINA_PUBLIC_IS_LOCAL === "true";
 
+// For production, create the database with GitHub App auth
+async function createProdDatabase() {
+  const { owner, repo, branch } = getGitHubConfig();
+
+  console.log("Creating production database with GitHub provider:");
+  console.log("  Owner:", owner || "(NOT SET)");
+  console.log("  Repo:", repo || "(NOT SET)");
+  console.log("  Branch:", branch);
+
+  if (!owner || !repo) {
+    throw new Error("GITHUB_OWNER and GITHUB_REPO environment variables are required");
+  }
+
+  const githubToken = await getGitHubToken();
+  console.log("  GitHub token generated successfully");
+
+  return createDatabase({
+    gitProvider: new GitHubProvider({
+      branch,
+      owner,
+      repo,
+      token: githubToken,
+    }),
+    databaseAdapter: new MongodbLevel({
+      collectionName: branch,
+      dbName: process.env.COSMOS_DB_NAME || "tinacms",
+      mongoUri: process.env.COSMOS_DB_CONNECTION_STRING,
+    }),
+  });
+}
+
+// Wrap database in a client with .request() method that TinaNodeBackend expects
+function createDatabaseClient(database) {
+  return {
+    request: async ({ query, variables, user }) => {
+      return await tinaResolve({
+        database,
+        query,
+        variables,
+        ctxUser: user ? { sub: user.sub || user.id || user } : undefined,
+      });
+    }
+  };
+}
+
+// Export a function that returns the databaseClient (handles async for prod)
 async function getDatabase() {
-    if (database) return database;
-
-    const connectionString = process.env.COSMOS_DB_CONNECTION_STRING;
-    if (!connectionString) {
-        throw new Error('COSMOS_DB_CONNECTION_STRING environment variable is required');
-    }
-
-    client = new MongoClient(connectionString);
-    await client.connect();
-
-    database = new MongodbLevel({
-        client,
-        dbName: process.env.COSMOS_DB_NAME || 'tinacms',
-    });
-
-    return database;
+  const database = isLocal ? createLocalDatabase() : await createProdDatabase();
+  return createDatabaseClient(database);
 }
 
-async function closeDatabase() {
-    if (client) {
-        await client.close();
-        client = null;
-        database = null;
-    }
-}
-
-module.exports = { getDatabase, closeDatabase };
+module.exports = { getDatabase };

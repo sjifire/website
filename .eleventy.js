@@ -12,6 +12,9 @@ module.exports = function(eleventyConfig) {
   // Copy static assets
   eleventyConfig.addPassthroughCopy("src/assets/");
 
+  // Copy Azure Static Web Apps config to output root
+  eleventyConfig.addPassthroughCopy({ "staticwebapp.config.json": "staticwebapp.config.json" });
+
   // Process CSS files as templates with minification in production
   eleventyConfig.addTemplateFormats("css");
   eleventyConfig.addExtension("css", {
