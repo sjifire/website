@@ -2,99 +2,31 @@
 if (typeof window === "undefined") {
   require("dotenv/config");
 }
-import { defineConfig, LocalAuthProvider } from "tinacms";
-import type { MediaStore } from "tinacms";
+import { defineConfig } from "tinacms";
+import { createAuthProvider } from "./auth-provider";
+import { getMediaStoreClass } from "./media-store";
 
 const isLocal = process.env.TINA_PUBLIC_IS_LOCAL === "true";
 const isLocalProd = process.env.TINA_PUBLIC_LOCAL_PROD === "true";
-
-// Custom auth provider for production - Azure AD handles auth at platform level
-// This skips the "enter edit mode" dialog since users are already authenticated
-class AzureADAuthProvider extends LocalAuthProvider {
-  async authenticate() { return true; }
-  async isAuthenticated() { return true; }
-  async isAuthorized() { return true; }
-  getUser() { return true; }
-  async logout() { window.location.href = "/.auth/logout"; }
-}
-
-// Use LocalAuthProvider for local dev (shows edit mode dialog), AzureADAuthProvider for production
-const authProvider = isLocal ? new LocalAuthProvider() : new AzureADAuthProvider();
+const LOCAL_AZURE_FUNCTIONS_URL = "http://localhost:7071";
 
 // API URL: undefined for local, localhost:7071 for local-prod testing, relative for production
 const getApiUrl = () => {
   if (isLocal) {
     return undefined;
   } else if (isLocalProd) {
-    return "http://localhost:7071/api/tina/gql";
+    return `${LOCAL_AZURE_FUNCTIONS_URL}/api/tina/gql`;
   } else {
     return "/api/tina/gql";
   }
 };
-
-// Custom media store class for self-hosted - calls our API endpoints
-class GitHubMediaStore implements MediaStore {
-  accept = "*";
-
-  private get apiBase() {
-    return isLocalProd ? "http://localhost:7071/api/media" : "/api/media";
-  }
-
-  async persist(files: any[]) {
-    const uploaded = [];
-    for (const { file, directory } of files) {
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("directory", directory || "");
-      const response = await fetch(this.apiBase, {
-        method: "POST",
-        body: formData,
-        credentials: "include",
-      });
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || "Upload failed");
-      }
-      const result = await response.json();
-      uploaded.push(result);
-    }
-    return uploaded;
-  }
-
-  async list(options?: any) {
-    const directory = options?.directory || "";
-    const url = `${this.apiBase}?directory=${encodeURIComponent(directory)}`;
-    const response = await fetch(url, {
-      credentials: "include",
-    });
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error || "Failed to list media");
-    }
-    const items = await response.json();
-    return { items };
-  }
-
-  async delete(media: any) {
-    const response = await fetch(this.apiBase, {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ filepath: media.id }),
-      credentials: "include",
-    });
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error || "Delete failed");
-    }
-  }
-}
 
 export default defineConfig({
   branch: process.env.TINA_BRANCH || "main",
 
   // Self-hosted: use custom backend in production, local mode for development
   contentApiUrlOverride: getApiUrl(),
-  authProvider,
+  authProvider: createAuthProvider(isLocal),
 
   build: {
     outputFolder: "admin",
@@ -110,7 +42,7 @@ export default defineConfig({
         },
       }
     : {
-        loadCustomStore: async () => GitHubMediaStore,
+        loadCustomStore: async () => getMediaStoreClass(isLocalProd, LOCAL_AZURE_FUNCTIONS_URL),
       },
 
   schema: {
