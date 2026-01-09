@@ -147,10 +147,7 @@ npm run api:dev
 npm run tina:local-prod
 ```
 
-This connects to your Cosmos DB instance. Requires `.env` file with:
-- `COSMOS_DB_CONNECTION_STRING`
-- `GITHUB_APP_ID`, `GITHUB_APP_PRIVATE_KEY`, `GITHUB_APP_INSTALLATION_ID`
-- `GITHUB_OWNER`, `GITHUB_REPO`
+This connects to your Cosmos DB instance. Requires `.env` file
 
 See `.env.example` for all required variables.
 
