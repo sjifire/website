@@ -1,8 +1,7 @@
 {
   "name": "api",
   "version": "1.0.0",
-  "type": "module",
-  "main": "src/functions/*.mjs",
+  "main": "src/functions/*.js",
   "engines": {
     "node": ">=22"
   },

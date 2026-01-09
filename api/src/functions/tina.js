@@ -1,5 +1,5 @@
-import { app } from "@azure/functions";
-import { TinaNodeBackend, LocalBackendAuthProvider } from "@tinacms/datalayer";
+const { app } = require("@azure/functions");
+const { TinaNodeBackend, LocalBackendAuthProvider } = require("@tinacms/datalayer");
 
 const isLocal = process.env.TINA_PUBLIC_IS_LOCAL === "true";
 
@@ -8,8 +8,7 @@ let backend = null;
 async function getBackend() {
   if (backend) return backend;
 
-  // Dynamic import to handle the async database creation
-  const { getDatabase } = await import("../../tina/database.mjs");
+  const { getDatabase } = require("../../tina/database.js");
   const database = await getDatabase();
 
   backend = TinaNodeBackend({

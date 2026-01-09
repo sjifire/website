@@ -1,15 +1,9 @@
-import dotenv from "dotenv";
-import { fileURLToPath } from "url";
-import { dirname, resolve } from "path";
+require("dotenv").config({ path: require("path").resolve(__dirname, "../../.env") });
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-dotenv.config({ path: resolve(__dirname, "../../.env") });
-import { createDatabase, createLocalDatabase, resolve as tinaResolve } from "@tinacms/datalayer";
-import mongodbLevel from "mongodb-level";
-const { MongodbLevel } = mongodbLevel;
-import githubProvider from "tinacms-gitprovider-github";
-const { GitHubProvider } = githubProvider;
-import { createAppAuth } from "@octokit/auth-app";
+const { createDatabase, createLocalDatabase, resolve: tinaResolve } = require("@tinacms/datalayer");
+const { MongodbLevel } = require("mongodb-level");
+const { GitHubProvider } = require("tinacms-gitprovider-github");
+const { createAppAuth } = require("@octokit/auth-app");
 
 const isLocal = process.env.TINA_PUBLIC_IS_LOCAL === "true";
 
@@ -51,8 +45,6 @@ async function getGitHubToken() {
   return token;
 }
 
-// For local development, use the simple createLocalDatabase
-
 // For production, create the database with GitHub App auth
 async function createProdDatabase() {
   const githubToken = await getGitHubToken();
@@ -86,11 +78,9 @@ function createDatabaseClient(database) {
 }
 
 // Export a function that returns the databaseClient (handles async for prod)
-export async function getDatabase() {
-  var database = isLocal ? createLocalDatabase() : await createProdDatabase()
+async function getDatabase() {
+  const database = isLocal ? createLocalDatabase() : await createProdDatabase();
   return createDatabaseClient(database);
 }
 
-export default (async () => {
-  return getDatabase();
-})();
+module.exports = { getDatabase };
