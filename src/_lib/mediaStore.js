@@ -1,3 +1,4 @@
+/* global FormData, fetch */
 const isLocalProd = process.env.TINA_PUBLIC_LOCAL_PROD === "true";
 const apiBase = isLocalProd ? "http://localhost:7071/api/media" : "/api/media";
 
