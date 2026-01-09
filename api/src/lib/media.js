@@ -42,18 +42,28 @@ function getCorsHeaders(request) {
 function createMediaOperations(deps = {}) {
   const { getGitHubConfig, githubRequest } = { ...github, ...deps };
 
-  // Encode path segments for GitHub API URLs
+  // Normalize and encode path for GitHub API URLs
+  // Removes empty segments (from double slashes or leading/trailing slashes)
+  // and encodes each segment for URL safety
   function encodePathForGitHub(path) {
     return path
       .split("/")
+      .filter((segment) => segment.length > 0) // Remove empty segments
       .map((segment) => encodeURIComponent(segment))
       .join("/");
+  }
+
+  // Clean directory input - remove leading/trailing slashes and whitespace
+  function normalizeDirectory(directory) {
+    if (!directory) return "";
+    return directory.trim().replace(/^\/+|\/+$/g, "");
   }
 
   // List files in the media directory
   async function listMedia(directory = "") {
     const { branch } = getGitHubConfig();
-    const mediaPath = directory ? `${MEDIA_ROOT}/${directory}` : MEDIA_ROOT;
+    const cleanDir = normalizeDirectory(directory);
+    const mediaPath = cleanDir ? `${MEDIA_ROOT}/${cleanDir}` : MEDIA_ROOT;
     const encodedPath = encodePathForGitHub(mediaPath);
 
     try {
@@ -87,8 +97,9 @@ function createMediaOperations(deps = {}) {
   // Upload a file to the media directory
   async function uploadMedia(filename, content, directory = "") {
     const { branch } = getGitHubConfig();
-    const filePath = directory
-      ? `${MEDIA_ROOT}/${directory}/${filename}`
+    const cleanDir = normalizeDirectory(directory);
+    const filePath = cleanDir
+      ? `${MEDIA_ROOT}/${cleanDir}/${filename}`
       : `${MEDIA_ROOT}/${filename}`;
     const encodedPath = encodePathForGitHub(filePath);
 
