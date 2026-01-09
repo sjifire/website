@@ -1,3 +1,5 @@
-// Re-export from api/tina/database.mjs - single source of truth
-console.lo
-export { default } from "../api/tina/database.mjs";
+import { createLocalDatabase } from "@tinacms/datalayer";
+
+// For build/dev, use local database
+// Production database (Cosmos DB) is handled by api/tina/database.mjs at runtime
+export default createLocalDatabase();
