@@ -4,14 +4,6 @@
   },
   "routes": [
     {
-      "route": "/admin",
-      "allowedRoles": ["authenticated"]
-    },
-    {
-      "route": "/admin/",
-      "allowedRoles": ["authenticated"]
-    },
-    {
       "route": "/admin/*",
       "allowedRoles": ["authenticated"]
     },
@@ -28,17 +20,6 @@
     "401": {
       "statusCode": 302,
       "redirect": "/.auth/login/aad"
-    }
-  },
-  "auth": {
-    "identityProviders": {
-      "azureActiveDirectory": {
-        "registration": {
-          "openIdIssuer": "https://login.microsoftonline.com/4122848f-c317-4267-9c07-7c504150d1bd/v2.0",
-          "clientIdSettingName": "AAD_CLIENT_ID",
-          "clientSecretSettingName": "AAD_CLIENT_SECRET"
-        }
-      }
     }
   },
   "globalHeaders": {
