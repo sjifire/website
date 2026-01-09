@@ -58,8 +58,8 @@ jobs:
         if: steps.playwright-cache.outputs.cache-hit == 'true'
         run: npx playwright install-deps chromium
 
-      - name: Build site
-        run: npm run build
+      - name: Build site with TinaCMS
+        run: npm run tina:build
 
       - name: Run unit tests
         run: npm run test:unit
