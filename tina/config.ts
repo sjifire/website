@@ -36,12 +36,19 @@ export default defineConfig({
     publicFolder: "_site",
   },
 
-  media: {
-    tina: {
-      mediaRoot: "assets/images",
-      publicFolder: "src",
-    },
-  },
+  media: isLocal
+    ? {
+        tina: {
+          mediaRoot: "assets/images",
+          publicFolder: "src",
+        },
+      }
+    : {
+        loadCustomStore: async () => {
+          const { GitHubMediaStore } = require("../src/_lib/mediaStore.js");
+          return new GitHubMediaStore();
+        },
+      },
 
   schema: {
     collections: [
