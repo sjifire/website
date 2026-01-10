@@ -1,0 +1,54 @@
+name: Sync Personnel from M365
+
+on:
+  schedule:
+    # Run weekly on Monday at 7 AM UTC (11 PM PST Sunday / 12 AM PDT Monday)
+    - cron: '0 7 * * 1'
+  workflow_dispatch:
+    # Allow manual trigger from GitHub Actions UI
+
+jobs:
+  sync-personnel:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Sync personnel from Microsoft 365
+        env:
+          MS_GRAPH_TENANT_ID: ${{ secrets.MS_GRAPH_TENANT_ID }}
+          MS_GRAPH_CLIENT_ID: ${{ secrets.MS_GRAPH_CLIENT_ID }}
+          MS_GRAPH_CLIENT_SECRET: ${{ secrets.MS_GRAPH_CLIENT_SECRET }}
+          MS_GRAPH_PERSONNEL_GROUP: ${{ vars.MS_GRAPH_PERSONNEL_GROUP }}
+          MS_GRAPH_STAFF_GROUP: ${{ vars.MS_GRAPH_STAFF_GROUP }}
+          MS_GRAPH_VOLUNTEER_GROUP: ${{ vars.MS_GRAPH_VOLUNTEER_GROUP }}
+          SYNC_PHOTOS: 'true'
+        run: node src/scripts/sync-personnel.mjs
+
+      - name: Check for changes
+        id: changes
+        run: |
+          if git diff --quiet src/pages/about/emergency-personnel-data.mdx src/assets/images/personnel_imgs/; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit and push changes
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add src/pages/about/emergency-personnel-data.mdx src/assets/images/personnel_imgs/
+          git commit -m "chore: sync personnel data from Microsoft 365
+
+          Auto-generated weekly update of personnel information."
+          git push

@@ -28,7 +28,7 @@ Requires Node.js 20+. Output goes to `_site/`.
 - `src/pages/` - Content pages (`.njk`/`.md`) - URLs generated without `/pages/` prefix via `pages.11tydata.js`
 - `src/posts/` - News posts as JSON files (`YYYY-MM-DD-slug.json`)
 - `src/media_releases/` - Press release metadata (JSON) linking to PDFs in `src/assets/media_releases/`
-- `src/modules/` - Utility JS: ESO incident scraper, board meeting date calculator
+- `src/scripts/` - Standalone ESM scripts for data sync (NERIS, M365 personnel)
 - `api/` - Azure Functions backend (TypeScript) for GitHub content operations and auth
 
 ### Key Patterns
@@ -50,3 +50,58 @@ Requires Node.js 20+. Output goes to `_site/`.
 ### Authentication
 
 Admin routes (`/admin/*`, `/api/*`) require Azure AD authentication configured via `staticwebapp.config.json`. See README.md for Azure AD setup.
+
+### Incident Statistics (NERIS)
+
+Incident statistics are pulled daily from NERIS (National Emergency Response Information System) via a scheduled GitHub Action.
+
+**Files:**
+- `src/scripts/neris-client.mjs` - ESM API client for NERIS REST API
+- `src/scripts/generate-stats.mjs` - Fetches incidents and generates `src/_data/stats.json`
+- `.github/workflows/update-stats.yml` - Daily scheduled workflow (6 AM UTC)
+
+**Required GitHub Secrets:**
+- `NERIS_CLIENT_ID` - OAuth2 client ID from NERIS
+- `NERIS_CLIENT_SECRET` - OAuth2 client secret
+- `NERIS_ENTITY_ID` - Fire department NERIS ID
+
+**Local Testing:**
+```bash
+export NERIS_CLIENT_ID="your-client-id"
+export NERIS_CLIENT_SECRET="your-client-secret"
+export NERIS_ENTITY_ID="your-entity-id"
+npm run stats
+```
+
+### Personnel Data (Microsoft 365)
+
+Personnel data and photos are synced weekly from Microsoft 365 via Microsoft Graph API.
+
+**Files:**
+- `src/scripts/msgraph-client.mjs` - ESM client for Microsoft Graph API
+- `src/scripts/sync-personnel.mjs` - Syncs users/photos to `emergency-personnel-data.mdx`
+- `.github/workflows/sync-personnel.yml` - Weekly scheduled workflow (Monday 7 AM UTC)
+
+**Required GitHub Secrets:**
+- `MS_GRAPH_TENANT_ID` - Azure AD tenant ID
+- `MS_GRAPH_CLIENT_ID` - App registration client ID
+- `MS_GRAPH_CLIENT_SECRET` - App registration client secret
+
+**Optional GitHub Variables:**
+- `MS_GRAPH_PERSONNEL_GROUP` - M365 group ID to filter personnel
+- `MS_GRAPH_STAFF_GROUP` - M365 group ID for staff members
+- `MS_GRAPH_VOLUNTEER_GROUP` - M365 group ID for volunteers
+
+**Azure AD App Setup:**
+1. Create App Registration in Azure Portal
+2. Add API Permission: Microsoft Graph → Application → `User.Read.All`
+3. Grant admin consent
+4. Create client secret
+
+**Local Testing:**
+```bash
+export MS_GRAPH_TENANT_ID="your-tenant-id"
+export MS_GRAPH_CLIENT_ID="your-client-id"
+export MS_GRAPH_CLIENT_SECRET="your-client-secret"
+npm run sync-personnel
+```
