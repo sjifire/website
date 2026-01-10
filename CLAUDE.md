@@ -119,3 +119,30 @@ export MS_GRAPH_CLIENT_ID="your-client-id"
 export MS_GRAPH_CLIENT_SECRET="your-client-secret"
 npm run sync-personnel
 ```
+
+### Facebook Posts Integration
+
+Facebook posts are fetched from the Graph API during build and intermingled with regular posts on the homepage.
+
+**Files:**
+- `src/_data/facebook_posts.js` - Fetches posts from Facebook Graph API
+- `src/_data/combined_feed.js` - Merges posts and Facebook posts chronologically
+
+**Required Environment Variables:**
+- `FACEBOOK_PAGE_ID` - The Facebook Page ID (numeric ID, not username)
+- `FACEBOOK_ACCESS_TOKEN` - Long-lived Page Access Token
+
+**Setup:**
+1. Create a Meta App at developers.facebook.com
+2. Add the Facebook Login product
+3. Generate a Page Access Token for the SJIFire page
+4. Convert to long-lived token (60+ days) or set up token refresh
+
+**Local Testing:**
+```bash
+export FACEBOOK_PAGE_ID="your-page-id"
+export FACEBOOK_ACCESS_TOKEN="your-access-token"
+npm run build
+```
+
+Without credentials, Facebook posts are skipped and only regular posts display.

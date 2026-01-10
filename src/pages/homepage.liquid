@@ -27,7 +27,7 @@ scripts: '<script src="/js/carousel.js" defer></script>'
   </section>
   <div class="l-grid__main block-content">
     <ul class="l-grid l-grid--auto">
-      {% assign limitedPosts = posts | reverse | limit: homepage.number_news_stories %}
+      {% assign limitedPosts = combined_feed | reverse | limit: homepage.number_news_stories %}
       {% for post in limitedPosts %}
         <li class="card">
           <div class="card__body">
@@ -37,7 +37,7 @@ scripts: '<script src="/js/carousel.js" defer></script>'
               {{ post.post_type }}
             </div>
             <h3 class="news__headline">
-              <a href="{{ post.url }}/">
+              <a href="{{ post.url }}{% unless post.external %}/{% endunless %}"{% if post.external %} target="_blank" rel="noopener"{% endif %}>
                 {{ post.title }}
               </a>
             </h3>
@@ -49,7 +49,7 @@ scripts: '<script src="/js/carousel.js" defer></script>'
             </div>
           </div>
           <div class="card__footer">
-            <a href="{{ post.url }}/" class="news__readmore" aria-label="Read more about {{ post.title }}">Read more <svg aria-hidden="true"><use xlink:href="#right-arrow"></svg></a>
+            <a href="{{ post.url }}{% unless post.external %}/{% endunless %}" class="news__readmore" aria-label="Read more about {{ post.title }}"{% if post.external %} target="_blank" rel="noopener"{% endif %}>Read more <svg aria-hidden="true"><use xlink:href="#right-arrow"></svg></a>
           </div>
         </li>
       {% endfor %}
