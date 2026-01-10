@@ -62,36 +62,20 @@
   {% set js %}
     {% include "nav-js.njk" %}
     {% if page.url === '/' %}
-      if (location.href.indexOf("#invite_token") != -1) {
-        var urlSplit = document.URL.split("#");
-        window.location = `/admin/#${urlSplit[1]}`;
-        //current url has a #hash in it
-      }
-
       const imgs = {{ header_image_source | headerImageUrls(header_image_transform) | safe }};
-      const random = Math.floor(Math.random() * imgs.length);
-      const image = imgs[random]
+      const image = imgs[Math.floor(Math.random() * imgs.length)];
       document.getElementById('home-header').style.setProperty('--home-header-bg-image', 'url('+image+')');
     {% endif %}
 
-    let navItems = Array.from(document.querySelectorAll('.gallery-nav__item'));
-
-    const handleClick = (e) => {
-      e.preventDefault();
-      const activeNav = document.querySelector('.gallery-nav__item.active');
-      const activeShowcase = document.querySelector('.gallery-showcase__item.active');
-      const target = document.getElementById(e.currentTarget.dataset.targetId)
-      if(activeNav){
-        activeNav.classList.remove('active');
-        activeShowcase.classList.remove('active');
-      }
-      e.currentTarget.classList.add('active');
-      target.classList.add('active');
+    for (const item of document.querySelectorAll('.gallery-nav__item')) {
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        document.querySelector('.gallery-nav__item.active')?.classList.remove('active');
+        document.querySelector('.gallery-showcase__item.active')?.classList.remove('active');
+        e.currentTarget.classList.add('active');
+        document.getElementById(e.currentTarget.dataset.targetId)?.classList.add('active');
+      });
     }
-
-    navItems.forEach(node => {
-      node.addEventListener('click', handleClick)
-    });
   {% endset %}
   <script defer>
     {{ js | jsmin | safe }}
