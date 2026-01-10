@@ -10,8 +10,8 @@
  *
  * Optional:
  *   MS_GRAPH_PERSONNEL_GROUP - Group ID/name for personnel (default: all users)
- *   MS_GRAPH_STAFF_GROUP - Group ID/name for staff members
- *   MS_GRAPH_VOLUNTEER_GROUP - Group ID/name for volunteers
+ *   MS_GRAPH_STAFF_GROUP - Comma-separated group IDs/names for staff members
+ *   MS_GRAPH_VOLUNTEER_GROUP - Comma-separated group IDs/names for volunteers
  *   SYNC_PHOTOS - Set to "true" to download photos (default: true)
  */
 
@@ -115,6 +115,22 @@ function isInGroup(userGroups, targetGroupId) {
 }
 
 /**
+ * Check if user is in any of the specified groups
+ */
+function isInAnyGroup(userGroups, targetGroupIds) {
+  if (!targetGroupIds || targetGroupIds.length === 0) return false;
+  return targetGroupIds.some(groupId => isInGroup(userGroups, groupId));
+}
+
+/**
+ * Parse comma-separated group IDs from env var
+ */
+function parseGroupIds(envValue) {
+  if (!envValue) return [];
+  return envValue.split(',').map(id => id.trim()).filter(id => id.length > 0);
+}
+
+/**
  * Generate MDX frontmatter for personnel
  */
 function generateMDX(personnel) {
@@ -179,13 +195,13 @@ async function main() {
   }
 
   const personnelGroupId = process.env.MS_GRAPH_PERSONNEL_GROUP;
-  const staffGroupId = process.env.MS_GRAPH_STAFF_GROUP;
-  const volunteerGroupId = process.env.MS_GRAPH_VOLUNTEER_GROUP;
+  const staffGroupIds = parseGroupIds(process.env.MS_GRAPH_STAFF_GROUP);
+  const volunteerGroupIds = parseGroupIds(process.env.MS_GRAPH_VOLUNTEER_GROUP);
   const syncPhotos = process.env.SYNC_PHOTOS !== 'false';
 
   console.log(`Personnel group: ${personnelGroupId || '(all users)'}`);
-  console.log(`Staff group: ${staffGroupId || '(not configured)'}`);
-  console.log(`Volunteer group: ${volunteerGroupId || '(not configured)'}`);
+  console.log(`Staff groups: ${staffGroupIds.length > 0 ? staffGroupIds.join(', ') : '(not configured)'}`);
+  console.log(`Volunteer groups: ${volunteerGroupIds.length > 0 ? volunteerGroupIds.join(', ') : '(not configured)'}`);
   console.log(`Sync photos: ${syncPhotos}`);
 
   // Initialize client
@@ -235,9 +251,9 @@ async function main() {
 
     // Determine staff type
     let staffType = 'volunteer'; // Default to volunteer
-    if (staffGroupId && isInGroup(userGroups, staffGroupId)) {
+    if (isInAnyGroup(userGroups, staffGroupIds)) {
       staffType = 'staff';
-    } else if (volunteerGroupId && isInGroup(userGroups, volunteerGroupId)) {
+    } else if (isInAnyGroup(userGroups, volunteerGroupIds)) {
       staffType = 'volunteer';
     }
 
