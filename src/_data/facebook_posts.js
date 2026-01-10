@@ -1,3 +1,4 @@
+/* global fetch */
 const { DateTime } = require("luxon");
 
 const FACEBOOK_PAGE_ID = process.env.FACEBOOK_PAGE_ID;
@@ -76,7 +77,7 @@ function transformPost(fbPost) {
 
   return {
     post_type: "Facebook",
-    date: fbPost.created_time,
+    date: date.toISO(),
     title: extractTitle(fbPost.message),
     lede: extractLede(fbPost.message),
     url: fbPost.permalink_url,
