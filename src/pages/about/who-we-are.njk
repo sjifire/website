@@ -23,7 +23,7 @@ image_gallery:
   - image: sj3-snow2.jpg
     image_alt: Snowy morning
 ---
-{% extends "page.njk" %}
+{% extends "base.njk" %}
 
 {% set cloudinaryDefaults = "f_auto,q_auto:good,g_faces,c_fill,w_315,h_328" %}
 {% set defaultPersonImg = "/assets/media/personnel_imgs/images.jpg" %}
@@ -36,25 +36,36 @@ image_gallery:
   {% endif %}
 {% endfor %}
 
-{% block main_content %}
-<p>At San Juan Island Fire &amp; Rescue, <strong>WE are YOU!</strong></p>
+{% block content %}
+{# Two-column layout for intro + sidebar #}
+<div class="l-grid l-grid--2col">
+  <div class="l-grid__main block-content">
+    <h1>{{ title | safe }}</h1>
+    <p>At San Juan Island Fire &amp; Rescue, <strong>WE are YOU!</strong></p>
 
-<p>We are your neighbors, friends and the workers you see every day around our islands. Some of us are part- or full-time staff but most of us are volunteers.</p>
+    <p>We are your neighbors, friends and the workers you see every day around our islands. Some of us are part- or full-time staff but most of us are volunteers.</p>
 
-<p>Even our small limited paid staff have just about all began as SJIF&amp;R volunteers.</p>
+    <p>Even our small limited paid staff have just about all began as SJIF&amp;R volunteers.</p>
 
-<p>We work on homes &amp; gardens, or on boats, docks, and aircraft. We deliver packages, or farm the fields. We work for the county, restaurants, and professional services. We are young, starting our careers out of High School, and some of us are older and retired. We serve on boards and commissions. We are members of nonprofit organizations and volunteer there too.</p>
+    <p>We work on homes &amp; gardens, or on boats, docks, and aircraft. We deliver packages, or farm the fields. We work for the county, restaurants, and professional services. We are young, starting our careers out of High School, and some of us are older and retired. We serve on boards and commissions. We are members of nonprofit organizations and volunteer there too.</p>
 
-<p>As your neighbors you see us, running out the doors of shops to answer the call. You hear our cars leaving as we head out to respond to emergencies.</p>
+    <p>As your neighbors you see us, running out the doors of shops to answer the call. You hear our cars leaving as we head out to respond to emergencies.</p>
 
-<p>At all hours.</p>
+    <p>At all hours.</p>
 
-<p>In all weather.</p>
+    <p>In all weather.</p>
 
-<p>We serve because we are islanders. We live here, work here and many of us our raising our families here.</p>
+    <p>We serve because we are islanders. We live here, work here and many of us our raising our families here.</p>
 
-<p><strong>WE are YOU.</strong></p>
+    <p><strong>WE are YOU.</strong></p>
+  </div>
 
+  <aside class="l-grid__sidebar">
+    {{ sidebar | markdownify | processStyledImages | safe }}
+  </aside>
+</div>
+
+{# Full-width personnel sections #}
 {% set staffOnly = personnelData | pluckByValue('staff', 'staff_type') %}
 {% set volunteersOnly = personnelData | pluckByValue('volunteer', 'staff_type') %}
 
