@@ -1,7 +1,8 @@
 const { app } = require("@azure/functions");
+const siteConfig = require("../../site-config.json");
 
-const CLOUDINARY_ROOT = "https://res.cloudinary.com/san-juan-fire-district-3";
-const SITE_URL = "https://sjifire.netlify.app";
+const CLOUDINARY_ROOT = siteConfig.cloudinaryRootUrl;
+const SITE_URL = siteConfig.cloudinarySiteId;
 
 // Default transforms for PDF thumbnails
 const DEFAULT_TRANSFORMS = "f_jpg,pg_1,w_200,h_200,c_thumb,q_auto";
