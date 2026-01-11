@@ -1,5 +1,5 @@
 const crypto = require("crypto");
-const siteConfig = require("../../../src/_data/site.json");
+const siteConfig = require("../../site-config.json");
 
 // Extract cloud name from cloudinaryRootUrl
 // e.g., "https://res.cloudinary.com/san-juan-fire-district-3" -> "san-juan-fire-district-3"
