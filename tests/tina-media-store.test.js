@@ -145,7 +145,7 @@ describe("tina/media-store", () => {
       };
 
       const store = new GitHubMediaStore({ apiBase: "/api/media" });
-      await store.delete({ id: "src/assets/images/photo.jpg" });
+      await store.delete({ id: "src/assets/media/photo.jpg" });
 
       assert.strictEqual(fetchCalls.length, 1);
       assert.strictEqual(fetchCalls[0].url, "/api/media");
@@ -153,7 +153,7 @@ describe("tina/media-store", () => {
       assert.strictEqual(fetchCalls[0].options.credentials, "include");
 
       const body = JSON.parse(fetchCalls[0].options.body);
-      assert.strictEqual(body.filepath, "src/assets/images/photo.jpg");
+      assert.strictEqual(body.filepath, "src/assets/media/photo.jpg");
     });
 
     it("throws error on failed delete", async () => {

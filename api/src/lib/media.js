@@ -1,22 +1,40 @@
 const github = require("./github.js");
+const { optimizeImage } = require("./cloudinary.js");
 
-const MEDIA_ROOT = "src/assets/images";
+const MEDIA_ROOT = "src/assets/media";
 const MEDIA_EXTENSIONS = ["jpg", "jpeg", "png", "gif", "webp", "svg", "pdf"];
+const LOCAL_AZURE_FUNCTIONS_URL = "http://localhost:7071";
+
+// API base URL - in production this is relative, locally it needs the full URL
+function getApiBase() {
+  return process.env.TINA_PUBLIC_LOCAL_PROD === "true"
+    ? LOCAL_AZURE_FUNCTIONS_URL
+    : "";
+}
 
 // Format a GitHub file item into TinaCMS media format
 function formatMediaItem(repoPath, filename, directory) {
   const publicPath = repoPath.replace(/^src\//, "/");
+  const isPdf = filename.toLowerCase().endsWith(".pdf");
+
+  // For PDFs, use the thumb API endpoint which redirects to Cloudinary
+  // The _thumb.jpg suffix makes TinaCMS treat it as an image for preview
+  const mediaPath = publicPath.replace(/^\/assets\/media\//, "");
+  const previewPath = isPdf
+    ? `${getApiBase()}/api/thumb/${mediaPath}_thumb.jpg`
+    : publicPath;
+
   return {
     type: "file",
     id: repoPath,
     filename,
     directory: directory || "",
     src: publicPath,
-    previewSrc: publicPath,
+    previewSrc: previewPath,
     thumbnails: {
-      "75x75": publicPath,
-      "400x400": publicPath,
-      "1000x1000": publicPath,
+      "75x75": previewPath,
+      "400x400": previewPath,
+      "1000x1000": previewPath,
     },
   };
 }
@@ -71,7 +89,7 @@ function createMediaOperations(deps = {}) {
 
       if (!Array.isArray(contents)) return [];
 
-      return contents
+      const items = contents
         .map((item) => {
           if (item.type === "file" && isMediaFile(item.name)) {
             return formatMediaItem(item.path, item.name, directory);
@@ -86,6 +104,13 @@ function createMediaOperations(deps = {}) {
           return null;
         })
         .filter(Boolean);
+
+      // Sort: directories first, then files alphabetically
+      return items.sort((a, b) => {
+        if (a.type === "dir" && b.type !== "dir") return -1;
+        if (a.type !== "dir" && b.type === "dir") return 1;
+        return a.filename.localeCompare(b.filename, undefined, { sensitivity: "base" });
+      });
     } catch (error) {
       if (error.message.includes("404")) {
         return [];
@@ -103,6 +128,11 @@ function createMediaOperations(deps = {}) {
       : `${MEDIA_ROOT}/${filename}`;
     const encodedPath = encodePathForGitHub(filePath);
 
+    // Optimize image via Cloudinary if applicable
+    const optimizationResult = await optimizeImage(content, filename);
+    const { content: optimizedContent, optimized } = optimizationResult;
+    const finalContent = optimizedContent;
+
     // Check if file exists to get its SHA (required for updates)
     let sha;
     try {
@@ -112,9 +142,13 @@ function createMediaOperations(deps = {}) {
       // File doesn't exist, that's fine
     }
 
+    const commitMessage = sha
+      ? `Update media: ${filename}`
+      : `Add media: ${filename}${optimized ? " (optimized)" : ""}`;
+
     const body = {
-      message: sha ? `Update media: ${filename}` : `Add media: ${filename}`,
-      content,
+      message: commitMessage,
+      content: finalContent,
       branch,
       ...(sha && { sha }),
     };
@@ -124,7 +158,9 @@ function createMediaOperations(deps = {}) {
       body: JSON.stringify(body),
     });
 
-    return formatMediaItem(result.content.path, result.content.name, directory);
+    const mediaItem = formatMediaItem(result.content.path, result.content.name, directory);
+    mediaItem._optimization = optimizationResult;
+    return mediaItem;
   }
 
   // Delete a file from the media directory

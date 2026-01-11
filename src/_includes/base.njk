@@ -17,9 +17,9 @@
     <meta property="og:type" content="website" />
     <meta property="og:image" content="
       {%- if page.fileSlug === 'news-article' and post.featured_image and post.featured_image.source %}
-        {%- imgPath '/assets/images/' + post.featured_image.source, 'f_auto,q_auto:good,c_fill,w_1200,h_630' -%}
+        {%- imgPath '/assets/media/' + post.featured_image.source, 'f_auto,q_auto:good,c_fill,w_1200,h_630' -%}
       {% else %}
-        {%- imgPath '/assets/images/' + site.opengraph_image, 'f_auto,q_auto:good,c_fill,w_1200,h_630' -%}
+        {%- imgPath '/assets/media/' + site.opengraph_image, 'f_auto,q_auto:good,c_fill,w_1200,h_630' -%}
       {% endif -%}" key="ogimage" />
     <meta property="og:site_name" content="{{site.site_name}}" key="ogsitename" />
     <meta property="og:title" content="{{pageTitle}}" key="ogtitle" />
@@ -42,7 +42,7 @@
 
   {% if page.fileSlug === 'news-article' and post.featured_image and post.featured_image.source != "" %}
     <figure class="featured__media">
-      <img src="{% imgPath '/assets/images/' + post.featured_image.source, 'f_auto,c_limit,w_900,h_500' %}" alt="{{ post.featured_image.alt }}" loading="eager">
+      <img src="{% imgPath '/assets/media/' + post.featured_image.source, 'f_auto,c_limit,w_900,h_500' %}" alt="{{ post.featured_image.alt }}" loading="eager">
     </figure>
   {% endif %}
 
