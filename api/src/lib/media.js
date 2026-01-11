@@ -71,7 +71,7 @@ function createMediaOperations(deps = {}) {
 
       if (!Array.isArray(contents)) return [];
 
-      return contents
+      const items = contents
         .map((item) => {
           if (item.type === "file" && isMediaFile(item.name)) {
             return formatMediaItem(item.path, item.name, directory);
@@ -86,6 +86,13 @@ function createMediaOperations(deps = {}) {
           return null;
         })
         .filter(Boolean);
+
+      // Sort: directories first, then files alphabetically
+      return items.sort((a, b) => {
+        if (a.type === "dir" && b.type !== "dir") return -1;
+        if (a.type !== "dir" && b.type === "dir") return 1;
+        return a.filename.localeCompare(b.filename, undefined, { sensitivity: "base" });
+      });
     } catch (error) {
       if (error.message.includes("404")) {
         return [];
