@@ -2,15 +2,6 @@
 title: "Who We Are"
 nav_order: 1
 layout: false
-sidebar: >-
-  ![Team Dinner while on shift](/assets/media/team-dinner.jpeg "Team Dinner
-  while on shift"){.med_img}
-
-
-  ![Break Time](/assets/media/family-break-time.jpg "Break Time"){.med_img}
-
-
-  ![Wildland Fire Drill](/assets/media/Vols-2-edited-1-scaled.jpg "Wildland Fire Drill"){.med_img}
 image_gallery:
   - image: 20210420_204157.jpg
     image_alt: Evening on the water
@@ -23,7 +14,7 @@ image_gallery:
   - image: sj3-snow2.jpg
     image_alt: Snowy morning
 ---
-{% extends "base.njk" %}
+{% extends "page.njk" %}
 
 {% set cloudinaryDefaults = "f_auto,q_auto:good,g_faces,c_fill,w_315,h_328" %}
 {% set defaultPersonImg = "/assets/media/personnel_imgs/images.jpg" %}
@@ -36,36 +27,33 @@ image_gallery:
   {% endif %}
 {% endfor %}
 
-{% block content %}
-{# Two-column layout for intro + sidebar #}
-<div class="l-grid l-grid--2col">
-  <div class="l-grid__main block-content">
-    <h1>{{ title | safe }}</h1>
-    <p>At San Juan Island Fire &amp; Rescue, <strong>WE are YOU!</strong></p>
+{% block main_content_single %}
+<styled-image src="/assets/media/team-dinner.jpeg" alt="Team Dinner while on shift" size="small" align="right" />
 
-    <p>We are your neighbors, friends and the workers you see every day around our islands. Some of us are part- or full-time staff but most of us are volunteers.</p>
+<p>At San Juan Island Fire &amp; Rescue, <strong>WE are YOU!</strong></p>
 
-    <p>Even our small limited paid staff have just about all began as SJIF&amp;R volunteers.</p>
+<p>We are your neighbors, friends and the workers you see every day around our islands. Some of us are part- or full-time staff but most of us are volunteers.</p>
 
-    <p>We work on homes &amp; gardens, or on boats, docks, and aircraft. We deliver packages, or farm the fields. We work for the county, restaurants, and professional services. We are young, starting our careers out of High School, and some of us are older and retired. We serve on boards and commissions. We are members of nonprofit organizations and volunteer there too.</p>
+<p>Even our small limited paid staff have just about all began as SJIF&amp;R volunteers.</p>
 
-    <p>As your neighbors you see us, running out the doors of shops to answer the call. You hear our cars leaving as we head out to respond to emergencies.</p>
+<styled-image src="/assets/media/family-break-time.jpg" alt="Break Time" size="small" align="right" />
 
-    <p>At all hours.</p>
+<p>We work on homes &amp; gardens, or on boats, docks, and aircraft. We deliver packages, or farm the fields. We work for the county, restaurants, and professional services. We are young, starting our careers out of High School, and some of us are older and retired. We serve on boards and commissions. We are members of nonprofit organizations and volunteer there too.</p>
 
-    <p>In all weather.</p>
+<p>As your neighbors you see us, running out the doors of shops to answer the call. You hear our cars leaving as we head out to respond to emergencies.</p>
 
-    <p>We serve because we are islanders. We live here, work here and many of us our raising our families here.</p>
+<styled-image src="/assets/media/Vols-2-edited-1-scaled.jpg" alt="Wildland Fire Drill" size="small" align="right" />
 
-    <p><strong>WE are YOU.</strong></p>
-  </div>
+<p>At all hours.</p>
 
-  <aside class="l-grid__sidebar">
-    {{ sidebar | markdownify | processStyledImages | safe }}
-  </aside>
-</div>
+<p>In all weather.</p>
 
-{# Full-width personnel sections #}
+<p>We serve because we are islanders. We live here, work here and many of us our raising our families here.</p>
+
+<p><strong>WE are YOU.</strong></p>
+
+<div style="clear: both;"></div>
+
 {% set staffOnly = personnelData | pluckByValue('staff', 'staff_type') %}
 {% set volunteersOnly = personnelData | pluckByValue('volunteer', 'staff_type') %}
 
