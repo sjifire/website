@@ -21,12 +21,11 @@ describe("cloudinary module", () => {
       assert.strictEqual(MIN_SIZE_BYTES, 500 * 1024);
     });
 
-    it("TRANSFORM includes limit mode, auto quality and auto format", () => {
+    it("TRANSFORM includes limit mode and auto quality", () => {
       assert.ok(TRANSFORM.includes("c_limit"));
       assert.ok(TRANSFORM.includes("q_auto"));
       assert.ok(TRANSFORM.includes("w_1600"));
       assert.ok(TRANSFORM.includes("h_1600"));
-      assert.ok(TRANSFORM.includes("f_auto"));
     });
   });
 
