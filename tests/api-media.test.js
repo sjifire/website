@@ -187,13 +187,14 @@ describe("media module", () => {
 
       const result = await mediaOps.listMedia();
 
+      // Results are sorted: directories first, then files alphabetically
       assert.strictEqual(result.length, 3);
-      assert.strictEqual(result[0].type, "file");
-      assert.strictEqual(result[0].filename, "photo.jpg");
+      assert.strictEqual(result[0].type, "dir");
+      assert.strictEqual(result[0].filename, "events");
       assert.strictEqual(result[1].type, "file");
       assert.strictEqual(result[1].filename, "doc.pdf");
-      assert.strictEqual(result[2].type, "dir");
-      assert.strictEqual(result[2].filename, "events");
+      assert.strictEqual(result[2].type, "file");
+      assert.strictEqual(result[2].filename, "photo.jpg");
     });
 
     it("filters out non-media files", async () => {

@@ -26,7 +26,8 @@ export default defineConfig({
 
   // Self-hosted: use custom backend in production, local mode for development
   contentApiUrlOverride: getApiUrl(),
-  authProvider: createAuthProvider(isLocal),
+  // Use local auth for both local and local-prod modes (Azure AD only in real production)
+  authProvider: createAuthProvider(isLocal || isLocalProd),
 
   build: {
     outputFolder: "admin",
@@ -37,7 +38,7 @@ export default defineConfig({
   media: isLocal
     ? {
         tina: {
-          mediaRoot: "assets/images",
+          mediaRoot: "assets/media",
           publicFolder: "src",
         },
       }
