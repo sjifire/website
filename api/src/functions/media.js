@@ -34,8 +34,17 @@ app.http("media", {
         }
 
         const arrayBuffer = await file.arrayBuffer();
+        const originalSize = arrayBuffer.byteLength;
         const base64Content = Buffer.from(arrayBuffer).toString("base64");
         const result = await uploadMedia(file.name, base64Content, directory);
+
+        // Include optimization debug info in response
+        result._debug = {
+          originalSize,
+          originalSizeKB: Math.round(originalSize / 1024),
+          filename: file.name,
+        };
+
         return { status: 200, headers: corsHeaders, jsonBody: result };
       }
 

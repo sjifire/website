@@ -129,7 +129,8 @@ function createMediaOperations(deps = {}) {
     const encodedPath = encodePathForGitHub(filePath);
 
     // Optimize image via Cloudinary if applicable
-    const { content: optimizedContent, optimized } = await optimizeImage(content, filename);
+    const optimizationResult = await optimizeImage(content, filename);
+    const { content: optimizedContent, optimized } = optimizationResult;
     const finalContent = optimizedContent;
 
     // Check if file exists to get its SHA (required for updates)
@@ -157,7 +158,9 @@ function createMediaOperations(deps = {}) {
       body: JSON.stringify(body),
     });
 
-    return formatMediaItem(result.content.path, result.content.name, directory);
+    const mediaItem = formatMediaItem(result.content.path, result.content.name, directory);
+    mediaItem._optimization = optimizationResult;
+    return mediaItem;
   }
 
   // Delete a file from the media directory
