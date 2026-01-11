@@ -21,6 +21,10 @@ async function createProdDatabase() {
   const githubToken = await getGitHubToken();
   console.log("  GitHub token generated successfully");
 
+  // Sanitize branch name for MongoDB collection (replace / with -)
+  const collectionName = branch.replace(/\//g, "-");
+  console.log(`  Collection: ${collectionName}`);
+
   return createDatabase({
     gitProvider: new GitHubProvider({
       branch,
@@ -29,7 +33,7 @@ async function createProdDatabase() {
       token: githubToken,
     }),
     databaseAdapter: new MongodbLevel({
-      collectionName: branch,
+      collectionName,
       dbName: process.env.COSMOS_DB_NAME || "tinacms",
       mongoUri: process.env.COSMOS_DB_CONNECTION_STRING,
     }),

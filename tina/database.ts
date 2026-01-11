@@ -14,12 +14,24 @@ let database;
 
 if (isLocal || !cosmosConnectionString || !githubToken) {
   // Local development: use local filesystem database
+  console.log("[TinaCMS Build] Using local database");
+  console.log(`  isLocal: ${isLocal}`);
+  console.log(`  hasCosmosConnection: ${!!cosmosConnectionString}`);
+  console.log(`  hasGithubToken: ${!!githubToken}`);
   database = createLocalDatabase();
 } else {
   // CI build: use Cosmos DB to index schema with GitHub provider
   const branch = process.env.GITHUB_BRANCH || "main";
+  // Sanitize branch name for MongoDB collection (replace / with -)
+  const collectionName = branch.replace(/\//g, "-");
   const owner = process.env.GITHUB_OWNER || process.env.GITHUB_REPOSITORY?.split("/")[0];
   const repo = process.env.GITHUB_REPO || process.env.GITHUB_REPOSITORY?.split("/")[1];
+
+  console.log("[TinaCMS Build] Using Cosmos DB database adapter");
+  console.log(`  Branch: ${branch}`);
+  console.log(`  Collection: ${collectionName}`);
+  console.log(`  Owner: ${owner}`);
+  console.log(`  Repo: ${repo}`);
 
   database = createDatabase({
     gitProvider: new GitHubProvider({
@@ -29,7 +41,7 @@ if (isLocal || !cosmosConnectionString || !githubToken) {
       token: githubToken,
     }),
     databaseAdapter: new MongodbLevel({
-      collectionName: branch,
+      collectionName,
       dbName: process.env.COSMOS_DB_NAME || "tinacms",
       mongoUri: cosmosConnectionString,
     }),
