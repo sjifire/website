@@ -5,7 +5,7 @@ const createCloudinary = require('../src/_lib/cloudinary');
 // Mock site configuration
 const mockSiteData = {
   cloudinaryRootUrl: 'https://res.cloudinary.com/test-account',
-  cloudinarySiteId: 'https://example.com',
+  cloudinaryFetchUrl: 'https://example.com',
   enable_cloudinary_rewrites: false
 };
 
@@ -152,7 +152,7 @@ describe('cloudinary module', () => {
       const cloudinary = createCloudinary(mockSiteData, true);
 
       assert.strictEqual(cloudinary._config.cloudinaryRootUrl, mockSiteData.cloudinaryRootUrl);
-      assert.strictEqual(cloudinary._config.cloudinarySiteId, mockSiteData.cloudinarySiteId);
+      assert.strictEqual(cloudinary._config.cloudinaryFetchUrl, mockSiteData.cloudinaryFetchUrl);
       assert.strictEqual(cloudinary._config.enableRewrites, false);
       assert.strictEqual(cloudinary._config.isProduction, true);
     });

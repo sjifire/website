@@ -2,21 +2,38 @@ const github = require("./github.js");
 
 const MEDIA_ROOT = "src/assets/media";
 const MEDIA_EXTENSIONS = ["jpg", "jpeg", "png", "gif", "webp", "svg", "pdf"];
+const LOCAL_AZURE_FUNCTIONS_URL = "http://localhost:7071";
+
+// API base URL - in production this is relative, locally it needs the full URL
+function getApiBase() {
+  return process.env.TINA_PUBLIC_LOCAL_PROD === "true"
+    ? LOCAL_AZURE_FUNCTIONS_URL
+    : "";
+}
 
 // Format a GitHub file item into TinaCMS media format
 function formatMediaItem(repoPath, filename, directory) {
   const publicPath = repoPath.replace(/^src\//, "/");
+  const isPdf = filename.toLowerCase().endsWith(".pdf");
+
+  // For PDFs, use the thumb API endpoint which redirects to Cloudinary
+  // The _thumb.jpg suffix makes TinaCMS treat it as an image for preview
+  const mediaPath = publicPath.replace(/^\/assets\/media\//, "");
+  const previewPath = isPdf
+    ? `${getApiBase()}/api/thumb/${mediaPath}_thumb.jpg`
+    : publicPath;
+
   return {
     type: "file",
     id: repoPath,
     filename,
     directory: directory || "",
     src: publicPath,
-    previewSrc: publicPath,
+    previewSrc: previewPath,
     thumbnails: {
-      "75x75": publicPath,
-      "400x400": publicPath,
-      "1000x1000": publicPath,
+      "75x75": previewPath,
+      "400x400": previewPath,
+      "1000x1000": previewPath,
     },
   };
 }
