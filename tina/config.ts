@@ -1,24 +1,50 @@
+// Load .env on server-side only (not in browser)
+if (typeof window === "undefined") {
+  require("dotenv/config");
+}
 import { defineConfig } from "tinacms";
+import { createAuthProvider } from "./auth-provider";
+import { getMediaStoreClass } from "./media-store";
 
 const isLocal = process.env.TINA_PUBLIC_IS_LOCAL === "true";
+const isLocalProd = process.env.TINA_PUBLIC_LOCAL_PROD === "true";
+const LOCAL_AZURE_FUNCTIONS_URL = "http://localhost:7071";
+
+// API URL: undefined for local, localhost:7071 for local-prod testing, relative for production
+const getApiUrl = () => {
+  if (isLocal) {
+    return undefined;
+  } else if (isLocalProd) {
+    return `${LOCAL_AZURE_FUNCTIONS_URL}/api/tina/gql`;
+  } else {
+    return "/api/tina/gql";
+  }
+};
 
 export default defineConfig({
   branch: process.env.TINA_BRANCH || "main",
 
   // Self-hosted: use custom backend in production, local mode for development
-  ...(isLocal ? {} : { contentApiUrlOverride: "/api/tina" }),
+  contentApiUrlOverride: getApiUrl(),
+  // Use local auth for both local and local-prod modes (Azure AD only in real production)
+  authProvider: createAuthProvider(isLocal || isLocalProd),
 
   build: {
     outputFolder: "admin",
     publicFolder: "_site",
   },
 
-  media: {
-    tina: {
-      mediaRoot: "assets/images",
-      publicFolder: "src",
-    },
-  },
+  // Media config: local filesystem for dev, custom GitHub store for production
+  media: isLocal
+    ? {
+        tina: {
+          mediaRoot: "assets/media",
+          publicFolder: "src",
+        },
+      }
+    : {
+        loadCustomStore: async () => getMediaStoreClass(isLocalProd, LOCAL_AZURE_FUNCTIONS_URL),
+      },
 
   schema: {
     collections: [
@@ -212,7 +238,7 @@ export default defineConfig({
           },
           {
             type: "string",
-            name: "cloudinarySiteId",
+            name: "cloudinaryFetchUrl",
             label: "Cloudinary Site ID",
           },
           {

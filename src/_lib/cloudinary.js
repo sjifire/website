@@ -9,7 +9,7 @@ const DEFAULT_TRANSFORMS = "f_auto";
  * Creates Cloudinary utility functions bound to site configuration
  * @param {Object} siteData - Site configuration from site.json
  * @param {string} siteData.cloudinaryRootUrl - Cloudinary base URL (e.g., https://res.cloudinary.com/account)
- * @param {string} siteData.cloudinarySiteId - Origin URL for fetch (e.g., https://sjifire.netlify.app)
+ * @param {string} siteData.cloudinaryFetchUrl - Origin URL for fetch (e.g., https://sjifire.netlify.app)
  * @param {boolean} siteData.enable_cloudinary_rewrites - Whether to use /optim/ route rewrites
  * @param {boolean} isProduction - Whether running in production mode
  * @returns {Object} Object containing Cloudinary utility functions
@@ -17,13 +17,13 @@ const DEFAULT_TRANSFORMS = "f_auto";
 function createCloudinary(siteData, isProduction) {
   const {
     cloudinaryRootUrl,
-    cloudinarySiteId,
+    cloudinaryFetchUrl,
     enable_cloudinary_rewrites: enableRewrites
   } = siteData;
 
   /**
    * Generate a Cloudinary image URL for a given asset path
-   * @param {string} assetPath - Path to the asset (e.g., '/assets/images/photo.jpg')
+   * @param {string} assetPath - Path to the asset (e.g., '/assets/media/photo.jpg')
    * @param {string} [transforms='f_auto'] - Cloudinary transformation string
    * @returns {string} Full URL to the optimized image
    */
@@ -43,7 +43,7 @@ function createCloudinary(siteData, isProduction) {
     }
 
     // Default: direct Cloudinary fetch URL
-    return `${cloudinaryRootUrl}/image/fetch/${transforms}/${cloudinarySiteId}/${cleanPath}`;
+    return `${cloudinaryRootUrl}/image/fetch/${transforms}/${cloudinaryFetchUrl}/${cleanPath}`;
   }
 
   /**
@@ -60,7 +60,7 @@ function createCloudinary(siteData, isProduction) {
       const cleanImage = image.replace(/^\/+/, "");
       // Header images use a special transform format with path segments
       // e.g., /h_520,q_auto:eco/e_art:incognito/...
-      return `${cloudinaryRootUrl}/image/fetch${transforms}${cloudinarySiteId}/assets/images/${cleanImage}`;
+      return `${cloudinaryRootUrl}/image/fetch${transforms}${cloudinaryFetchUrl}/assets/media/${cleanImage}`;
     });
 
     return JSON.stringify(urls);
@@ -70,7 +70,7 @@ function createCloudinary(siteData, isProduction) {
     imgPath,
     headerImageUrls,
     // Expose for testing
-    _config: { cloudinaryRootUrl, cloudinarySiteId, enableRewrites, isProduction }
+    _config: { cloudinaryRootUrl, cloudinaryFetchUrl, enableRewrites, isProduction }
   };
 }
 

@@ -1,8 +1,11 @@
 # tina cms
 admin/
-.tina/__generated__
+tina/__generated__
 api/dist
 _site/
+
+# Azure Functions local settings (contains secrets)
+local.settings.json
 
 
 

@@ -32,19 +32,31 @@ test.describe("Smoke Tests", () => {
           const text = msg.text();
           // Ignore 404s - usually external resources
           // Ignore X-Frame-Options errors from social media embeds (Facebook, etc.)
+          // Ignore Facebook SDK errors (ErrorUtils, requireLazy, element not found)
           if (
             !text.includes("404") &&
             !text.includes("Failed to load resource") &&
-            !text.includes("X-Frame-Options")
+            !text.includes("X-Frame-Options") &&
+            !text.includes("ErrorUtils") &&
+            !text.includes("requireLazy") &&
+            !text.includes("fburl.com") &&
+            !text.includes("Could not find element")
           ) {
             errors.push(text);
           }
         }
       });
 
-      // Capture page errors
+      // Capture page errors (ignore Facebook SDK errors)
       browserPage.on("pageerror", (err) => {
-        errors.push(err.message);
+        const msg = err.message;
+        if (
+          !msg.includes("requireLazy") &&
+          !msg.includes("ErrorUtils") &&
+          !msg.includes("fburl.com")
+        ) {
+          errors.push(msg);
+        }
       });
 
       const response = await browserPage.goto(page.path);
@@ -107,7 +119,7 @@ test.describe("Smoke Tests", () => {
     const firstImage = personnelImages.first();
     const src = await firstImage.getAttribute("src");
     expect(src).toContain("cloudinary.com");
-    expect(src).toContain("/assets/images/personnel_imgs/");
+    expect(src).toContain("/assets/media/personnel_imgs/");
   });
 
   test("Media Releases page displays releases with PDF thumbnails", async ({ page }) => {

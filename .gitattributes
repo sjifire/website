@@ -1,0 +1,9 @@
+# Override GitHub Linguist language detection
+# See: https://github.com/github-linguist/linguist/blob/master/docs/overrides.md
+
+# Exclude template files from language statistics
+*.njk linguist-vendored
+
+# Exclude generated/data files from language stats
+tina/tina-lock.json linguist-generated
+*.json linguist-detectable=false
