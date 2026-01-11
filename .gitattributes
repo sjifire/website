@@ -1,3 +1,0 @@
-# Override GitHub Linguist language detection
-# Mark template files as not counting toward language statistics
-*.njk linguist-vendored
