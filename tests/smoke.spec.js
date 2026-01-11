@@ -9,7 +9,6 @@ const pages = [
   { path: "/about/governance/", name: "Governance" },
   { path: "/about/who-we-are/", name: "Who We Are" },
   { path: "/about/join/", name: "Join" },
-  { path: "/about/emergency-personnel/", name: "Emergency Personnel" },
   { path: "/about/key-information/", name: "Key Information" },
   { path: "/about/levy-2024/", name: "Levy 2024" },
   { path: "/about/stations-equipment/", name: "Stations & Equipment" },
@@ -96,8 +95,8 @@ test.describe("Smoke Tests", () => {
     await expect(page.locator("h1").first()).toContainText("Questions");
   });
 
-  test("Emergency Personnel page displays staff and volunteers with images", async ({ page }) => {
-    await page.goto("/about/emergency-personnel/");
+  test("Who We Are page displays staff and volunteers with images", async ({ page }) => {
+    await page.goto("/about/who-we-are/");
 
     // Should have Staff section
     await expect(page.locator("h2").filter({ hasText: "Staff" })).toBeVisible();
