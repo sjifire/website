@@ -2,17 +2,6 @@
 title: "Who We Are"
 nav_order: 1
 layout: false
-image_gallery:
-  - image: 20210420_204157.jpg
-    image_alt: Evening on the water
-  - image: 20210605_124424.jpg
-    image_alt: Never not learning
-  - image: img_3041.jpg
-    image_alt: Dog rescue
-  - image: img_6699.jpeg
-    image_alt: Loud LT
-  - image: sj3-snow2.jpg
-    image_alt: Snowy morning
 ---
 {% extends "page.njk" %}
 
@@ -28,7 +17,10 @@ image_gallery:
 {% endfor %}
 
 {% block main_content_single %}
-<styled-image src="/assets/media/team-dinner.jpeg" alt="Team Dinner while on shift" size="small" align="right" />
+<figure class="styled-image styled-image--small styled-image--right">
+  <img src="{% imgPath '/assets/media/team-dinner.jpeg', 'f_auto,q_auto:good' %}" alt="Team Dinner while on shift" />
+  <figcaption>Team Dinner while on shift</figcaption>
+</figure>
 
 <p>At San Juan Island Fire &amp; Rescue, <strong>WE are YOU!</strong></p>
 
@@ -36,13 +28,19 @@ image_gallery:
 
 <p>Even our small limited paid staff have just about all began as SJIF&amp;R volunteers.</p>
 
-<styled-image src="/assets/media/family-break-time.jpg" alt="Break Time" size="small" align="right" />
+<figure class="styled-image styled-image--small styled-image--right">
+  <img src="{% imgPath '/assets/media/family-break-time.jpg', 'f_auto,q_auto:good' %}" alt="Break Time" />
+  <figcaption>Break Time</figcaption>
+</figure>
 
 <p>We work on homes &amp; gardens, or on boats, docks, and aircraft. We deliver packages, or farm the fields. We work for the county, restaurants, and professional services. We are young, starting our careers out of High School, and some of us are older and retired. We serve on boards and commissions. We are members of nonprofit organizations and volunteer there too.</p>
 
 <p>As your neighbors you see us, running out the doors of shops to answer the call. You hear our cars leaving as we head out to respond to emergencies.</p>
 
-<styled-image src="/assets/media/Vols-2-edited-1-scaled.jpg" alt="Wildland Fire Drill" size="small" align="right" />
+<figure class="styled-image styled-image--small styled-image--right">
+  <img src="{% imgPath '/assets/media/Vols-2-edited-1-scaled.jpg', 'f_auto,q_auto:good' %}" alt="Wildland Fire Drill" />
+  <figcaption>Wildland Fire Drill</figcaption>
+</figure>
 
 <p>At all hours.</p>
 
