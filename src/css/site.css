@@ -1422,12 +1422,12 @@ select.form-control:focus::-ms-value {
   margin: 0 auto;
 }
 
-.styled-image--left {
+.block-content .styled-image--left {
   float: left;
   margin: 0 1.5rem 1rem 0;
 }
 
-.styled-image--right {
+.block-content .styled-image--right {
   float: right;
   margin: 0 0 1rem 1.5rem;
 }
