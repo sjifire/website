@@ -238,7 +238,7 @@ export default defineConfig({
           },
           {
             type: "string",
-            name: "cloudinarySiteId",
+            name: "cloudinaryFetchUrl",
             label: "Cloudinary Site ID",
           },
           {

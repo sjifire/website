@@ -2,7 +2,7 @@ const { app } = require("@azure/functions");
 const siteConfig = require("../../site-config.json");
 
 const CLOUDINARY_ROOT = siteConfig.cloudinaryRootUrl;
-const SITE_URL = siteConfig.cloudinarySiteId;
+const SITE_URL = siteConfig.cloudinaryFetchUrl;
 
 // Default transforms for PDF thumbnails
 const DEFAULT_TRANSFORMS = "f_jpg,pg_1,w_200,h_200,c_thumb,q_auto";
