@@ -4,7 +4,7 @@
   "scripts": {
     "stats": "node src/scripts/generate-stats.mjs",
     "sync-personnel": "node src/scripts/sync-personnel.mjs",
-    "dev": "eleventy --serve",
+    "dev": "eleventy --serve --port=8080",
     "build": "eleventy",
     "tina:dev": "TINA_PUBLIC_IS_LOCAL=true tinacms dev -c \"npm run dev\"",
     "tina:local-prod": "TINA_PUBLIC_IS_LOCAL=false TINA_PUBLIC_LOCAL_PROD=true tinacms dev -c \"npm run dev\"",

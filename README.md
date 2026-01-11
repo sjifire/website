@@ -121,6 +121,8 @@ To find your Tenant ID: Microsoft Entra ID > Overview > "Tenant ID"
 | `GITHUB_OWNER` | `your-org` | GitHub username or organization |
 | `GITHUB_REPO` | `your-repo` | Repository name |
 | `GITHUB_BRANCH` | `main` | Branch for content (optional, defaults to "main") |
+| `CLOUDINARY_API_KEY` | `123456789012345` | Cloudinary API key (optional, for image optimization) |
+| `CLOUDINARY_API_SECRET` | `abcdefg...` | Cloudinary API secret (optional, for image optimization) |
 
 ### 8. Deploy
 
@@ -224,3 +226,22 @@ api/
 - **Local mode** (`tina:dev`): No credentials needed, changes saved to local files
 - **Local-prod mode** (`tina:local-prod`): Tests full Cosmos DB integration locally
 - The site auto-reloads when files change
+
+### Image Optimization
+
+When images are uploaded via the TinaCMS media manager, they are automatically optimized before being committed to the GitHub repository. This reduces repository bloat from large image uploads.
+
+**How it works:**
+- Images larger than 500KB are sent to Cloudinary for optimization
+- Images are resized to max 1600×1600 pixels (preserving aspect ratio)
+- Quality is automatically optimized while maintaining visual fidelity
+- Original format is preserved (PNG stays PNG, JPG stays JPG)
+- If the optimized image isn't smaller, the original is kept
+- SVG and PDF files are not modified
+
+**Why Cloudinary API credentials are needed:**
+The site already uses Cloudinary's fetch URLs for runtime image delivery (serving WebP/AVIF to supported browsers). The Upload API credentials (`CLOUDINARY_API_KEY` and `CLOUDINARY_API_SECRET`) enable server-side optimization *before* images are stored in git, keeping the repository small.
+
+To get credentials: https://console.cloudinary.com/settings/api-keys
+
+**Without credentials:** Image uploads still work normally, they're just stored at their original size.

@@ -5,7 +5,7 @@ const createCloudinary = require('../src/_lib/cloudinary');
 // Mock site configuration
 const mockSiteData = {
   cloudinaryRootUrl: 'https://res.cloudinary.com/test-account',
-  cloudinarySiteId: 'https://example.com',
+  cloudinaryFetchUrl: 'https://example.com',
   enable_cloudinary_rewrites: false
 };
 
@@ -15,26 +15,26 @@ describe('cloudinary module', () => {
       const cloudinary = createCloudinary(mockSiteData, false);
 
       it('returns direct Cloudinary URL with default transforms', () => {
-        const result = cloudinary.imgPath('/assets/images/photo.jpg');
+        const result = cloudinary.imgPath('/assets/media/photo.jpg');
         assert.strictEqual(
           result,
-          'https://res.cloudinary.com/test-account/image/fetch/f_auto/https://example.com/assets/images/photo.jpg'
+          'https://res.cloudinary.com/test-account/image/fetch/f_auto/https://example.com/assets/media/photo.jpg'
         );
       });
 
       it('returns direct Cloudinary URL with custom transforms', () => {
-        const result = cloudinary.imgPath('/assets/images/photo.jpg', 'f_auto,q_auto:good,w_500');
+        const result = cloudinary.imgPath('/assets/media/photo.jpg', 'f_auto,q_auto:good,w_500');
         assert.strictEqual(
           result,
-          'https://res.cloudinary.com/test-account/image/fetch/f_auto,q_auto:good,w_500/https://example.com/assets/images/photo.jpg'
+          'https://res.cloudinary.com/test-account/image/fetch/f_auto,q_auto:good,w_500/https://example.com/assets/media/photo.jpg'
         );
       });
 
       it('strips leading slashes from asset path', () => {
-        const result = cloudinary.imgPath('///assets/images/photo.jpg');
+        const result = cloudinary.imgPath('///assets/media/photo.jpg');
         assert.strictEqual(
           result,
-          'https://res.cloudinary.com/test-account/image/fetch/f_auto/https://example.com/assets/images/photo.jpg'
+          'https://res.cloudinary.com/test-account/image/fetch/f_auto/https://example.com/assets/media/photo.jpg'
         );
       });
 
@@ -62,10 +62,10 @@ describe('cloudinary module', () => {
       const cloudinary = createCloudinary(siteData, true);
 
       it('returns direct Cloudinary URL (same as dev)', () => {
-        const result = cloudinary.imgPath('/assets/images/photo.jpg');
+        const result = cloudinary.imgPath('/assets/media/photo.jpg');
         assert.strictEqual(
           result,
-          'https://res.cloudinary.com/test-account/image/fetch/f_auto/https://example.com/assets/images/photo.jpg'
+          'https://res.cloudinary.com/test-account/image/fetch/f_auto/https://example.com/assets/media/photo.jpg'
         );
       });
     });
@@ -75,23 +75,23 @@ describe('cloudinary module', () => {
       const cloudinary = createCloudinary(siteData, true);
 
       it('returns /optim/ URL with transforms as query param', () => {
-        const result = cloudinary.imgPath('/assets/images/photo.jpg');
-        assert.strictEqual(result, '/optim/assets/images/photo.jpg?c_param=f_auto');
+        const result = cloudinary.imgPath('/assets/media/photo.jpg');
+        assert.strictEqual(result, '/optim/assets/media/photo.jpg?c_param=f_auto');
       });
 
       it('returns /optim/ URL with custom transforms', () => {
-        const result = cloudinary.imgPath('/assets/images/photo.jpg', 'f_auto,w_500');
-        assert.strictEqual(result, '/optim/assets/images/photo.jpg?c_param=f_auto,w_500');
+        const result = cloudinary.imgPath('/assets/media/photo.jpg', 'f_auto,w_500');
+        assert.strictEqual(result, '/optim/assets/media/photo.jpg?c_param=f_auto,w_500');
       });
 
       it('prevents double-transformation for already processed paths', () => {
-        const result = cloudinary.imgPath('/optim/assets/images/photo.jpg');
-        assert.strictEqual(result, '/optim/assets/images/photo.jpg');
+        const result = cloudinary.imgPath('/optim/assets/media/photo.jpg');
+        assert.strictEqual(result, '/optim/assets/media/photo.jpg');
       });
 
       it('prevents double-transformation without leading slash', () => {
-        const result = cloudinary.imgPath('optim/assets/images/photo.jpg');
-        assert.strictEqual(result, '/optim/assets/images/photo.jpg');
+        const result = cloudinary.imgPath('optim/assets/media/photo.jpg');
+        assert.strictEqual(result, '/optim/assets/media/photo.jpg');
       });
     });
   });
@@ -108,11 +108,11 @@ describe('cloudinary module', () => {
       assert.strictEqual(parsed.length, 2);
       assert.strictEqual(
         parsed[0],
-        'https://res.cloudinary.com/test-account/image/fetch/h_520,q_auto:eco/https://example.com/assets/images/photo1.jpg'
+        'https://res.cloudinary.com/test-account/image/fetch/h_520,q_auto:eco/https://example.com/assets/media/photo1.jpg'
       );
       assert.strictEqual(
         parsed[1],
-        'https://res.cloudinary.com/test-account/image/fetch/h_520,q_auto:eco/https://example.com/assets/images/photo2.jpg'
+        'https://res.cloudinary.com/test-account/image/fetch/h_520,q_auto:eco/https://example.com/assets/media/photo2.jpg'
       );
     });
 
@@ -123,7 +123,7 @@ describe('cloudinary module', () => {
 
       assert.strictEqual(
         parsed[0],
-        'https://res.cloudinary.com/test-account/image/fetch/h_520/https://example.com/assets/images/photo1.jpg'
+        'https://res.cloudinary.com/test-account/image/fetch/h_520/https://example.com/assets/media/photo1.jpg'
       );
     });
 
@@ -152,7 +152,7 @@ describe('cloudinary module', () => {
       const cloudinary = createCloudinary(mockSiteData, true);
 
       assert.strictEqual(cloudinary._config.cloudinaryRootUrl, mockSiteData.cloudinaryRootUrl);
-      assert.strictEqual(cloudinary._config.cloudinarySiteId, mockSiteData.cloudinarySiteId);
+      assert.strictEqual(cloudinary._config.cloudinaryFetchUrl, mockSiteData.cloudinaryFetchUrl);
       assert.strictEqual(cloudinary._config.enableRewrites, false);
       assert.strictEqual(cloudinary._config.isProduction, true);
     });
