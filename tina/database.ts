@@ -17,19 +17,16 @@ if (isLocal || !cosmosConnectionString || !githubToken) {
   database = createLocalDatabase();
 } else {
   // CI build: use Cosmos DB to index schema with GitHub provider
-  // Always use 'main' collection for schema (shared across all environments)
-  // GitHubProvider branch determines which content is read from Git
-  const branch = process.env.GITHUB_BRANCH || "main";
+  // Always use 'main' branch and collection for schema (shared across all environments)
   const owner = process.env.GITHUB_OWNER || process.env.GITHUB_REPOSITORY?.split("/")[0];
   const repo = process.env.GITHUB_REPO || process.env.GITHUB_REPOSITORY?.split("/")[1];
 
   console.log("[TinaCMS Build] Indexing schema to Cosmos DB");
-  console.log(`  Git Branch: ${branch}`);
-  console.log(`  Collection: main`);
+  console.log("  Branch: main, Collection: main");
 
   database = createDatabase({
     gitProvider: new GitHubProvider({
-      branch,
+      branch: "main",
       owner,
       repo,
       token: githubToken,
