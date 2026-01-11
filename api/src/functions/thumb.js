@@ -19,7 +19,7 @@ app.http("thumb", {
     }
 
     // Strip _thumb.jpg suffix (we add it for TinaCMS compatibility)
-    const cleanPath = requestPath.replace(/_thumb\.(jpg|jpeg|png)$/i, '');
+    const cleanPath = requestPath.replace(/_thumb\.jpg$/i, "");
 
     // Only process PDFs
     if (!cleanPath.toLowerCase().endsWith('.pdf')) {
