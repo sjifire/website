@@ -23,7 +23,7 @@ function createCloudinary(siteData, isProduction) {
 
   /**
    * Generate a Cloudinary image URL for a given asset path
-   * @param {string} assetPath - Path to the asset (e.g., '/assets/images/photo.jpg')
+   * @param {string} assetPath - Path to the asset (e.g., '/assets/media/photo.jpg')
    * @param {string} [transforms='f_auto'] - Cloudinary transformation string
    * @returns {string} Full URL to the optimized image
    */
@@ -60,7 +60,7 @@ function createCloudinary(siteData, isProduction) {
       const cleanImage = image.replace(/^\/+/, "");
       // Header images use a special transform format with path segments
       // e.g., /h_520,q_auto:eco/e_art:incognito/...
-      return `${cloudinaryRootUrl}/image/fetch${transforms}${cloudinarySiteId}/assets/images/${cleanImage}`;
+      return `${cloudinaryRootUrl}/image/fetch${transforms}${cloudinarySiteId}/assets/media/${cleanImage}`;
     });
 
     return JSON.stringify(urls);

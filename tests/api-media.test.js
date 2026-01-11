@@ -12,8 +12,8 @@ const {
 
 describe("media module", () => {
   describe("constants", () => {
-    it("MEDIA_ROOT points to src/assets/images", () => {
-      assert.strictEqual(MEDIA_ROOT, "src/assets/images");
+    it("MEDIA_ROOT points to src/assets/media", () => {
+      assert.strictEqual(MEDIA_ROOT, "src/assets/media");
     });
 
     it("MEDIA_EXTENSIONS includes common image formats and pdf", () => {
@@ -64,40 +64,40 @@ describe("media module", () => {
   describe("formatMediaItem", () => {
     it("formats a GitHub file path into TinaCMS media format", () => {
       const result = formatMediaItem(
-        "src/assets/images/photo.jpg",
+        "src/assets/media/photo.jpg",
         "photo.jpg",
         ""
       );
 
       assert.deepStrictEqual(result, {
         type: "file",
-        id: "src/assets/images/photo.jpg",
+        id: "src/assets/media/photo.jpg",
         filename: "photo.jpg",
         directory: "",
-        src: "/assets/images/photo.jpg",
-        previewSrc: "/assets/images/photo.jpg",
+        src: "/assets/media/photo.jpg",
+        previewSrc: "/assets/media/photo.jpg",
         thumbnails: {
-          "75x75": "/assets/images/photo.jpg",
-          "400x400": "/assets/images/photo.jpg",
-          "1000x1000": "/assets/images/photo.jpg",
+          "75x75": "/assets/media/photo.jpg",
+          "400x400": "/assets/media/photo.jpg",
+          "1000x1000": "/assets/media/photo.jpg",
         },
       });
     });
 
     it("strips src/ prefix from public path", () => {
       const result = formatMediaItem(
-        "src/assets/images/subdir/photo.jpg",
+        "src/assets/media/subdir/photo.jpg",
         "photo.jpg",
         "subdir"
       );
 
-      assert.strictEqual(result.src, "/assets/images/subdir/photo.jpg");
-      assert.strictEqual(result.id, "src/assets/images/subdir/photo.jpg");
+      assert.strictEqual(result.src, "/assets/media/subdir/photo.jpg");
+      assert.strictEqual(result.id, "src/assets/media/subdir/photo.jpg");
     });
 
     it("handles directory parameter", () => {
       const result = formatMediaItem(
-        "src/assets/images/events/photo.jpg",
+        "src/assets/media/events/photo.jpg",
         "photo.jpg",
         "events"
       );
@@ -107,7 +107,7 @@ describe("media module", () => {
 
     it("handles empty directory as empty string", () => {
       const result = formatMediaItem(
-        "src/assets/images/photo.jpg",
+        "src/assets/media/photo.jpg",
         "photo.jpg",
         null
       );
@@ -175,9 +175,9 @@ describe("media module", () => {
 
     it("returns formatted media items from GitHub API response", async () => {
       mockGithubRequest = async () => [
-        { type: "file", name: "photo.jpg", path: "src/assets/images/photo.jpg" },
-        { type: "file", name: "doc.pdf", path: "src/assets/images/doc.pdf" },
-        { type: "dir", name: "events", path: "src/assets/images/events" },
+        { type: "file", name: "photo.jpg", path: "src/assets/media/photo.jpg" },
+        { type: "file", name: "doc.pdf", path: "src/assets/media/doc.pdf" },
+        { type: "dir", name: "events", path: "src/assets/media/events" },
       ];
 
       mediaOps = createMediaOperations({
@@ -198,9 +198,9 @@ describe("media module", () => {
 
     it("filters out non-media files", async () => {
       mockGithubRequest = async () => [
-        { type: "file", name: "photo.jpg", path: "src/assets/images/photo.jpg" },
-        { type: "file", name: "readme.txt", path: "src/assets/images/readme.txt" },
-        { type: "file", name: ".gitkeep", path: "src/assets/images/.gitkeep" },
+        { type: "file", name: "photo.jpg", path: "src/assets/media/photo.jpg" },
+        { type: "file", name: "readme.txt", path: "src/assets/media/readme.txt" },
+        { type: "file", name: ".gitkeep", path: "src/assets/media/.gitkeep" },
       ];
 
       mediaOps = createMediaOperations({
@@ -218,7 +218,7 @@ describe("media module", () => {
       mockGithubRequest = async (endpoint) => {
         githubRequestCalls.push(endpoint);
         return [
-          { type: "file", name: "event.jpg", path: "src/assets/images/events/event.jpg" },
+          { type: "file", name: "event.jpg", path: "src/assets/media/events/event.jpg" },
         ];
       };
 
@@ -230,7 +230,7 @@ describe("media module", () => {
       const result = await mediaOps.listMedia("events");
 
       assert.strictEqual(githubRequestCalls.length, 1);
-      assert.ok(githubRequestCalls[0].includes("src/assets/images/events"));
+      assert.ok(githubRequestCalls[0].includes("src/assets/media/events"));
       assert.strictEqual(result[0].directory, "events");
     });
 
@@ -294,7 +294,7 @@ describe("media module", () => {
         }
         return {
           content: {
-            path: "src/assets/images/new-photo.jpg",
+            path: "src/assets/media/new-photo.jpg",
             name: "new-photo.jpg",
           },
         };
@@ -308,7 +308,7 @@ describe("media module", () => {
       const result = await mediaOps.uploadMedia("new-photo.jpg", "base64content", "");
 
       assert.strictEqual(result.filename, "new-photo.jpg");
-      assert.strictEqual(result.src, "/assets/images/new-photo.jpg");
+      assert.strictEqual(result.src, "/assets/media/new-photo.jpg");
 
       const putCall = calls.find((c) => c.options?.method === "PUT");
       assert.ok(putCall);
@@ -326,7 +326,7 @@ describe("media module", () => {
         }
         return {
           content: {
-            path: "src/assets/images/existing.jpg",
+            path: "src/assets/media/existing.jpg",
             name: "existing.jpg",
           },
         };
@@ -354,7 +354,7 @@ describe("media module", () => {
         }
         return {
           content: {
-            path: "src/assets/images/events/photo.jpg",
+            path: "src/assets/media/events/photo.jpg",
             name: "photo.jpg",
           },
         };
@@ -381,7 +381,7 @@ describe("media module", () => {
         }
         return {
           content: {
-            path: "src/assets/images/photo.jpg",
+            path: "src/assets/media/photo.jpg",
             name: "photo.jpg",
           },
         };
@@ -395,9 +395,9 @@ describe("media module", () => {
       await mediaOps.uploadMedia("photo.jpg", "content", "/");
 
       const putCall = calls.find((c) => c.options?.method === "PUT");
-      // Should not have double slashes - path should be src/assets/images/photo.jpg
+      // Should not have double slashes - path should be src/assets/media/photo.jpg
       assert.ok(!putCall.endpoint.includes("//"), "Path should not contain double slashes");
-      assert.ok(putCall.endpoint.includes("src/assets/images/photo.jpg"));
+      assert.ok(putCall.endpoint.includes("src/assets/media/photo.jpg"));
     });
 
     it("normalizes directory with leading and trailing slashes", async () => {
@@ -409,7 +409,7 @@ describe("media module", () => {
         }
         return {
           content: {
-            path: "src/assets/images/events/photo.jpg",
+            path: "src/assets/media/events/photo.jpg",
             name: "photo.jpg",
           },
         };
@@ -424,7 +424,7 @@ describe("media module", () => {
 
       const putCall = calls.find((c) => c.options?.method === "PUT");
       assert.ok(!putCall.endpoint.includes("//"), "Path should not contain double slashes");
-      assert.ok(putCall.endpoint.includes("src/assets/images/events/photo.jpg"));
+      assert.ok(putCall.endpoint.includes("src/assets/media/events/photo.jpg"));
     });
 
     it("URL-encodes filenames with spaces", async () => {
@@ -436,7 +436,7 @@ describe("media module", () => {
         }
         return {
           content: {
-            path: "src/assets/images/my photo.jpg",
+            path: "src/assets/media/my photo.jpg",
             name: "my photo.jpg",
           },
         };
@@ -481,7 +481,7 @@ describe("media module", () => {
         githubRequest: mockGithubRequest,
       });
 
-      const result = await mediaOps.deleteMedia("src/assets/images/photo.jpg");
+      const result = await mediaOps.deleteMedia("src/assets/media/photo.jpg");
 
       assert.deepStrictEqual(result, { success: true });
 
@@ -507,7 +507,7 @@ describe("media module", () => {
         githubRequest: mockGithubRequest,
       });
 
-      await mediaOps.deleteMedia("src/assets/images/deep/nested/file.jpg");
+      await mediaOps.deleteMedia("src/assets/media/deep/nested/file.jpg");
 
       const deleteCall = calls.find((c) => c.options?.method === "DELETE");
       const body = JSON.parse(deleteCall.options.body);

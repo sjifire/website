@@ -1,6 +1,6 @@
 const github = require("./github.js");
 
-const MEDIA_ROOT = "src/assets/images";
+const MEDIA_ROOT = "src/assets/media";
 const MEDIA_EXTENSIONS = ["jpg", "jpeg", "png", "gif", "webp", "svg", "pdf"];
 
 // Format a GitHub file item into TinaCMS media format

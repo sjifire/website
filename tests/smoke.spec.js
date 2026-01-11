@@ -119,7 +119,7 @@ test.describe("Smoke Tests", () => {
     const firstImage = personnelImages.first();
     const src = await firstImage.getAttribute("src");
     expect(src).toContain("cloudinary.com");
-    expect(src).toContain("/assets/images/personnel_imgs/");
+    expect(src).toContain("/assets/media/personnel_imgs/");
   });
 
   test("Media Releases page displays releases with PDF thumbnails", async ({ page }) => {
