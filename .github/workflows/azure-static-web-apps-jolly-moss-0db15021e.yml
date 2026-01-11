@@ -41,12 +41,15 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build TinaCMS
+      - name: Build TinaCMS and index schema
         run: npx tinacms build --skip-cloud-checks
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_OWNER: ${{ github.repository_owner }}
+          GITHUB_REPO: ${{ github.event.repository.name }}
+          GITHUB_BRANCH: ${{ github.head_ref || github.ref_name }}
           COSMOS_DB_CONNECTION_STRING: ${{ secrets.COSMOS_DB_CONNECTION_STRING }}
           COSMOS_DB_NAME: ${{ secrets.COSMOS_DB_NAME }}
-          GITHUB_BRANCH: ${{ github.head_ref || github.ref_name }}
 
       - name: Build 11ty site
         run: npm run build
