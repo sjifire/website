@@ -4,8 +4,8 @@
   "scripts": {
     "dev": "eleventy --serve --port=8080",
     "build": "eleventy",
-    "tina:dev": "TINA_PUBLIC_IS_LOCAL=true tinacms dev --port 8080 -c \"eleventy --serve --port=3000\"",
-    "tina:local-prod": "TINA_PUBLIC_IS_LOCAL=false TINA_PUBLIC_LOCAL_PROD=true tinacms dev --port 8080 -c \"eleventy --serve --port=3000\"",
+    "tina:dev": "TINA_PUBLIC_IS_LOCAL=true tinacms dev -c \"npm run dev\"",
+    "tina:local-prod": "TINA_PUBLIC_IS_LOCAL=false TINA_PUBLIC_LOCAL_PROD=true tinacms dev -c \"npm run dev\"",
     "tina:build": "tinacms build && npm run build",
     "api:dev": "cd api && FUNCTIONS_WORKER_RUNTIME=node func start --verbose",
     "api:install": "cd api && npm install",
