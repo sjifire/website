@@ -22,7 +22,7 @@ const getApiUrl = () => {
 };
 
 export default defineConfig({
-  branch: process.env.GITHUB_BRANCH || process.env.TINA_BRANCH || "main",
+  branch: process.env.TINA_BRANCH || "main",
 
   // Self-hosted: use custom backend in production, local mode for development
   contentApiUrlOverride: getApiUrl(),
