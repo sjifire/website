@@ -1,4 +1,5 @@
 const github = require("./github.js");
+const { optimizeImage } = require("./cloudinary.js");
 
 const MEDIA_ROOT = "src/assets/media";
 const MEDIA_EXTENSIONS = ["jpg", "jpeg", "png", "gif", "webp", "svg", "pdf"];
@@ -127,6 +128,11 @@ function createMediaOperations(deps = {}) {
       : `${MEDIA_ROOT}/${filename}`;
     const encodedPath = encodePathForGitHub(filePath);
 
+    // Optimize image via Cloudinary if applicable
+    const optimizationResult = await optimizeImage(content, filename);
+    const { content: optimizedContent, optimized } = optimizationResult;
+    const finalContent = optimizedContent;
+
     // Check if file exists to get its SHA (required for updates)
     let sha;
     try {
@@ -136,9 +142,13 @@ function createMediaOperations(deps = {}) {
       // File doesn't exist, that's fine
     }
 
+    const commitMessage = sha
+      ? `Update media: ${filename}`
+      : `Add media: ${filename}${optimized ? " (optimized)" : ""}`;
+
     const body = {
-      message: sha ? `Update media: ${filename}` : `Add media: ${filename}`,
-      content,
+      message: commitMessage,
+      content: finalContent,
       branch,
       ...(sha && { sha }),
     };
@@ -148,7 +158,9 @@ function createMediaOperations(deps = {}) {
       body: JSON.stringify(body),
     });
 
-    return formatMediaItem(result.content.path, result.content.name, directory);
+    const mediaItem = formatMediaItem(result.content.path, result.content.name, directory);
+    mediaItem._optimization = optimizationResult;
+    return mediaItem;
   }
 
   // Delete a file from the media directory
