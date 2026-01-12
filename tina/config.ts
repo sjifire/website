@@ -386,6 +386,160 @@ export default defineConfig({
         ],
       },
       {
+        name: "configGovernance",
+        label: "Config: Governance",
+        path: "src/_data",
+        format: "yaml",
+        match: {
+          include: "governance",
+        },
+        ui: {
+          allowedActions: {
+            create: false,
+            delete: false,
+          },
+        },
+        fields: [
+          {
+            type: "object",
+            name: "meeting_schedule",
+            label: "Regular Meeting Schedule",
+            fields: [
+              {
+                type: "number",
+                name: "week_of_month",
+                label: "Week of Month",
+                description: "1=first, 2=second, 3=third, 4=fourth, -1=last",
+                required: true,
+              },
+              {
+                type: "number",
+                name: "day_of_week",
+                label: "Day of Week",
+                description: "0=Sunday, 1=Monday, 2=Tuesday, 3=Wednesday, 4=Thursday, 5=Friday, 6=Saturday",
+                required: true,
+              },
+              {
+                type: "string",
+                name: "time",
+                label: "Time (24-hour format)",
+                description: "e.g., 15:00 for 3:00 PM",
+                required: true,
+              },
+              {
+                type: "string",
+                name: "description",
+                label: "Description",
+                description: "Human-readable description of schedule",
+              },
+            ],
+          },
+          {
+            type: "object",
+            name: "next_meeting_override",
+            label: "Next Meeting Override (Optional)",
+            description: "Override the calculated next meeting with a specific date",
+            fields: [
+              {
+                type: "datetime",
+                name: "date",
+                label: "Override Date",
+                description: "Leave empty to use regular schedule",
+              },
+              {
+                type: "string",
+                name: "time",
+                label: "Override Time (24-hour)",
+                description: "Leave empty to use regular time",
+              },
+              {
+                type: "string",
+                name: "note",
+                label: "Note",
+                description: "Optional note to display (e.g., 'Special budget session')",
+              },
+            ],
+          },
+          {
+            type: "object",
+            name: "meeting_location",
+            label: "Meeting Location",
+            fields: [
+              {
+                type: "string",
+                name: "name",
+                label: "Location Name",
+              },
+              {
+                type: "string",
+                name: "street",
+                label: "Street Address",
+              },
+              {
+                type: "string",
+                name: "city",
+                label: "City",
+              },
+              {
+                type: "string",
+                name: "state",
+                label: "State",
+              },
+              {
+                type: "string",
+                name: "zip",
+                label: "ZIP Code",
+              },
+            ],
+          },
+          {
+            type: "string",
+            name: "documents_url",
+            label: "Meeting Documents URL",
+            description: "Link to SharePoint or document repository",
+          },
+          {
+            type: "object",
+            name: "important_documents",
+            label: "Important Documents",
+            list: true,
+            ui: {
+              itemProps: (item) => ({
+                label: item?.title || "New Document",
+              }),
+            },
+            fields: [
+              {
+                type: "string",
+                name: "title",
+                label: "Document Title",
+                required: true,
+              },
+              {
+                type: "string",
+                name: "file",
+                label: "File Name",
+                description: "Filename in /assets/docs/ folder",
+              },
+              {
+                type: "string",
+                name: "url",
+                label: "External URL",
+                description: "Or provide an external URL instead of file",
+              },
+            ],
+          },
+          {
+            type: "string",
+            name: "body",
+            label: "Main Content (Markdown)",
+            ui: {
+              component: "textarea",
+            },
+          },
+        ],
+      },
+      {
         name: "homepage",
         label: "Homepage",
         path: "src/_data",

@@ -1,22 +1,15 @@
 # Meeting Schedule Configuration
-# The regular meeting schedule (recurring)
 meeting_schedule:
-  # Week of month: 1=first, 2=second, 3=third, 4=fourth, -1=last
   week_of_month: 2
-  # Day of week: 0=Sunday, 1=Monday, 2=Tuesday, etc.
-  day_of_week: 2  # Tuesday
-  # Time in 24-hour format
+  day_of_week: 2
   time: "15:00"
-  # Human-readable description
   description: "Second Tuesday of the month at 3:00 PM"
 
 # Override the next meeting with specific date/info (optional)
-# Set to null or remove to use the recurring schedule
 next_meeting_override:
-  # Uncomment and set to override the next meeting:
-  # date: "2025-02-11"
-  # time: "15:00"
-  # note: "Special budget session"
+  date: null
+  time: null
+  note: null
 
 # Meeting location
 meeting_location:
@@ -25,6 +18,22 @@ meeting_location:
   city: "Friday Harbor"
   state: "WA"
   zip: "98250"
+
+# Link to document repository (SharePoint, etc.)
+documents_url: ""
+
+# Important documents list (editable via /admin)
+important_documents:
+  - title: 2025 Approved Budget
+    file: adopted-2025-budget.pdf
+  - title: 2024 Approved Budget
+    file: approved-2024-budget.pdf
+  - title: 2022 Approved Budget
+    file: budget-cy2022-adopted.pdf
+  - title: 2021 Operations Report
+    file: jan22-annual-ops-report-v2.pdf
+  - title: 2021 Department Goals
+    file: san-juan-island-2021-goals.pdf
 
 body: >-
   San Juan Island Fire and Rescue is governed by San Juan County Fire District
@@ -77,39 +86,3 @@ body: >-
 
 
   The Board welcomes public input. During regular meetings, there is an opportunity for public comment. If you are unable to attend but wish to submit a comment, please contact us in advance.
-
-
-  ---
-
-
-  ## Meeting Materials & Documents
-
-
-  Meeting agendas, minutes, and other board documents are available online.
-
-
-  [View Board Meeting Materials](https://www.sjifire.org/documents){.button} *(Coming Soon)*
-
-
-  *Note: We are in the process of setting up a document repository. Check back soon for access to agendas, minutes, budgets, and other public records.*
-
-
-  ---
-
-
-  ## Important Documents
-
-
-important_documents:
-  - title: 2025 Approved Budget
-    file: adopted-2025-budget.pdf
-  - file: approved-2024-budget.pdf
-    title: 2024 Approved Budget
-  - title: 2022 Approved Budget
-    file: budget-cy2022-adopted.pdf
-  - title: 2021 Operations Report
-    file: jan22-annual-ops-report-v2.pdf
-  - file: san-juan-island-2021-goals.pdf
-    title: 2021 Department Goals
-
-
