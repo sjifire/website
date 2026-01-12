@@ -10,45 +10,18 @@ layout: false
 
 {# Pull personnel data from the MDX content-include file #}
 {% set personnelData = null %}
+{% set whoWeAreContent = null %}
 {% for item in collections.contentIncludes %}
   {% if item.data.contentFor == "emergency-personnel" %}
     {% set personnelData = item.data.personnel %}
   {% endif %}
+  {% if item.data.contentFor == "who-we-are" %}
+    {% set whoWeAreContent = item.content %}
+  {% endif %}
 {% endfor %}
 
 {% block main_content_single %}
-<p>At San Juan Island Fire &amp; Rescue, <strong>WE are YOU!</strong></p>
-
-<figure class="styled-image styled-image--medium styled-image--right">
-  <img src="{% imgPath '/assets/media/team-dinner.jpeg', 'f_auto,q_auto:good' %}" alt="Team Dinner while on shift" />
-  <figcaption>Team Dinner while on shift</figcaption>
-</figure>
-
-<p>We are your neighbors, friends and the workers you see every day around our islands. Some of us are part- or full-time staff but most of us are volunteers.</p>
-
-<p>Even our small limited paid staff have just about all began as SJIF&amp;R volunteers.</p>
-
-<p>We work on homes &amp; gardens, or on boats, docks, and aircraft. We deliver packages, or farm the fields. We work for the county, restaurants, and professional services. We are young, starting our careers out of High School, and some of us are older and retired. We serve on boards and commissions. We are members of nonprofit organizations and volunteer there too.</p>
-
-<figure class="styled-image styled-image--medium styled-image--right">
-  <img src="{% imgPath '/assets/media/family-break-time.jpg', 'f_auto,q_auto:good' %}" alt="Break Time" />
-  <figcaption>Break Time</figcaption>
-</figure>
-
-<p>As your neighbors you see us, running out the doors of shops to answer the call. You hear our cars leaving as we head out to respond to emergencies.</p>
-
-<p>At all hours.</p>
-
-<p>In all weather.</p>
-
-<figure class="styled-image styled-image--medium styled-image--right">
-  <img src="{% imgPath '/assets/media/Vols-2-edited-1-scaled.jpg', 'f_auto,q_auto:good' %}" alt="Wildland Fire Drill" />
-  <figcaption>Wildland Fire Drill</figcaption>
-</figure>
-
-<p>We serve because we are islanders. We live here, work here and many of us our raising our families here.</p>
-
-<p><strong>WE are YOU.</strong></p>
+{{ whoWeAreContent | processStyledImages | safe }}
 
 <div style="clear: both;"></div>
 
