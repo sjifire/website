@@ -2,7 +2,7 @@ const CleanCSS = require("clean-css");
 const { minify } = require("terser");
 const yaml = require("js-yaml");
 const createCloudinary = require("./src/_lib/cloudinary");
-const { dateFilters } = require("./src/_lib/date-filters");
+const { dateFilters, getNextMeetingDate, DateTime } = require("./src/_lib/date-filters");
 
 const isProduction = process.env.ELEVENTY_ENV === "production";
 
@@ -61,6 +61,33 @@ module.exports = function(eleventyConfig) {
 
   eleventyConfig.addFilter("formatNumber", (num) => {
     return num.toLocaleString();
+  });
+
+  // Next meeting date filter for governance page
+  eleventyConfig.addFilter("nextMeetingDate", function(schedule, override) {
+    // Check for override first
+    if (override && override.date) {
+      const overrideDate = DateTime.fromISO(override.date, { zone: "America/Los_Angeles" });
+      if (overrideDate > DateTime.now()) {
+        return {
+          date: overrideDate,
+          formatted: overrideDate.toFormat("cccc, LLLL d, yyyy"),
+          time: overrideDate.toFormat("h:mm a"),
+          isOverride: true,
+          note: override.note || null
+        };
+      }
+    }
+    // Calculate from recurring schedule
+    const nextDate = getNextMeetingDate(schedule.week_of_month, schedule.day_of_week, schedule.time);
+    const [hour, minute] = schedule.time.split(":").map(Number);
+    return {
+      date: nextDate,
+      formatted: nextDate.toFormat("cccc, LLLL d, yyyy"),
+      time: nextDate.toFormat("h:mm a"),
+      isOverride: false,
+      note: null
+    };
   });
 
 
