@@ -118,156 +118,8 @@ export default defineConfig({
         ],
       },
       {
-        name: "configNavigation",
-        label: "Menu Structure",
-        path: "src/_data",
-        format: "json",
-        match: {
-          include: "navigation",
-        },
-        ui: {
-          allowedActions: {
-            create: false,
-            delete: false,
-          },
-        },
-        fields: [
-          {
-            type: "string",
-            name: "header_highlight_url",
-            label: "Header Highlight URL",
-            description: "URL of page to highlight in navigation (e.g., /about/join/). Label is pulled from page title.",
-          },
-          {
-            type: "object",
-            name: "items",
-            label: "Menu Items",
-            list: true,
-            ui: {
-              itemProps: (item) => ({
-                label: item?.label || "New Item",
-              }),
-            },
-            fields: [
-              {
-                type: "string",
-                name: "label",
-                label: "Label",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "folder",
-                label: "Auto-populate from folder",
-                description: "Folder name (e.g., 'about', 'services') to auto-populate children from pages",
-              },
-              {
-                type: "string",
-                name: "url",
-                label: "URL",
-                description: "Direct link URL (for items without dropdown)",
-              },
-              {
-                type: "object",
-                name: "children",
-                label: "Static Children",
-                description: "Manual child links (used when folder is not set)",
-                list: true,
-                ui: {
-                  itemProps: (item) => ({
-                    label: item?.label || "New Link",
-                  }),
-                },
-                fields: [
-                  {
-                    type: "string",
-                    name: "label",
-                    label: "Label",
-                    required: true,
-                  },
-                  {
-                    type: "string",
-                    name: "url",
-                    label: "URL",
-                    required: true,
-                  },
-                ],
-              },
-            ],
-          },
-        ],
-      },
-      {
-        name: "configSite",
-        label: "Site Identity",
-        path: "src/_data",
-        format: "json",
-        match: {
-          include: "site",
-        },
-        ui: {
-          allowedActions: {
-            create: false,
-            delete: false,
-          },
-        },
-        fields: [
-          {
-            type: "string",
-            name: "site_name",
-            label: "Site Name",
-            required: true,
-          },
-          {
-            type: "string",
-            name: "site_desc",
-            label: "Site Description",
-            ui: {
-              component: "textarea",
-            },
-          },
-          // Hidden fields - not user-configurable
-          {
-            type: "string",
-            name: "prodUrl",
-            label: "Production URL",
-            ui: { component: () => null },
-          },
-          {
-            type: "string",
-            name: "cloudinaryFetchUrl",
-            label: "Cloudinary Site ID",
-            ui: { component: () => null },
-          },
-          {
-            type: "string",
-            name: "cloudinaryRootUrl",
-            label: "Cloudinary Root URL",
-            ui: { component: () => null },
-          },
-          {
-            type: "boolean",
-            name: "enable_cloudinary_rewrites",
-            label: "Enable Cloudinary Rewrites",
-            ui: { component: () => null },
-          },
-          {
-            type: "string",
-            name: "timezone",
-            label: "Timezone",
-            ui: { component: () => null },
-          },
-          {
-            type: "string",
-            name: "opengraph_image",
-            label: "OpenGraph Image Filename",
-            ui: { component: () => null },
-          },
-        ],
-      },
-      {
         name: "configGovernanceMeeting",
-        label: "Board Meeting",
+        label: "Board Meeting Schedules",
         path: "src/_data",
         format: "json",
         match: {
@@ -402,93 +254,6 @@ export default defineConfig({
                 description: "e.g., 'Special Budget Hearing'",
               },
             ],
-          },
-        ],
-      },
-      {
-        name: "configPersonnel",
-        label: "Personnel",
-        path: "src/pages/about",
-        format: "mdx",
-        match: {
-          include: "emergency-personnel-data",
-        },
-        ui: {
-          allowedActions: {
-            create: false,
-            delete: false,
-          },
-        },
-        fields: [
-          {
-            type: "string",
-            name: "title",
-            label: "Title",
-            isTitle: true,
-            required: true,
-          },
-          {
-            type: "object",
-            name: "personnel",
-            label: "Personnel",
-            list: true,
-            ui: {
-              itemProps: (item) => ({
-                label: item?.first_name && item?.last_name
-                  ? `${item.first_name} ${item.last_name}`
-                  : "New Person",
-              }),
-            },
-            fields: [
-              {
-                type: "string",
-                name: "first_name",
-                label: "First Name",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "last_name",
-                label: "Last Name",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "title",
-                label: "Title",
-              },
-              {
-                type: "string",
-                name: "rank",
-                label: "Rank",
-                options: ["Chief", "Division Chief", "Battalion Chief", "Captain", "Lieutenant"],
-              },
-              {
-                type: "string",
-                name: "staff_type",
-                label: "Type",
-                options: ["staff", "volunteer"],
-                required: true,
-              },
-              {
-                type: "string",
-                name: "roles",
-                label: "Roles",
-                options: [ "FireFighter", "Wildland Firefighter", "EMT", "Medic", "Apparatus Operator",  "Marine Crew", "Support", "Admin"],
-                list: true,
-              },
-              {
-                type: "image",
-                name: "photo",
-                label: "Photo",
-              },
-            ],
-          },
-          {
-            type: "rich-text",
-            name: "body",
-            label: "Body",
-            isBody: true,
           },
         ],
       },
@@ -656,6 +421,241 @@ export default defineConfig({
                       { value: "center", label: "Center" },
                       { value: "right", label: "Float Right" },
                     ],
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+      {
+        name: "configPersonnel",
+        label: "Personnel",
+        path: "src/pages/about",
+        format: "mdx",
+        match: {
+          include: "emergency-personnel-data",
+        },
+        ui: {
+          allowedActions: {
+            create: false,
+            delete: false,
+          },
+        },
+        fields: [
+          {
+            type: "string",
+            name: "title",
+            label: "Title",
+            isTitle: true,
+            required: true,
+          },
+          {
+            type: "object",
+            name: "personnel",
+            label: "Personnel",
+            list: true,
+            ui: {
+              itemProps: (item) => ({
+                label: item?.first_name && item?.last_name
+                  ? `${item.first_name} ${item.last_name}`
+                  : "New Person",
+              }),
+            },
+            fields: [
+              {
+                type: "string",
+                name: "first_name",
+                label: "First Name",
+                required: true,
+              },
+              {
+                type: "string",
+                name: "last_name",
+                label: "Last Name",
+                required: true,
+              },
+              {
+                type: "string",
+                name: "title",
+                label: "Title",
+              },
+              {
+                type: "string",
+                name: "rank",
+                label: "Rank",
+                options: ["Chief", "Division Chief", "Battalion Chief", "Captain", "Lieutenant"],
+              },
+              {
+                type: "string",
+                name: "staff_type",
+                label: "Type",
+                options: ["staff", "volunteer"],
+                required: true,
+              },
+              {
+                type: "string",
+                name: "roles",
+                label: "Roles",
+                options: [ "FireFighter", "Wildland Firefighter", "EMT", "Medic", "Apparatus Operator",  "Marine Crew", "Support", "Admin"],
+                list: true,
+              },
+              {
+                type: "image",
+                name: "photo",
+                label: "Photo",
+              },
+            ],
+          },
+          {
+            type: "rich-text",
+            name: "body",
+            label: "Body",
+            isBody: true,
+          },
+        ],
+      },
+      {
+        name: "configSite",
+        label: "Site Identity",
+        path: "src/_data",
+        format: "json",
+        match: {
+          include: "site",
+        },
+        ui: {
+          allowedActions: {
+            create: false,
+            delete: false,
+          },
+        },
+        fields: [
+          {
+            type: "string",
+            name: "site_name",
+            label: "Site Name",
+            required: true,
+          },
+          {
+            type: "string",
+            name: "site_desc",
+            label: "Site Description",
+            ui: {
+              component: "textarea",
+            },
+          },
+          // Hidden fields - not user-configurable
+          {
+            type: "string",
+            name: "prodUrl",
+            label: "Production URL",
+            ui: { component: () => null },
+          },
+          {
+            type: "string",
+            name: "cloudinaryFetchUrl",
+            label: "Cloudinary Site ID",
+            ui: { component: () => null },
+          },
+          {
+            type: "string",
+            name: "cloudinaryRootUrl",
+            label: "Cloudinary Root URL",
+            ui: { component: () => null },
+          },
+          {
+            type: "boolean",
+            name: "enable_cloudinary_rewrites",
+            label: "Enable Cloudinary Rewrites",
+            ui: { component: () => null },
+          },
+          {
+            type: "string",
+            name: "timezone",
+            label: "Timezone",
+            ui: { component: () => null },
+          },
+          {
+            type: "string",
+            name: "opengraph_image",
+            label: "OpenGraph Image Filename",
+            ui: { component: () => null },
+          },
+        ],
+      },
+      {
+        name: "configNavigation",
+        label: "Navigation",
+        path: "src/_data",
+        format: "json",
+        match: {
+          include: "navigation",
+        },
+        ui: {
+          allowedActions: {
+            create: false,
+            delete: false,
+          },
+        },
+        fields: [
+          {
+            type: "string",
+            name: "header_highlight_url",
+            label: "Header Highlight URL",
+            description: "URL of page to highlight in navigation (e.g., /about/join/). Label is pulled from page title.",
+          },
+          {
+            type: "object",
+            name: "items",
+            label: "Menu Items",
+            list: true,
+            ui: {
+              itemProps: (item) => ({
+                label: item?.label || "New Item",
+              }),
+            },
+            fields: [
+              {
+                type: "string",
+                name: "label",
+                label: "Label",
+                required: true,
+              },
+              {
+                type: "string",
+                name: "folder",
+                label: "Auto-populate from folder",
+                description: "Folder name (e.g., 'about', 'services') to auto-populate children from pages",
+              },
+              {
+                type: "string",
+                name: "url",
+                label: "URL",
+                description: "Direct link URL (for items without dropdown)",
+              },
+              {
+                type: "object",
+                name: "children",
+                label: "Static Children",
+                description: "Manual child links (used when folder is not set)",
+                list: true,
+                ui: {
+                  itemProps: (item) => ({
+                    label: item?.label || "New Link",
+                  }),
+                },
+                fields: [
+                  {
+                    type: "string",
+                    name: "label",
+                    label: "Label",
+                    required: true,
+                  },
+                  {
+                    type: "string",
+                    name: "url",
+                    label: "URL",
+                    required: true,
                   },
                 ],
               },
