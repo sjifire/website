@@ -22,19 +22,6 @@ meeting_location:
 # Link to document repository (SharePoint, etc.)
 documents_url: ""
 
-# Important documents list (editable via /admin)
-important_documents:
-  - title: 2025 Approved Budget
-    file: adopted-2025-budget.pdf
-  - title: 2024 Approved Budget
-    file: approved-2024-budget.pdf
-  - title: 2022 Approved Budget
-    file: budget-cy2022-adopted.pdf
-  - title: 2021 Operations Report
-    file: jan22-annual-ops-report-v2.pdf
-  - title: 2021 Department Goals
-    file: san-juan-island-2021-goals.pdf
-
 body: >-
   San Juan Island Fire and Rescue is governed by San Juan County Fire District
   #3. The state of Washington chartered San Juan Island Fire Department in May of
@@ -57,7 +44,7 @@ body: >-
 
   * **Warren Appleton** (Vice-Chair)
 
-  * **Alexa Rust**
+  * **Mike Coryell**
 
 
   ---

@@ -31,9 +31,6 @@ sidebar: " "
   <p>Agendas, minutes, and board materials are available online.</p>
   {% if governance.documents_url %}
     <p><a href="{{ governance.documents_url }}" class="button">View Documents</a></p>
-  {% else %}
-    <p><a href="#" class="button" style="opacity: 0.6; pointer-events: none;">View Documents</a></p>
-    <p><small><em>Document link coming soon</em></small></p>
   {% endif %}
 </div>
 
@@ -55,22 +52,4 @@ sidebar: " "
 
 {% block main_content %}
 {{ governance.body | markdownify | processStyledImages | safe }}
-
-{% if governance.important_documents and governance.important_documents.length %}
-<hr>
-<h2>Important Documents</h2>
-<ul class="document-list">
-  {% for doc in governance.important_documents %}
-    <li>
-      {% if doc.url %}
-        <a href="{{ doc.url }}" target="_blank" rel="noopener">{{ doc.title }}</a>
-      {% elif doc.file %}
-        <a href="/assets/docs/{{ doc.file }}">{{ doc.title }}</a>
-      {% else %}
-        {{ doc.title }}
-      {% endif %}
-    </li>
-  {% endfor %}
-</ul>
-{% endif %}
 {% endblock %}

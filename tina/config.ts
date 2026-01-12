@@ -499,37 +499,6 @@ export default defineConfig({
             description: "Link to SharePoint or document repository",
           },
           {
-            type: "object",
-            name: "important_documents",
-            label: "Important Documents",
-            list: true,
-            ui: {
-              itemProps: (item) => ({
-                label: item?.title || "New Document",
-              }),
-            },
-            fields: [
-              {
-                type: "string",
-                name: "title",
-                label: "Document Title",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "file",
-                label: "File Name",
-                description: "Filename in /assets/docs/ folder",
-              },
-              {
-                type: "string",
-                name: "url",
-                label: "External URL",
-                description: "Or provide an external URL instead of file",
-              },
-            ],
-          },
-          {
             type: "string",
             name: "body",
             label: "Main Content (Markdown)",
