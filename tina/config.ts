@@ -220,11 +220,6 @@ export default defineConfig({
           },
           {
             type: "string",
-            name: "formal_site_name",
-            label: "Formal Site Name",
-          },
-          {
-            type: "string",
             name: "site_desc",
             label: "Site Description",
             ui: {
@@ -258,50 +253,15 @@ export default defineConfig({
           },
           {
             type: "string",
-            name: "opengraph_image",
-            label: "OpenGraph Image Filename",
+            name: "timezone",
+            label: "Timezone",
             ui: { component: () => null },
           },
           {
-            type: "object",
-            name: "address",
-            label: "Address",
+            type: "string",
+            name: "opengraph_image",
+            label: "OpenGraph Image Filename",
             ui: { component: () => null },
-            fields: [
-              {
-                type: "string",
-                name: "street",
-                label: "Street",
-              },
-              {
-                type: "string",
-                name: "city",
-                label: "City",
-              },
-              {
-                type: "string",
-                name: "state",
-                label: "State",
-              },
-              {
-                type: "string",
-                name: "zip",
-                label: "ZIP Code",
-              },
-              {
-                type: "string",
-                name: "phone",
-                label: "Phone",
-              },
-              {
-                type: "string",
-                name: "map",
-                label: "Google Maps Embed URL",
-                ui: {
-                  component: "textarea",
-                },
-              },
-            ],
           },
         ],
       },
