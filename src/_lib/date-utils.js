@@ -26,10 +26,11 @@ function createDateFilter(formatter) {
  * @param {number} weekOfMonth - 1=first, 2=second, 3=third, 4=fourth
  * @param {number} dayOfWeek - 0=Sunday, 1=Monday, 2=Tuesday, etc.
  * @param {string} time - Time in HH:mm format (24-hour)
+ * @param {string} timezone - IANA timezone string
  * @returns {DateTime} The next meeting date
  */
-function getNextMeetingDate(weekOfMonth, dayOfWeek, time = "15:00") {
-  const now = DateTime.now().setZone("America/Los_Angeles");
+function getNextMeetingDate(weekOfMonth, dayOfWeek, time = "15:00", timezone) {
+  const now = DateTime.now().setZone(timezone);
   const [hour, minute] = time.split(":").map(Number);
 
   // Try current month and next month
@@ -56,6 +57,53 @@ function getNextMeetingDate(weekOfMonth, dayOfWeek, time = "15:00") {
   return now.plus({ months: 1 }).startOf("month");
 }
 
+/**
+ * Format a meeting date result object for template consumption
+ * @param {DateTime} date - Luxon DateTime object
+ * @param {boolean} isOverride - Whether this is an override date
+ * @param {string|null} note - Optional note for the meeting
+ * @returns {Object} Formatted meeting result
+ */
+function formatMeetingResult(date, isOverride = false, note = null) {
+  return {
+    date,
+    formatted: date.toFormat("cccc, LLLL d, yyyy"),
+    time: date.toFormat("h:mm a"),
+    isOverride,
+    note
+  };
+}
+
+/**
+ * Calculate next meeting with override support
+ * @param {Object} schedule - Recurring schedule config (week_of_month, day_of_week, time)
+ * @param {Object} override - Optional override (date, time, note)
+ * @param {string} timezone - IANA timezone string
+ * @returns {Object} Meeting result with date, formatted, time, isOverride, note
+ */
+function getNextMeeting(schedule, override, timezone) {
+  // Check for override first
+  if (override?.date) {
+    let overrideDate = DateTime.fromISO(override.date, { zone: timezone });
+    if (override.time) {
+      const [hour, minute] = override.time.split(":").map(Number);
+      overrideDate = overrideDate.set({ hour, minute });
+    }
+    if (overrideDate > DateTime.now()) {
+      return formatMeetingResult(overrideDate, true, override.note || null);
+    }
+  }
+
+  // Calculate from recurring schedule (values may be strings from TinaCMS, parse as integers)
+  const nextDate = getNextMeetingDate(
+    parseInt(schedule.week_of_month, 10),
+    parseInt(schedule.day_of_week, 10),
+    schedule.time,
+    timezone
+  );
+  return formatMeetingResult(nextDate);
+}
+
 // Pre-configured date filters
 const dateFilters = {
   // "Jan 15" - short format without year
@@ -75,5 +123,7 @@ module.exports = {
   createDateFilter,
   dateFilters,
   getNextMeetingDate,
-  DateTime, // Re-export for use in tests
+  getNextMeeting,
+  formatMeetingResult,
+  DateTime,
 };

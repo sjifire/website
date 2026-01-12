@@ -2,13 +2,14 @@ const CleanCSS = require("clean-css");
 const { minify } = require("terser");
 const yaml = require("js-yaml");
 const createCloudinary = require("./src/_lib/cloudinary");
-const { dateFilters, getNextMeetingDate, DateTime } = require("./src/_lib/date-utils");
+const { dateFilters, getNextMeeting } = require("./src/_lib/date-utils");
 
 const isProduction = process.env.ELEVENTY_ENV === "production";
 
 module.exports = function(eleventyConfig) {
   const siteData = require("./src/_data/site.json");
   const cloudinary = createCloudinary(siteData, isProduction);
+  const timezone = siteData.address.timezone;
 
   // Add YAML support for data files
   eleventyConfig.addDataExtension("yml,yaml", (contents) => yaml.load(contents));
@@ -65,33 +66,7 @@ module.exports = function(eleventyConfig) {
 
   // Next meeting date filter for governance page
   eleventyConfig.addFilter("nextMeetingDate", function(schedule, override) {
-    // Check for override first
-    if (override && override.date) {
-      let overrideDate = DateTime.fromISO(override.date, { zone: "America/Los_Angeles" });
-      // Apply override time if provided
-      if (override.time) {
-        const [hour, minute] = override.time.split(":").map(Number);
-        overrideDate = overrideDate.set({ hour, minute });
-      }
-      if (overrideDate > DateTime.now()) {
-        return {
-          date: overrideDate,
-          formatted: overrideDate.toFormat("cccc, LLLL d, yyyy"),
-          time: overrideDate.toFormat("h:mm a"),
-          isOverride: true,
-          note: override.note || null
-        };
-      }
-    }
-    // Calculate from recurring schedule (values may be strings from TinaCMS, parse as integers)
-    const nextDate = getNextMeetingDate(parseInt(schedule.week_of_month, 10), parseInt(schedule.day_of_week, 10), schedule.time);
-    return {
-      date: nextDate,
-      formatted: nextDate.toFormat("cccc, LLLL d, yyyy"),
-      time: nextDate.toFormat("h:mm a"),
-      isOverride: false,
-      note: null
-    };
+    return getNextMeeting(schedule, override, timezone);
   });
 
 
