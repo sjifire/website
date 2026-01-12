@@ -11,22 +11,12 @@
   const interval = (parseInt(carousel.dataset.interval, 10) || 5) * 1000;
   const randomize = carousel.dataset.randomize === 'true';
 
-  // Shuffle elements in place using Fisher-Yates algorithm
-  function shuffleElements(container) {
-    if (!container) return;
-    const children = Array.from(container.children);
-    for (let i = children.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      container.appendChild(children[j]);
-      children.splice(j, 1, children[i]);
-    }
-  }
-
   // Randomize order if enabled
   if (randomize) {
-    // Generate a shuffle order
     const count = slidesContainer.children.length;
     const order = Array.from({ length: count }, (_, i) => i);
+
+    // Fisher-Yates shuffle
     for (let i = order.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [order[i], order[j]] = [order[j], order[i]];
@@ -135,6 +125,16 @@
   carousel.addEventListener('mouseleave', () => {
     isPaused = false;
     startAutoplay();
+  });
+
+  // Pause when page is hidden, restart fresh when visible
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      stopAutoplay();
+    } else {
+      stopAutoplay();
+      startAutoplay();
+    }
   });
 
   // Keyboard navigation
