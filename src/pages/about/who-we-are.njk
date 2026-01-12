@@ -1,6 +1,6 @@
 ---
-title: Emergency Personnel
-nav_order: 3
+title: "Who We Are"
+nav_order: 1
 layout: false
 ---
 {% extends "page.njk" %}
@@ -10,14 +10,20 @@ layout: false
 
 {# Pull personnel data from the MDX content-include file #}
 {% set personnelData = null %}
+{% set whoWeAreContent = null %}
 {% for item in collections.contentIncludes %}
   {% if item.data.contentFor == "emergency-personnel" %}
     {% set personnelData = item.data.personnel %}
   {% endif %}
+  {% if item.data.contentFor == "who-we-are" %}
+    {% set whoWeAreContent = item.content %}
+  {% endif %}
 {% endfor %}
 
 {% block main_content_single %}
-<p>San Juan Island Fire & Rescue is proud to serve our community with dedicated staff and volunteer firefighters.</p>
+{{ whoWeAreContent | processStyledImages | safe }}
+
+<div style="clear: both;"></div>
 
 {% set staffOnly = personnelData | pluckByValue('staff', 'staff_type') %}
 {% set volunteersOnly = personnelData | pluckByValue('volunteer', 'staff_type') %}
