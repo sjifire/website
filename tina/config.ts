@@ -50,7 +50,7 @@ export default defineConfig({
     collections: [
       {
         name: "configBurnStatus",
-        label: "Config: Burn Status",
+        label: "Burn Status",
         path: "src/_data",
         format: "json",
         match: {
@@ -119,7 +119,7 @@ export default defineConfig({
       },
       {
         name: "configNavigation",
-        label: "Config: Navigation",
+        label: "Menu Structure",
         path: "src/_data",
         format: "json",
         match: {
@@ -199,7 +199,7 @@ export default defineConfig({
       },
       {
         name: "configSite",
-        label: "Config: Site",
+        label: "Site Identity",
         path: "src/_data",
         format: "json",
         match: {
@@ -267,7 +267,7 @@ export default defineConfig({
       },
       {
         name: "configGovernanceMeeting",
-        label: "Config: Governance Meeting",
+        label: "Board Meeting",
         path: "src/_data",
         format: "json",
         match: {
@@ -407,7 +407,7 @@ export default defineConfig({
       },
       {
         name: "configPersonnel",
-        label: "Config: Personnel",
+        label: "Personnel",
         path: "src/pages/about",
         format: "mdx",
         match: {
