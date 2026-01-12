@@ -15,7 +15,8 @@
     "lint:css": "stylelint --config tests/stylelint.config.json src/css/**/*.css",
     "test": "npm run test:unit && npm run test:e2e",
     "test:unit": "node --test tests/*.test.js",
-    "test:e2e": "playwright test --config=tests/playwright.config.js"
+    "test:e2e": "playwright test --config=tests/playwright.config.js",
+    "tina:reset-db": "node scripts/reset-tina-db.js"
   },
   "keywords": [],
   "author": "",
@@ -43,6 +44,7 @@
   "devDependencies": {
     "@11ty/eleventy": "^3.1.2",
     "@azure/static-web-apps-cli": "^2.0.7",
+    "@csstools/css-calc": "^2.1.4",
     "@eslint/js": "^9.39.2",
     "@playwright/test": "^1.57.0",
     "azure-functions-core-tools": "^4.6.0",

@@ -1,7 +1,8 @@
 require("dotenv").config({ path: require("path").resolve(__dirname, "../../../.env") });
 const { createAppAuth } = require("@octokit/auth-app");
 
-const branch = process.env.GITHUB_BRANCH || process.env.HEAD || "main";
+// Always use main branch for TinaCMS operations
+const branch = "main";
 
 // Generate a GitHub installation access token from App credentials
 async function getGitHubToken() {

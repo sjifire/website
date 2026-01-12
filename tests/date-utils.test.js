@@ -1,6 +1,8 @@
 const { describe, it } = require("node:test");
 const assert = require("node:assert");
-const { createDateFilter, dateFilters, DateTime } = require("../src/_lib/date-filters");
+const { createDateFilter, dateFilters, getNextMeetingDate, DateTime } = require("../src/_lib/date-utils");
+
+const TEST_TIMEZONE = "America/Los_Angeles";
 
 describe("createDateFilter", () => {
   describe("input handling", () => {
@@ -134,5 +136,104 @@ describe("edge cases", () => {
   it("handles dates in the future", () => {
     const filter = createDateFilter("yyyy-LL-dd");
     assert.strictEqual(filter("2030-06-15T12:00:00.000Z"), "2030-06-15");
+  });
+});
+
+describe("getNextMeetingDate", () => {
+  describe("basic functionality", () => {
+    it("returns a DateTime object", () => {
+      const result = getNextMeetingDate(2, 2, "15:00", TEST_TIMEZONE);
+      assert.ok(result instanceof DateTime, "Should return a Luxon DateTime");
+    });
+
+    it("returns a date in the future", () => {
+      const result = getNextMeetingDate(2, 2, "15:00", TEST_TIMEZONE);
+      const now = DateTime.now();
+      assert.ok(result > now, "Meeting date should be in the future");
+    });
+
+    it("sets the correct time", () => {
+      const result = getNextMeetingDate(2, 2, "15:00", TEST_TIMEZONE);
+      assert.strictEqual(result.hour, 15, "Hour should be 15");
+      assert.strictEqual(result.minute, 0, "Minute should be 0");
+    });
+
+    it("sets different time correctly", () => {
+      const result = getNextMeetingDate(2, 2, "09:30", TEST_TIMEZONE);
+      assert.strictEqual(result.hour, 9, "Hour should be 9");
+      assert.strictEqual(result.minute, 30, "Minute should be 30");
+    });
+  });
+
+  describe("week of month calculation", () => {
+    it("calculates first week correctly (week_of_month=1)", () => {
+      const result = getNextMeetingDate(1, 2, "15:00", TEST_TIMEZONE); // First Tuesday
+      // The result should be a Tuesday (weekday 2 in Luxon, but we use 0-indexed Sunday)
+      // Luxon uses 1=Monday, 2=Tuesday, etc.
+      assert.strictEqual(result.weekday, 2, "Should be a Tuesday");
+      assert.ok(result.day <= 7, "First week should be day 1-7");
+    });
+
+    it("calculates second week correctly (week_of_month=2)", () => {
+      const result = getNextMeetingDate(2, 2, "15:00", TEST_TIMEZONE); // Second Tuesday
+      assert.strictEqual(result.weekday, 2, "Should be a Tuesday");
+      assert.ok(result.day >= 8 && result.day <= 14, "Second week should be day 8-14");
+    });
+
+    it("calculates third week correctly (week_of_month=3)", () => {
+      const result = getNextMeetingDate(3, 2, "15:00", TEST_TIMEZONE); // Third Tuesday
+      assert.strictEqual(result.weekday, 2, "Should be a Tuesday");
+      assert.ok(result.day >= 15 && result.day <= 21, "Third week should be day 15-21");
+    });
+
+    it("calculates fourth week correctly (week_of_month=4)", () => {
+      const result = getNextMeetingDate(4, 2, "15:00", TEST_TIMEZONE); // Fourth Tuesday
+      assert.strictEqual(result.weekday, 2, "Should be a Tuesday");
+      assert.ok(result.day >= 22 && result.day <= 28, "Fourth week should be day 22-28");
+    });
+  });
+
+  describe("day of week calculation", () => {
+    it("calculates Sunday correctly (day_of_week=0)", () => {
+      const result = getNextMeetingDate(2, 0, "15:00", TEST_TIMEZONE);
+      assert.strictEqual(result.weekday, 7, "Should be Sunday (Luxon weekday 7)");
+    });
+
+    it("calculates Monday correctly (day_of_week=1)", () => {
+      const result = getNextMeetingDate(2, 1, "15:00", TEST_TIMEZONE);
+      assert.strictEqual(result.weekday, 1, "Should be Monday");
+    });
+
+    it("calculates Tuesday correctly (day_of_week=2)", () => {
+      const result = getNextMeetingDate(2, 2, "15:00", TEST_TIMEZONE);
+      assert.strictEqual(result.weekday, 2, "Should be Tuesday");
+    });
+
+    it("calculates Wednesday correctly (day_of_week=3)", () => {
+      const result = getNextMeetingDate(2, 3, "15:00", TEST_TIMEZONE);
+      assert.strictEqual(result.weekday, 3, "Should be Wednesday");
+    });
+
+    it("calculates Thursday correctly (day_of_week=4)", () => {
+      const result = getNextMeetingDate(2, 4, "15:00", TEST_TIMEZONE);
+      assert.strictEqual(result.weekday, 4, "Should be Thursday");
+    });
+
+    it("calculates Friday correctly (day_of_week=5)", () => {
+      const result = getNextMeetingDate(2, 5, "15:00", TEST_TIMEZONE);
+      assert.strictEqual(result.weekday, 5, "Should be Friday");
+    });
+
+    it("calculates Saturday correctly (day_of_week=6)", () => {
+      const result = getNextMeetingDate(2, 6, "15:00", TEST_TIMEZONE);
+      assert.strictEqual(result.weekday, 6, "Should be Saturday");
+    });
+  });
+
+  describe("timezone handling", () => {
+    it("uses the provided timezone", () => {
+      const result = getNextMeetingDate(2, 2, "15:00", TEST_TIMEZONE);
+      assert.strictEqual(result.zoneName, TEST_TIMEZONE, "Should use the provided timezone");
+    });
   });
 });

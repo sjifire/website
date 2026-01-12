@@ -299,6 +299,141 @@ export default defineConfig({
         ],
       },
       {
+        name: "configGovernanceMeeting",
+        label: "Config: Governance Meeting",
+        path: "src/_data",
+        format: "json",
+        match: {
+          include: "governance_meeting",
+        },
+        ui: {
+          allowedActions: {
+            create: false,
+            delete: false,
+          },
+          filename: {
+            readonly: true,
+            slugify: () => "governance_meeting",
+          },
+          global: true,
+        },
+        fields: [
+          {
+            type: "string",
+            name: "label",
+            label: "Label",
+            ui: {
+              component: () => null,
+            },
+          },
+          {
+            type: "object",
+            name: "meeting_schedule",
+            label: "Regular Meeting Schedule",
+            fields: [
+              {
+                type: "number",
+                name: "week_of_month",
+                label: "Week of Month",
+                required: true,
+                ui: {
+                  component: "select",
+                },
+                options: [
+                  { value: "1", label: "First" },
+                  { value: "2", label: "Second" },
+                  { value: "3", label: "Third" },
+                  { value: "4", label: "Fourth" },
+                ],
+              },
+              {
+                type: "number",
+                name: "day_of_week",
+                label: "Day of Week",
+                required: true,
+                ui: {
+                  component: "select",
+                },
+                options: [
+                  { value: "0", label: "Sunday" },
+                  { value: "1", label: "Monday" },
+                  { value: "2", label: "Tuesday" },
+                  { value: "3", label: "Wednesday" },
+                  { value: "4", label: "Thursday" },
+                  { value: "5", label: "Friday" },
+                  { value: "6", label: "Saturday" },
+                ],
+              },
+              {
+                type: "string",
+                name: "time",
+                label: "Time (24-hour format)",
+                description: "e.g., 15:00 for 3:00 PM",
+                required: true,
+              },
+            ],
+          },
+          {
+            type: "object",
+            name: "meeting_location",
+            label: "Meeting Location",
+            fields: [
+              {
+                type: "string",
+                name: "name",
+                label: "Location Name",
+              },
+              {
+                type: "string",
+                name: "street",
+                label: "Street Address",
+              },
+              {
+                type: "string",
+                name: "city",
+                label: "City",
+              },
+              {
+                type: "string",
+                name: "state",
+                label: "State",
+              },
+              {
+                type: "string",
+                name: "zip",
+                label: "ZIP Code",
+              },
+            ],
+          },
+          {
+            type: "object",
+            name: "next_meeting_override",
+            label: "Override Next Meeting (optional)",
+            description: "Set a specific date and time for a special meeting",
+            fields: [
+              {
+                type: "datetime",
+                name: "date",
+                label: "Override Date",
+                description: "Leave empty to use regular schedule",
+              },
+              {
+                type: "string",
+                name: "time",
+                label: "Override Time (24-hour format)",
+                description: "e.g., 15:00 for 3:00 PM. Required if date is set.",
+              },
+              {
+                type: "string",
+                name: "note",
+                label: "Note",
+                description: "e.g., 'Special Budget Hearing'",
+              },
+            ],
+          },
+        ],
+      },
+      {
         name: "configPersonnel",
         label: "Config: Personnel",
         path: "src/pages/about",

@@ -1,13 +1,17 @@
 const CleanCSS = require("clean-css");
 const { minify } = require("terser");
+const yaml = require("js-yaml");
 const createCloudinary = require("./src/_lib/cloudinary");
-const { dateFilters } = require("./src/_lib/date-filters");
+const { dateFilters, getNextMeeting } = require("./src/_lib/date-utils");
 
 const isProduction = process.env.ELEVENTY_ENV === "production";
 
 module.exports = function(eleventyConfig) {
   const siteData = require("./src/_data/site.json");
   const cloudinary = createCloudinary(siteData, isProduction);
+
+  // Add YAML support for data files
+  eleventyConfig.addDataExtension("yml,yaml", (contents) => yaml.load(contents));
 
   // Copy static assets
   eleventyConfig.addPassthroughCopy("src/assets/");
@@ -57,6 +61,11 @@ module.exports = function(eleventyConfig) {
 
   eleventyConfig.addFilter("formatNumber", (num) => {
     return num.toLocaleString();
+  });
+
+  // Next meeting date filter for governance page
+  eleventyConfig.addFilter("nextMeetingDate", function(schedule, override) {
+    return getNextMeeting(schedule, override, siteData.address.timezone);
   });
 
 

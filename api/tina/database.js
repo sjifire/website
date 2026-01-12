@@ -6,15 +6,13 @@ const { getGitHubToken, getGitHubConfig } = require("../src/lib/github.js");
 const isLocal = process.env.TINA_PUBLIC_IS_LOCAL === "true";
 
 // For production, create the database with GitHub App auth
-// Always use 'main' collection for schema (shared across all environments)
 async function createProdDatabase() {
   const { owner, repo, branch } = getGitHubConfig();
 
   console.log("Creating production database with GitHub provider:");
   console.log("  Owner:", owner || "(NOT SET)");
   console.log("  Repo:", repo || "(NOT SET)");
-  console.log("  Git Branch:", branch);
-  console.log("  Collection: main");
+  console.log("  Branch:", branch);
 
   if (!owner || !repo) {
     throw new Error("GITHUB_OWNER and GITHUB_REPO environment variables are required");
