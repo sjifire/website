@@ -20,4 +20,31 @@ layout: false
     {{ item.content | processStyledImages | safe }}
   {% endif %}
 {% endfor %}
+
+<h2>Additional Statistics</h2>
+<table class="stats-table">
+  <tbody>
+    <tr>
+      <th>Incident Types</th>
+      <td>
+        {{ stats.incident_stats.types.medical_rescue }} Medical Assists,
+        {{ stats.incident_stats.types.fire }} Fire,
+        {{ stats.incident_stats.types.downgraded }} Downgraded,
+        {{ stats.incident_stats.types.cancelled }} Cancelled
+      </td>
+    </tr>
+    <tr>
+      <th>Time of Day</th>
+      <td>{{ stats.incident_stats.num_daytime_incidents }} daytime, {{ stats.incident_stats.num_nighttime_incidents }} nighttime</td>
+    </tr>
+    <tr>
+      <th>Responders per Call</th>
+      <td>{{ stats.personnel_stats.num_per_incidents.median | round(0, 'ceil') }} (median)</td>
+    </tr>
+    <tr>
+      <th>Simultaneous Calls</th>
+      <td>{{ stats.incident_stats.num_overlapping_incidents }}</td>
+    </tr>
+  </tbody>
+</table>
 {% endblock %}
