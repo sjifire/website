@@ -9,7 +9,6 @@ const isProduction = process.env.ELEVENTY_ENV === "production";
 module.exports = function(eleventyConfig) {
   const siteData = require("./src/_data/site.json");
   const cloudinary = createCloudinary(siteData, isProduction);
-  const timezone = siteData.address.timezone;
 
   // Add YAML support for data files
   eleventyConfig.addDataExtension("yml,yaml", (contents) => yaml.load(contents));
@@ -66,7 +65,7 @@ module.exports = function(eleventyConfig) {
 
   // Next meeting date filter for governance page
   eleventyConfig.addFilter("nextMeetingDate", function(schedule, override) {
-    return getNextMeeting(schedule, override, timezone);
+    return getNextMeeting(schedule, override, siteData.address.timezone);
   });
 
 
