@@ -44,7 +44,7 @@ header_image_source:
         </a>
       </div>
 
-      <section class="carousel" data-autoplay="{{ homepage.carousel.autoplay | default(true) }}" data-interval="{{ homepage.carousel.interval | default(5) }}" data-randomize="{{ homepage.carousel.randomize | default(false) }}">
+      <section class="carousel" tabindex="0" data-autoplay="{{ homepage.carousel.autoplay | default(true) }}" data-interval="{{ homepage.carousel.interval | default(5) }}" data-randomize="{{ homepage.carousel.randomize | default(false) }}">
         <div class="carousel__viewport">
           <div class="carousel__slides" aria-live="polite">
             {% for img in homepage.carousel_images %}
