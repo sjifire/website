@@ -316,9 +316,6 @@ export default defineConfig({
             slugify: () => "governance_meeting",
           },
           global: true,
-          itemProps: (item) => ({
-            label: item?.label || "Board Meeting Schedule",
-          }),
         },
         fields: [
           {
