@@ -11,17 +11,17 @@ carousel:
   autoplay: true
   interval: 5
   show_thumbnails: true
-image_gallery:
-  - image: /assets/media/75627272_2431052507006192_899932430335475712_n.jpg
-    image_alt: MOBE Crew
-  - image: /assets/media/ssfire_l31.png
-    image_alt: Active Fire Scene
-  - image: /assets/media/alldeptphoto2022.jpg
-    image_alt: All Department Photo 2022
-  - image: /assets/media/img_20221016_121427_628.jpg
-    image_alt: Open house 2022
-  - image: /assets/media/pxl_20221016_192119162.jpg
-    image_alt: Response Vehicles
+carousel_images:
+  - src: /assets/media/75627272_2431052507006192_899932430335475712_n.jpg
+    alt: MOBE Crew
+  - src: /assets/media/ssfire_l31.png
+    alt: Active Fire Scene
+  - src: /assets/media/alldeptphoto2022.jpg
+    alt: All Department Photo 2022
+  - src: /assets/media/img_20221016_121427_628.jpg
+    alt: Open house 2022
+  - src: /assets/media/pxl_20221016_192119162.jpg
+    alt: Response Vehicles
 ---
 {% extends 'base.njk' %}
 
@@ -63,9 +63,9 @@ image_gallery:
       <section class="carousel" data-autoplay="{{ carousel.autoplay | default(true) }}" data-interval="{{ carousel.interval | default(5) }}">
         <div class="carousel__viewport">
           <div class="carousel__slides" aria-live="polite">
-            {% for img in image_gallery %}
-              <div id="carousel-slide-{{ loop.index }}" class="carousel__slide{{ ' active' if loop.first }}" role="group" aria-roledescription="slide" aria-label="Slide {{ loop.index }} of {{ image_gallery | length }}">
-                <img class="carousel__image leave-alone" src="{%- imgPath img.image | safe,  'f_auto,q_auto:good,c_fill,w_1000,h_800' -%}" alt="{{ img.image_alt }}" loading="{{ 'eager' if loop.first else 'lazy' }}">
+            {% for img in carousel_images %}
+              <div id="carousel-slide-{{ loop.index }}" class="carousel__slide{{ ' active' if loop.first }}" role="group" aria-roledescription="slide" aria-label="Slide {{ loop.index }} of {{ carousel_images | length }}">
+                <img class="carousel__image leave-alone" src="{%- imgPath img.src | safe,  'f_auto,q_auto:good,c_fill,w_1000,h_800' -%}" alt="{{ img.alt }}" loading="{{ 'eager' if loop.first else 'lazy' }}">
               </div>
             {% endfor %}
           </div>
@@ -81,15 +81,15 @@ image_gallery:
           </button>
         </div>
         <div class="carousel__indicators">
-          {% for img in image_gallery %}
+          {% for img in carousel_images %}
             <button type="button" class="carousel__dot{{ ' active' if loop.first }}" data-slide="{{ loop.index }}" aria-label="Go to slide {{ loop.index }}"></button>
           {% endfor %}
         </div>
         {% if carousel.show_thumbnails %}
         <div class="carousel__thumbnails">
-          {% for img in image_gallery %}
+          {% for img in carousel_images %}
             <button type="button" class="carousel__thumb{{ ' active' if loop.first }}" data-slide="{{ loop.index }}" aria-label="Go to slide {{ loop.index }}">
-              <img class="leave-alone" src="{%- imgPath img.image | safe,  'f_auto,q_auto:good,c_fill,w_150,h_100' -%}" alt="{{ img.image_alt }}">
+              <img class="leave-alone" src="{%- imgPath img.src | safe,  'f_auto,q_auto:good,c_fill,w_150,h_100' -%}" alt="{{ img.alt }}">
             </button>
           {% endfor %}
         </div>

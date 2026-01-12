@@ -439,24 +439,24 @@ export default defineConfig({
           },
           {
             type: "object",
-            name: "image_gallery",
-            label: "Image Carousel",
+            name: "carousel_images",
+            label: "Carousel Images",
             list: true,
             ui: {
               itemProps: (item) => ({
-                label: item?.image_alt || item?.image || "New Image",
+                label: item?.alt || item?.src || "New Image",
               }),
             },
             fields: [
               {
                 type: "image",
-                name: "image",
+                name: "src",
                 label: "Image",
                 required: true,
               },
               {
                 type: "string",
-                name: "image_alt",
+                name: "alt",
                 label: "Alt Text",
                 required: true,
               },
