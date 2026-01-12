@@ -36,7 +36,7 @@
     <tr class="{{ cls.next() }}">
       <th>
         Reaction Time
-        <aside>Median seconds</aside>
+        <aside>Seconds</aside>
       </th>
       <td>
         {{ stats.unit_time_stats.first_unit_reaction.median }}
@@ -45,15 +45,15 @@
     <tr class="{{ cls.next() }}">
       <th rowspan=3>
         Travel Time
-        <aside>Median minutes</aside>
+        <aside>Minutes (% of calls)</aside>
       </th>
       <td>
         {% if stats.region_stats.central and stats.region_stats.central.num_incidents > 0 -%}
           {{ (stats.region_stats.central.unit_travel_time.median/60) | round(1) }}
-          <aside>Central</aside>
+          <aside>Central ({{((stats.region_stats.central.num_incidents/stats.incident_stats.num_incidents) * 100) | round }}%)</aside>
         {% else %}
            --
-          <aside>Central</aside>
+          <aside>Central (0%)</aside>
         {% endif -%}
       </td>
     </tr>
@@ -61,10 +61,10 @@
       <td>
         {% if stats.region_stats.south and stats.region_stats.south.num_incidents > 0 -%}
           {{ (stats.region_stats.south.unit_travel_time.median/60) | round(1) }}
-          <aside>South</aside>
+          <aside>South ({{((stats.region_stats.south.num_incidents/stats.incident_stats.num_incidents) * 100) | round }}%)</aside>
         {% else %}
            --
-          <aside>South</aside>
+          <aside>South (0%)</aside>
         {% endif -%}
       </td>
     </tr>
@@ -72,17 +72,17 @@
       <td>
         {% if stats.region_stats.north and stats.region_stats.north.num_incidents > 0 -%}
           {{ (stats.region_stats.north.unit_travel_time.median/60) | round(1) }}
-          <aside>North</aside>
+          <aside>North ({{((stats.region_stats.north.num_incidents/stats.incident_stats.num_incidents) * 100) | round }}%)</aside>
         {% else %}
            --
-          <aside>North</aside>
+          <aside>North (0%)</aside>
         {% endif -%}
       </td>
     </tr>
     <tr class="{{ cls.next() }}">
       <th>
         Responder Time on Calls
-        <aside>Total minutes</aside>
+        <aside>Minutes</aside>
       </th>
       <td>
         {{ (stats.personnel_stats.time_on_incidents.sum/60) | round | formatNumber }}
