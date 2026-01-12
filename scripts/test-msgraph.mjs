@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Test Microsoft Graph API connection and display sample data
- * Run: node src/scripts/test-msgraph.mjs
+ * Run: node scripts/test-msgraph.mjs
  *
  * Requires: MS_GRAPH_TENANT_ID, MS_GRAPH_CLIENT_ID, MS_GRAPH_CLIENT_SECRET
  */

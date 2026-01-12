@@ -28,7 +28,7 @@ Requires Node.js 20+. Output goes to `_site/`.
 - `src/pages/` - Content pages (`.njk`/`.md`) - URLs generated without `/pages/` prefix via `pages.11tydata.js`
 - `src/posts/` - News posts as JSON files (`YYYY-MM-DD-slug.json`)
 - `src/media_releases/` - Press release metadata (JSON) linking to PDFs in `src/assets/media_releases/`
-- `src/scripts/` - Standalone ESM scripts for data sync (NERIS, M365 personnel)
+- `scripts/` - Standalone ESM scripts for data sync (NERIS, M365 personnel)
 - `api/` - Azure Functions backend (TypeScript) for GitHub content operations and auth
 
 ### Key Patterns
@@ -56,8 +56,8 @@ Admin routes (`/admin/*`, `/api/*`) require Azure AD authentication configured v
 Incident statistics are pulled daily from NERIS (National Emergency Response Information System) via a scheduled GitHub Action.
 
 **Files:**
-- `src/scripts/neris-client.mjs` - ESM API client for NERIS REST API
-- `src/scripts/generate-stats.mjs` - Fetches incidents and generates `src/_data/stats.json`
+- `scripts/neris-client.mjs` - ESM API client for NERIS REST API
+- `scripts/generate-stats.mjs` - Fetches incidents and generates `src/_data/stats.json`
 - `.github/workflows/update-stats.yml` - Daily scheduled workflow (6 AM UTC)
 
 **Required GitHub Secrets:**
@@ -78,8 +78,8 @@ npm run stats
 Personnel data and photos are synced weekly from Microsoft 365 via Microsoft Graph API.
 
 **Files:**
-- `src/scripts/msgraph-client.mjs` - ESM client for Microsoft Graph API
-- `src/scripts/sync-personnel.mjs` - Syncs users/photos to `emergency-personnel-data.mdx`
+- `scripts/msgraph-client.mjs` - ESM client for Microsoft Graph API
+- `scripts/sync-personnel.mjs` - Syncs users/photos to `emergency-personnel-data.mdx`
 - `.github/workflows/sync-personnel.yml` - Weekly scheduled workflow (Monday 7 AM UTC)
 
 **Required GitHub Secrets:**

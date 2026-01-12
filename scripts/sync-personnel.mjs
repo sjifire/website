@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Sync personnel data from Microsoft 365
- * Run: node src/scripts/sync-personnel.mjs
+ * Run: node scripts/sync-personnel.mjs
  *
  * Required environment variables:
  *   MS_GRAPH_TENANT_ID - Azure AD tenant ID
@@ -15,14 +15,15 @@
  *   SYNC_PHOTOS - Set to "true" to download photos (default: true)
  */
 
+import 'dotenv/config';
 import { writeFile, mkdir } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { MSGraphClient } from './msgraph-client.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const OUTPUT_PATH = join(__dirname, '..', 'pages', 'about', 'emergency-personnel-data.mdx');
-const PHOTOS_DIR = join(__dirname, '..', 'assets', 'images', 'personnel_imgs');
+const OUTPUT_PATH = join(__dirname, '..', 'src', 'pages', 'about', 'emergency-personnel-data.mdx');
+const PHOTOS_DIR = join(__dirname, '..', 'src', 'assets', 'media', 'personnel_imgs');
 
 // Role group mappings - M365 group display names to role names
 // Configure these to match your M365 group names
