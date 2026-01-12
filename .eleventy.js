@@ -83,8 +83,8 @@ module.exports = function(eleventyConfig) {
         };
       }
     }
-    // Calculate from recurring schedule
-    const nextDate = getNextMeetingDate(schedule.week_of_month, schedule.day_of_week, schedule.time);
+    // Calculate from recurring schedule (values may be strings from TinaCMS, parse as integers)
+    const nextDate = getNextMeetingDate(parseInt(schedule.week_of_month, 10), parseInt(schedule.day_of_week, 10), schedule.time);
     return {
       date: nextDate,
       formatted: nextDate.toFormat("cccc, LLLL d, yyyy"),
