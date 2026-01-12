@@ -17,9 +17,9 @@ function parseTimeString(timeStr) {
     const minute = parseInt(match12h[2], 10);
     const period = match12h[3];
 
-    if (period === 'pm' && hour !== 12) {
+    if (period === "pm" && hour !== 12) {
       hour += 12;
-    } else if (period === 'am' && hour === 12) {
+    } else if (period === "am" && hour === 12) {
       hour = 0;
     }
 
@@ -27,7 +27,7 @@ function parseTimeString(timeStr) {
   }
 
   // Fallback: try simple colon split for 24-hour format
-  const parts = normalized.split(':').map(p => parseInt(p, 10));
+  const parts = normalized.split(":").map(p => parseInt(p, 10));
   if (parts.length >= 2 && !isNaN(parts[0]) && !isNaN(parts[1])) {
     return { hour: parts[0], minute: parts[1] };
   }
