@@ -231,35 +231,42 @@ export default defineConfig({
               component: "textarea",
             },
           },
+          // Hidden fields - not user-configurable
           {
             type: "string",
             name: "prodUrl",
             label: "Production URL",
+            ui: { component: () => null },
           },
           {
             type: "string",
             name: "cloudinaryFetchUrl",
             label: "Cloudinary Site ID",
+            ui: { component: () => null },
           },
           {
             type: "string",
             name: "cloudinaryRootUrl",
             label: "Cloudinary Root URL",
+            ui: { component: () => null },
           },
           {
             type: "boolean",
             name: "enable_cloudinary_rewrites",
             label: "Enable Cloudinary Rewrites",
+            ui: { component: () => null },
           },
           {
             type: "string",
             name: "opengraph_image",
             label: "OpenGraph Image Filename",
+            ui: { component: () => null },
           },
           {
             type: "object",
             name: "address",
             label: "Address",
+            ui: { component: () => null },
             fields: [
               {
                 type: "string",
