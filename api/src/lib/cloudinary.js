@@ -12,8 +12,9 @@ const OPTIMIZABLE_EXTENSIONS = ["jpg", "jpeg", "png", "gif", "webp"];
 const MIN_SIZE_BYTES = 500 * 1024; // 500KB
 
 // Transformation for web-ready images
+// 2000px max supports retina displays for most site use cases
 // Keep original format (PNG/JPG) - Cloudinary CDN handles WebP/AVIF at runtime
-const TRANSFORM = "w_1600,h_1600,c_limit,q_auto";
+const TRANSFORM = "w_2000,h_2000,c_limit,q_auto";
 
 function getCloudinaryConfig() {
   const apiKey = process.env.CLOUDINARY_API_KEY;
