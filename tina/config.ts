@@ -388,8 +388,8 @@ export default defineConfig({
       {
         name: "homepage",
         label: "Homepage",
-        path: "src/pages",
-        format: "mdx",
+        path: "src/_data",
+        format: "json",
         match: {
           include: "homepage",
         },
@@ -401,37 +401,61 @@ export default defineConfig({
         },
         fields: [
           {
-            type: "string",
-            name: "title",
-            label: "Title",
-            isTitle: true,
-            required: true,
-          },
-          {
             type: "number",
             name: "number_news_stories",
             label: "Number of News Stories to Display",
           },
           {
             type: "object",
-            name: "image_gallery",
-            label: "Image Gallery",
+            name: "carousel",
+            label: "Image Carousel Settings",
+            fields: [
+              {
+                type: "boolean",
+                name: "autoplay",
+                label: "Auto-rotate slides",
+                description: "Automatically advance slides",
+              },
+              {
+                type: "number",
+                name: "interval",
+                label: "Slide interval (seconds)",
+                description: "Time between slides when auto-rotating (default: 5)",
+              },
+              {
+                type: "boolean",
+                name: "show_thumbnails",
+                label: "Show thumbnail navigation",
+                description: "Display thumbnail images below the carousel",
+              },
+              {
+                type: "boolean",
+                name: "randomize",
+                label: "Randomize order",
+                description: "Shuffle slide order on each page load",
+              },
+            ],
+          },
+          {
+            type: "object",
+            name: "carousel_images",
+            label: "Carousel Images",
             list: true,
             ui: {
               itemProps: (item) => ({
-                label: item?.image_alt || item?.image || "New Image",
+                label: item?.alt || item?.src || "New Image",
               }),
             },
             fields: [
               {
                 type: "image",
-                name: "image",
+                name: "src",
                 label: "Image",
                 required: true,
               },
               {
                 type: "string",
-                name: "image_alt",
+                name: "alt",
                 label: "Alt Text",
                 required: true,
               },

@@ -66,19 +66,10 @@
       const image = imgs[Math.floor(Math.random() * imgs.length)];
       document.getElementById('home-header').style.setProperty('--home-header-bg-image', 'url('+image+')');
     {% endif %}
-
-    for (const item of document.querySelectorAll('.gallery-nav__item')) {
-      item.addEventListener('click', (e) => {
-        e.preventDefault();
-        document.querySelector('.gallery-nav__item.active')?.classList.remove('active');
-        document.querySelector('.gallery-showcase__item.active')?.classList.remove('active');
-        e.currentTarget.classList.add('active');
-        document.getElementById(e.currentTarget.dataset.targetId)?.classList.add('active');
-      });
-    }
   {% endset %}
   <script defer>
     {{ js | jsmin | safe }}
   </script>
+  {% block scripts %}{% endblock %}
 </body>
 </html>
