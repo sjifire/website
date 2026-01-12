@@ -1,3 +1,105 @@
+# Meeting Schedule Configuration
+# The regular meeting schedule (recurring)
+meeting_schedule:
+  # Week of month: 1=first, 2=second, 3=third, 4=fourth, -1=last
+  week_of_month: 2
+  # Day of week: 0=Sunday, 1=Monday, 2=Tuesday, etc.
+  day_of_week: 2  # Tuesday
+  # Time in 24-hour format
+  time: "15:00"
+  # Human-readable description
+  description: "Second Tuesday of the month at 3:00 PM"
+
+# Override the next meeting with specific date/info (optional)
+# Set to null or remove to use the recurring schedule
+next_meeting_override:
+  # Uncomment and set to override the next meeting:
+  # date: "2025-02-11"
+  # time: "15:00"
+  # note: "Special budget session"
+
+# Meeting location
+meeting_location:
+  name: "Fire Station #31"
+  street: "1011 Mullis Street"
+  city: "Friday Harbor"
+  state: "WA"
+  zip: "98250"
+
+body: >-
+  San Juan Island Fire and Rescue is governed by San Juan County Fire District
+  #3. The state of Washington chartered San Juan Island Fire Department in May of
+  1959.
+
+
+  In Washington, special purpose districts are limited purpose local governments separate from a city, town, or county government. They perform functions including fire protection and emergency medical services that are not otherwise available from city or county governments.
+
+
+  San Juan County Fire District #3 has an elected, three-member Board of Fire Commissioners who serve six-year terms ([RCW 52.14.060](https://app.leg.wa.gov/rcw/default.aspx?cite=52.14.060)). The district derives revenues from real property assessments and is classified as a taxing district.
+
+
+  Fire District #3 operates as directed by applicable laws and regulations set by the Revised Code of Washington (RCW) and the Washington Administrative Code (WAC).
+
+
+  ### Current Commissioners
+
+
+  * **Dwight Colley** (Chair)
+
+  * **Warren Appleton** (Vice-Chair)
+
+  * **Alexa Rust**
+
+
+  ---
+
+
+  ## Board Meetings
+
+
+  All Board of Fire Commissioners meetings are **open to the public**. Regular meetings are held on the **second Tuesday of every month at 3:00 PM** at Fire District headquarters:
+
+
+  **Fire Station #31**
+
+  1011 Mullis Street
+
+  Friday Harbor, WA 98250
+
+
+  ### Attending Meetings
+
+
+  Community members are welcome and encouraged to attend meetings in person. Meeting agendas are typically posted in advance so attendees can review items beforehand.
+
+
+  ### Public Comment
+
+
+  The Board welcomes public input. During regular meetings, there is an opportunity for public comment. If you are unable to attend but wish to submit a comment, please contact us in advance.
+
+
+  ---
+
+
+  ## Meeting Materials & Documents
+
+
+  Meeting agendas, minutes, and other board documents are available online.
+
+
+  [View Board Meeting Materials](https://www.sjifire.org/documents){.button} *(Coming Soon)*
+
+
+  *Note: We are in the process of setting up a document repository. Check back soon for access to agendas, minutes, budgets, and other public records.*
+
+
+  ---
+
+
+  ## Important Documents
+
+
 important_documents:
   - title: 2025 Approved Budget
     file: adopted-2025-budget.pdf
@@ -5,48 +107,9 @@ important_documents:
     title: 2024 Approved Budget
   - title: 2022 Approved Budget
     file: budget-cy2022-adopted.pdf
-  - title: 2021-operations-report.pdf
+  - title: 2021 Operations Report
     file: jan22-annual-ops-report-v2.pdf
   - file: san-juan-island-2021-goals.pdf
-    title: 2021-department-goals.pdf
-body: >-
-  San Juan Island Fire and Rescue is governed by San Juan County Fire District
-  3. The state of Washington chartered San Juan Island Fire Department in May of
-  1959.
+    title: 2021 Department Goals
 
 
-  In Washington, special purpose districts are limited purpose local governments separate from a city, town, or county government. Generally, they perform limited functions including fire protection, that are not otherwise available from city or county governments.
-
-
-  San Juan County Fire District 3 has an elected, three member board of commissioners who serve a six-year term ([RCW 52.14.060](https://app.leg.wa.gov/rcw/default.aspx?cite=52.14.060)). Most special purpose districts in Washington, including San Juan County District 3, derive revenues from real property assessments and are called taxing districts.
-
-
-  Fire District #3 operates as directed by applicable laws and regulations set by the Revised Code of Washington (RCW) and the Washington Administrative Code (WAC).
-
-
-  The RCW is the compilation of all permanent laws now in force. It is a collection of Session Laws (enacted by the Legislature, and signed by the Governor, or enacted via the initiative process). The WAC includes the regulations of executive branch agencies issued by authority of statutes. Like legislation and the Constitution, *regulations are a source of primary law* in Washington State. The WAC codifies the regulations and arranges them by subject or agency.
-
-
-  ### Current Commissioners
-
-
-  * Dwight Colley (Chair)
-
-  * Warren Appleton (Vice-Chair)
-
-  * A﻿lexa Rust
-
-
-  ### Board Meetings
-
-
-  Board meetings are open to the public and regularly scheduled meetings are held on the second Tuesday of every month, at 3:00 PM at the Fire District headquarters, located at Fire Station #31 at 1011 Mullis Street in Friday Harbor.
-
-
-  ### District
-
-
-  SJIF&R provides emergency response to all of San Juan Island, including Town of Friday Harbor, as well as Brown, Henry, Johns, Pearl, Spieden, and Stuart Islands.
-
-
-  ![District Map](/assets/media/district_map.png "District Map"){.large_img}

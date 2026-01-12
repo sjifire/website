@@ -8,3 +8,56 @@ sidebar: " "
 {% set pageData = governance %}
 {% extends "page.njk" %}
 
+{% block sidebar_content %}
+<div class="sidebar-block">
+  <h3>Next Board Meeting</h3>
+  <p>
+    <strong>{{ nextMeeting.dateFormatted }}</strong><br>
+    {{ nextMeeting.timeFormatted }}
+  </p>
+  {% if nextMeeting.isOverride and nextMeeting.overrideNote %}
+    <p><em>{{ nextMeeting.overrideNote }}</em></p>
+  {% endif %}
+  <p>
+    {{ nextMeeting.location.name }}<br>
+    {{ nextMeeting.location.street }}<br>
+    {{ nextMeeting.location.city }}, {{ nextMeeting.location.state }} {{ nextMeeting.location.zip }}
+  </p>
+</div>
+
+<hr>
+
+<div class="sidebar-block">
+  <h3>Meeting Documents</h3>
+  <p>Agendas, minutes, and board materials are available online.</p>
+  <p><a href="https://sjifire.sharepoint.com" class="button">View Documents</a></p>
+  <p><small><em>SharePoint link coming soon</em></small></p>
+</div>
+
+<hr>
+
+<div class="sidebar-block">
+  <h3>Contact the Board</h3>
+  <p>Questions or comments for the Board of Fire Commissioners can be submitted via our <a href="/contact/">contact form</a> or by calling 360-378-5334.</p>
+</div>
+
+<hr>
+
+<div class="sidebar-block">
+  <h3>District Service Area</h3>
+  <p>SJIF&R provides emergency response to all of San Juan Island, including the Town of Friday Harbor, as well as Brown, Henry, Johns, Pearl, Spieden, and Stuart Islands.</p>
+  <p><img src="/assets/media/district_map.png" alt="District Map"></p>
+</div>
+{% endblock %}
+
+{% block main_content %}
+{{ governance.body | markdownify | processStyledImages | safe }}
+
+{% if governance.important_documents and governance.important_documents.length %}
+<ul>
+  {% for doc in governance.important_documents %}
+    <li><a href="/assets/docs/{{ doc.file }}">{{ doc.title }}</a></li>
+  {% endfor %}
+</ul>
+{% endif %}
+{% endblock %}
