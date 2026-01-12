@@ -1,6 +1,42 @@
 const { DateTime } = require("luxon");
 
 /**
+ * Parse a time string in various formats (12-hour or 24-hour) to hour/minute
+ * @param {string} timeStr - Time like "2:30pm", "14:30", "3:00 PM", etc.
+ * @returns {{hour: number, minute: number}} Parsed hour and minute in 24-hour format
+ */
+function parseTimeString(timeStr) {
+  if (!timeStr) return { hour: 15, minute: 0 }; // Default to 3:00 PM
+
+  const normalized = timeStr.toLowerCase().trim();
+
+  // Check for 12-hour format with am/pm
+  const match12h = normalized.match(/^(\d{1,2}):(\d{2})\s*(am|pm)?$/);
+  if (match12h) {
+    let hour = parseInt(match12h[1], 10);
+    const minute = parseInt(match12h[2], 10);
+    const period = match12h[3];
+
+    if (period === 'pm' && hour !== 12) {
+      hour += 12;
+    } else if (period === 'am' && hour === 12) {
+      hour = 0;
+    }
+
+    return { hour, minute };
+  }
+
+  // Fallback: try simple colon split for 24-hour format
+  const parts = normalized.split(':').map(p => parseInt(p, 10));
+  if (parts.length >= 2 && !isNaN(parts[0]) && !isNaN(parts[1])) {
+    return { hour: parts[0], minute: parts[1] };
+  }
+
+  // Default fallback
+  return { hour: 15, minute: 0 };
+}
+
+/**
  * Factory function to create date filters for Eleventy.
  * Handles both Date objects and ISO strings, always uses UTC to avoid DST issues.
  *
@@ -86,7 +122,7 @@ function getNextMeeting(schedule, override, timezone) {
   if (override?.date) {
     let overrideDate = DateTime.fromISO(override.date, { zone: timezone });
     if (override.time) {
-      const [hour, minute] = override.time.split(":").map(Number);
+      const { hour, minute } = parseTimeString(override.time);
       overrideDate = overrideDate.set({ hour, minute });
     }
     if (overrideDate > DateTime.now()) {
@@ -125,5 +161,6 @@ module.exports = {
   getNextMeetingDate,
   getNextMeeting,
   formatMeetingResult,
+  parseTimeString,
   DateTime,
 };

@@ -1,6 +1,6 @@
 const { describe, it } = require("node:test");
 const assert = require("node:assert");
-const { createDateFilter, dateFilters, getNextMeetingDate, DateTime } = require("../src/_lib/date-utils");
+const { createDateFilter, dateFilters, getNextMeetingDate, getNextMeeting, parseTimeString, DateTime } = require("../src/_lib/date-utils");
 
 const TEST_TIMEZONE = "America/Los_Angeles";
 
@@ -234,6 +234,207 @@ describe("getNextMeetingDate", () => {
     it("uses the provided timezone", () => {
       const result = getNextMeetingDate(2, 2, "15:00", TEST_TIMEZONE);
       assert.strictEqual(result.zoneName, TEST_TIMEZONE, "Should use the provided timezone");
+    });
+  });
+});
+
+describe("parseTimeString", () => {
+  describe("12-hour format with am/pm", () => {
+    it("parses time with lowercase pm", () => {
+      const result = parseTimeString("2:30pm");
+      assert.strictEqual(result.hour, 14, "Hour should be 14 (2pm)");
+      assert.strictEqual(result.minute, 30, "Minute should be 30");
+    });
+
+    it("parses time with lowercase am", () => {
+      const result = parseTimeString("9:15am");
+      assert.strictEqual(result.hour, 9, "Hour should be 9");
+      assert.strictEqual(result.minute, 15, "Minute should be 15");
+    });
+
+    it("parses time with uppercase PM", () => {
+      const result = parseTimeString("3:00 PM");
+      assert.strictEqual(result.hour, 15, "Hour should be 15 (3pm)");
+      assert.strictEqual(result.minute, 0, "Minute should be 0");
+    });
+
+    it("parses time with uppercase AM", () => {
+      const result = parseTimeString("10:45 AM");
+      assert.strictEqual(result.hour, 10, "Hour should be 10");
+      assert.strictEqual(result.minute, 45, "Minute should be 45");
+    });
+
+    it("handles 12:00pm as noon (12)", () => {
+      const result = parseTimeString("12:00pm");
+      assert.strictEqual(result.hour, 12, "Hour should be 12 (noon)");
+      assert.strictEqual(result.minute, 0, "Minute should be 0");
+    });
+
+    it("handles 12:00am as midnight (0)", () => {
+      const result = parseTimeString("12:00am");
+      assert.strictEqual(result.hour, 0, "Hour should be 0 (midnight)");
+      assert.strictEqual(result.minute, 0, "Minute should be 0");
+    });
+
+    it("handles 12:30pm correctly", () => {
+      const result = parseTimeString("12:30pm");
+      assert.strictEqual(result.hour, 12, "Hour should be 12");
+      assert.strictEqual(result.minute, 30, "Minute should be 30");
+    });
+
+    it("handles 12:30am correctly", () => {
+      const result = parseTimeString("12:30am");
+      assert.strictEqual(result.hour, 0, "Hour should be 0");
+      assert.strictEqual(result.minute, 30, "Minute should be 30");
+    });
+  });
+
+  describe("24-hour format", () => {
+    it("parses 24-hour time", () => {
+      const result = parseTimeString("14:30");
+      assert.strictEqual(result.hour, 14, "Hour should be 14");
+      assert.strictEqual(result.minute, 30, "Minute should be 30");
+    });
+
+    it("parses midnight in 24-hour format", () => {
+      const result = parseTimeString("00:00");
+      assert.strictEqual(result.hour, 0, "Hour should be 0");
+      assert.strictEqual(result.minute, 0, "Minute should be 0");
+    });
+
+    it("parses 23:59", () => {
+      const result = parseTimeString("23:59");
+      assert.strictEqual(result.hour, 23, "Hour should be 23");
+      assert.strictEqual(result.minute, 59, "Minute should be 59");
+    });
+  });
+
+  describe("edge cases", () => {
+    it("returns default time for null input", () => {
+      const result = parseTimeString(null);
+      assert.strictEqual(result.hour, 15, "Default hour should be 15");
+      assert.strictEqual(result.minute, 0, "Default minute should be 0");
+    });
+
+    it("returns default time for undefined input", () => {
+      const result = parseTimeString(undefined);
+      assert.strictEqual(result.hour, 15, "Default hour should be 15");
+      assert.strictEqual(result.minute, 0, "Default minute should be 0");
+    });
+
+    it("returns default time for empty string", () => {
+      const result = parseTimeString("");
+      assert.strictEqual(result.hour, 15, "Default hour should be 15");
+      assert.strictEqual(result.minute, 0, "Default minute should be 0");
+    });
+
+    it("handles extra whitespace", () => {
+      const result = parseTimeString("  2:30pm  ");
+      assert.strictEqual(result.hour, 14, "Hour should be 14");
+      assert.strictEqual(result.minute, 30, "Minute should be 30");
+    });
+  });
+});
+
+describe("getNextMeeting", () => {
+  const schedule = {
+    week_of_month: 2,
+    day_of_week: 2,
+    time: "15:00"
+  };
+
+  describe("returns correct structure", () => {
+    it("returns an object with required properties", () => {
+      const result = getNextMeeting(schedule, null, TEST_TIMEZONE);
+      assert.ok(result.date, "Should have date property");
+      assert.ok(result.formatted, "Should have formatted property");
+      assert.ok(result.time, "Should have time property");
+      assert.strictEqual(typeof result.isOverride, "boolean", "isOverride should be boolean");
+    });
+
+    it("returns isOverride=false for regular schedule", () => {
+      const result = getNextMeeting(schedule, null, TEST_TIMEZONE);
+      assert.strictEqual(result.isOverride, false, "isOverride should be false");
+      assert.strictEqual(result.note, null, "note should be null");
+    });
+  });
+
+  describe("override handling", () => {
+    it("uses override when date is in the future", () => {
+      const futureDate = DateTime.now().plus({ days: 7 }).toISO();
+      const override = {
+        date: futureDate,
+        time: "14:00",
+        note: "Special meeting"
+      };
+      const result = getNextMeeting(schedule, override, TEST_TIMEZONE);
+      assert.strictEqual(result.isOverride, true, "isOverride should be true");
+      assert.strictEqual(result.note, "Special meeting", "note should be set");
+    });
+
+    it("ignores override when date is in the past", () => {
+      const pastOverride = {
+        date: "1970-01-01T00:00:00.000Z",
+        time: "2:30pm",
+        note: "Past meeting"
+      };
+      const result = getNextMeeting(schedule, pastOverride, TEST_TIMEZONE);
+      assert.strictEqual(result.isOverride, false, "isOverride should be false for past dates");
+      assert.strictEqual(result.note, null, "note should be null");
+    });
+
+    it("handles override with 12-hour time format", () => {
+      const futureDate = DateTime.now().plus({ days: 7 }).toISO();
+      const override = {
+        date: futureDate,
+        time: "2:30pm",
+        note: "Afternoon meeting"
+      };
+      const result = getNextMeeting(schedule, override, TEST_TIMEZONE);
+      assert.strictEqual(result.isOverride, true, "isOverride should be true");
+      assert.ok(result.time.includes("2:30"), `Time should contain "2:30", got "${result.time}"`);
+    });
+
+    it("handles override without time (uses date only)", () => {
+      const futureDate = DateTime.now().plus({ days: 7 }).startOf("day").toISO();
+      const override = {
+        date: futureDate,
+        note: "No time specified"
+      };
+      const result = getNextMeeting(schedule, override, TEST_TIMEZONE);
+      assert.strictEqual(result.isOverride, true, "isOverride should be true");
+    });
+
+    it("handles null override", () => {
+      const result = getNextMeeting(schedule, null, TEST_TIMEZONE);
+      assert.strictEqual(result.isOverride, false, "isOverride should be false");
+    });
+
+    it("handles undefined override", () => {
+      const result = getNextMeeting(schedule, undefined, TEST_TIMEZONE);
+      assert.strictEqual(result.isOverride, false, "isOverride should be false");
+    });
+
+    it("handles override with empty date", () => {
+      const override = {
+        date: "",
+        time: "2:30pm"
+      };
+      const result = getNextMeeting(schedule, override, TEST_TIMEZONE);
+      assert.strictEqual(result.isOverride, false, "isOverride should be false for empty date");
+    });
+  });
+
+  describe("schedule parsing", () => {
+    it("handles string values from TinaCMS", () => {
+      const stringSchedule = {
+        week_of_month: "2",
+        day_of_week: "2",
+        time: "15:00"
+      };
+      const result = getNextMeeting(stringSchedule, null, TEST_TIMEZONE);
+      assert.ok(result.date, "Should parse string schedule values");
+      assert.strictEqual(result.date.weekday, 2, "Should be Tuesday");
     });
   });
 });
