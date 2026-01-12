@@ -41,19 +41,6 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Set branch in API config
-        run: |
-          BRANCH="${{ github.head_ref || 'main' }}"
-          echo "Setting TINA_BRANCH to: $BRANCH"
-          # Update api/site-config.json with the branch
-          node -e "
-            const fs = require('fs');
-            const config = JSON.parse(fs.readFileSync('api/site-config.json', 'utf8'));
-            config.branch = '$BRANCH';
-            fs.writeFileSync('api/site-config.json', JSON.stringify(config, null, 2));
-          "
-          cat api/site-config.json
-
       - name: Build TinaCMS and index schema
         run: npx tinacms build --skip-cloud-checks
         env:
@@ -62,7 +49,6 @@ jobs:
           GITHUB_REPO: ${{ github.event.repository.name }}
           COSMOS_DB_CONNECTION_STRING: ${{ secrets.COSMOS_DB_CONNECTION_STRING }}
           COSMOS_DB_NAME: ${{ secrets.COSMOS_DB_NAME }}
-          TINA_BRANCH: ${{ github.head_ref || 'main' }}
 
       - name: Build 11ty site
         run: npm run build
@@ -130,7 +116,6 @@ jobs:
           COSMOS_DB_CONNECTION_STRING: ${{ secrets.COSMOS_DB_CONNECTION_STRING }}
           COSMOS_DB_NAME: ${{ secrets.COSMOS_DB_NAME }}
           TINA_PUBLIC_IS_LOCAL: "false"
-          TINA_BRANCH: ${{ github.head_ref || 'main' }}
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'

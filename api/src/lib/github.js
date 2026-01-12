@@ -3,25 +3,8 @@ const { createAppAuth } = require("@octokit/auth-app");
 const path = require("path");
 const fs = require("fs");
 
-// Read branch from site-config.json (written at build time) or fall back to env vars
-function getBranch() {
-  // First try environment variables
-  if (process.env.GITHUB_BRANCH) return process.env.GITHUB_BRANCH;
-  if (process.env.HEAD) return process.env.HEAD;
-
-  // Try reading from site-config.json (set during build)
-  try {
-    const configPath = path.resolve(__dirname, "../../site-config.json");
-    const config = JSON.parse(fs.readFileSync(configPath, "utf8"));
-    if (config.branch) return config.branch;
-  } catch (e) {
-    // Config file doesn't exist or doesn't have branch - that's OK
-  }
-
-  return "main";
-}
-
-const branch = getBranch();
+// Always use main branch for TinaCMS operations
+const branch = "main";
 
 // Generate a GitHub installation access token from App credentials
 async function getGitHubToken() {

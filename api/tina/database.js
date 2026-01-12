@@ -5,24 +5,14 @@ const { getGitHubToken, getGitHubConfig } = require("../src/lib/github.js");
 
 const isLocal = process.env.TINA_PUBLIC_IS_LOCAL === "true";
 
-// Sanitize branch name for use as MongoDB collection name
-function sanitizeCollectionName(branch) {
-  // MongoDB collection names can't contain $ or null, and shouldn't start with "system."
-  // Replace slashes and other problematic chars with underscores
-  return branch.replace(/[/$\x00]/g, "_").replace(/^system\./, "sys_");
-}
-
 // For production, create the database with GitHub App auth
-// Use branch-specific collections so preview branches have their own schema
 async function createProdDatabase() {
   const { owner, repo, branch } = getGitHubConfig();
-  const collectionName = sanitizeCollectionName(branch);
 
   console.log("Creating production database with GitHub provider:");
   console.log("  Owner:", owner || "(NOT SET)");
   console.log("  Repo:", repo || "(NOT SET)");
-  console.log("  Git Branch:", branch);
-  console.log("  Collection:", collectionName);
+  console.log("  Branch:", branch);
 
   if (!owner || !repo) {
     throw new Error("GITHUB_OWNER and GITHUB_REPO environment variables are required");
@@ -39,7 +29,7 @@ async function createProdDatabase() {
       token: githubToken,
     }),
     databaseAdapter: new MongodbLevel({
-      collectionName,
+      collectionName: "main",
       dbName: process.env.COSMOS_DB_NAME || "tinacms",
       mongoUri: process.env.COSMOS_DB_CONNECTION_STRING,
     }),
