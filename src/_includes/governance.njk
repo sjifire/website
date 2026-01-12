@@ -1,7 +1,7 @@
 {% extends 'base.njk' %}
 
 {% block content %}
-  {% set nextMeeting = meeting_schedule | nextMeetingDate(next_meeting_override) %}
+  {% set nextMeeting = governance_meeting.meeting_schedule | nextMeetingDate(governance_meeting.next_meeting_override) %}
 
   <div class="l-grid l-grid--2col">
     <div class="l-grid__main block-content">
@@ -19,9 +19,9 @@
           <p><em>{{ nextMeeting.note }}</em></p>
         {% endif %}
         <p>
-          {{ meeting_location.name }}<br>
-          {{ meeting_location.street }}<br>
-          {{ meeting_location.city }}, {{ meeting_location.state }} {{ meeting_location.zip }}
+          {{ governance_meeting.meeting_location.name }}<br>
+          {{ governance_meeting.meeting_location.street }}<br>
+          {{ governance_meeting.meeting_location.city }}, {{ governance_meeting.meeting_location.state }} {{ governance_meeting.meeting_location.zip }}
         </p>
       </div>
 

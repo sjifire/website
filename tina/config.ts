@@ -299,6 +299,103 @@ export default defineConfig({
         ],
       },
       {
+        name: "configGovernanceMeeting",
+        label: "Config: Governance Meeting",
+        path: "src/_data",
+        format: "json",
+        match: {
+          include: "governance_meeting",
+        },
+        ui: {
+          allowedActions: {
+            create: false,
+            delete: false,
+          },
+        },
+        fields: [
+          {
+            type: "object",
+            name: "meeting_schedule",
+            label: "Regular Meeting Schedule",
+            fields: [
+              {
+                type: "number",
+                name: "week_of_month",
+                label: "Week of Month",
+                description: "1=first, 2=second, 3=third, 4=fourth",
+                required: true,
+              },
+              {
+                type: "number",
+                name: "day_of_week",
+                label: "Day of Week",
+                description: "0=Sunday, 1=Monday, 2=Tuesday, 3=Wednesday, 4=Thursday, 5=Friday, 6=Saturday",
+                required: true,
+              },
+              {
+                type: "string",
+                name: "time",
+                label: "Time (24-hour format)",
+                description: "e.g., 15:00 for 3:00 PM",
+                required: true,
+              },
+            ],
+          },
+          {
+            type: "object",
+            name: "meeting_location",
+            label: "Meeting Location",
+            fields: [
+              {
+                type: "string",
+                name: "name",
+                label: "Location Name",
+              },
+              {
+                type: "string",
+                name: "street",
+                label: "Street Address",
+              },
+              {
+                type: "string",
+                name: "city",
+                label: "City",
+              },
+              {
+                type: "string",
+                name: "state",
+                label: "State",
+              },
+              {
+                type: "string",
+                name: "zip",
+                label: "ZIP Code",
+              },
+            ],
+          },
+          {
+            type: "object",
+            name: "next_meeting_override",
+            label: "Override Next Meeting (optional)",
+            description: "Set a specific date for a special meeting",
+            fields: [
+              {
+                type: "datetime",
+                name: "date",
+                label: "Override Date",
+                description: "Leave empty to use regular schedule",
+              },
+              {
+                type: "string",
+                name: "note",
+                label: "Note",
+                description: "e.g., 'Special Budget Hearing'",
+              },
+            ],
+          },
+        ],
+      },
+      {
         name: "configPersonnel",
         label: "Config: Personnel",
         path: "src/pages/about",
@@ -464,173 +561,12 @@ export default defineConfig({
         ],
       },
       {
-        name: "governancePage",
-        label: "Pages: Governance",
-        path: "src/pages/about",
-        format: "mdx",
-        match: {
-          include: "governance",
-        },
-        ui: {
-          allowedActions: {
-            create: false,
-            delete: false,
-          },
-        },
-        fields: [
-          {
-            type: "string",
-            name: "title",
-            label: "Title",
-            isTitle: true,
-            required: true,
-          },
-          {
-            type: "number",
-            name: "nav_order",
-            label: "Navigation Order",
-          },
-          {
-            type: "object",
-            name: "meeting_schedule",
-            label: "Regular Meeting Schedule",
-            fields: [
-              {
-                type: "number",
-                name: "week_of_month",
-                label: "Week of Month",
-                description: "1=first, 2=second, 3=third, 4=fourth",
-                required: true,
-              },
-              {
-                type: "number",
-                name: "day_of_week",
-                label: "Day of Week",
-                description: "0=Sunday, 1=Monday, 2=Tuesday, 3=Wednesday, 4=Thursday, 5=Friday, 6=Saturday",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "time",
-                label: "Time (24-hour format)",
-                description: "e.g., 15:00 for 3:00 PM",
-                required: true,
-              },
-            ],
-          },
-          {
-            type: "object",
-            name: "meeting_location",
-            label: "Meeting Location",
-            fields: [
-              {
-                type: "string",
-                name: "name",
-                label: "Location Name",
-              },
-              {
-                type: "string",
-                name: "street",
-                label: "Street Address",
-              },
-              {
-                type: "string",
-                name: "city",
-                label: "City",
-              },
-              {
-                type: "string",
-                name: "state",
-                label: "State",
-              },
-              {
-                type: "string",
-                name: "zip",
-                label: "ZIP Code",
-              },
-            ],
-          },
-          {
-            type: "object",
-            name: "next_meeting_override",
-            label: "Override Next Meeting (optional)",
-            description: "Set a specific date for a special meeting",
-            fields: [
-              {
-                type: "datetime",
-                name: "date",
-                label: "Override Date",
-                description: "Leave empty to use regular schedule",
-              },
-              {
-                type: "string",
-                name: "note",
-                label: "Note",
-                description: "e.g., 'Special Budget Hearing'",
-              },
-            ],
-          },
-          {
-            type: "rich-text",
-            name: "body",
-            label: "Body",
-            isBody: true,
-            templates: [
-              {
-                name: "StyledImage",
-                label: "Styled Image",
-                ui: {
-                  defaultItem: {
-                    size: "medium",
-                    align: "center",
-                  },
-                },
-                fields: [
-                  {
-                    type: "image",
-                    name: "src",
-                    label: "Image",
-                    required: true,
-                  },
-                  {
-                    type: "string",
-                    name: "alt",
-                    label: "Alt Text"
-                  },
-                  {
-                    type: "string",
-                    name: "size",
-                    label: "Size",
-                    options: [
-                      { value: "small", label: "Small (25%)" },
-                      { value: "medium", label: "Medium (50%)" },
-                      { value: "large", label: "Large (75%)" },
-                      { value: "full", label: "Full Width" },
-                    ],
-                  },
-                  {
-                    type: "string",
-                    name: "align",
-                    label: "Alignment",
-                    options: [
-                      { value: "left", label: "Float Left" },
-                      { value: "center", label: "Center" },
-                      { value: "right", label: "Float Right" },
-                    ],
-                  },
-                ],
-              },
-            ],
-          },
-        ],
-      },
-      {
         name: "page",
         label: "Pages",
         path: "src/pages",
         format: "mdx",
         match: {
-          exclude: "{about/emergency-personnel-data,about/governance,homepage}",
+          exclude: "{about/emergency-personnel-data,homepage}",
         },
         fields: [
           {

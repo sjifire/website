@@ -1,0 +1,18 @@
+{
+  "meeting_schedule": {
+    "week_of_month": 2,
+    "day_of_week": 2,
+    "time": "15:00"
+  },
+  "meeting_location": {
+    "name": "Fire Station #31",
+    "street": "1011 Mullis Street",
+    "city": "Friday Harbor",
+    "state": "WA",
+    "zip": "98250"
+  },
+  "next_meeting_override": {
+    "date": null,
+    "note": null
+  }
+}
