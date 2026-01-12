@@ -50,7 +50,7 @@ export default defineConfig({
     collections: [
       {
         name: "configBurnStatus",
-        label: "Config: Burn Status",
+        label: "Burn Status",
         path: "src/_data",
         format: "json",
         match: {
@@ -119,7 +119,7 @@ export default defineConfig({
       },
       {
         name: "configNavigation",
-        label: "Config: Navigation",
+        label: "Menu Structure",
         path: "src/_data",
         format: "json",
         match: {
@@ -199,7 +199,7 @@ export default defineConfig({
       },
       {
         name: "configSite",
-        label: "Config: Site",
+        label: "Site Identity",
         path: "src/_data",
         format: "json",
         match: {
@@ -220,87 +220,54 @@ export default defineConfig({
           },
           {
             type: "string",
-            name: "formal_site_name",
-            label: "Formal Site Name",
-          },
-          {
-            type: "string",
             name: "site_desc",
             label: "Site Description",
             ui: {
               component: "textarea",
             },
           },
+          // Hidden fields - not user-configurable
           {
             type: "string",
             name: "prodUrl",
             label: "Production URL",
+            ui: { component: () => null },
           },
           {
             type: "string",
             name: "cloudinaryFetchUrl",
             label: "Cloudinary Site ID",
+            ui: { component: () => null },
           },
           {
             type: "string",
             name: "cloudinaryRootUrl",
             label: "Cloudinary Root URL",
+            ui: { component: () => null },
           },
           {
             type: "boolean",
             name: "enable_cloudinary_rewrites",
             label: "Enable Cloudinary Rewrites",
+            ui: { component: () => null },
+          },
+          {
+            type: "string",
+            name: "timezone",
+            label: "Timezone",
+            ui: { component: () => null },
           },
           {
             type: "string",
             name: "opengraph_image",
             label: "OpenGraph Image Filename",
-          },
-          {
-            type: "object",
-            name: "address",
-            label: "Address",
-            fields: [
-              {
-                type: "string",
-                name: "street",
-                label: "Street",
-              },
-              {
-                type: "string",
-                name: "city",
-                label: "City",
-              },
-              {
-                type: "string",
-                name: "state",
-                label: "State",
-              },
-              {
-                type: "string",
-                name: "zip",
-                label: "ZIP Code",
-              },
-              {
-                type: "string",
-                name: "phone",
-                label: "Phone",
-              },
-              {
-                type: "string",
-                name: "map",
-                label: "Google Maps Embed URL",
-                ui: {
-                  component: "textarea",
-                },
-              },
-            ],
+            ui: { component: () => null },
           },
         ],
       },
       {
         name: "configGovernanceMeeting",
-        label: "Config: Governance Meeting",
+        label: "Board Meeting",
         path: "src/_data",
         format: "json",
         match: {
@@ -440,7 +407,7 @@ export default defineConfig({
       },
       {
         name: "configPersonnel",
-        label: "Config: Personnel",
+        label: "Personnel",
         path: "src/pages/about",
         format: "mdx",
         match: {

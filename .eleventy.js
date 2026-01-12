@@ -65,7 +65,7 @@ module.exports = function(eleventyConfig) {
 
   // Next meeting date filter for governance page
   eleventyConfig.addFilter("nextMeetingDate", function(schedule, override) {
-    return getNextMeeting(schedule, override, siteData.address.timezone);
+    return getNextMeeting(schedule, override, siteData.timezone);
   });
 
 
