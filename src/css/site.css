@@ -850,7 +850,7 @@ body {
 }
 
 /* Responsive adjustments */
-@media (max-width: 576px) {
+@media (width <= 576px) {
   .carousel__btn {
     width: 36px;
     height: 36px;
