@@ -13,17 +13,28 @@
  *   MS_GRAPH_STAFF_GROUP - Comma-separated group IDs/names for staff members
  *   MS_GRAPH_VOLUNTEER_GROUP - Comma-separated group IDs/names for volunteers
  *   SYNC_PHOTOS - Set to "true" to download photos (default: true)
+ *
+ * CLI flags:
+ *   --force-refresh  Force re-download all photos even if unchanged
+ *   --hash-threshold=N  Hamming distance threshold for photo changes (default: 10)
  */
 
 import 'dotenv/config';
-import { writeFile, mkdir } from 'node:fs/promises';
+import { writeFile, readFile, mkdir, access } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { MSGraphClient } from './msgraph-client.mjs';
+import { processImage, hashJpegBuffer, hammingDistance } from './image-hash.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const OUTPUT_PATH = join(__dirname, '..', 'src', 'pages', 'about', 'emergency-personnel-data.mdx');
 const PHOTOS_DIR = join(__dirname, '..', 'src', 'assets', 'media', 'personnel_imgs');
+const PHOTO_HASHES_PATH = join(__dirname, '..', 'src', 'assets', 'media', 'personnel_imgs', '.photo-hashes.json');
+
+// Image processing settings
+const MAX_PHOTO_DIMENSION = 500; // Max width/height in pixels
+const JPEG_QUALITY = 80;
+const DEFAULT_HASH_THRESHOLD = 10; // Hamming distance threshold for "same" image
 
 // Role group mappings - M365 group display names to role names
 // Configure these to match your M365 group names
@@ -43,6 +54,57 @@ const RANK_KEYWORDS = {
   'Captain': 'Captain',
   'Lieutenant': 'Lieutenant',
 };
+
+/**
+ * Parse CLI arguments
+ */
+function parseArgs() {
+  const args = {
+    forceRefresh: false,
+    hashThreshold: DEFAULT_HASH_THRESHOLD,
+  };
+
+  for (const arg of process.argv.slice(2)) {
+    if (arg === '--force-refresh') {
+      args.forceRefresh = true;
+    } else if (arg.startsWith('--hash-threshold=')) {
+      args.hashThreshold = parseInt(arg.split('=')[1], 10);
+    }
+  }
+
+  return args;
+}
+
+/**
+ * Load existing photo hashes
+ */
+async function loadPhotoHashes() {
+  try {
+    const data = await readFile(PHOTO_HASHES_PATH, 'utf-8');
+    return JSON.parse(data);
+  } catch {
+    return {};
+  }
+}
+
+/**
+ * Save photo hashes
+ */
+async function savePhotoHashes(hashes) {
+  await writeFile(PHOTO_HASHES_PATH, JSON.stringify(hashes, null, 2));
+}
+
+/**
+ * Check if a file exists
+ */
+async function fileExists(path) {
+  try {
+    await access(path);
+    return true;
+  } catch {
+    return false;
+  }
+}
 
 /**
  * Normalize name for filename
@@ -179,6 +241,8 @@ function generateMDX(personnel) {
  * Main execution
  */
 async function main() {
+  const args = parseArgs();
+
   console.log('Personnel Sync from Microsoft 365');
   console.log('==================================');
 
@@ -204,6 +268,8 @@ async function main() {
   console.log(`Staff groups: ${staffGroupIds.length > 0 ? staffGroupIds.join(', ') : '(not configured)'}`);
   console.log(`Volunteer groups: ${volunteerGroupIds.length > 0 ? volunteerGroupIds.join(', ') : '(not configured)'}`);
   console.log(`Sync photos: ${syncPhotos}`);
+  console.log(`Force refresh photos: ${args.forceRefresh}`);
+  console.log(`Hash threshold: ${args.hashThreshold} bits`);
 
   // Initialize client
   const client = new MSGraphClient({ tenantId, clientId, clientSecret });
@@ -233,6 +299,18 @@ async function main() {
   if (syncPhotos) {
     await mkdir(PHOTOS_DIR, { recursive: true });
   }
+
+  // Load existing photo hashes
+  const photoHashes = await loadPhotoHashes();
+  const newPhotoHashes = {};
+
+  // Photo sync stats
+  const photoStats = {
+    downloaded: 0,
+    skippedUnchanged: 0,
+    skippedNoPhoto: 0,
+    updated: 0,
+  };
 
   // Process each user
   const personnel = [];
@@ -278,21 +356,105 @@ async function main() {
 
     // Download photo if enabled
     if (syncPhotos) {
+      const filename = `${normalizeFilename(user.givenName, user.surname)}.jpg`;
+      const photoPath = join(PHOTOS_DIR, filename);
+      const photoUrl = `/assets/media/personnel_imgs/${filename}`;
+      const existingHash = photoHashes[filename];
+      const photoExists = await fileExists(photoPath);
+
       try {
         const photoData = await client.getUserPhoto(user.id);
         if (photoData) {
-          const filename = `${normalizeFilename(user.givenName, user.surname)}.jpg`;
-          const photoPath = join(PHOTOS_DIR, filename);
-          await writeFile(photoPath, Buffer.from(photoData));
-          person.photo = `/assets/media/personnel_imgs/${filename}`;
-          console.log(`    Downloaded photo`);
+          // Process the image (resize and compute hash)
+          const processed = processImage(Buffer.from(photoData), MAX_PHOTO_DIMENSION, JPEG_QUALITY);
+          const newHash = processed.hash;
+
+          // Check if we should save the photo
+          let shouldSave = false;
+          let reason = '';
+
+          if (args.forceRefresh) {
+            shouldSave = true;
+            reason = 'force refresh';
+          } else if (!photoExists) {
+            shouldSave = true;
+            reason = 'new photo';
+            photoStats.downloaded++;
+          } else if (!existingHash) {
+            // No stored hash, compute from existing file and compare
+            try {
+              const existingData = await readFile(photoPath);
+              const existingFileHash = hashJpegBuffer(existingData);
+              const distance = hammingDistance(newHash, existingFileHash);
+
+              if (distance > args.hashThreshold) {
+                shouldSave = true;
+                reason = `changed (distance: ${distance})`;
+                photoStats.updated++;
+              } else {
+                reason = `unchanged (distance: ${distance})`;
+                photoStats.skippedUnchanged++;
+              }
+            } catch {
+              shouldSave = true;
+              reason = 'could not read existing';
+            }
+          } else {
+            // Compare with stored hash
+            const distance = hammingDistance(newHash, existingHash);
+            if (distance > args.hashThreshold) {
+              shouldSave = true;
+              reason = `changed (distance: ${distance})`;
+              photoStats.updated++;
+            } else {
+              reason = `unchanged (distance: ${distance})`;
+              photoStats.skippedUnchanged++;
+            }
+          }
+
+          if (shouldSave) {
+            await writeFile(photoPath, processed.buffer);
+            console.log(`    Photo saved: ${reason} (${processed.width}x${processed.height})`);
+          } else {
+            console.log(`    Photo skipped: ${reason}`);
+          }
+
+          // Store the new hash
+          newPhotoHashes[filename] = newHash;
+          person.photo = photoUrl;
+        } else {
+          photoStats.skippedNoPhoto++;
+          console.log(`    No photo in M365`);
+
+          // Keep existing photo if we have one
+          if (photoExists) {
+            person.photo = photoUrl;
+            // Preserve the existing hash
+            if (existingHash) {
+              newPhotoHashes[filename] = existingHash;
+            }
+          }
         }
       } catch (error) {
-        console.log(`    No photo available`);
+        photoStats.skippedNoPhoto++;
+        console.log(`    No photo available: ${error.message}`);
+
+        // Keep existing photo if we have one
+        if (photoExists) {
+          person.photo = photoUrl;
+          if (existingHash) {
+            newPhotoHashes[filename] = existingHash;
+          }
+        }
       }
     }
 
     personnel.push(person);
+  }
+
+  // Save updated photo hashes
+  if (syncPhotos) {
+    await savePhotoHashes(newPhotoHashes);
   }
 
   // Sort: staff first (by rank), then volunteers (by last name)
@@ -324,6 +486,14 @@ async function main() {
   console.log(`  Staff: ${personnel.filter(p => p.staff_type === 'staff').length}`);
   console.log(`  Volunteers: ${personnel.filter(p => p.staff_type === 'volunteer').length}`);
   console.log(`  With photos: ${personnel.filter(p => p.photo).length}`);
+
+  if (syncPhotos) {
+    console.log(`\nPhoto sync:`);
+    console.log(`  New photos downloaded: ${photoStats.downloaded}`);
+    console.log(`  Photos updated (changed): ${photoStats.updated}`);
+    console.log(`  Photos skipped (unchanged): ${photoStats.skippedUnchanged}`);
+    console.log(`  No photo in M365: ${photoStats.skippedNoPhoto}`);
+  }
 
   console.log(`\nOutput written to ${OUTPUT_PATH}`);
   console.log('Done!');
