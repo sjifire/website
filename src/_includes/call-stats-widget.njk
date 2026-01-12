@@ -107,23 +107,45 @@
       </td>
     </tr>
     <tr class="{{ cls.next() }}">
-      <th>
+      <th rowspan=4>
         Incident Types
       </th>
       <td>
-        {{ stats.incident_stats.types.medical_rescue }} Medical Assists<br>
-        {{ stats.incident_stats.types.fire }} Fire<br>
-        {{ stats.incident_stats.types.downgraded }} Downgraded<br>
-        {{ stats.incident_stats.types.cancelled }} Cancelled
+        {{ stats.incident_stats.types.medical_rescue }}
+        <aside>Medical Assists</aside>
       </td>
     </tr>
     <tr class="{{ cls.next() }}">
-      <th>
+      <td>
+        {{ stats.incident_stats.types.fire }}
+        <aside>Fire</aside>
+      </td>
+    </tr>
+    <tr class="{{ cls.next() }}">
+      <td>
+        {{ stats.incident_stats.types.downgraded }}
+        <aside>Downgraded</aside>
+      </td>
+    </tr>
+    <tr class="{{ cls.next() }}">
+      <td>
+        {{ stats.incident_stats.types.cancelled }}
+        <aside>Cancelled</aside>
+      </td>
+    </tr>
+    <tr class="{{ cls.next() }}">
+      <th rowspan=2>
         Time of Day
       </th>
       <td>
-        {{ stats.incident_stats.num_daytime_incidents }} daytime<br>
-        {{ stats.incident_stats.num_nighttime_incidents }} nighttime
+        {{ stats.incident_stats.num_daytime_incidents }}
+        <aside>Daytime</aside>
+      </td>
+    </tr>
+    <tr class="{{ cls.next() }}">
+      <td>
+        {{ stats.incident_stats.num_nighttime_incidents }}
+        <aside>Nighttime</aside>
       </td>
     </tr>
     <tr class="{{ cls.next() }}">
