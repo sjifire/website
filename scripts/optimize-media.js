@@ -145,25 +145,44 @@ async function main() {
 
   console.log(`Cloudinary cloud: ${config.cloudName}`);
   console.log(`Transform: ${TRANSFORM}`);
-  console.log(`Min size threshold: ${formatBytes(MIN_SIZE_BYTES)}`);
-  console.log(`Media directory: ${MEDIA_DIR}\n`);
+  console.log(`Min size threshold: ${formatBytes(MIN_SIZE_BYTES)}\n`);
 
-  // Get all files recursively
-  function getFiles(dir, files = []) {
-    const entries = fs.readdirSync(dir, { withFileTypes: true });
-    for (const entry of entries) {
-      const fullPath = path.join(dir, entry.name);
-      if (entry.isDirectory()) {
-        getFiles(fullPath, files);
-      } else if (isOptimizableFile(entry.name)) {
-        files.push(fullPath);
+  // Check for file arguments
+  const args = process.argv.slice(2);
+  let files;
+
+  if (args.length > 0) {
+    // Use provided file paths
+    files = args.map(arg => path.resolve(arg)).filter(filePath => {
+      if (!fs.existsSync(filePath)) {
+        console.error(`File not found: ${filePath}`);
+        return false;
       }
+      if (!isOptimizableFile(filePath)) {
+        console.error(`Not an optimizable image: ${filePath}`);
+        return false;
+      }
+      return true;
+    });
+    console.log(`Processing ${files.length} specified file(s)\n`);
+  } else {
+    // Get all files recursively from media directory
+    console.log(`Media directory: ${MEDIA_DIR}`);
+    function getFiles(dir, fileList = []) {
+      const entries = fs.readdirSync(dir, { withFileTypes: true });
+      for (const entry of entries) {
+        const fullPath = path.join(dir, entry.name);
+        if (entry.isDirectory()) {
+          getFiles(fullPath, fileList);
+        } else if (isOptimizableFile(entry.name)) {
+          fileList.push(fullPath);
+        }
+      }
+      return fileList;
     }
-    return files;
+    files = getFiles(MEDIA_DIR);
+    console.log(`Found ${files.length} optimizable images\n`);
   }
-
-  const files = getFiles(MEDIA_DIR);
-  console.log(`Found ${files.length} optimizable images\n`);
 
   let totalOriginal = 0;
   let totalOptimized = 0;
