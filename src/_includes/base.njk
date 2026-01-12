@@ -65,11 +65,13 @@
       const imgs = {{ header_image_source | headerImageUrls(header_image_transform) | safe }};
       const image = imgs[Math.floor(Math.random() * imgs.length)];
       document.getElementById('home-header').style.setProperty('--home-header-bg-image', 'url('+image+')');
-      {% include "carousel-js.njk" %}
     {% endif %}
   {% endset %}
   <script defer>
     {{ js | jsmin | safe }}
   </script>
+  {% if page.url === '/' %}
+  <script src="/js/carousel.js" defer></script>
+  {% endif %}
 </body>
 </html>
