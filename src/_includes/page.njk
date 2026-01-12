@@ -1,7 +1,7 @@
 {% extends 'base.njk' %}
 
 {% block content %}
-  {% if sidebar or sidebar_content %}
+  {% if sidebar or sidebar_content or include_burn_widget or include_incident_widget %}
     {# Two-column layout #}
     <div class="l-grid l-grid--2col{{ ' flipped' if mobile_layout_flipped === true }}">
       <div class="l-grid__main block-content">
@@ -21,6 +21,11 @@
         {% if include_burn_widget %}
           <div class="sidebar-block">
             {% include "burn-status-widget.njk" %}
+          </div>
+        {% endif %}
+        {% if include_incident_widget %}
+          <div class="sidebar-block">
+            {% include "call-stats-widget.njk" %}
           </div>
         {% endif %}
         {% if sidebar %}
