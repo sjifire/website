@@ -465,7 +465,7 @@ export default defineConfig({
       },
       {
         name: "governancePage",
-        label: "Governance Page",
+        label: "Pages: Governance",
         path: "src/pages/about",
         format: "mdx",
         match: {
