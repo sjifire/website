@@ -118,8 +118,8 @@ function formatMeetingResult(date, isOverride = false, note = null) {
  * @returns {Object} Meeting result with date, formatted, time, isOverride, note
  */
 function getNextMeeting(schedule, override, timezone) {
-  // Check for override first
-  if (override?.date) {
+  // Check for override first (must be enabled and have a date)
+  if (override?.enabled && override?.date) {
     // Parse date in UTC to extract year/month/day, then create in local timezone
     // This prevents timezone conversion from shifting the calendar date
     const utcDate = DateTime.fromISO(override.date, { zone: "utc" });

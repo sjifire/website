@@ -37,6 +37,7 @@ test.describe("Governance Meeting Override", () => {
     futureDate.setDate(15);
 
     data.next_meeting_override = {
+      enabled: true,
       date: futureDate.toISOString().split("T")[0] + "T00:00:00.000Z",
       time: "10:30am",
       note: "Special Budget Meeting",
@@ -63,12 +64,13 @@ test.describe("Governance Meeting Override", () => {
     expect(noteText).toContain("Special Budget Meeting");
   });
 
-  test("falls back to regular schedule when override is in the past", async ({ page }) => {
+  test("falls back to regular schedule when override is disabled", async ({ page }) => {
     const data = JSON.parse(fs.readFileSync(GOVERNANCE_FILE, "utf-8"));
 
-    // Set override to a past date (should be ignored)
+    // Set override but disable it
     data.next_meeting_override = {
-      date: "1970-01-01T00:00:00.000Z",
+      enabled: false,
+      date: "2030-06-15T00:00:00.000Z",
       time: "2:30pm",
       note: "This should not appear",
     };
@@ -95,6 +97,7 @@ test.describe("Governance Meeting Override", () => {
     // Use a specific date - UTC midnight on the 20th
     // This tests that Jan 20 UTC doesn't become Jan 19 in Pacific time
     data.next_meeting_override = {
+      enabled: true,
       date: "2030-01-20T00:00:00.000Z",
       time: "3:00pm",
       note: "Timezone test",

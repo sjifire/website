@@ -360,9 +360,10 @@ describe("getNextMeeting", () => {
   });
 
   describe("override handling", () => {
-    it("uses override when date is in the future", () => {
+    it("uses override when enabled and date is in the future", () => {
       const futureDate = DateTime.now().plus({ days: 7 }).toISO();
       const override = {
+        enabled: true,
         date: futureDate,
         time: "14:00",
         note: "Special meeting"
@@ -372,8 +373,22 @@ describe("getNextMeeting", () => {
       assert.strictEqual(result.note, "Special meeting", "note should be set");
     });
 
+    it("ignores override when enabled is false", () => {
+      const futureDate = DateTime.now().plus({ days: 7 }).toISO();
+      const override = {
+        enabled: false,
+        date: futureDate,
+        time: "14:00",
+        note: "Disabled meeting"
+      };
+      const result = getNextMeeting(schedule, override, TEST_TIMEZONE);
+      assert.strictEqual(result.isOverride, false, "isOverride should be false when disabled");
+      assert.strictEqual(result.note, null, "note should be null");
+    });
+
     it("ignores override when date is in the past", () => {
       const pastOverride = {
+        enabled: true,
         date: "1970-01-01T00:00:00.000Z",
         time: "2:30pm",
         note: "Past meeting"
@@ -386,6 +401,7 @@ describe("getNextMeeting", () => {
     it("handles override with 12-hour time format", () => {
       const futureDate = DateTime.now().plus({ days: 7 }).toISO();
       const override = {
+        enabled: true,
         date: futureDate,
         time: "2:30pm",
         note: "Afternoon meeting"
@@ -398,6 +414,7 @@ describe("getNextMeeting", () => {
     it("handles override without time (uses date only)", () => {
       const futureDate = DateTime.now().plus({ days: 7 }).startOf("day").toISO();
       const override = {
+        enabled: true,
         date: futureDate,
         note: "No time specified"
       };
@@ -417,11 +434,24 @@ describe("getNextMeeting", () => {
 
     it("handles override with empty date", () => {
       const override = {
+        enabled: true,
         date: "",
         time: "2:30pm"
       };
       const result = getNextMeeting(schedule, override, TEST_TIMEZONE);
       assert.strictEqual(result.isOverride, false, "isOverride should be false for empty date");
+    });
+
+    it("handles override without enabled field (backwards compatibility)", () => {
+      const futureDate = DateTime.now().plus({ days: 7 }).toISO();
+      const override = {
+        date: futureDate,
+        time: "14:00",
+        note: "No enabled field"
+      };
+      const result = getNextMeeting(schedule, override, TEST_TIMEZONE);
+      // Without enabled field, should fall back to regular schedule
+      assert.strictEqual(result.isOverride, false, "isOverride should be false without enabled");
     });
   });
 
@@ -442,6 +472,7 @@ describe("getNextMeeting", () => {
     it("preserves calendar date when parsing UTC midnight", () => {
       // UTC midnight on Jan 15 should become Jan 15 in local timezone, not Jan 14
       const override = {
+        enabled: true,
         date: "2030-01-15T00:00:00.000Z",
         time: "14:00",
         note: "Test meeting"
@@ -455,6 +486,7 @@ describe("getNextMeeting", () => {
 
     it("preserves calendar date for different timezones", () => {
       const override = {
+        enabled: true,
         date: "2030-06-20T00:00:00.000Z",
         time: "10:00am",
         note: "Summer meeting"
@@ -467,6 +499,7 @@ describe("getNextMeeting", () => {
 
     it("correctly applies override time to preserved calendar date", () => {
       const override = {
+        enabled: true,
         date: "2030-03-10T00:00:00.000Z",
         time: "2:30pm",
         note: "Afternoon meeting"
@@ -480,6 +513,7 @@ describe("getNextMeeting", () => {
     it("handles TinaCMS-style ISO dates with timezone correctly", () => {
       // TinaCMS stores dates like this - UTC midnight
       const override = {
+        enabled: true,
         date: "2030-12-25T00:00:00.000Z",
         time: "15:00",
         note: "Holiday meeting"

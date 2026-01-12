@@ -13,6 +13,7 @@
     "zip": "98250"
   },
   "next_meeting_override": {
+    "enabled": true,
     "date": "2026-01-12T00:00:00.000Z",
     "time": "2:30pm",
     "note": "last-minute meeting change"

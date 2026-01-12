@@ -412,19 +412,21 @@ export default defineConfig({
             description: "Set a specific date and time for a special meeting",
             fields: [
               {
+                type: "boolean",
+                name: "enabled",
+                label: "Enable Override",
+                description: "Toggle off to use regular schedule",
+              },
+              {
                 type: "datetime",
                 name: "date",
                 label: "Override Date",
-                description: "Leave empty to use regular schedule",
-                ui: {
-                  dateFormat: "yyyy-MM-dd",
-                },
               },
               {
                 type: "string",
                 name: "time",
-                label: "Override Time (24-hour format)",
-                description: "e.g., 15:00 for 3:00 PM. Required if date is set.",
+                label: "Override Time",
+                description: "e.g., 2:30pm or 15:00",
               },
               {
                 type: "string",
