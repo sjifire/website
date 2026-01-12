@@ -21,50 +21,6 @@ function createDateFilter(formatter) {
   };
 }
 
-/**
- * Calculate the next occurrence of a meeting based on week-of-month and day-of-week.
- * @param {number} weekOfMonth - 1=first, 2=second, 3=third, 4=fourth, -1=last
- * @param {number} dayOfWeek - 0=Sunday, 1=Monday, 2=Tuesday, etc.
- * @param {string} time - Time in HH:mm format (24-hour)
- * @returns {DateTime} The next meeting date
- */
-function getNextMeetingDate(weekOfMonth, dayOfWeek, time = "15:00") {
-  const now = DateTime.now().setZone("America/Los_Angeles");
-  const [hour, minute] = time.split(":").map(Number);
-
-  // Try current month and next month
-  for (let monthOffset = 0; monthOffset <= 1; monthOffset++) {
-    const targetMonth = now.plus({ months: monthOffset });
-    const firstOfMonth = targetMonth.startOf("month");
-
-    let meetingDate;
-    if (weekOfMonth === -1) {
-      // Last occurrence of the day in the month
-      const lastOfMonth = targetMonth.endOf("month");
-      const daysFromTarget = (lastOfMonth.weekday % 7) - dayOfWeek;
-      const adjustedDays = daysFromTarget < 0 ? daysFromTarget + 7 : daysFromTarget;
-      meetingDate = lastOfMonth.minus({ days: adjustedDays }).startOf("day");
-    } else {
-      // Nth occurrence of the day in the month
-      const firstDayWeekday = firstOfMonth.weekday % 7; // Convert to 0=Sunday
-      let daysToAdd = dayOfWeek - firstDayWeekday;
-      if (daysToAdd < 0) daysToAdd += 7;
-      meetingDate = firstOfMonth.plus({ days: daysToAdd + (weekOfMonth - 1) * 7 });
-    }
-
-    // Set the time
-    meetingDate = meetingDate.set({ hour, minute, second: 0, millisecond: 0 });
-
-    // If meeting is in the future, return it
-    if (meetingDate > now) {
-      return meetingDate;
-    }
-  }
-
-  // Fallback: return 2 months from now
-  return now.plus({ months: 2 }).startOf("month");
-}
-
 // Pre-configured date filters
 const dateFilters = {
   // "Jan 15" - short format without year
@@ -83,6 +39,5 @@ const dateFilters = {
 module.exports = {
   createDateFilter,
   dateFilters,
-  getNextMeetingDate,
   DateTime, // Re-export for use in tests
 };
