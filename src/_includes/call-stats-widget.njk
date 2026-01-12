@@ -5,7 +5,7 @@
         <svg><use xlink:href='#stats' /></svg>
         <div>
           <h4>
-            SJIF&R Statistics
+            Response Statistics
           </h4>
           <div class="timeframe">
             Last 30 days
@@ -27,7 +27,7 @@
     <tr class="{{ cls.next() }}">
       <th>
         Calls
-        <aside>Last 365 Days</aside>
+        <aside>Last 365 days</aside>
       </th>
       <td>
         {{ stats.incident_stats.num_incidents_last_365_days | formatNumber }}
@@ -36,7 +36,7 @@
     <tr class="{{ cls.next() }}">
       <th>
         Reaction Time
-        <aside>Seconds</aside>
+        <aside>Median seconds</aside>
       </th>
       <td>
         {{ stats.unit_time_stats.first_unit_reaction.median }}
@@ -45,15 +45,15 @@
     <tr class="{{ cls.next() }}">
       <th rowspan=3>
         Travel Time
-        <aside>Minutes (% of calls)</aside>
+        <aside>Median minutes</aside>
       </th>
       <td>
         {% if stats.region_stats.central and stats.region_stats.central.num_incidents > 0 -%}
           {{ (stats.region_stats.central.unit_travel_time.median/60) | round(1) }}
-          <aside>Central ({{((stats.region_stats.central.num_incidents/stats.incident_stats.num_incidents) * 100) | round }}%)</aside>
+          <aside>Central</aside>
         {% else %}
            --
-          <aside>Central (0%)</aside>
+          <aside>Central</aside>
         {% endif -%}
       </td>
     </tr>
@@ -61,10 +61,10 @@
       <td>
         {% if stats.region_stats.south and stats.region_stats.south.num_incidents > 0 -%}
           {{ (stats.region_stats.south.unit_travel_time.median/60) | round(1) }}
-          <aside>South ({{((stats.region_stats.south.num_incidents/stats.incident_stats.num_incidents) * 100) | round }}%)</aside>
+          <aside>South</aside>
         {% else %}
            --
-          <aside>South (0%)</aside>
+          <aside>South</aside>
         {% endif -%}
       </td>
     </tr>
@@ -72,17 +72,17 @@
       <td>
         {% if stats.region_stats.north and stats.region_stats.north.num_incidents > 0 -%}
           {{ (stats.region_stats.north.unit_travel_time.median/60) | round(1) }}
-          <aside>North ({{((stats.region_stats.north.num_incidents/stats.incident_stats.num_incidents) * 100) | round }}%)</aside>
+          <aside>North</aside>
         {% else %}
            --
-          <aside>North (0%)</aside>
+          <aside>North</aside>
         {% endif -%}
       </td>
     </tr>
     <tr class="{{ cls.next() }}">
       <th>
         Responder Time on Calls
-        <aside>Minutes</aside>
+        <aside>Total minutes</aside>
       </th>
       <td>
         {{ (stats.personnel_stats.time_on_incidents.sum/60) | round | formatNumber }}
