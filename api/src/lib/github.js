@@ -1,7 +1,5 @@
 require("dotenv").config({ path: require("path").resolve(__dirname, "../../../.env") });
 const { createAppAuth } = require("@octokit/auth-app");
-const path = require("path");
-const fs = require("fs");
 
 // Always use main branch for TinaCMS operations
 const branch = "main";
