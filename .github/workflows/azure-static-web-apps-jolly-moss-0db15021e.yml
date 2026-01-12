@@ -41,6 +41,19 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Set branch in API config
+        run: |
+          BRANCH="${{ github.head_ref || 'main' }}"
+          echo "Setting TINA_BRANCH to: $BRANCH"
+          # Update api/site-config.json with the branch
+          node -e "
+            const fs = require('fs');
+            const config = JSON.parse(fs.readFileSync('api/site-config.json', 'utf8'));
+            config.branch = '$BRANCH';
+            fs.writeFileSync('api/site-config.json', JSON.stringify(config, null, 2));
+          "
+          cat api/site-config.json
+
       - name: Build TinaCMS and index schema
         run: npx tinacms build --skip-cloud-checks
         env:
