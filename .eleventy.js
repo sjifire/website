@@ -80,7 +80,6 @@ module.exports = function(eleventyConfig) {
     }
     // Calculate from recurring schedule
     const nextDate = getNextMeetingDate(schedule.week_of_month, schedule.day_of_week, schedule.time);
-    const [hour, minute] = schedule.time.split(":").map(Number);
     return {
       date: nextDate,
       formatted: nextDate.toFormat("cccc, LLLL d, yyyy"),
