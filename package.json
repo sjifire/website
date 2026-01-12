@@ -16,6 +16,7 @@
     "test": "npm run test:unit && npm run test:e2e",
     "test:unit": "node --test tests/*.test.js",
     "test:e2e": "playwright test --config=tests/playwright.config.js",
+    "test:e2e:tina": "playwright test --config=tests/playwright.tina.config.js",
     "tina:reset-db": "node scripts/reset-tina-db.js"
   },
   "keywords": [],
