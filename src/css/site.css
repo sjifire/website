@@ -1583,43 +1583,43 @@ select.form-control:focus::-ms-value {
 }
 
 /* Styled Images (TinaCMS) */
-.styled-image {
+.block-content .styled-image {
   margin: 1.5rem 0;
 }
 
-.styled-image img {
+.block-content .styled-image img {
   max-width: 100%;
   height: auto;
   display: block;
 }
 
-.styled-image figcaption {
+.block-content .styled-image figcaption {
   font-size: 0.875rem;
   color: var(--muted-gray);
   margin-top: 0.5rem;
 }
 
 /* Sizes */
-.styled-image--small img { max-width: 25%; }
-.styled-image--medium img { max-width: 50%; }
-.styled-image--large img { max-width: 75%; }
-.styled-image--full img { max-width: 100%; }
+.block-content .styled-image--small img { max-width: 25%; }
+.block-content .styled-image--medium img { max-width: 50%; }
+.block-content .styled-image--large img { max-width: 75%; }
+.block-content .styled-image--full img { max-width: 100%; }
 
 /* Alignment */
-.styled-image--center {
+.block-content .styled-image--center {
   text-align: center;
 }
 
-.styled-image--center img {
+.block-content .styled-image--center img {
   margin: 0 auto;
 }
 
-.styled-image--left {
+.block-content .styled-image--left {
   float: left;
   margin: 0 1.5rem 1rem 0;
 }
 
-.styled-image--right {
+.block-content .styled-image--right {
   float: right;
   margin: 0 0 1rem 1.5rem;
 }
