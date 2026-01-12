@@ -121,7 +121,7 @@ test.describe("Smoke Tests", () => {
     expect(src).toContain("/assets/media/personnel_imgs/");
   });
 
-  test("Governance page displays meeting override when set", async ({ page }) => {
+  test("Governance page displays meeting info correctly", async ({ page }) => {
     await page.goto("/about/governance/");
 
     // Should have "Next Board Meeting" section in sidebar
@@ -135,6 +135,9 @@ test.describe("Smoke Tests", () => {
     const dateText = await meetingInfo.locator("strong").first().textContent();
     expect(dateText).toMatch(/\w+, \w+ \d+, \d{4}/); // e.g., "Monday, January 12, 2026"
     expect(dateText).toMatch(/\d{1,2}:\d{2} [AP]M/); // e.g., "2:30 PM"
+
+    // Should show location info
+    await expect(meetingInfo.locator("text=Fire Station")).toBeVisible();
   });
 
   test("Media Releases page displays releases with PDF thumbnails", async ({ page }) => {
