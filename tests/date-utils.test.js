@@ -437,4 +437,57 @@ describe("getNextMeeting", () => {
       assert.strictEqual(result.date.weekday, 2, "Should be Tuesday");
     });
   });
+
+  describe("timezone handling for UTC dates", () => {
+    it("preserves calendar date when parsing UTC midnight", () => {
+      // UTC midnight on Jan 15 should become Jan 15 in local timezone, not Jan 14
+      const override = {
+        date: "2030-01-15T00:00:00.000Z",
+        time: "14:00",
+        note: "Test meeting"
+      };
+      const result = getNextMeeting(schedule, override, TEST_TIMEZONE);
+      assert.strictEqual(result.isOverride, true, "Should use override");
+      assert.strictEqual(result.date.day, 15, "Day should be 15, not shifted to 14");
+      assert.strictEqual(result.date.month, 1, "Month should be January");
+      assert.strictEqual(result.date.year, 2030, "Year should be 2030");
+    });
+
+    it("preserves calendar date for different timezones", () => {
+      const override = {
+        date: "2030-06-20T00:00:00.000Z",
+        time: "10:00am",
+        note: "Summer meeting"
+      };
+      // Test with US Eastern timezone
+      const result = getNextMeeting(schedule, override, "America/New_York");
+      assert.strictEqual(result.date.day, 20, "Day should be 20 in Eastern timezone");
+      assert.strictEqual(result.date.month, 6, "Month should be June");
+    });
+
+    it("correctly applies override time to preserved calendar date", () => {
+      const override = {
+        date: "2030-03-10T00:00:00.000Z",
+        time: "2:30pm",
+        note: "Afternoon meeting"
+      };
+      const result = getNextMeeting(schedule, override, TEST_TIMEZONE);
+      assert.strictEqual(result.date.day, 10, "Day should be 10");
+      assert.strictEqual(result.date.hour, 14, "Hour should be 14 (2:30pm)");
+      assert.strictEqual(result.date.minute, 30, "Minute should be 30");
+    });
+
+    it("handles TinaCMS-style ISO dates with timezone correctly", () => {
+      // TinaCMS stores dates like this - UTC midnight
+      const override = {
+        date: "2030-12-25T00:00:00.000Z",
+        time: "15:00",
+        note: "Holiday meeting"
+      };
+      const result = getNextMeeting(schedule, override, TEST_TIMEZONE);
+      assert.strictEqual(result.date.month, 12, "Month should be December");
+      assert.strictEqual(result.date.day, 25, "Day should be 25 (Christmas)");
+      assert.ok(result.formatted.includes("December 25"), `Formatted should include "December 25", got "${result.formatted}"`);
+    });
+  });
 });
