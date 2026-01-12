@@ -13,8 +13,8 @@
     "zip": "98250"
   },
   "next_meeting_override": {
-    "date": null,
-    "time": null,
-    "note": null
+    "date": "1970-01-01T00:00:00.000Z",
+    "time": "2:30pm",
+    "note": "last-minute meeting change "
   }
 }
