@@ -70,8 +70,6 @@
   <script defer>
     {{ js | jsmin | safe }}
   </script>
-  {% if page.url === '/' %}
-  <script src="/js/carousel.js" defer></script>
-  {% endif %}
+  {% block scripts %}{% endblock %}
 </body>
 </html>
