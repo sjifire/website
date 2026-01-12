@@ -311,8 +311,21 @@ export default defineConfig({
             create: false,
             delete: false,
           },
+          filename: {
+            readonly: true,
+            slugify: () => "governance_meeting",
+          },
+          global: true,
         },
         fields: [
+          {
+            type: "string",
+            name: "label",
+            label: "Label",
+            ui: {
+              component: () => null,
+            },
+          },
           {
             type: "object",
             name: "meeting_schedule",
@@ -322,15 +335,34 @@ export default defineConfig({
                 type: "number",
                 name: "week_of_month",
                 label: "Week of Month",
-                description: "1=first, 2=second, 3=third, 4=fourth",
                 required: true,
+                ui: {
+                  component: "select",
+                },
+                options: [
+                  { value: 1, label: "First" },
+                  { value: 2, label: "Second" },
+                  { value: 3, label: "Third" },
+                  { value: 4, label: "Fourth" },
+                ],
               },
               {
                 type: "number",
                 name: "day_of_week",
                 label: "Day of Week",
-                description: "0=Sunday, 1=Monday, 2=Tuesday, 3=Wednesday, 4=Thursday, 5=Friday, 6=Saturday",
                 required: true,
+                ui: {
+                  component: "select",
+                },
+                options: [
+                  { value: 0, label: "Sunday" },
+                  { value: 1, label: "Monday" },
+                  { value: 2, label: "Tuesday" },
+                  { value: 3, label: "Wednesday" },
+                  { value: 4, label: "Thursday" },
+                  { value: 5, label: "Friday" },
+                  { value: 6, label: "Saturday" },
+                ],
               },
               {
                 type: "string",
@@ -377,13 +409,19 @@ export default defineConfig({
             type: "object",
             name: "next_meeting_override",
             label: "Override Next Meeting (optional)",
-            description: "Set a specific date for a special meeting",
+            description: "Set a specific date and time for a special meeting",
             fields: [
               {
                 type: "datetime",
                 name: "date",
                 label: "Override Date",
                 description: "Leave empty to use regular schedule",
+              },
+              {
+                type: "string",
+                name: "time",
+                label: "Override Time (24-hour format)",
+                description: "e.g., 15:00 for 3:00 PM. Required if date is set.",
               },
               {
                 type: "string",

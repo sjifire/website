@@ -67,7 +67,12 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addFilter("nextMeetingDate", function(schedule, override) {
     // Check for override first
     if (override && override.date) {
-      const overrideDate = DateTime.fromISO(override.date, { zone: "America/Los_Angeles" });
+      let overrideDate = DateTime.fromISO(override.date, { zone: "America/Los_Angeles" });
+      // Apply override time if provided
+      if (override.time) {
+        const [hour, minute] = override.time.split(":").map(Number);
+        overrideDate = overrideDate.set({ hour, minute });
+      }
       if (overrideDate > DateTime.now()) {
         return {
           date: overrideDate,
