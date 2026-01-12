@@ -284,7 +284,7 @@ async function main() {
           const filename = `${normalizeFilename(user.givenName, user.surname)}.jpg`;
           const photoPath = join(PHOTOS_DIR, filename);
           await writeFile(photoPath, Buffer.from(photoData));
-          person.photo = `/assets/images/personnel_imgs/${filename}`;
+          person.photo = `/assets/media/personnel_imgs/${filename}`;
           console.log(`    Downloaded photo`);
         }
       } catch (error) {
