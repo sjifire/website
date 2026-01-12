@@ -1,6 +1,6 @@
 const { describe, it } = require("node:test");
 const assert = require("node:assert");
-const { createDateFilter, dateFilters, getNextMeetingDate, DateTime } = require("../src/_lib/date-filters");
+const { createDateFilter, dateFilters, getNextMeetingDate, DateTime } = require("../src/_lib/date-utils");
 
 describe("createDateFilter", () => {
   describe("input handling", () => {

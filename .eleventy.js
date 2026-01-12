@@ -2,7 +2,7 @@ const CleanCSS = require("clean-css");
 const { minify } = require("terser");
 const yaml = require("js-yaml");
 const createCloudinary = require("./src/_lib/cloudinary");
-const { dateFilters, getNextMeetingDate, DateTime } = require("./src/_lib/date-filters");
+const { dateFilters, getNextMeetingDate, DateTime } = require("./src/_lib/date-utils");
 
 const isProduction = process.env.ELEVENTY_ENV === "production";
 
