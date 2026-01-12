@@ -24,8 +24,8 @@ describe("cloudinary module", () => {
     it("TRANSFORM includes limit mode and auto quality", () => {
       assert.ok(TRANSFORM.includes("c_limit"));
       assert.ok(TRANSFORM.includes("q_auto"));
-      assert.ok(TRANSFORM.includes("w_1600"));
-      assert.ok(TRANSFORM.includes("h_1600"));
+      assert.ok(TRANSFORM.includes("w_2000"));
+      assert.ok(TRANSFORM.includes("h_2000"));
     });
   });
 
