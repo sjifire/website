@@ -741,14 +741,22 @@ body {
   -webkit-backdrop-filter: blur(8px);
   color: rgba(255, 255, 255, 0.9);
   cursor: pointer;
-  opacity: 0;
+  opacity: 1;
+  animation: carousel-btn-fade-out 0.5s ease-out 2s forwards;
   transition: opacity 0.3s, background-color 0.2s, transform 0.2s;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes carousel-btn-fade-out {
+  to {
+    opacity: 0;
+  }
 }
 
 .carousel:hover .carousel__btn,
 .carousel:focus-within .carousel__btn {
   opacity: 1;
+  animation: none;
 }
 
 .carousel__btn:hover {
@@ -758,6 +766,7 @@ body {
 
 .carousel__btn:focus {
   opacity: 1;
+  animation: none;
   outline: 2px solid rgba(255, 255, 255, 0.8);
   outline-offset: 2px;
 }
