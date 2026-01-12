@@ -3,14 +3,59 @@
   const carousel = document.querySelector('.carousel');
   if (!carousel) return;
 
+  const slidesContainer = carousel.querySelector('.carousel__slides');
+  const dotsContainer = carousel.querySelector('.carousel__indicators');
+  const thumbsContainer = carousel.querySelector('.carousel__thumbnails');
+
+  const autoplay = carousel.dataset.autoplay === 'true';
+  const interval = (parseInt(carousel.dataset.interval, 10) || 5) * 1000;
+  const randomize = carousel.dataset.randomize === 'true';
+
+  // Shuffle elements in place using Fisher-Yates algorithm
+  function shuffleElements(container) {
+    if (!container) return;
+    const children = Array.from(container.children);
+    for (let i = children.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      container.appendChild(children[j]);
+      children.splice(j, 1, children[i]);
+    }
+  }
+
+  // Randomize order if enabled
+  if (randomize) {
+    // Generate a shuffle order
+    const count = slidesContainer.children.length;
+    const order = Array.from({ length: count }, (_, i) => i);
+    for (let i = order.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [order[i], order[j]] = [order[j], order[i]];
+    }
+
+    // Apply same order to slides, dots, and thumbs
+    const reorder = (container) => {
+      if (!container) return;
+      const children = Array.from(container.children);
+      order.forEach(i => container.appendChild(children[i]));
+    };
+
+    reorder(slidesContainer);
+    reorder(dotsContainer);
+    reorder(thumbsContainer);
+
+    // Reset active states to first element
+    carousel.querySelectorAll('.active').forEach(el => el.classList.remove('active'));
+    slidesContainer.children[0]?.classList.add('active');
+    dotsContainer?.children[0]?.classList.add('active');
+    thumbsContainer?.children[0]?.classList.add('active');
+  }
+
+  // Get elements after potential reordering
   const slides = carousel.querySelectorAll('.carousel__slide');
   const dots = carousel.querySelectorAll('.carousel__dot');
   const thumbs = carousel.querySelectorAll('.carousel__thumb');
   const prevBtn = carousel.querySelector('.carousel__btn--prev');
   const nextBtn = carousel.querySelector('.carousel__btn--next');
-
-  const autoplay = carousel.dataset.autoplay === 'true';
-  const interval = (parseInt(carousel.dataset.interval, 10) || 5) * 1000;
 
   let currentIndex = 0;
   let autoplayTimer = null;

@@ -11,6 +11,7 @@ carousel:
   autoplay: true
   interval: 5
   show_thumbnails: true
+  randomize: true
 carousel_images:
   - src: /assets/media/75627272_2431052507006192_899932430335475712_n.jpg
     alt: MOBE Crew
@@ -60,7 +61,7 @@ carousel_images:
         </a>
       </div>
 
-      <section class="carousel" data-autoplay="{{ carousel.autoplay | default(true) }}" data-interval="{{ carousel.interval | default(5) }}">
+      <section class="carousel" data-autoplay="{{ carousel.autoplay | default(true) }}" data-interval="{{ carousel.interval | default(5) }}" data-randomize="{{ carousel.randomize | default(false) }}">
         <div class="carousel__viewport">
           <div class="carousel__slides" aria-live="polite">
             {% for img in carousel_images %}

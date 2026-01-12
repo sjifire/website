@@ -435,6 +435,12 @@ export default defineConfig({
                 label: "Show thumbnail navigation",
                 description: "Display thumbnail images below the carousel",
               },
+              {
+                type: "boolean",
+                name: "randomize",
+                label: "Randomize order",
+                description: "Shuffle slide order on each page load",
+              },
             ],
           },
           {
