@@ -109,8 +109,7 @@ test.describe("Carousel", () => {
       return;
     }
 
-    // Get current active dot index
-    const initialActiveDot = page.locator(".carousel__dot.active");
+    // Get current active slide
     const initialSlide = page.locator(".carousel__slide.active");
     const initialSlideLabel = await initialSlide.getAttribute("aria-label");
 
