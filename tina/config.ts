@@ -388,8 +388,8 @@ export default defineConfig({
       {
         name: "homepage",
         label: "Homepage",
-        path: "src/pages",
-        format: "mdx",
+        path: "src/_data",
+        format: "json",
         match: {
           include: "homepage",
         },
@@ -400,13 +400,6 @@ export default defineConfig({
           },
         },
         fields: [
-          {
-            type: "string",
-            name: "title",
-            label: "Title",
-            isTitle: true,
-            required: true,
-          },
           {
             type: "number",
             name: "number_news_stories",

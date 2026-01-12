@@ -2,27 +2,10 @@
 title: San Juan Island Fire and Rescue
 permalink: /
 layout: false
-number_news_stories: 4
 header_image_transform: /h_520,q_auto:eco,b_rgb:334155/e_art:incognito/o_30/e_gradient_fade:symmetric_pad,x_0.1/
 header_image_source:
   - alldeptphoto2022_washout.jpg
   - deptvehicles_washout.jpg
-carousel:
-  autoplay: true
-  interval: 5
-  show_thumbnails: true
-  randomize: true
-carousel_images:
-  - src: /assets/media/75627272_2431052507006192_899932430335475712_n.jpg
-    alt: MOBE Crew
-  - src: /assets/media/ssfire_l31.png
-    alt: Active Fire Scene
-  - src: /assets/media/alldeptphoto2022.jpg
-    alt: All Department Photo 2022
-  - src: /assets/media/img_20221016_121427_628.jpg
-    alt: Open house 2022
-  - src: /assets/media/pxl_20221016_192119162.jpg
-    alt: Response Vehicles
 ---
 {% extends 'base.njk' %}
 
@@ -30,7 +13,7 @@ carousel_images:
   <div class="l-grid l-grid--2col flipped">
     <div class="l-grid__main block-content">
       <ul class="l-grid l-grid--auto">
-        {% for post in posts | reverse | limit(number_news_stories) %}
+        {% for post in posts | reverse | limit(homepage.number_news_stories) %}
           <li class="card">
             <div class="card__body">
               <div class="news__type">
@@ -61,11 +44,11 @@ carousel_images:
         </a>
       </div>
 
-      <section class="carousel" data-autoplay="{{ carousel.autoplay | default(true) }}" data-interval="{{ carousel.interval | default(5) }}" data-randomize="{{ carousel.randomize | default(false) }}">
+      <section class="carousel" data-autoplay="{{ homepage.carousel.autoplay | default(true) }}" data-interval="{{ homepage.carousel.interval | default(5) }}" data-randomize="{{ homepage.carousel.randomize | default(false) }}">
         <div class="carousel__viewport">
           <div class="carousel__slides" aria-live="polite">
-            {% for img in carousel_images %}
-              <div id="carousel-slide-{{ loop.index }}" class="carousel__slide{{ ' active' if loop.first }}" role="group" aria-roledescription="slide" aria-label="Slide {{ loop.index }} of {{ carousel_images | length }}">
+            {% for img in homepage.carousel_images %}
+              <div id="carousel-slide-{{ loop.index }}" class="carousel__slide{{ ' active' if loop.first }}" role="group" aria-roledescription="slide" aria-label="Slide {{ loop.index }} of {{ homepage.carousel_images | length }}">
                 <img class="carousel__image leave-alone" src="{%- imgPath img.src | safe,  'f_auto,q_auto:good,c_fill,w_1000,h_800' -%}" alt="{{ img.alt }}" loading="{{ 'eager' if loop.first else 'lazy' }}">
               </div>
             {% endfor %}
@@ -82,13 +65,13 @@ carousel_images:
           </button>
         </div>
         <div class="carousel__indicators">
-          {% for img in carousel_images %}
+          {% for img in homepage.carousel_images %}
             <button type="button" class="carousel__dot{{ ' active' if loop.first }}" data-slide="{{ loop.index }}" aria-label="Go to slide {{ loop.index }}"></button>
           {% endfor %}
         </div>
-        {% if carousel.show_thumbnails %}
+        {% if homepage.carousel.show_thumbnails %}
         <div class="carousel__thumbnails">
-          {% for img in carousel_images %}
+          {% for img in homepage.carousel_images %}
             <button type="button" class="carousel__thumb{{ ' active' if loop.first }}" data-slide="{{ loop.index }}" aria-label="Go to slide {{ loop.index }}">
               <img class="leave-alone" src="{%- imgPath img.src | safe,  'f_auto,q_auto:good,c_fill,w_150,h_100' -%}" alt="{{ img.alt }}">
             </button>
