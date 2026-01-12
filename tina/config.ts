@@ -414,8 +414,33 @@ export default defineConfig({
           },
           {
             type: "object",
+            name: "carousel",
+            label: "Image Carousel Settings",
+            fields: [
+              {
+                type: "boolean",
+                name: "autoplay",
+                label: "Auto-rotate slides",
+                description: "Automatically advance slides",
+              },
+              {
+                type: "number",
+                name: "interval",
+                label: "Slide interval (seconds)",
+                description: "Time between slides when auto-rotating (default: 5)",
+              },
+              {
+                type: "boolean",
+                name: "show_thumbnails",
+                label: "Show thumbnail navigation",
+                description: "Display thumbnail images below the carousel",
+              },
+            ],
+          },
+          {
+            type: "object",
             name: "image_gallery",
-            label: "Image Gallery",
+            label: "Image Carousel",
             list: true,
             ui: {
               itemProps: (item) => ({

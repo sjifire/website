@@ -7,6 +7,10 @@ header_image_transform: /h_520,q_auto:eco,b_rgb:334155/e_art:incognito/o_30/e_gr
 header_image_source:
   - alldeptphoto2022_washout.jpg
   - deptvehicles_washout.jpg
+carousel:
+  autoplay: true
+  interval: 5
+  show_thumbnails: true
 image_gallery:
   - image: /assets/media/75627272_2431052507006192_899932430335475712_n.jpg
     image_alt: MOBE Crew
@@ -56,17 +60,40 @@ image_gallery:
         </a>
       </div>
 
-      <section class="gallery">
-        <div aria-hidden="true" class="gallery-showcase">
+      <section class="carousel" data-autoplay="{{ carousel.autoplay | default(true) }}" data-interval="{{ carousel.interval | default(5) }}">
+        <div class="carousel__viewport">
+          <div class="carousel__slides" aria-live="polite">
+            {% for img in image_gallery %}
+              <div id="carousel-slide-{{ loop.index }}" class="carousel__slide{{ ' active' if loop.first }}" role="group" aria-roledescription="slide" aria-label="Slide {{ loop.index }} of {{ image_gallery | length }}">
+                <img class="carousel__image leave-alone" src="{%- imgPath img.image | safe,  'f_auto,q_auto:good,c_fill,w_1000,h_800' -%}" alt="{{ img.image_alt }}" loading="{{ 'eager' if loop.first else 'lazy' }}">
+              </div>
+            {% endfor %}
+          </div>
+          <button type="button" class="carousel__btn carousel__btn--prev" aria-label="Previous slide">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+          </button>
+          <button type="button" class="carousel__btn carousel__btn--next" aria-label="Next slide">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="9 6 15 12 9 18"></polyline>
+            </svg>
+          </button>
+        </div>
+        <div class="carousel__indicators">
           {% for img in image_gallery %}
-            <img id="gallery-pic{{ loop.index }}" class="gallery-showcase__item{{ ' active' if loop.first }} leave-alone" src="{%- imgPath img.image | safe,  'f_auto,q_auto:good,c_fill,w_1000,h_800' -%}" alt="{{ img.image_alt }}" >
+            <button type="button" class="carousel__dot{{ ' active' if loop.first }}" data-slide="{{ loop.index }}" aria-label="Go to slide {{ loop.index }}"></button>
           {% endfor %}
         </div>
-        <div class="gallery-nav">
+        {% if carousel.show_thumbnails %}
+        <div class="carousel__thumbnails">
           {% for img in image_gallery %}
-            <img class="gallery-nav__item{{ ' active' if loop.first }} leave-alone" data-target-id="gallery-pic{{ loop.index }}" src="{%- imgPath img.image | safe,  'f_auto,q_auto:good,c_fill,w_150,h_100' -%}" alt="{{ img.image_alt }}" >
+            <button type="button" class="carousel__thumb{{ ' active' if loop.first }}" data-slide="{{ loop.index }}" aria-label="Go to slide {{ loop.index }}">
+              <img class="leave-alone" src="{%- imgPath img.image | safe,  'f_auto,q_auto:good,c_fill,w_150,h_100' -%}" alt="{{ img.image_alt }}">
+            </button>
           {% endfor %}
         </div>
+        {% endif %}
       </section>
     </div>
 
