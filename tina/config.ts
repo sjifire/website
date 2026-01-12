@@ -416,6 +416,9 @@ export default defineConfig({
                 name: "date",
                 label: "Override Date",
                 description: "Leave empty to use regular schedule",
+                ui: {
+                  dateFormat: "yyyy-MM-dd",
+                },
               },
               {
                 type: "string",
