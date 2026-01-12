@@ -18,6 +18,11 @@
       </div>
 
       <aside class="l-grid__sidebar">
+        {% if include_burn_widget %}
+          <div class="sidebar-block">
+            {% include "burn-status-widget.njk" %}
+          </div>
+        {% endif %}
         {% if sidebar %}
           {{ sidebar | markdownify | processStyledImages | safe }}
         {% endif %}
