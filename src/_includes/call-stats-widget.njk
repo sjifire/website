@@ -1,19 +1,15 @@
 <table class="widget widget--station-stats">
-  <thead class="widget__header">
-    <th colspan="2">
-      <div class="flex">
-        <svg><use xlink:href='#stats' /></svg>
-        <div>
-          <h4>
-            Response Statistics
-          </h4>
-          <div class="timeframe">
-            Last 30 days
-          </div>
+  <caption class="widget__header">
+    <div class="flex">
+      <svg aria-hidden="true"><use xlink:href='#stats' /></svg>
+      <div>
+        <span class="widget__title">Response Statistics</span>
+        <div class="timeframe">
+          Last 30 days
         </div>
       </div>
-    </th>
-  </thead>
+    </div>
+  </caption>
   <tbody class="widget__body">
     {% set cls = cycler("odd", "even") %}
     <tr class="{{ cls.next() }}">

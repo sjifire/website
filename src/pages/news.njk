@@ -38,7 +38,7 @@ sidebar: " "
           </div>
         </div>
         <div class="card__footer">
-          <a href="{{ post.url }}/" class="news__readmore">Read more <svg><use xlink:href="#right-arrow"></svg></a>
+          <a href="{{ post.url }}/" class="news__readmore" aria-label="Read more about {{ post.title }}">Read more <svg aria-hidden="true"><use xlink:href="#right-arrow"></svg></a>
         </div>
       </li>
     {% endfor %}
