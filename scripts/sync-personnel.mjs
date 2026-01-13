@@ -1,22 +1,23 @@
 #!/usr/bin/env node
 /**
  * Sync personnel data from Microsoft 365
- * Run: node scripts/sync-personnel.mjs
  *
- * Required environment variables (secrets):
- *   MS_GRAPH_TENANT_ID - Azure AD tenant ID
- *   MS_GRAPH_CLIENT_ID - App registration client ID
+ * Secrets (environment variables):
+ *   MS_GRAPH_TENANT_ID     - Azure AD tenant ID
+ *   MS_GRAPH_CLIENT_ID     - App registration client ID
  *   MS_GRAPH_CLIENT_SECRET - App registration client secret
  *
- * Configuration in src/_data/site.json:
- *   personnelSync.personnelGroup - Group ID for personnel
- *   personnelSync.staffGroups - Array of group IDs for staff
- *   personnelSync.volunteerGroups - Array of group IDs for volunteers
- *   personnelSync.syncPhotos - Whether to sync photos (default: true)
+ * Configuration (src/_data/site.json → personnelSync):
+ *   personnelGroup   - Entra ID group containing personnel to sync
+ *   staffGroups      - Group IDs that indicate staff (vs volunteer)
+ *   volunteerGroups  - Group IDs that indicate volunteer
+ *   roleGroups       - Map of group ID → role name (e.g., "Firefighter", "Marine Crew")
+ *   syncPhotos       - Whether to sync profile photos (default: true)
  *
- * CLI flags:
- *   --force-refresh  Force re-download all photos even if unchanged
- *   --hash-threshold=N  Hamming distance threshold for photo changes (default: 10)
+ * CLI:
+ *   npm run sync-personnel
+ *   npm run sync-personnel -- --force-refresh
+ *   npm run sync-personnel -- --hash-threshold=15
  */
 
 import 'dotenv/config';
@@ -38,12 +39,11 @@ const PHOTO_HASHES_PATH = join(__dirname, '..', 'src', 'assets', 'media', 'perso
 const siteConfig = JSON.parse(readFileSync(SITE_CONFIG_PATH, 'utf-8'));
 const syncConfig = siteConfig.personnelSync || {};
 
-// Image processing settings via Cloudinary
-// c_fill crops to exact dimensions, g_faces centers on detected faces
+// Cloudinary transform: 1000x1000 crop centered on face
 const PHOTO_TRANSFORM = 'w_1000,h_1000,c_fill,g_faces,q_auto';
-const DEFAULT_HASH_THRESHOLD = 10; // Hamming distance threshold for "same" image
+const DEFAULT_HASH_THRESHOLD = 10;
 
-// Role group mappings - M365 group IDs to role names (from site.json)
+// Group ID → role name mapping from site.json
 const roleGroups = syncConfig.roleGroups || {};
 
 /**
@@ -107,7 +107,7 @@ function normalizeFilename(firstName, lastName) {
     .replace(/[^a-z0-9_]/g, '');
 }
 
-// Ranks - order matters for sorting (Chief first, then by seniority)
+// Ranks in sort order (Chief first). Used for sorting personnel.
 const RANKS = [
   'Chief',
   'Assistant Chief',
@@ -119,13 +119,12 @@ const RANKS = [
   'Firefighter',
 ];
 
-// For parsing, check longer ranks first to avoid partial matches
+// Same ranks sorted by length (longest first) for parsing jobTitle without partial matches
 const RANKS_BY_LENGTH = [...RANKS].sort((a, b) => b.length - a.length);
 
 /**
- * Extract rank and title from jobTitle
- * Examples: "Captain - Training Officer", "Captain: Training", "Captain_Training"
- * Returns { rank, title }
+ * Parse jobTitle into rank and title
+ * "Captain - Training Officer" → { rank: "Captain", title: "Training Officer" }
  */
 function parseJobTitle(jobTitle) {
   if (!jobTitle) return { rank: null, title: null };
@@ -153,20 +152,16 @@ function parseJobTitle(jobTitle) {
 }
 
 /**
- * Determine roles from group memberships
- * Uses roleGroups mapping from site.json (group ID -> role name)
+ * Map user's group memberships to roles via roleGroups config
  */
 function determineRoles(userGroups) {
   const roles = [];
-
   for (const group of userGroups) {
-    // Check by group ID first (from config)
-    const roleByGroupId = roleGroups[group.id];
-    if (roleByGroupId && !roles.includes(roleByGroupId)) {
-      roles.push(roleByGroupId);
+    const role = roleGroups[group.id];
+    if (role && !roles.includes(role)) {
+      roles.push(role);
     }
   }
-
   return roles;
 }
 
@@ -186,7 +181,7 @@ function isInAnyGroup(userGroups, targetGroupIds) {
 }
 
 /**
- * Parse comma-separated group IDs from env var
+ * Parse comma-separated group IDs (for env var backwards compatibility)
  */
 function parseGroupIds(envValue) {
   if (!envValue) return [];
