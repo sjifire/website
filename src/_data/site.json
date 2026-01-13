@@ -29,7 +29,8 @@
       "b87c77fd-0de1-400a-9a44-748f44c23ee5": "Wildland Firefighter",
       "f7b8f454-5324-4be5-80be-06a1fa2bc247": "Marine Crew",
       "ef46b755-a91a-4bb8-a430-fbb6453c4e18": "Administration",
-      "0c99e7b7-c554-44ce-914e-e251864b17d6": "Logistics"
+      "0c99e7b7-c554-44ce-914e-e251864b17d6": "Logistics",
+      "35c0191e-20a5-4632-8b4a-88b48fb5f397": "Tender Ops"
     },
     "supersedeRoles": {
       "Firefighter": ["Wildland Firefighter"]
