@@ -79,7 +79,7 @@ Personnel data and photos are synced daily from Microsoft 365 via Microsoft Grap
 
 **Files:**
 - `scripts/msgraph-client.mjs` - ESM client for Microsoft Graph API
-- `scripts/sync-personnel.mjs` - Syncs users/photos to `emergency-personnel-data.mdx`
+- `scripts/sync-personnel.mjs` - Syncs users/photos to `our-team-data.mdx`
 - `scripts/image-hash.mjs` - Perceptual hashing for photo change detection
 - `scripts/cloudinary-optimize.mjs` - Photo optimization via Cloudinary
 - `.github/workflows/sync-personnel.yml` - Daily scheduled workflow (7 AM UTC)

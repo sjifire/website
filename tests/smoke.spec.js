@@ -95,8 +95,8 @@ test.describe("Smoke Tests", () => {
     await expect(page.locator("h1").first()).toContainText("Questions");
   });
 
-  test("Who We Are page displays staff and volunteers with images", async ({ page }) => {
-    await page.goto("/about/who-we-are/");
+  test("Our Team page displays staff and volunteers with images", async ({ page }) => {
+    await page.goto("/about/our-team/");
 
     // Should have Staff section
     await expect(page.locator("h2").filter({ hasText: "Staff" })).toBeVisible();

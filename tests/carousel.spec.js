@@ -48,21 +48,22 @@ test.describe("Carousel", () => {
     const carousel = page.locator(".carousel");
     const nextBtn = page.locator(".carousel__btn--next");
 
+    // Hover first to stop autoplay before reading initial state
+    await carousel.hover();
+
     // Get the initial active slide's aria-label
     const initialActive = page.locator(".carousel__slide.active");
     const initialLabel = await initialActive.getAttribute("aria-label");
 
-    // Hover to make button visible, then click
-    await carousel.hover();
+    // Click next button
     await nextBtn.click();
 
-    // Wait for transition
-    await page.waitForTimeout(600);
+    // Wait for a different slide to become active (not the initial one)
+    const newActiveSlide = page.locator(`.carousel__slide.active:not([aria-label="${initialLabel}"])`);
+    await expect(newActiveSlide).toBeVisible({ timeout: 1000 });
 
-    // A different slide should now be active
-    const newActive = page.locator(".carousel__slide.active");
-    const newLabel = await newActive.getAttribute("aria-label");
-
+    // Verify the label changed
+    const newLabel = await page.locator(".carousel__slide.active").getAttribute("aria-label");
     expect(newLabel).not.toBe(initialLabel);
   });
 
@@ -71,19 +72,25 @@ test.describe("Carousel", () => {
     const nextBtn = page.locator(".carousel__btn--next");
     const prevBtn = page.locator(".carousel__btn--prev");
 
-    // First go forward, then back
+    // Hover to stop autoplay
     await carousel.hover();
+
+    // First go forward
+    const initialLabel = await page.locator(".carousel__slide.active").getAttribute("aria-label");
     await nextBtn.click();
-    await page.waitForTimeout(600);
 
-    const afterNext = page.locator(".carousel__slide.active");
-    const afterNextLabel = await afterNext.getAttribute("aria-label");
+    // Wait for slide to change
+    const afterNextSlide = page.locator(`.carousel__slide.active:not([aria-label="${initialLabel}"])`);
+    await expect(afterNextSlide).toBeVisible({ timeout: 1000 });
+    const afterNextLabel = await page.locator(".carousel__slide.active").getAttribute("aria-label");
 
+    // Then go back
     await prevBtn.click();
-    await page.waitForTimeout(600);
 
-    const afterPrev = page.locator(".carousel__slide.active");
-    const afterPrevLabel = await afterPrev.getAttribute("aria-label");
+    // Wait for slide to change back
+    const afterPrevSlide = page.locator(`.carousel__slide.active:not([aria-label="${afterNextLabel}"])`);
+    await expect(afterPrevSlide).toBeVisible({ timeout: 1000 });
+    const afterPrevLabel = await page.locator(".carousel__slide.active").getAttribute("aria-label");
 
     expect(afterPrevLabel).not.toBe(afterNextLabel);
   });

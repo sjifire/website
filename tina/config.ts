@@ -341,7 +341,7 @@ export default defineConfig({
         path: "src/pages",
         format: "mdx",
         match: {
-          exclude: "{about/emergency-personnel-data,homepage}",
+          exclude: "{about/our-team-data,homepage}",
         },
         fields: [
           {
@@ -429,18 +429,19 @@ export default defineConfig({
         ],
       },
       {
-        name: "configPersonnel",
-        label: "Personnel",
+        name: "configOurTeam",
+        label: "Our Team",
         path: "src/pages/about",
         format: "mdx",
         match: {
-          include: "emergency-personnel-data",
+          include: "our-team-data",
         },
         ui: {
           allowedActions: {
             create: false,
             delete: false,
           },
+          description: "Personnel list is automatically synced from Microsoft 365. To update staff or volunteer information, make changes in M365 and the website will update daily.",
         },
         fields: [
           {
@@ -451,66 +452,10 @@ export default defineConfig({
             required: true,
           },
           {
-            type: "object",
-            name: "personnel",
-            label: "Personnel",
-            list: true,
-            ui: {
-              itemProps: (item) => ({
-                label: item?.first_name && item?.last_name
-                  ? `${item.first_name} ${item.last_name}`
-                  : "New Person",
-              }),
-            },
-            fields: [
-              {
-                type: "string",
-                name: "first_name",
-                label: "First Name",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "last_name",
-                label: "Last Name",
-                required: true,
-              },
-              {
-                type: "string",
-                name: "title",
-                label: "Title",
-              },
-              {
-                type: "string",
-                name: "rank",
-                label: "Rank",
-                options: ["Chief", "Division Chief", "Battalion Chief", "Captain", "Lieutenant"],
-              },
-              {
-                type: "string",
-                name: "staff_type",
-                label: "Type",
-                options: ["staff", "volunteer"],
-                required: true,
-              },
-              {
-                type: "string",
-                name: "roles",
-                label: "Roles",
-                options: [ "FireFighter", "Wildland Firefighter", "EMT", "Medic", "Apparatus Operator",  "Marine Crew", "Support", "Admin"],
-                list: true,
-              },
-              {
-                type: "image",
-                name: "photo",
-                label: "Photo",
-              },
-            ],
-          },
-          {
             type: "rich-text",
             name: "body",
             label: "Body",
+            description: "Introduction text shown above the team directory. Personnel list is managed automatically.",
             isBody: true,
           },
         ],
