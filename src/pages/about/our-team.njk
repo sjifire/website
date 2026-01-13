@@ -10,14 +10,18 @@ layout: false
 
 {# Pull personnel data from the MDX content-include file #}
 {% set personnelData = null %}
+{% set introText = null %}
 {% for item in collections.contentIncludes %}
-  {% if item.data.contentFor == "emergency-personnel" %}
+  {% if item.data.contentFor == "our-team" %}
     {% set personnelData = item.data.personnel %}
+    {% set introText = item.data.intro %}
   {% endif %}
 {% endfor %}
 
 {% block main_content_single %}
-<p class="lead">Our department is made up of dedicated career staff and volunteers who live and work in our island community.</p>
+{% if introText %}
+<p class="lead">{{ introText }}</p>
+{% endif %}
 
 {% if personnelData %}
 {% set staffOnly = personnelData | pluckByValue('staff', 'staff_type') %}

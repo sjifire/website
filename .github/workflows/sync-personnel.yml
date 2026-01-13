@@ -55,7 +55,7 @@ jobs:
       - name: Check for changes
         id: changes
         run: |
-          git add src/pages/about/emergency-personnel-data.mdx src/assets/media/personnel_imgs/
+          git add src/pages/about/our-team-data.mdx src/assets/media/personnel_imgs/
           if git diff --cached --quiet; then
             echo "changed=false" >> $GITHUB_OUTPUT
           else

@@ -31,7 +31,7 @@ import { optimizeImageBuffer, getCloudinaryConfig } from './cloudinary-optimize.
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const SITE_CONFIG_PATH = join(__dirname, '..', 'src', '_data', 'site.json');
-const OUTPUT_PATH = join(__dirname, '..', 'src', 'pages', 'about', 'emergency-personnel-data.mdx');
+const OUTPUT_PATH = join(__dirname, '..', 'src', 'pages', 'about', 'our-team-data.mdx');
 const PHOTOS_DIR = join(__dirname, '..', 'src', 'assets', 'media', 'personnel_imgs');
 const PHOTO_HASHES_PATH = join(__dirname, '..', 'src', 'assets', 'media', 'personnel_imgs', '.photo-hashes.json');
 
@@ -211,8 +211,9 @@ function generateMDX(personnel) {
     '---',
     'permalink: false',
     'tags: content-include',
-    'contentFor: emergency-personnel',
-    'title: Emergency Personnel',
+    'contentFor: our-team',
+    'title: Our Team',
+    'intro: Our department is made up of dedicated career staff and volunteers who live and work in our island community.',
     'personnel:',
   ];
 
