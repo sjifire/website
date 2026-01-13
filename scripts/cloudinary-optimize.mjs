@@ -55,7 +55,7 @@ function generateSignature(params, apiSecret) {
  */
 export async function optimizeImageBuffer(buffer, options = {}) {
   const {
-    transform = 'w_1000,h_1000,c_fill,g_faces,q_auto',
+    transform = 'w_1000,h_1000,c_limit,q_auto',
     format = 'jpg',
   } = options;
 
