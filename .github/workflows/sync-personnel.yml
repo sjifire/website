@@ -70,14 +70,14 @@ jobs:
         if: steps.changes.outputs.changed == 'true'
         uses: actions/create-github-app-token@v1
         with:
-          app-id: ${{ secrets.GITHUB_APP_ID }}
-          private-key: ${{ secrets.GITHUB_APP_PRIVATE_KEY }}
+          app-id: ${{ secrets.GH_APP_ID }}
+          private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
 
       - name: Commit and push changes
         if: steps.changes.outputs.changed == 'true'
         run: |
           git config user.name "sjifire-bot[bot]"
-          git config user.email "${{ secrets.GITHUB_APP_ID }}+sjifire-bot[bot]@users.noreply.github.com"
+          git config user.email "${{ secrets.GH_APP_ID }}+sjifire-bot[bot]@users.noreply.github.com"
           git remote set-url origin "https://x-access-token:${{ steps.app-token.outputs.token }}@github.com/${{ github.repository }}.git"
           git commit -m "chore: sync personnel data from Microsoft 365
 
