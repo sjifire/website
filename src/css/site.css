@@ -1582,6 +1582,60 @@ select.form-control:focus::-ms-value {
   fill: var(--yellow);
 }
 
+/* Quick Actions Box */
+.quick-actions-box {
+  margin-bottom: 1.5rem;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 0 8px rgb(0, 0, 0, 0.2);
+  padding: 30px;
+}
+
+.quick-actions-box__header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.025rem;
+  line-height: 1;
+  color: var(--bright-red);
+  text-transform: uppercase;
+}
+
+.quick-actions-box__header h4 {
+  margin: 0;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+}
+
+.quick-actions-box__body {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.quick-actions-box__body .btn {
+  flex: 1 1 auto;
+  justify-content: center;
+  min-width: 140px;
+}
+
+.quick-actions-box__body .btn svg {
+  fill: currentcolor;
+}
+
+@media (width <= 600px) {
+  .quick-actions-box__body {
+    flex-direction: column;
+  }
+
+  .quick-actions-box__body .btn {
+    width: 100%;
+  }
+}
+
 /* Styled Images (TinaCMS) */
 .block-content .styled-image {
   margin: 1.5rem 0;
