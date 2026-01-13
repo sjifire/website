@@ -14,7 +14,7 @@ header_image_source:
     <div class="l-grid__main block-content">
       <section class="quick-actions-box">
         <header class="quick-actions-box__header">
-          <h4>Quick Links</h4>
+          <h2>Quick Links</h2>
         </header>
         <nav class="quick-actions-box__body" aria-label="Quick links">
           <a href="/services/burn-permits/" class="btn btn-primary">
@@ -52,7 +52,7 @@ header_image_source:
               </div>
             </div>
             <div class="card__footer">
-              <a href="{{ post.url }}/" class="news__readmore">Read more <svg><use xlink:href="#right-arrow"></svg></a>
+              <a href="{{ post.url }}/" class="news__readmore" aria-label="Read more about {{ post.title }}">Read more <svg aria-hidden="true"><use xlink:href="#right-arrow"></svg></a>
             </div>
           </li>
         {% endfor %}

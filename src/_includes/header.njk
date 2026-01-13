@@ -24,7 +24,7 @@
       {% endif %}
     {% endfor %}
     <li class="toggle">
-      <a href="#"><svg><use xlink:href='#menu' /></svg></a>
+      <a href="#" aria-label="Toggle navigation menu"><svg aria-hidden="true"><use xlink:href='#menu' /></svg><span class="sr-only">Menu</span></a>
     </li>
     {% if nav.headerHighlight %}
     <li class="item item--highlight">

@@ -8,11 +8,11 @@
   --bright-red: #c42414;
   --dk-red: #72150c;
   --md-gray: #515559;
-  --muted-gray: #919599;
+  --muted-gray: #6b6f73;
   --btn-gray: #e1e5e9;
   --lt-gray: #f1f5f9;
   --rule-gray: #e1e5e9;
-  --link-blue: #3182e4;
+  --link-blue: #1d6fd1;
   --lt-blue-gray: #E2E8F0;
   --md-blue-gray: #cbd5e1;
   --blue: #20528d;
@@ -794,8 +794,8 @@ body {
 }
 
 .carousel__dot {
-  width: 12px;
-  height: 12px;
+  width: 24px;
+  height: 24px;
   padding: 0;
   border: 2px solid var(--md-gray);
   border-radius: 50%;
@@ -1103,12 +1103,13 @@ body {
   border-radius: 12px;
 }
 
-.widget__header th {
+.widget__header {
   background-color: var(--blue);
   color: white;
   text-align: left;
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
+  caption-side: top;
 }
 
 .widget__header .flex {
@@ -1125,7 +1126,8 @@ body {
   fill: var(--bright-red);
 }
 
-.widget__header h4 {
+.widget__title {
+  display: block;
   margin-bottom: 0.15rem;
   font-size: 24px;
   line-height: 1.5rem;
@@ -1164,7 +1166,7 @@ body {
 .widget__body td aside {
   font-size: 0.7rem;
   font-weight: 400;
-  color: #919397;
+  color: #5f6368;
 }
 
 .widget__body td {
@@ -1603,7 +1605,7 @@ select.form-control:focus::-ms-value {
   text-transform: uppercase;
 }
 
-.quick-actions-box__header h4 {
+.quick-actions-box__header h2 {
   margin: 0;
   font: inherit;
   letter-spacing: inherit;
