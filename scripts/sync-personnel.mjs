@@ -24,16 +24,17 @@ import { writeFile, readFile, mkdir, access } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { MSGraphClient } from './msgraph-client.mjs';
-import { processImage, hashJpegBuffer, hammingDistance } from './image-hash.mjs';
+import { hashJpegBuffer, hammingDistance } from './image-hash.mjs';
+import { optimizeImageBuffer, getCloudinaryConfig } from './cloudinary-optimize.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const OUTPUT_PATH = join(__dirname, '..', 'src', 'pages', 'about', 'emergency-personnel-data.mdx');
 const PHOTOS_DIR = join(__dirname, '..', 'src', 'assets', 'media', 'personnel_imgs');
 const PHOTO_HASHES_PATH = join(__dirname, '..', 'src', 'assets', 'media', 'personnel_imgs', '.photo-hashes.json');
 
-// Image processing settings
-const MAX_PHOTO_DIMENSION = 500; // Max width/height in pixels
-const JPEG_QUALITY = 80;
+// Image processing settings via Cloudinary
+// c_fill crops to exact dimensions, g_faces centers on detected faces
+const PHOTO_TRANSFORM = 'w_1000,h_1000,c_fill,g_faces,q_auto';
 const DEFAULT_HASH_THRESHOLD = 10; // Hamming distance threshold for "same" image
 
 // Role group mappings - M365 group display names to role names
@@ -271,6 +272,14 @@ async function main() {
   console.log(`Force refresh photos: ${args.forceRefresh}`);
   console.log(`Hash threshold: ${args.hashThreshold} bits`);
 
+  // Check Cloudinary config
+  const cloudinaryConfig = getCloudinaryConfig();
+  if (syncPhotos && !cloudinaryConfig) {
+    console.warn('\nWarning: CLOUDINARY_API_KEY/SECRET not set - photos will be saved without optimization');
+  } else if (syncPhotos) {
+    console.log(`Cloudinary transform: ${PHOTO_TRANSFORM}`);
+  }
+
   // Initialize client
   const client = new MSGraphClient({ tenantId, clientId, clientSecret });
 
@@ -365,9 +374,12 @@ async function main() {
       try {
         const photoData = await client.getUserPhoto(user.id);
         if (photoData) {
-          // Process the image (resize and compute hash)
-          const processed = processImage(Buffer.from(photoData), MAX_PHOTO_DIMENSION, JPEG_QUALITY);
-          const newHash = processed.hash;
+          // Optimize image via Cloudinary (or use raw if no credentials)
+          const rawBuffer = Buffer.from(photoData);
+          const optimized = await optimizeImageBuffer(rawBuffer, { transform: PHOTO_TRANSFORM });
+
+          const finalBuffer = optimized.buffer;
+          const newHash = hashJpegBuffer(finalBuffer);
 
           // Check if we should save the photo
           let shouldSave = false;
@@ -413,8 +425,10 @@ async function main() {
           }
 
           if (shouldSave) {
-            await writeFile(photoPath, processed.buffer);
-            console.log(`    Photo saved: ${reason} (${processed.width}x${processed.height})`);
+            await writeFile(photoPath, finalBuffer);
+            const sizeKB = Math.round(finalBuffer.length / 1024);
+            const optStatus = optimized.optimized ? 'cloudinary' : optimized.reason;
+            console.log(`    Photo saved: ${reason} (${sizeKB}KB, ${optStatus})`);
           } else {
             console.log(`    Photo skipped: ${reason}`);
           }
