@@ -441,6 +441,7 @@ export default defineConfig({
             create: false,
             delete: false,
           },
+          description: "Personnel list is automatically synced from Microsoft 365. To update staff or volunteer information, make changes in M365 and the website will update daily.",
         },
         fields: [
           {

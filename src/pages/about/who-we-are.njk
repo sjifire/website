@@ -13,7 +13,20 @@ layout: false
   {% endif %}
 {% endfor %}
 
-{% block main_content_single %}
+{# Set sidebar with images #}
+{% set sidebar %}
+<div class="sidebar-block">
+  <img src="{%- imgPath '/assets/media/team-dinner.jpeg', 'f_auto,q_auto:good,w_400' -%}" alt="Team Dinner while on shift" class="sidebar__image" loading="lazy">
+</div>
+<div class="sidebar-block">
+  <img src="{%- imgPath '/assets/media/family-break-time.jpg', 'f_auto,q_auto:good,w_400' -%}" alt="Break Time" class="sidebar__image" loading="lazy">
+</div>
+<div class="sidebar-block">
+  <img src="{%- imgPath '/assets/media/Vols-2-edited-1-scaled.jpg', 'f_auto,q_auto:good,w_400' -%}" alt="Wildland Fire Drill" class="sidebar__image" loading="lazy">
+</div>
+{% endset %}
+
+{% block main_content %}
 {{ whoWeAreContent | processStyledImages | safe }}
 
 <div style="clear: both;"></div>
