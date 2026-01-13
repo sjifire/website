@@ -34,7 +34,7 @@ const PHOTO_HASHES_PATH = join(__dirname, '..', 'src', 'assets', 'media', 'perso
 
 // Image processing settings via Cloudinary
 // c_fill crops to exact dimensions, g_faces centers on detected faces
-const PHOTO_TRANSFORM = 'w_1000,h_1000,c_fill,g_faces,q_auto';
+const PHOTO_TRANSFORM = 'w_1000,h_1000,c_limit,q_auto';
 const DEFAULT_HASH_THRESHOLD = 10; // Hamming distance threshold for "same" image
 
 // Role group mappings - M365 group display names to role names
