@@ -11,7 +11,7 @@ import { optimizeImageBuffer, getCloudinaryConfig } from './cloudinary-optimize.
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PHOTOS_DIR = join(__dirname, '..', 'src', 'assets', 'media', 'personnel_imgs');
-const TRANSFORM = 'w_1000,h_1000,c_limit,q_auto';
+const TRANSFORM = 'w_1000,h_1000,c_fill,g_faces,q_auto';
 
 async function main() {
   const config = getCloudinaryConfig();
