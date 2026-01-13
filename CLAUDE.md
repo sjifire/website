@@ -28,7 +28,7 @@ Requires Node.js 20+. Output goes to `_site/`.
 - `src/pages/` - Content pages (`.njk`/`.md`) - URLs generated without `/pages/` prefix via `pages.11tydata.js`
 - `src/posts/` - News posts as JSON files (`YYYY-MM-DD-slug.json`)
 - `src/media_releases/` - Press release metadata (JSON) linking to PDFs in `src/assets/media_releases/`
-- `src/modules/` - Utility JS: ESO incident scraper, board meeting date calculator
+- `scripts/` - Standalone ESM scripts for data sync (NERIS, M365 personnel)
 - `api/` - Azure Functions backend (TypeScript) for GitHub content operations and auth
 
 ### Key Patterns
@@ -50,3 +50,72 @@ Requires Node.js 20+. Output goes to `_site/`.
 ### Authentication
 
 Admin routes (`/admin/*`, `/api/*`) require Azure AD authentication configured via `staticwebapp.config.json`. See README.md for Azure AD setup.
+
+### Incident Statistics (NERIS)
+
+Incident statistics are pulled daily from NERIS (National Emergency Response Information System) via a scheduled GitHub Action.
+
+**Files:**
+- `scripts/neris-client.mjs` - ESM API client for NERIS REST API
+- `scripts/generate-stats.mjs` - Fetches incidents and generates `src/_data/stats.json`
+- `.github/workflows/update-stats.yml` - Daily scheduled workflow (6 AM UTC)
+
+**Required GitHub Secrets:**
+- `NERIS_CLIENT_ID` - OAuth2 client ID from NERIS
+- `NERIS_CLIENT_SECRET` - OAuth2 client secret
+- `NERIS_ENTITY_ID` - Fire department NERIS ID
+
+**Local Testing:**
+```bash
+export NERIS_CLIENT_ID="your-client-id"
+export NERIS_CLIENT_SECRET="your-client-secret"
+export NERIS_ENTITY_ID="your-entity-id"
+npm run stats
+```
+
+### Personnel Data (Microsoft 365)
+
+Personnel data and photos are synced daily from Microsoft 365 via Microsoft Graph API.
+
+**Files:**
+- `scripts/msgraph-client.mjs` - ESM client for Microsoft Graph API
+- `scripts/sync-personnel.mjs` - Syncs users/photos to `emergency-personnel-data.mdx`
+- `scripts/image-hash.mjs` - Perceptual hashing for photo change detection
+- `scripts/cloudinary-optimize.mjs` - Photo optimization via Cloudinary
+- `.github/workflows/sync-personnel.yml` - Daily scheduled workflow (7 AM UTC)
+
+**Required GitHub Secrets:**
+- `MS_GRAPH_TENANT_ID` - Azure AD tenant ID
+- `MS_GRAPH_CLIENT_ID` - App registration client ID
+- `MS_GRAPH_CLIENT_SECRET` - App registration client secret
+- `CLOUDINARY_API_KEY` - Cloudinary API key (for photo optimization)
+- `CLOUDINARY_API_SECRET` - Cloudinary API secret
+
+**Configuration in `src/_data/site.json`:**
+```json
+{
+  "personnelSync": {
+    "personnelGroup": "group-id",
+    "staffGroups": ["group-id-1", "group-id-2"],
+    "volunteerGroups": ["group-id-1", "group-id-2"],
+    "roleGroups": {
+      "group-id": "Role Name"
+    },
+    "syncPhotos": true
+  }
+}
+```
+
+**Azure AD App Setup:**
+1. Create App Registration in Azure Portal
+2. Add API Permission: Microsoft Graph → Application → `User.Read.All`, `GroupMember.Read.All`
+3. Grant admin consent
+4. Create client secret
+
+**Local Testing:**
+```bash
+export MS_GRAPH_TENANT_ID="your-tenant-id"
+export MS_GRAPH_CLIENT_ID="your-client-id"
+export MS_GRAPH_CLIENT_SECRET="your-client-secret"
+npm run sync-personnel
+```

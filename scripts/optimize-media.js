@@ -9,8 +9,8 @@ const fs = require("fs");
 const path = require("path");
 const crypto = require("crypto");
 
-// Config from api/src/lib/cloudinary.js
-const siteConfig = require("../api/site-config.json");
+// Config from site.json
+const siteConfig = require("../src/_data/site.json");
 const CLOUD_NAME = siteConfig.cloudinaryRootUrl.split("/").pop();
 const OPTIMIZABLE_EXTENSIONS = ["jpg", "jpeg", "png", "gif", "webp"];
 const MIN_SIZE_BYTES = 500 * 1024; // 500KB

@@ -245,3 +245,98 @@ The site already uses Cloudinary's fetch URLs for runtime image delivery (servin
 To get credentials: https://console.cloudinary.com/settings/api-keys
 
 **Without credentials:** Image uploads still work normally, they're just stored at their original size.
+
+### Personnel Directory Sync (Microsoft 365)
+
+Personnel data and photos can be automatically synced from Microsoft 365 (Entra ID). A GitHub Action runs daily to update the personnel directory.
+
+#### Entra ID App Registration
+
+1. Go to Azure Portal > Microsoft Entra ID > App registrations
+2. Click "New registration"
+3. Fill in:
+   - **Name**: Personnel Sync
+   - **Supported account types**: Accounts in this organizational directory only
+4. Click "Register"
+5. Note the **Application (client) ID** and **Directory (tenant) ID**
+6. Go to "API permissions" > "Add a permission" > "Microsoft Graph" > "Application permissions"
+7. Add these permissions:
+   - `User.Read.All` - Read user profiles
+   - `GroupMember.Read.All` - Read group memberships
+8. Click "Grant admin consent for [your org]"
+9. Go to "Certificates & secrets" > "New client secret"
+10. Create a secret and copy the **Value** immediately
+
+#### Entra ID Fields Used
+
+The sync reads these fields from each user's Entra ID profile:
+
+| Field | Usage |
+|-------|-------|
+| `givenName` | First name |
+| `surname` | Last name |
+| `displayName` | Fallback display name |
+| `jobTitle` | Parsed for rank (Chief, Captain, etc.) and title |
+| `id` | Used to fetch profile photo and group memberships |
+
+**Job Title Parsing:**
+- Ranks are extracted from jobTitle: Chief, Assistant Chief, Battalion Chief, Division Chief, Captain, Lieutenant, Apparatus Operator, Firefighter
+- Examples: "Captain - Training Officer" → rank: Captain, title: Training Officer
+- Separators supported: dash (-), colon (:), underscore (_), comma (,)
+
+#### Configuration
+
+**GitHub Secrets** (Settings > Secrets and variables > Actions > Secrets):
+
+| Secret | Description |
+|--------|-------------|
+| `MS_GRAPH_TENANT_ID` | Entra ID tenant ID |
+| `MS_GRAPH_CLIENT_ID` | App registration client ID |
+| `MS_GRAPH_CLIENT_SECRET` | App registration client secret |
+| `CLOUDINARY_API_KEY` | For photo optimization |
+| `CLOUDINARY_API_SECRET` | For photo optimization |
+
+**Site Configuration** (`src/_data/site.json`):
+
+```json
+{
+  "personnelSync": {
+    "personnelGroup": "group-id-guid",
+    "staffGroups": ["group-id-1", "group-id-2"],
+    "volunteerGroups": ["group-id-1", "group-id-2"],
+    "roleGroups": {
+      "group-id-guid": "Role Name"
+    },
+    "supersedeRoles": {
+      "Firefighter": ["Wildland Firefighter"]
+    },
+    "syncPhotos": true
+  }
+}
+```
+
+| Setting | Description |
+|---------|-------------|
+| `personnelGroup` | Only sync members of this Entra ID group |
+| `staffGroups` | Group IDs that indicate staff (vs volunteer) |
+| `volunteerGroups` | Group IDs that indicate volunteer |
+| `roleGroups` | Map group IDs to role names displayed on the site |
+| `supersedeRoles` | When a role is present, hide roles it supersedes |
+| `syncPhotos` | Whether to download profile photos |
+
+To find group IDs: Azure Portal > Groups > [group name] > Object ID
+
+#### Local Testing
+
+```bash
+# Set environment variables
+export MS_GRAPH_TENANT_ID="your-tenant-id"
+export MS_GRAPH_CLIENT_ID="your-client-id"
+export MS_GRAPH_CLIENT_SECRET="your-client-secret"
+
+# Run sync
+npm run sync-personnel
+
+# Force refresh all photos
+npm run sync-personnel -- --force-refresh
+```

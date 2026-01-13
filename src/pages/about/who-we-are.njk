@@ -25,6 +25,7 @@ layout: false
 
 <div style="clear: both;"></div>
 
+{% if personnelData %}
 {% set staffOnly = personnelData | pluckByValue('staff', 'staff_type') %}
 {% set volunteersOnly = personnelData | pluckByValue('volunteer', 'staff_type') %}
 
@@ -79,4 +80,9 @@ layout: false
     {% endfor %}
   </div>
 </section>
+{% else %}
+<section class="personnel-section">
+  <p><em>Personnel data is not available in this environment. Run <code>npm run sync-personnel</code> to generate personnel data, or this data will be generated automatically during the production build.</em></p>
+</section>
+{% endif %}
 {% endblock %}

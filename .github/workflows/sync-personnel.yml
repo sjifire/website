@@ -1,0 +1,77 @@
+name: Sync Personnel from M365
+
+on:
+  schedule:
+    # Run daily at 7 AM UTC (11 PM PST / 12 AM PDT)
+    - cron: '0 7 * * *'
+  workflow_dispatch:
+    # Allow manual trigger from GitHub Actions UI
+    inputs:
+      force_refresh:
+        description: 'Force refresh all photos (ignore hash comparison)'
+        required: false
+        default: 'false'
+        type: choice
+        options:
+          - 'false'
+          - 'true'
+
+jobs:
+  sync-personnel:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Sync personnel from Microsoft 365
+        env:
+          # Secrets for authentication
+          MS_GRAPH_TENANT_ID: ${{ secrets.MS_GRAPH_TENANT_ID }}
+          MS_GRAPH_CLIENT_ID: ${{ secrets.MS_GRAPH_CLIENT_ID }}
+          MS_GRAPH_CLIENT_SECRET: ${{ secrets.MS_GRAPH_CLIENT_SECRET }}
+          # Cloudinary for photo optimization
+          CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
+          CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
+          # Group IDs and sync settings are in src/_data/site.json
+        run: |
+          if [ "${{ inputs.force_refresh }}" = "true" ]; then
+            node scripts/sync-personnel.mjs --force-refresh
+          else
+            node scripts/sync-personnel.mjs
+          fi
+
+      - name: Check for changes
+        id: changes
+        run: |
+          git add src/pages/about/emergency-personnel-data.mdx src/assets/media/personnel_imgs/
+          if git diff --cached --quiet; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+            # Show what changed
+            echo "## Changed files:" >> $GITHUB_STEP_SUMMARY
+            git diff --cached --name-only >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Commit and push changes
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore: sync personnel data from Microsoft 365
+
+          Auto-generated daily update of personnel information.
+          Photos updated only when visually different (perceptual hash)."
+          git push
