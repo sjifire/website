@@ -75,26 +75,40 @@ npm run stats
 
 ### Personnel Data (Microsoft 365)
 
-Personnel data and photos are synced weekly from Microsoft 365 via Microsoft Graph API.
+Personnel data and photos are synced daily from Microsoft 365 via Microsoft Graph API.
 
 **Files:**
 - `scripts/msgraph-client.mjs` - ESM client for Microsoft Graph API
 - `scripts/sync-personnel.mjs` - Syncs users/photos to `emergency-personnel-data.mdx`
-- `.github/workflows/sync-personnel.yml` - Weekly scheduled workflow (Monday 7 AM UTC)
+- `scripts/image-hash.mjs` - Perceptual hashing for photo change detection
+- `scripts/cloudinary-optimize.mjs` - Photo optimization via Cloudinary
+- `.github/workflows/sync-personnel.yml` - Daily scheduled workflow (7 AM UTC)
 
 **Required GitHub Secrets:**
 - `MS_GRAPH_TENANT_ID` - Azure AD tenant ID
 - `MS_GRAPH_CLIENT_ID` - App registration client ID
 - `MS_GRAPH_CLIENT_SECRET` - App registration client secret
+- `CLOUDINARY_API_KEY` - Cloudinary API key (for photo optimization)
+- `CLOUDINARY_API_SECRET` - Cloudinary API secret
 
-**Optional GitHub Variables:**
-- `MS_GRAPH_PERSONNEL_GROUP` - M365 group ID to filter personnel
-- `MS_GRAPH_STAFF_GROUP` - M365 group ID for staff members
-- `MS_GRAPH_VOLUNTEER_GROUP` - M365 group ID for volunteers
+**Configuration in `src/_data/site.json`:**
+```json
+{
+  "personnelSync": {
+    "personnelGroup": "group-id",
+    "staffGroups": ["group-id-1", "group-id-2"],
+    "volunteerGroups": ["group-id-1", "group-id-2"],
+    "roleGroups": {
+      "group-id": "Role Name"
+    },
+    "syncPhotos": true
+  }
+}
+```
 
 **Azure AD App Setup:**
 1. Create App Registration in Azure Portal
-2. Add API Permission: Microsoft Graph → Application → `User.Read.All`
+2. Add API Permission: Microsoft Graph → Application → `User.Read.All`, `GroupMember.Read.All`
 3. Grant admin consent
 4. Create client secret
 
