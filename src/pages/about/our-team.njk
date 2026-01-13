@@ -20,7 +20,7 @@ layout: false
 
 {% block main_content_single %}
 {% if introText %}
-<p class="lead">{{ introText }}</p>
+<p class="lead">{{ introText | safe }}</p>
 {% endif %}
 
 {% if personnelData %}
@@ -84,5 +84,4 @@ layout: false
 </section>
 {% endif %}
 
-<p style="margin-top: 2rem;">Interested in joining? <a href="/about/join/">Learn more</a> about becoming a volunteer.</p>
 {% endblock %}
