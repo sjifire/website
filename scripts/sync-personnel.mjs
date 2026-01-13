@@ -3,16 +3,16 @@
  * Sync personnel data from Microsoft 365
  * Run: node scripts/sync-personnel.mjs
  *
- * Required environment variables:
+ * Required environment variables (secrets):
  *   MS_GRAPH_TENANT_ID - Azure AD tenant ID
  *   MS_GRAPH_CLIENT_ID - App registration client ID
  *   MS_GRAPH_CLIENT_SECRET - App registration client secret
  *
- * Optional:
- *   MS_GRAPH_PERSONNEL_GROUP - Group ID/name for personnel (default: all users)
- *   MS_GRAPH_STAFF_GROUP - Comma-separated group IDs/names for staff members
- *   MS_GRAPH_VOLUNTEER_GROUP - Comma-separated group IDs/names for volunteers
- *   SYNC_PHOTOS - Set to "true" to download photos (default: true)
+ * Configuration in src/_data/site.json:
+ *   personnelSync.personnelGroup - Group ID for personnel
+ *   personnelSync.staffGroups - Array of group IDs for staff
+ *   personnelSync.volunteerGroups - Array of group IDs for volunteers
+ *   personnelSync.syncPhotos - Whether to sync photos (default: true)
  *
  * CLI flags:
  *   --force-refresh  Force re-download all photos even if unchanged
@@ -21,6 +21,7 @@
 
 import 'dotenv/config';
 import { writeFile, readFile, mkdir, access } from 'node:fs/promises';
+import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { MSGraphClient } from './msgraph-client.mjs';
@@ -28,33 +29,22 @@ import { hashJpegBuffer, hammingDistance } from './image-hash.mjs';
 import { optimizeImageBuffer, getCloudinaryConfig } from './cloudinary-optimize.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
+const SITE_CONFIG_PATH = join(__dirname, '..', 'src', '_data', 'site.json');
 const OUTPUT_PATH = join(__dirname, '..', 'src', 'pages', 'about', 'emergency-personnel-data.mdx');
 const PHOTOS_DIR = join(__dirname, '..', 'src', 'assets', 'media', 'personnel_imgs');
 const PHOTO_HASHES_PATH = join(__dirname, '..', 'src', 'assets', 'media', 'personnel_imgs', '.photo-hashes.json');
+
+// Load site configuration
+const siteConfig = JSON.parse(readFileSync(SITE_CONFIG_PATH, 'utf-8'));
+const syncConfig = siteConfig.personnelSync || {};
 
 // Image processing settings via Cloudinary
 // c_fill crops to exact dimensions, g_faces centers on detected faces
 const PHOTO_TRANSFORM = 'w_1000,h_1000,c_fill,g_faces,q_auto';
 const DEFAULT_HASH_THRESHOLD = 10; // Hamming distance threshold for "same" image
 
-// Role group mappings - M365 group display names to role names
-// Configure these to match your M365 group names
-const ROLE_GROUPS = {
-  'FireFighters': 'FireFighter',
-  'EMTs': 'EMT',
-  'Apparatus Operators': 'Apparatus Operator',
-  'Marine Crew': 'Marine Crew',
-  'Support Staff': 'Support',
-  'Wildland Firefighters': 'Wildland Firefighter',
-};
-
-// Rank mappings from jobTitle
-const RANK_KEYWORDS = {
-  'Chief': 'Chief',
-  'Division Chief': 'Division Chief',
-  'Captain': 'Captain',
-  'Lieutenant': 'Lieutenant',
-};
+// Role group mappings - M365 group IDs to role names (from site.json)
+const roleGroups = syncConfig.roleGroups || {};
 
 /**
  * Parse CLI arguments
@@ -117,54 +107,60 @@ function normalizeFilename(firstName, lastName) {
     .replace(/[^a-z0-9_]/g, '');
 }
 
-/**
- * Extract rank from job title
- */
-function extractRank(jobTitle) {
-  if (!jobTitle) return null;
+// Ranks to extract from jobTitle (order matters - more specific first)
+const RANKS = [
+  'Battalion Chief',
+  'Division Chief',
+  'Assistant Chief',
+  'Chief',
+  'Captain',
+  'Lieutenant',
+  'Engineer',
+  'Firefighter',
+];
 
-  // Check for specific ranks (order matters - check more specific first)
-  for (const [keyword, rank] of Object.entries(RANK_KEYWORDS)) {
-    if (jobTitle.toLowerCase().includes(keyword.toLowerCase())) {
-      return rank;
+/**
+ * Extract rank and title from jobTitle
+ * Examples: "Captain - Training Officer", "Captain: Training", "Captain_Training"
+ * Returns { rank, title }
+ */
+function parseJobTitle(jobTitle) {
+  if (!jobTitle) return { rank: null, title: null };
+
+  let rank = null;
+  let title = jobTitle;
+
+  // Find matching rank (check more specific first)
+  for (const r of RANKS) {
+    if (jobTitle.toLowerCase().includes(r.toLowerCase())) {
+      rank = r;
+      // Remove rank from title
+      title = jobTitle.replace(new RegExp(r, 'i'), '');
+      break;
     }
   }
-  return null;
-}
 
-/**
- * Extract title (non-rank portion) from job title
- */
-function extractTitle(jobTitle, rank) {
-  if (!jobTitle) return null;
-  if (!rank) return jobTitle;
+  // Clean up separators: leading/trailing spaces, dashes, colons, underscores, commas
+  title = title.replace(/^[\s\-:_,]+|[\s\-:_,]+$/g, '').trim();
 
-  // Remove the rank from the title
-  let title = jobTitle;
-  for (const keyword of Object.keys(RANK_KEYWORDS)) {
-    title = title.replace(new RegExp(keyword, 'gi'), '').trim();
-  }
-
-  // Clean up separators
-  title = title.replace(/^[-–—,\s]+|[-–—,\s]+$/g, '').trim();
-
-  return title || null;
+  return {
+    rank,
+    title: title || null,
+  };
 }
 
 /**
  * Determine roles from group memberships
+ * Uses roleGroups mapping from site.json (group ID -> role name)
  */
 function determineRoles(userGroups) {
   const roles = [];
 
   for (const group of userGroups) {
-    const groupName = group.displayName;
-    for (const [groupPattern, roleName] of Object.entries(ROLE_GROUPS)) {
-      if (groupName?.toLowerCase().includes(groupPattern.toLowerCase())) {
-        if (!roles.includes(roleName)) {
-          roles.push(roleName);
-        }
-      }
+    // Check by group ID first (from config)
+    const roleByGroupId = roleGroups[group.id];
+    if (roleByGroupId && !roles.includes(roleByGroupId)) {
+      roles.push(roleByGroupId);
     }
   }
 
@@ -260,10 +256,17 @@ async function main() {
     process.exit(1);
   }
 
-  const personnelGroupId = process.env.MS_GRAPH_PERSONNEL_GROUP;
-  const staffGroupIds = parseGroupIds(process.env.MS_GRAPH_STAFF_GROUP);
-  const volunteerGroupIds = parseGroupIds(process.env.MS_GRAPH_VOLUNTEER_GROUP);
-  const syncPhotos = process.env.SYNC_PHOTOS !== 'false';
+  // Get config from site.json (env vars override for backwards compatibility)
+  const personnelGroupId = process.env.MS_GRAPH_PERSONNEL_GROUP || syncConfig.personnelGroup;
+  const staffGroupIds = process.env.MS_GRAPH_STAFF_GROUP
+    ? parseGroupIds(process.env.MS_GRAPH_STAFF_GROUP)
+    : (syncConfig.staffGroups || []);
+  const volunteerGroupIds = process.env.MS_GRAPH_VOLUNTEER_GROUP
+    ? parseGroupIds(process.env.MS_GRAPH_VOLUNTEER_GROUP)
+    : (syncConfig.volunteerGroups || []);
+  const syncPhotos = process.env.SYNC_PHOTOS !== undefined
+    ? process.env.SYNC_PHOTOS !== 'false'
+    : (syncConfig.syncPhotos !== false);
 
   console.log(`Personnel group: ${personnelGroupId || '(all users)'}`);
   console.log(`Staff groups: ${staffGroupIds.length > 0 ? staffGroupIds.join(', ') : '(not configured)'}`);
@@ -287,7 +290,7 @@ async function main() {
   console.log('\nFetching users from Microsoft 365...');
 
   let users = [];
-  const selectFields = ['id', 'givenName', 'surname', 'displayName', 'jobTitle', 'mail', 'userPrincipalName'];
+  const selectFields = ['id', 'givenName', 'surname', 'displayName', 'jobTitle'];
 
   if (personnelGroupId) {
     // Fetch from specific group
@@ -327,7 +330,7 @@ async function main() {
   for (const user of users) {
     // Skip users without names
     if (!user.givenName || !user.surname) {
-      console.log(`  Skipping ${user.displayName || user.userPrincipalName} (missing name)`);
+      console.log(`  Skipping ${user.displayName || user.id} (missing name)`);
       continue;
     }
 
@@ -345,12 +348,11 @@ async function main() {
       staffType = 'volunteer';
     }
 
-    // Extract rank and title from jobTitle
-    const rank = extractRank(user.jobTitle);
-    const title = extractTitle(user.jobTitle, rank);
-
     // Determine roles from groups
     const roles = determineRoles(userGroups);
+
+    // Parse jobTitle into rank and title
+    const { rank, title } = parseJobTitle(user.jobTitle);
 
     // Build person object
     const person = {
@@ -472,7 +474,6 @@ async function main() {
   }
 
   // Sort: staff first (by rank), then volunteers (by last name)
-  const rankOrder = ['Chief', 'Division Chief', 'Captain', 'Lieutenant'];
   personnel.sort((a, b) => {
     // Staff before volunteers
     if (a.staff_type !== b.staff_type) {
@@ -481,13 +482,13 @@ async function main() {
 
     // Within staff, sort by rank
     if (a.staff_type === 'staff') {
-      const aRankIdx = rankOrder.indexOf(a.rank) >= 0 ? rankOrder.indexOf(a.rank) : 999;
-      const bRankIdx = rankOrder.indexOf(b.rank) >= 0 ? rankOrder.indexOf(b.rank) : 999;
+      const aRankIdx = a.rank ? RANKS.indexOf(a.rank) : 999;
+      const bRankIdx = b.rank ? RANKS.indexOf(b.rank) : 999;
       if (aRankIdx !== bRankIdx) return aRankIdx - bRankIdx;
     }
 
-    // Then by last name
-    return a.last_name.localeCompare(b.last_name);
+    // Then by first name
+    return a.first_name.localeCompare(b.first_name);
   });
 
   // Generate output

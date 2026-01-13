@@ -37,13 +37,14 @@ jobs:
 
       - name: Sync personnel from Microsoft 365
         env:
+          # Secrets for authentication
           MS_GRAPH_TENANT_ID: ${{ secrets.MS_GRAPH_TENANT_ID }}
           MS_GRAPH_CLIENT_ID: ${{ secrets.MS_GRAPH_CLIENT_ID }}
           MS_GRAPH_CLIENT_SECRET: ${{ secrets.MS_GRAPH_CLIENT_SECRET }}
-          MS_GRAPH_PERSONNEL_GROUP: ${{ vars.MS_GRAPH_PERSONNEL_GROUP }}
-          MS_GRAPH_STAFF_GROUP: ${{ vars.MS_GRAPH_STAFF_GROUP }}
-          MS_GRAPH_VOLUNTEER_GROUP: ${{ vars.MS_GRAPH_VOLUNTEER_GROUP }}
-          SYNC_PHOTOS: 'true'
+          # Cloudinary for photo optimization
+          CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
+          CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
+          # Group IDs and sync settings are in src/_data/site.json
         run: |
           if [ "${{ inputs.force_refresh }}" = "true" ]; then
             node scripts/sync-personnel.mjs --force-refresh

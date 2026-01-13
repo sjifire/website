@@ -12,7 +12,7 @@ import { dirname, join } from 'node:path';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 // Load site config for cloud name
-const siteConfigPath = join(__dirname, '..', 'api', 'site-config.json');
+const siteConfigPath = join(__dirname, '..', 'src', '_data', 'site.json');
 const siteConfig = JSON.parse(readFileSync(siteConfigPath, 'utf-8'));
 const CLOUD_NAME = siteConfig.cloudinaryRootUrl.split('/').pop();
 
