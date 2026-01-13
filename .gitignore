@@ -4,9 +4,6 @@ tina/__generated__
 api/dist
 _site/
 
-# Photo hash cache (used by sync-personnel for perceptual hash comparison)
-src/assets/media/personnel_imgs/.photo-hashes.json
-
 # Azure Functions local settings (contains secrets)
 local.settings.json
 
