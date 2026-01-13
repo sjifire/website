@@ -65,39 +65,20 @@ jobs:
             git diff --cached --name-only >> $GITHUB_STEP_SUMMARY
           fi
 
+      - name: Generate GitHub App token
+        id: app-token
+        if: steps.changes.outputs.changed == 'true'
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.GITHUB_APP_ID }}
+          private-key: ${{ secrets.GITHUB_APP_PRIVATE_KEY }}
+
       - name: Commit and push changes
         if: steps.changes.outputs.changed == 'true'
-        env:
-          GITHUB_APP_ID: ${{ secrets.GITHUB_APP_ID }}
-          GITHUB_APP_PRIVATE_KEY: ${{ secrets.GITHUB_APP_PRIVATE_KEY }}
-          GITHUB_APP_INSTALLATION_ID: ${{ secrets.GITHUB_APP_INSTALLATION_ID }}
         run: |
-          # Generate installation access token from GitHub App
-          TOKEN=$(node -e "
-            const { createAppAuth } = require('@octokit/auth-app');
-            (async () => {
-              let privateKey = process.env.GITHUB_APP_PRIVATE_KEY
-                .replace(/\\\\n/g, '\n')
-                .replace(/^[\"']|[\"']$/g, '')
-                .trim();
-              if (!privateKey.includes('-----BEGIN')) {
-                privateKey = Buffer.from(privateKey, 'base64').toString('utf8');
-              }
-              const auth = createAppAuth({
-                appId: process.env.GITHUB_APP_ID,
-                privateKey,
-                installationId: process.env.GITHUB_APP_INSTALLATION_ID
-              });
-              const { token } = await auth({ type: 'installation' });
-              console.log(token);
-            })();
-          ")
-
-          # Configure git to use the GitHub App token
           git config user.name "sjifire-bot[bot]"
           git config user.email "${{ secrets.GITHUB_APP_ID }}+sjifire-bot[bot]@users.noreply.github.com"
-          git remote set-url origin "https://x-access-token:${TOKEN}@github.com/${{ github.repository }}.git"
-
+          git remote set-url origin "https://x-access-token:${{ steps.app-token.outputs.token }}@github.com/${{ github.repository }}.git"
           git commit -m "chore: sync personnel data from Microsoft 365
 
           Auto-generated daily update of personnel information.
