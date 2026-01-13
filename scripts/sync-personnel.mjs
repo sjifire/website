@@ -107,17 +107,20 @@ function normalizeFilename(firstName, lastName) {
     .replace(/[^a-z0-9_]/g, '');
 }
 
-// Ranks to extract from jobTitle (order matters - more specific first)
+// Ranks - order matters for sorting (Chief first, then by seniority)
 const RANKS = [
+  'Chief',
+  'Assistant Chief',
   'Battalion Chief',
   'Division Chief',
-  'Assistant Chief',
-  'Chief',
   'Captain',
   'Lieutenant',
-  'Engineer',
+  'Apparatus Operator',
   'Firefighter',
 ];
+
+// For parsing, check longer ranks first to avoid partial matches
+const RANKS_BY_LENGTH = [...RANKS].sort((a, b) => b.length - a.length);
 
 /**
  * Extract rank and title from jobTitle
@@ -130,8 +133,8 @@ function parseJobTitle(jobTitle) {
   let rank = null;
   let title = jobTitle;
 
-  // Find matching rank (check more specific first)
-  for (const r of RANKS) {
+  // Find matching rank (check longer ranks first to avoid partial matches)
+  for (const r of RANKS_BY_LENGTH) {
     if (jobTitle.toLowerCase().includes(r.toLowerCase())) {
       rank = r;
       // Remove rank from title
