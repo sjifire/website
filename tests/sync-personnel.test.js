@@ -10,7 +10,6 @@ const RANKS = [
   'Captain',
   'Lieutenant',
   'Apparatus Operator',
-  'Firefighter',
 ];
 
 // For parsing, check longer ranks first to avoid partial matches
@@ -66,6 +65,32 @@ function sortPersonnel(personnel) {
   });
 }
 
+/**
+ * Map user's group memberships to roles, applying supersede rules
+ */
+function determineRoles(userGroups, roleGroups, supersedeRoles = {}) {
+  const roles = [];
+  for (const group of userGroups) {
+    const role = roleGroups[group.id];
+    if (role && !roles.includes(role)) {
+      roles.push(role);
+    }
+  }
+
+  // Remove roles that are superseded by other roles present
+  const superseded = new Set();
+  for (const role of roles) {
+    const hides = supersedeRoles[role];
+    if (hides) {
+      for (const hidden of hides) {
+        superseded.add(hidden);
+      }
+    }
+  }
+
+  return roles.filter(role => !superseded.has(role));
+}
+
 describe('sync-personnel', () => {
   describe('RANKS_BY_LENGTH', () => {
     it('sorts longer ranks first for parsing', () => {
@@ -85,6 +110,7 @@ describe('sync-personnel', () => {
       assert.ok(battalionIdx < chiefIdx, 'Battalion Chief should come before Chief');
       assert.ok(divisionIdx < chiefIdx, 'Division Chief should come before Chief');
     });
+
   });
 
   describe('parseJobTitle', () => {
@@ -199,7 +225,7 @@ describe('sync-personnel', () => {
     it('sorts staff without rank after those with rank', () => {
       const personnel = [
         { first_name: 'Bob', staff_type: 'staff', rank: null },
-        { first_name: 'Alice', staff_type: 'staff', rank: 'Firefighter' },
+        { first_name: 'Alice', staff_type: 'staff', rank: 'Apparatus Operator' },
       ];
       const sorted = sortPersonnel(personnel);
       assert.strictEqual(sorted[0].first_name, 'Alice');
@@ -216,6 +242,54 @@ describe('sync-personnel', () => {
       assert.strictEqual(sorted[0].first_name, 'Adam');
       assert.strictEqual(sorted[1].first_name, 'Mike');
       assert.strictEqual(sorted[2].first_name, 'Zoe');
+    });
+  });
+
+  describe('determineRoles', () => {
+    const roleGroups = {
+      'group-ff': 'Firefighter',
+      'group-wff': 'Wildland Firefighter',
+      'group-marine': 'Marine Crew',
+      'group-admin': 'Administration',
+    };
+
+    it('maps group memberships to roles', () => {
+      const userGroups = [{ id: 'group-ff' }, { id: 'group-marine' }];
+      const roles = determineRoles(userGroups, roleGroups);
+      assert.deepStrictEqual(roles, ['Firefighter', 'Marine Crew']);
+    });
+
+    it('returns empty array when no groups match', () => {
+      const userGroups = [{ id: 'group-unknown' }];
+      const roles = determineRoles(userGroups, roleGroups);
+      assert.deepStrictEqual(roles, []);
+    });
+
+    it('does not duplicate roles', () => {
+      const userGroups = [{ id: 'group-ff' }, { id: 'group-ff' }];
+      const roles = determineRoles(userGroups, roleGroups);
+      assert.deepStrictEqual(roles, ['Firefighter']);
+    });
+
+    it('supersedes roles when superseding role is present', () => {
+      const supersedeRoles = { 'Firefighter': ['Wildland Firefighter'] };
+      const userGroups = [{ id: 'group-ff' }, { id: 'group-wff' }];
+      const roles = determineRoles(userGroups, roleGroups, supersedeRoles);
+      assert.deepStrictEqual(roles, ['Firefighter']);
+    });
+
+    it('keeps superseded role when superseding role is absent', () => {
+      const supersedeRoles = { 'Firefighter': ['Wildland Firefighter'] };
+      const userGroups = [{ id: 'group-wff' }, { id: 'group-marine' }];
+      const roles = determineRoles(userGroups, roleGroups, supersedeRoles);
+      assert.deepStrictEqual(roles, ['Wildland Firefighter', 'Marine Crew']);
+    });
+
+    it('handles multiple superseded roles', () => {
+      const supersedeRoles = { 'Administration': ['Firefighter', 'Wildland Firefighter'] };
+      const userGroups = [{ id: 'group-admin' }, { id: 'group-ff' }, { id: 'group-wff' }];
+      const roles = determineRoles(userGroups, roleGroups, supersedeRoles);
+      assert.deepStrictEqual(roles, ['Administration']);
     });
   });
 });

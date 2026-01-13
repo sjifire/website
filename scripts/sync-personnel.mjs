@@ -46,6 +46,9 @@ const DEFAULT_HASH_THRESHOLD = 10;
 // Group ID → role name mapping from site.json
 const roleGroups = syncConfig.roleGroups || {};
 
+// Role superseding: if role X is present, hide roles in its array
+const supersedeRoles = syncConfig.supersedeRoles || {};
+
 /**
  * Parse CLI arguments
  */
@@ -115,8 +118,7 @@ const RANKS = [
   'Division Chief',
   'Captain',
   'Lieutenant',
-  'Apparatus Operator',
-  'Firefighter',
+  'Apparatus Operator'
 ];
 
 // Same ranks sorted by length (longest first) for parsing jobTitle without partial matches
@@ -153,6 +155,7 @@ function parseJobTitle(jobTitle) {
 
 /**
  * Map user's group memberships to roles via roleGroups config
+ * Applies supersedeRoles: if role X is present, roles it supersedes are hidden
  */
 function determineRoles(userGroups) {
   const roles = [];
@@ -162,7 +165,19 @@ function determineRoles(userGroups) {
       roles.push(role);
     }
   }
-  return roles;
+
+  // Remove roles that are superseded by other roles present
+  const superseded = new Set();
+  for (const role of roles) {
+    const hides = supersedeRoles[role];
+    if (hides) {
+      for (const hidden of hides) {
+        superseded.add(hidden);
+      }
+    }
+  }
+
+  return roles.filter(role => !superseded.has(role));
 }
 
 /**

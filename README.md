@@ -307,6 +307,9 @@ The sync reads these fields from each user's Entra ID profile:
     "roleGroups": {
       "group-id-guid": "Role Name"
     },
+    "supersedeRoles": {
+      "Firefighter": ["Wildland Firefighter"]
+    },
     "syncPhotos": true
   }
 }
@@ -318,6 +321,7 @@ The sync reads these fields from each user's Entra ID profile:
 | `staffGroups` | Group IDs that indicate staff (vs volunteer) |
 | `volunteerGroups` | Group IDs that indicate volunteer |
 | `roleGroups` | Map group IDs to role names displayed on the site |
+| `supersedeRoles` | When a role is present, hide roles it supersedes |
 | `syncPhotos` | Whether to download profile photos |
 
 To find group IDs: Azure Portal > Groups > [group name] > Object ID
