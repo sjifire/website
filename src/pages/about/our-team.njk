@@ -1,0 +1,84 @@
+---
+title: "Our Team"
+nav_order: 2
+layout: false
+---
+{% extends "page.njk" %}
+
+{% set cloudinaryDefaults = "f_auto,q_auto:good,g_faces,c_fill,w_315,h_328" %}
+{% set defaultPersonImg = "/assets/media/personnel_imgs/images.jpg" %}
+
+{# Pull personnel data from the MDX content-include file #}
+{% set personnelData = null %}
+{% for item in collections.contentIncludes %}
+  {% if item.data.contentFor == "emergency-personnel" %}
+    {% set personnelData = item.data.personnel %}
+  {% endif %}
+{% endfor %}
+
+{% block main_content_single %}
+<p class="lead">Our department is made up of dedicated career staff and volunteers who live and work in our island community.</p>
+
+{% if personnelData %}
+{% set staffOnly = personnelData | pluckByValue('staff', 'staff_type') %}
+{% set volunteersOnly = personnelData | pluckByValue('volunteer', 'staff_type') %}
+
+<section class="personnel-section">
+  <h2>Staff</h2>
+  <div class="l-grid l-grid--personnel">
+    {% for person in staffOnly %}
+      {% set imgSrc = person.photo if person.photo else defaultPersonImg %}
+      <div class="person">
+        <div class="person__img">
+          <img src="{%- imgPath imgSrc, cloudinaryDefaults -%}" alt="{{ person.first_name }} {{ person.last_name }}" width="157.5" height="164">
+        </div>
+        <h3>{{ person.first_name }} {{ person.last_name }}</h3>
+        {% if person.rank or person.title %}<h4>
+          {% if person.rank %}{{ person.rank }}{% endif %}
+          {% if person.rank and person.title %} - {% endif %}
+          {% if person.title %}{{ person.title }}{% endif %}
+        </h4>
+        {% endif %}
+        <ul>
+          {% for role in person.roles | sort %}
+            <li>{{ role }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="personnel-section">
+  <h2>Volunteers</h2>
+  <div class="l-grid l-grid--personnel">
+    {% for person in volunteersOnly | sort(attribute='last_name') %}
+      {% set imgSrc = person.photo if person.photo else defaultPersonImg %}
+      <div class="person">
+        <div class="person__img">
+          <img src="{%- imgPath imgSrc, cloudinaryDefaults -%}" alt="Headshot of {{ person.first_name }} {{ person.last_name }}" width="157.5" height="164">
+        </div>
+        <h3>{{ person.first_name }} {{ person.last_name }}</h3>
+        {% if person.rank or person.title %}<h4>
+          {% if person.rank %}{{ person.rank }}{% endif %}
+          {% if person.rank and person.title %} - {% endif %}
+          {% if person.title %}{{ person.title }}{% endif %}
+        </h4>
+        {% endif %}
+        <ul>
+          {% for role in person.roles | sort %}
+            <li>{{ role }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+{% else %}
+<section class="personnel-section">
+  <p><em>Personnel data is not available in this environment. Run <code>npm run sync-personnel</code> to generate personnel data, or this data will be generated automatically during the production build.</em></p>
+</section>
+{% endif %}
+
+<p style="margin-top: 2rem;"><a href="/about/join/" class="btn btn-secondary">Interested in Joining? Learn More</a></p>
+{% endblock %}
