@@ -452,19 +452,10 @@ export default defineConfig({
             required: true,
           },
           {
-            type: "string",
-            name: "intro",
-            label: "Introduction",
-            description: "Brief intro text shown above the team directory",
-            ui: {
-              component: "textarea",
-            },
-          },
-          {
             type: "rich-text",
             name: "body",
             label: "Body",
-            description: "Optional additional content (personnel list is managed automatically)",
+            description: "Introduction text shown above the team directory. Personnel list is managed automatically.",
             isBody: true,
           },
         ],

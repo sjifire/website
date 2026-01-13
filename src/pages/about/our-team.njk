@@ -10,17 +10,17 @@ layout: false
 
 {# Pull personnel data from the MDX content-include file #}
 {% set personnelData = null %}
-{% set introText = null %}
+{% set bodyContent = null %}
 {% for item in collections.contentIncludes %}
   {% if item.data.contentFor == "our-team" %}
     {% set personnelData = item.data.personnel %}
-    {% set introText = item.data.intro %}
+    {% set bodyContent = item.content %}
   {% endif %}
 {% endfor %}
 
 {% block main_content_single %}
-{% if introText %}
-<p class="lead">{{ introText | safe }}</p>
+{% if bodyContent %}
+<div class="lead">{{ bodyContent | safe }}</div>
 {% endif %}
 
 {% if personnelData %}
