@@ -3,20 +3,7 @@
     "apiRuntime": "node:20"
   },
   "auth": {
-    "rolesSource": "/api/.auth/roles",
-    "identityProviders": {
-      "azureActiveDirectory": {
-        "userDetailsClaim": "http://schemas.microsoft.com/identity/claims/objectidentifier",
-        "registration": {
-          "openIdIssuer": "https://login.microsoftonline.com/common/v2.0",
-          "clientIdSettingName": "AAD_CLIENT_ID",
-          "clientSecretSettingName": "AAD_CLIENT_SECRET"
-        },
-        "login": {
-          "loginParameters": ["resource=https://graph.microsoft.com"]
-        }
-      }
-    }
+    "rolesSource": "/api/.auth/roles"
   },
   "routes": [
     {
