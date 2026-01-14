@@ -966,8 +966,55 @@ body {
   grid-area: main;
 }
 
-.l-grid__main table {
+.l-grid__main table,
+.block-content table {
     width: 100%;
+    border-collapse: collapse;
+    margin-block: 1.5rem;
+}
+
+.l-grid__main th,
+.l-grid__main td,
+.block-content th,
+.block-content td {
+    border: 1px solid #d1d5d9;
+    padding: 0.625rem 0.75rem;
+    text-align: left;
+}
+
+.l-grid__main th,
+.block-content th {
+    background-color: var(--lt-gray);
+    font-weight: 600;
+}
+
+.l-grid__main tbody tr:hover,
+.block-content tbody tr:hover {
+    background-color: var(--lt-gray);
+}
+
+/* Center Qty column */
+.block-content th:nth-child(1),
+.block-content td:nth-child(1) {
+    text-align: center;
+}
+
+/* Prevent text wrap on Type and Location columns */
+.block-content td:nth-child(2),
+.block-content td:nth-child(4) {
+    white-space: nowrap;
+}
+
+/* Empty row as table section separator */
+.block-content tr:has(td:empty):has(td:last-child:empty) {
+    background-color: var(--lt-gray);
+    height: 0.5rem;
+}
+
+.block-content tr:has(td:empty):has(td:last-child:empty) td {
+    padding: 0;
+    border-left: none;
+    border-right: none;
 }
 
 .l-grid__subsidebar {
