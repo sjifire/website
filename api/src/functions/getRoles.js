@@ -57,7 +57,7 @@ async function getRolesHandler(request, context) {
 app.http("getRoles", {
   methods: ["POST"],
   authLevel: "anonymous",
-  route: ".auth/roles",
+  route: "auth/get-roles",
   handler: getRolesHandler,
 });
 
