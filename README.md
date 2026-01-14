@@ -106,7 +106,68 @@ Now that you have your Static Web App URL:
 
 To find your Tenant ID: Microsoft Entra ID > Overview > "Tenant ID"
 
-### 7. Configure Static Web App Environment Variables
+### 7. Configure Admin Access Control
+
+The admin panel (`/admin`) requires users to be members of a specific Entra ID security group. This provides fine-grained control over who can edit site content.
+
+#### Create a Security Group
+
+1. Go to Azure Portal > Microsoft Entra ID > Groups
+2. Click "New group"
+3. Fill in:
+   - **Group type**: Security
+   - **Group name**: Website Admins
+   - **Group description**: Users with admin access to the website CMS
+   - **Membership type**: Assigned
+4. Click "Create"
+5. Open the group and copy the **Object ID** (you'll need this for configuration)
+
+#### Configure Group Claims in App Registration
+
+The app registration must be configured to include group memberships in the authentication token:
+
+1. Go to Microsoft Entra ID > App registrations > your app
+2. Click "Token configuration" in the left menu
+3. Click "+ Add groups claim"
+4. Select **Security groups**
+5. Under "ID" token, check **Group ID**
+6. Click "Add"
+
+#### Update Site Configuration
+
+Add the security group's Object ID to `src/_data/site.json`:
+
+```json
+{
+  "adminGroupId": "your-group-object-id-here",
+  ...
+}
+```
+
+#### Adding Users
+
+To grant someone admin access:
+
+1. Go to Microsoft Entra ID > Groups > Website Admins
+2. Click "Members" in the left menu
+3. Click "+ Add members"
+4. Search for and select the user(s)
+5. Click "Select"
+
+The user can now log in at `/admin` with their Microsoft account.
+
+#### Removing Users
+
+To revoke admin access:
+
+1. Go to Microsoft Entra ID > Groups > Website Admins
+2. Click "Members" in the left menu
+3. Check the box next to the user(s) to remove
+4. Click "Remove"
+
+The user will be denied access on their next login attempt.
+
+### 8. Configure Static Web App Environment Variables
 
 1. Go to your Static Web App > "Settings" > "Environment variables"
 2. Add these variables:
@@ -124,7 +185,7 @@ To find your Tenant ID: Microsoft Entra ID > Overview > "Tenant ID"
 | `CLOUDINARY_API_KEY` | `123456789012345` | Cloudinary API key (optional, for image optimization) |
 | `CLOUDINARY_API_SECRET` | `abcdefg...` | Cloudinary API secret (optional, for image optimization) |
 
-### 8. Deploy
+### 9. Deploy
 
 Push to your repository. The GitHub Action will automatically build and deploy.
 
