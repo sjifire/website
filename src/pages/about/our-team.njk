@@ -56,7 +56,7 @@ layout: false
 <section class="personnel-section">
   <h2>Volunteers</h2>
   <div class="l-grid l-grid--personnel">
-    {% for person in volunteersOnly | sort(attribute='last_name') %}
+    {% for person in volunteersOnly %}
       {% set imgSrc = person.photo if person.photo else defaultPersonImg %}
       <div class="person">
         <div class="person__img">
