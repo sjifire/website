@@ -524,6 +524,13 @@ body {
   fill: var(--bright-red);
 }
 
+.news__type svg.pin-icon {
+  width: 18px;
+  height: 18px;
+  fill: var(--md-gray);
+  margin-right: 4px;
+}
+
 .news__headline {
   margin-bottom: 0.2rem;
   font-weight: 400;
