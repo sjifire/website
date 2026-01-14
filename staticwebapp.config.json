@@ -2,9 +2,6 @@
   "platform": {
     "apiRuntime": "node:20"
   },
-  "auth": {
-    "rolesSource": "/api/.auth/roles"
-  },
   "routes": [
     {
       "route": "/admin/*",
