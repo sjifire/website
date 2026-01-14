@@ -181,20 +181,22 @@ test.describe("Carousel", () => {
     const initialSlide = page.locator(".carousel__slide.active");
     const initialLabel = await initialSlide.getAttribute("aria-label");
 
-    // Focus the carousel
+    // Focus the carousel and verify it's focused
     await carousel.focus();
+    await expect(carousel).toBeFocused();
 
-    // Press right arrow
+    // Press right arrow and wait for slide change
     await page.keyboard.press("ArrowRight");
-    await page.waitForTimeout(600);
+    // Wait for the active class to move to a different slide
+    await expect(page.locator(`.carousel__slide.active:not([aria-label="${initialLabel}"])`)).toBeVisible({ timeout: 2000 });
 
     const afterRight = page.locator(".carousel__slide.active");
     const afterRightLabel = await afterRight.getAttribute("aria-label");
     expect(afterRightLabel).not.toBe(initialLabel);
 
-    // Press left arrow
+    // Press left arrow and wait for slide change back
     await page.keyboard.press("ArrowLeft");
-    await page.waitForTimeout(600);
+    await expect(page.locator(`.carousel__slide.active[aria-label="${initialLabel}"]`)).toBeVisible({ timeout: 2000 });
 
     const afterLeft = page.locator(".carousel__slide.active");
     const afterLeftLabel = await afterLeft.getAttribute("aria-label");

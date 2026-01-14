@@ -30,15 +30,12 @@ test.describe("Governance Meeting Override", () => {
   });
 
   test("displays override date when set to future date", async ({ page }) => {
-    // Set a known future override date
+    // Set a known future override date (use fixed date far in future)
     const data = JSON.parse(fs.readFileSync(GOVERNANCE_FILE, "utf-8"));
-    const futureDate = new Date();
-    futureDate.setMonth(futureDate.getMonth() + 1);
-    futureDate.setDate(15);
 
     data.next_meeting_override = {
       enabled: true,
-      date: futureDate.toISOString().split("T")[0] + "T00:00:00.000Z",
+      date: "2030-03-15T00:00:00.000Z",
       time: "10:30am",
       note: "Special Budget Meeting",
     };
@@ -53,8 +50,8 @@ test.describe("Governance Meeting Override", () => {
     const meetingSection = page.locator(".sidebar-block").first();
     const dateTimeText = await meetingSection.locator("strong").first().textContent();
 
-    // Should show the 15th of next month at 10:30 AM
-    expect(dateTimeText).toContain("15");
+    // Should show March 15, 2030 at 10:30 AM
+    expect(dateTimeText).toContain("March 15");
     expect(dateTimeText).toContain("10:30 AM");
 
     // Should show the override note
