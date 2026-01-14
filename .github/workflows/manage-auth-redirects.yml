@@ -1,0 +1,69 @@
+name: Manage Auth Redirect URIs
+
+on:
+  pull_request:
+    types: [opened, reopened, closed]
+
+jobs:
+  manage-redirect:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Azure AD Token
+        id: get-token
+        run: |
+          TOKEN=$(curl -s -X POST \
+            "https://login.microsoftonline.com/${{ secrets.MS_GRAPH_TENANT_ID }}/oauth2/v2.0/token" \
+            -H "Content-Type: application/x-www-form-urlencoded" \
+            -d "client_id=${{ secrets.AAD_CLIENT_ID }}" \
+            -d "client_secret=${{ secrets.AAD_CLIENT_SECRET }}" \
+            -d "scope=https://graph.microsoft.com/.default" \
+            -d "grant_type=client_credentials" | jq -r '.access_token')
+          echo "token=$TOKEN" >> $GITHUB_OUTPUT
+
+      - name: Get Current Redirect URIs
+        id: get-uris
+        run: |
+          RESPONSE=$(curl -s -X GET \
+            "https://graph.microsoft.com/v1.0/applications(appId='${{ secrets.AAD_CLIENT_ID }}')" \
+            -H "Authorization: Bearer ${{ steps.get-token.outputs.token }}" \
+            -H "Content-Type: application/json")
+
+          OBJECT_ID=$(echo "$RESPONSE" | jq -r '.id')
+          URIS=$(echo "$RESPONSE" | jq -c '.web.redirectUris')
+
+          echo "object_id=$OBJECT_ID" >> $GITHUB_OUTPUT
+          echo "uris=$URIS" >> $GITHUB_OUTPUT
+
+      - name: Add Redirect URI (PR opened)
+        if: github.event.action == 'opened' || github.event.action == 'reopened'
+        run: |
+          PR_NUMBER=${{ github.event.pull_request.number }}
+          NEW_URI="https://jolly-moss-0db15021e-${PR_NUMBER}.westus2.1.azurestaticapps.net/.auth/login/aad/callback"
+
+          # Add new URI to existing list (if not already present)
+          UPDATED_URIS=$(echo '${{ steps.get-uris.outputs.uris }}' | jq --arg uri "$NEW_URI" '. + [$uri] | unique')
+
+          curl -s -X PATCH \
+            "https://graph.microsoft.com/v1.0/applications/${{ steps.get-uris.outputs.object_id }}" \
+            -H "Authorization: Bearer ${{ steps.get-token.outputs.token }}" \
+            -H "Content-Type: application/json" \
+            -d "{\"web\": {\"redirectUris\": $UPDATED_URIS}}"
+
+          echo "✅ Added redirect URI: $NEW_URI"
+
+      - name: Remove Redirect URI (PR closed)
+        if: github.event.action == 'closed'
+        run: |
+          PR_NUMBER=${{ github.event.pull_request.number }}
+          REMOVE_URI="https://jolly-moss-0db15021e-${PR_NUMBER}.westus2.1.azurestaticapps.net/.auth/login/aad/callback"
+
+          # Remove URI from list
+          UPDATED_URIS=$(echo '${{ steps.get-uris.outputs.uris }}' | jq --arg uri "$REMOVE_URI" '. - [$uri]')
+
+          curl -s -X PATCH \
+            "https://graph.microsoft.com/v1.0/applications/${{ steps.get-uris.outputs.object_id }}" \
+            -H "Authorization: Bearer ${{ steps.get-token.outputs.token }}" \
+            -H "Content-Type: application/json" \
+            -d "{\"web\": {\"redirectUris\": $UPDATED_URIS}}"
+
+          echo "✅ Removed redirect URI: $REMOVE_URI"
