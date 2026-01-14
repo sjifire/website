@@ -968,6 +968,24 @@ body {
 
 .l-grid__main table {
     width: 100%;
+    border-collapse: collapse;
+    margin-block: 1.5rem;
+}
+
+.l-grid__main th,
+.l-grid__main td {
+    border: 1px solid #d1d5d9;
+    padding: 0.625rem 0.75rem;
+    text-align: left;
+}
+
+.l-grid__main th {
+    background-color: var(--lt-gray);
+    font-weight: 600;
+}
+
+.l-grid__main tbody tr:hover {
+    background-color: var(--lt-gray);
 }
 
 .l-grid__subsidebar {
