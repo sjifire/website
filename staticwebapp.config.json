@@ -5,16 +5,16 @@
   "routes": [
     {
       "route": "/admin/*",
-      "allowedRoles": ["authenticated"]
+      "allowedRoles": ["admin"]
     },
     {
       "route": "/api/*",
-      "allowedRoles": ["authenticated"]
+      "allowedRoles": ["admin"]
     }
   ],
   "navigationFallback": {
     "rewrite": "/index.html",
-    "exclude": ["/assets/*", "/css/*", "/js/*", "/admin/*", "/api/*"]
+    "exclude": ["/assets/*", "/css/*", "/js/*", "/admin/*", "/api/*", "/.auth/*"]
   },
   "responseOverrides": {
     "401": {
