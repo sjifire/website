@@ -36,6 +36,7 @@ header_image_source:
           <li class="card">
             <div class="card__body">
               <div class="news__type">
+                {% if post.pinned %}<svg class="pin-icon" aria-label="Pinned post"><use xlink:href="#pin"></use></svg>{% endif %}
                 {% include "post_type_icons.njk" %}
                 {{ post.post_type }}
               </div>

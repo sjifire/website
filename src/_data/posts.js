@@ -11,7 +11,13 @@ const posts = fs
   .map((name) => ({
     ...require(path.join(postsFolder, name)),
   }))
-  .sort((a, b) => new Date(a.date) - new Date(b.date));
+  .sort((a, b) => {
+    // Pinned posts come first, then sort by date
+    if (a.pinned && !b.pinned) return 1;  // a after b (will be reversed)
+    if (!a.pinned && b.pinned) return -1; // a before b (will be reversed)
+    // Both pinned or both not pinned: sort by date
+    return new Date(a.date) - new Date(b.date);
+  });
 
 //FIXME: standardize slugify... can we set global configs?
 posts.forEach((p) => {

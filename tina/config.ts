@@ -529,6 +529,96 @@ export default defineConfig({
         ],
       },
       {
+        name: "post",
+        label: "News Posts",
+        path: "src/posts",
+        format: "json",
+        ui: {
+          filename: {
+            readonly: true,
+            slugify: (values: { date?: string; title?: string }) => {
+              const date = values?.date
+                ? new Date(values.date).toISOString().slice(0, 10)
+                : new Date().toISOString().slice(0, 10);
+              const title = values?.title || "untitled";
+              const slug = title
+                .toLowerCase()
+                .replace(/[^a-z0-9]+/g, "-")
+                .replace(/^-|-$/g, "");
+              return `${date}-${slug}`;
+            },
+          },
+          itemProps: (item: { title?: string; date?: string }) => ({
+            label: item?.title || "Untitled Post",
+          }),
+        },
+        fields: [
+          {
+            type: "string",
+            name: "post_type",
+            label: "Post Type",
+            options: [
+              "News",
+              "Advisory",
+              "Announcement",
+              "On Scene",
+              "Member Profile",
+              "Fact Check",
+              "Department Highlight",
+            ],
+            required: true,
+          },
+          {
+            type: "datetime",
+            name: "date",
+            label: "Date",
+            required: true,
+          },
+          {
+            type: "string",
+            name: "title",
+            label: "Title",
+            isTitle: true,
+            required: true,
+          },
+          {
+            type: "string",
+            name: "lede",
+            label: "Lede (Summary)",
+            description: "A brief summary shown in post listings",
+            ui: {
+              component: "textarea",
+            },
+          },
+          {
+            type: "boolean",
+            name: "pinned",
+            label: "Pin to Top",
+            description: "Pinned posts appear at the top of the news list",
+          },
+          {
+            type: "object",
+            name: "featured_image",
+            label: "Featured Image",
+            fields: [
+              {
+                type: "image",
+                name: "source",
+                label: "Image",
+              },
+            ],
+          },
+          {
+            type: "string",
+            name: "body",
+            label: "Body",
+            ui: {
+              component: "textarea",
+            },
+          },
+        ],
+      },
+      {
         name: "configNavigation",
         label: "Navigation",
         path: "src/_data",
