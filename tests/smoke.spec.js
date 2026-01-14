@@ -121,6 +121,24 @@ test.describe("Smoke Tests", () => {
     expect(src).toContain("/assets/media/personnel_imgs/");
   });
 
+  test("Our Team page sorts volunteers by first name", async ({ page }) => {
+    await page.goto("/about/our-team/");
+
+    // Get the Volunteers section
+    const volunteersSection = page.locator("section.personnel-section").filter({ hasText: "Volunteers" });
+
+    // Get all volunteer names (h3 elements within volunteer cards)
+    const volunteerNames = volunteersSection.locator(".person h3");
+    const names = await volunteerNames.allTextContents();
+
+    // Extract first names
+    const firstNames = names.map(name => name.split(" ")[0]);
+
+    // Verify first names are sorted alphabetically
+    const sortedFirstNames = [...firstNames].sort((a, b) => a.localeCompare(b));
+    expect(firstNames).toEqual(sortedFirstNames);
+  });
+
   test("Governance page displays meeting info correctly", async ({ page }) => {
     await page.goto("/about/governance/");
 
