@@ -974,6 +974,19 @@ body {
   grid-area: subsidebar;
 }
 
+.l-grid__quicklinks {
+  grid-area: quicklinks;
+}
+
+/* Homepage layout: quicklinks before widgets on mobile */
+.l-grid--home {
+  grid-template-areas:
+    "quicklinks quicklinks"
+    "sidebar sidebar"
+    "main main"
+    "subsidebar subsidebar";
+}
+
 .l-grid--media {
   display: grid;
   gap: 1rem 0;
@@ -993,6 +1006,13 @@ body {
       "main subsidebar";
     grid-template-columns: 2.5fr minmax(240px, 1fr);
     gap: 60px;
+  }
+
+  .l-grid--home {
+    grid-template-areas:
+      "quicklinks sidebar"
+      "main sidebar"
+      "main subsidebar";
   }
 
   .l-grid--auto {

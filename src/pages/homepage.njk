@@ -10,27 +10,27 @@ header_image_source:
 {% extends 'base.njk' %}
 
 {% block content %}
-  <div class="l-grid l-grid--2col flipped">
+  <div class="l-grid l-grid--2col l-grid--home">
+    <section class="l-grid__quicklinks quick-actions-box">
+      <header class="quick-actions-box__header">
+        <h2>Quick Links</h2>
+      </header>
+      <nav class="quick-actions-box__body" aria-label="Quick links">
+        <a href="/services/burn-permits/" class="btn btn-primary">
+          <svg><use xlink:href="#flame"></use></svg>
+          Burn Permits
+        </a>
+        <a href="/about/fire-insurance/" class="btn btn-primary">
+          <svg><use xlink:href="#fact-check"></use></svg>
+          Fire Insurance Info
+        </a>
+        <a href="/about/governance/" class="btn btn-primary">
+          <svg><use xlink:href="#stats"></use></svg>
+          Governance
+        </a>
+      </nav>
+    </section>
     <div class="l-grid__main block-content">
-      <section class="quick-actions-box">
-        <header class="quick-actions-box__header">
-          <h2>Quick Links</h2>
-        </header>
-        <nav class="quick-actions-box__body" aria-label="Quick links">
-          <a href="/services/burn-permits/" class="btn btn-primary">
-            <svg><use xlink:href="#flame"></use></svg>
-            Burn Permits
-          </a>
-          <a href="/about/fire-insurance/" class="btn btn-primary">
-            <svg><use xlink:href="#fact-check"></use></svg>
-            Fire Insurance Info
-          </a>
-          <a href="/about/governance/" class="btn btn-primary">
-            <svg><use xlink:href="#stats"></use></svg>
-            Governance
-          </a>
-        </nav>
-      </section>
       <ul class="l-grid l-grid--auto">
         {% for post in posts | reverse | limit(homepage.number_news_stories) %}
           <li class="card">
