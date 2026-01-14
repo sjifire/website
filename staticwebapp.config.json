@@ -2,6 +2,18 @@
   "platform": {
     "apiRuntime": "node:20"
   },
+  "auth": {
+    "rolesSource": "/api/auth/get-roles",
+    "identityProviders": {
+      "azureActiveDirectory": {
+        "registration": {
+          "openIdIssuer": "https://login.microsoftonline.com/4122848f-c317-4267-9c07-7c504150d1bd/v2.0",
+          "clientIdSettingName": "AAD_CLIENT_ID",
+          "clientSecretSettingName": "AAD_CLIENT_SECRET"
+        }
+      }
+    }
+  },
   "routes": [
     {
       "route": "/admin/*",
@@ -14,7 +26,7 @@
   ],
   "navigationFallback": {
     "rewrite": "/index.html",
-    "exclude": ["/assets/*", "/css/*", "/js/*", "/admin/*", "/api/*"]
+    "exclude": ["/assets/*", "/css/*", "/js/*", "/admin/*", "/api/*", "/.auth/*"]
   },
   "responseOverrides": {
     "401": {
