@@ -2,9 +2,6 @@
   "platform": {
     "apiRuntime": "node:20"
   },
-  "auth": {
-    "rolesSource": "/api/.auth/roles"
-  },
   "routes": [
     {
       "route": "/admin/*",
@@ -17,7 +14,7 @@
   ],
   "navigationFallback": {
     "rewrite": "/index.html",
-    "exclude": ["/assets/*", "/css/*", "/js/*", "/admin/*", "/api/*", "/.auth/*"]
+    "exclude": ["/assets/*", "/css/*", "/js/*", "/admin/*", "/api/*"]
   },
   "responseOverrides": {
     "401": {
