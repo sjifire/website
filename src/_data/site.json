@@ -35,6 +35,9 @@
     "supersedeRoles": {
       "Firefighter": ["Wildland Firefighter"]
     },
+    "includeWithoutRole": [
+      "jmcdowell@sjifire.org"
+    ],
     "syncPhotos": true
   }
 }

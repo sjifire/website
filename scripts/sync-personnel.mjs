@@ -8,11 +8,12 @@
  *   MS_GRAPH_CLIENT_SECRET - App registration client secret
  *
  * Configuration (src/_data/site.json → personnelSync):
- *   personnelGroup   - Entra ID group containing personnel to sync
- *   staffGroups      - Group IDs that indicate staff (vs volunteer)
- *   volunteerGroups  - Group IDs that indicate volunteer
- *   roleGroups       - Map of group ID → role name (e.g., "Firefighter", "Marine Crew")
- *   syncPhotos       - Whether to sync profile photos (default: true)
+ *   personnelGroup         - Entra ID group containing personnel to sync
+ *   staffGroups            - Group IDs that indicate staff (vs volunteer)
+ *   volunteerGroups        - Group IDs that indicate volunteer
+ *   roleGroups             - Map of group ID → role name (e.g., "Firefighter", "Marine Crew")
+ *   includeWithoutRole     - Array of emails to include even without a role
+ *   syncPhotos             - Whether to sync profile photos (default: true)
  *
  * CLI:
  *   npm run sync-personnel
@@ -49,6 +50,9 @@ const roleGroups = syncConfig.roleGroups || {};
 // Role superseding: if role X is present, hide roles in its array
 const supersedeRoles = syncConfig.supersedeRoles || {};
 
+// Users to include even without a role assignment (by email)
+const includeWithoutRole = (syncConfig.includeWithoutRole || []).map(e => e.toLowerCase());
+
 /**
  * Parse CLI arguments
  */
@@ -82,10 +86,14 @@ async function loadPhotoHashes() {
 }
 
 /**
- * Save photo hashes
+ * Save photo hashes (sorted by filename for stable git diffs)
  */
 async function savePhotoHashes(hashes) {
-  await writeFile(PHOTO_HASHES_PATH, JSON.stringify(hashes, null, 2));
+  const sorted = Object.keys(hashes).sort().reduce((obj, key) => {
+    obj[key] = hashes[key];
+    return obj;
+  }, {});
+  await writeFile(PHOTO_HASHES_PATH, JSON.stringify(sorted, null, 2) + '\n');
 }
 
 /**
@@ -232,7 +240,7 @@ function generateMDX(personnel) {
 
     if (person.roles.length > 0) {
       yaml.push('    roles:');
-      for (const role of person.roles) {
+      for (const role of [...person.roles].sort()) {
         yaml.push(`      - ${role}`);
       }
     }
@@ -304,7 +312,7 @@ async function main() {
   console.log('\nFetching users from Microsoft 365...');
 
   let users = [];
-  const selectFields = ['id', 'givenName', 'surname', 'displayName', 'jobTitle'];
+  const selectFields = ['id', 'givenName', 'surname', 'displayName', 'jobTitle', 'userPrincipalName'];
 
   if (personnelGroupId) {
     // Fetch from specific group
@@ -340,6 +348,7 @@ async function main() {
 
   // Process each user
   const personnel = [];
+  const usersWithoutRoles = [];
 
   for (const user of users) {
     // Skip users without names
@@ -364,6 +373,24 @@ async function main() {
 
     // Determine roles from groups
     const roles = determineRoles(userGroups);
+
+    // Only include users who have at least one role, unless explicitly included
+    if (roles.length === 0) {
+      const userEmail = (user.userPrincipalName || '').toLowerCase();
+      const isExplicitlyIncluded = includeWithoutRole.includes(userEmail);
+
+      if (!isExplicitlyIncluded) {
+        usersWithoutRoles.push({
+          name: `${user.givenName} ${user.surname}`,
+          displayName: user.displayName,
+          jobTitle: user.jobTitle || '(no job title)',
+          email: userEmail,
+        });
+        console.log(`    Skipped: no assigned role`);
+        continue;
+      }
+      console.log(`    Included without role (explicit exception)`);
+    }
 
     // Parse jobTitle into rank and title
     const { rank, title } = parseJobTitle(user.jobTitle);
@@ -487,22 +514,24 @@ async function main() {
     await savePhotoHashes(newPhotoHashes);
   }
 
-  // Sort: staff first (by rank), then volunteers (by last name)
+  // Sort: staff first (by rank, then first name), then volunteers (by first name)
   personnel.sort((a, b) => {
     // Staff before volunteers
     if (a.staff_type !== b.staff_type) {
       return a.staff_type === 'staff' ? -1 : 1;
     }
 
-    // Within staff, sort by rank
+    // Within staff, sort by rank first
     if (a.staff_type === 'staff') {
       const aRankIdx = a.rank ? RANKS.indexOf(a.rank) : 999;
       const bRankIdx = b.rank ? RANKS.indexOf(b.rank) : 999;
       if (aRankIdx !== bRankIdx) return aRankIdx - bRankIdx;
     }
 
-    // Then by first name
-    return a.first_name.localeCompare(b.first_name);
+    // Then by first name, last name as tiebreaker
+    const firstNameCmp = a.first_name.localeCompare(b.first_name);
+    if (firstNameCmp !== 0) return firstNameCmp;
+    return a.last_name.localeCompare(b.last_name);
   });
 
   // Generate output
@@ -515,6 +544,17 @@ async function main() {
   console.log(`  Staff: ${personnel.filter(p => p.staff_type === 'staff').length}`);
   console.log(`  Volunteers: ${personnel.filter(p => p.staff_type === 'volunteer').length}`);
   console.log(`  With photos: ${personnel.filter(p => p.photo).length}`);
+
+  // List users who are in personnel group but have no assigned role
+  if (usersWithoutRoles.length > 0) {
+    console.log(`\nUsers in personnel group without assigned roles (${usersWithoutRoles.length}):`);
+    for (const user of usersWithoutRoles) {
+      console.log(`  - ${user.name} <${user.email}> (${user.jobTitle})`);
+    }
+    console.log(`\nTo include these users, either:`);
+    console.log(`  1. Add them to a roleGroup in M365`);
+    console.log(`  2. Add their email to personnelSync.includeWithoutRole in site.json`);
+  }
 
   if (syncPhotos) {
     console.log(`\nPhoto sync:`);
