@@ -291,21 +291,32 @@ The site includes a photo gallery that displays images from a configurable folde
 **Adding images:**
 Simply drop image files into the gallery folder. They'll automatically appear on the next build.
 
-**Configuration** (`src/_data/site.json`):
+**Configuration:**
+
+Gallery folder is configured in `src/_data/site.json`:
 
 ```json
 {
   "gallery": {
-    "folder": "gallery",
-    "carouselCount": 5
+    "folder": "src/assets/media/gallery"
   }
 }
 ```
 
-| Setting | Default | Description |
-|---------|---------|-------------|
-| `folder` | `gallery` | Subfolder within `src/assets/media/` containing gallery images |
-| `carouselCount` | `5` | Number of random images to show in homepage carousel |
+Homepage carousel count is configured in `src/_data/homepage.json`:
+
+```json
+{
+  "carousel": {
+    "image_count": 5
+  }
+}
+```
+
+| Setting | File | Default | Description |
+|---------|------|---------|-------------|
+| `gallery.folder` | `site.json` | `src/assets/media/gallery` | Path from project root to gallery images |
+| `carousel.image_count` | `homepage.json` | `5` | Number of random images to show in homepage carousel |
 
 **Gallery page features:**
 - Responsive thumbnail grid

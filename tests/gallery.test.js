@@ -134,22 +134,24 @@ describe("Gallery Data Loader", () => {
     it("reads folder from site.json", () => {
       const site = require("../src/_data/site.json");
       const gallery = require("../src/_data/gallery.js");
-      const expectedFolder = site.gallery?.folder || "gallery";
+      const folderPath = site.gallery?.folder || "src/assets/media/gallery";
+      // Derive expected web path (strip "src" prefix)
+      const expectedWebPath = "/" + folderPath.replace(/^src\//, "");
       if (gallery.images.length > 0) {
         assert.ok(
-          gallery.images[0].src.includes(`/media/${expectedFolder}/`),
-          `Images should be from configured folder: ${expectedFolder}`
+          gallery.images[0].src.startsWith(expectedWebPath),
+          `Images should be from configured folder: ${expectedWebPath}`
         );
       }
     });
 
     it("uses default folder if not configured", () => {
-      // This tests the default behavior - folder defaults to "gallery"
+      // This tests the default behavior - folder defaults to "src/assets/media/gallery"
       const gallery = require("../src/_data/gallery.js");
       if (gallery.images.length > 0) {
         assert.ok(
-          gallery.images[0].src.includes("/media/"),
-          "Images should be from media folder"
+          gallery.images[0].src.startsWith("/assets/media/"),
+          "Images should be from assets/media folder"
         );
       }
     });

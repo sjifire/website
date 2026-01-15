@@ -4,6 +4,7 @@
     "autoplay": true,
     "interval": 5,
     "show_thumbnails": true,
-    "randomize": true
+    "randomize": true,
+    "image_count": 5
   }
 }

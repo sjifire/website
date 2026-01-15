@@ -8,8 +8,7 @@
   "opengraph_image": "sjifire-logo-clear.png",
   "enable_cloudinary_rewrites": false,
   "gallery": {
-    "folder": "gallery",
-    "carouselCount": 5
+    "folder": "src/assets/media/gallery"
   },
   "github": {
     "owner": "sjifire",

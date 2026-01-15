@@ -1,13 +1,19 @@
 const fs = require("fs");
 const path = require("path");
 const site = require("./site.json");
+const homepage = require("./homepage.json");
 
-// Configuration from site.json with defaults
+// Configuration from site.json (folder path) and homepage.json (carousel count)
 const config = site.gallery || {};
-const folderName = config.folder || "gallery";
-const carouselCount = config.carouselCount || 5;
+const folderPath = config.folder || "src/assets/media/gallery";
+const carouselCount = homepage.carousel?.image_count || 5;
 
-const galleryFolder = path.resolve(__dirname, `../assets/media/${folderName}`);
+// Resolve folder path from project root
+const projectRoot = path.resolve(__dirname, "../..");
+const galleryFolder = path.resolve(projectRoot, folderPath);
+
+// Derive web path (strip "src" prefix for URL)
+const webPath = "/" + folderPath.replace(/^src\//, "");
 
 // Supported image extensions
 const imageExtensions = [".jpg", ".jpeg", ".png", ".gif", ".webp"];
@@ -42,7 +48,7 @@ if (fs.existsSync(galleryFolder)) {
     })
     .sort()
     .map((name) => ({
-      src: `/assets/media/${folderName}/${name}`,
+      src: `${webPath}/${name}`,
       alt: filenameToAlt(name),
     }));
 }
