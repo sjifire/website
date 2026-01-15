@@ -277,6 +277,51 @@ To get credentials: https://console.cloudinary.com/settings/api-keys
 
 **Without credentials:** Image uploads still work normally, they're just stored at their original size.
 
+### Photo Gallery
+
+The site includes a photo gallery that displays images from a configurable folder. Images appear on both the gallery page (`/about/gallery/`) and the homepage carousel.
+
+**How it works:**
+- Images are automatically discovered from `src/assets/media/gallery/` (configurable)
+- Supported formats: JPG, JPEG, PNG, GIF, WebP
+- Alt text is auto-generated from filenames (underscores/dashes become spaces)
+- Homepage carousel shows a random selection of images (shuffled at build time)
+- Gallery page shows all images in a grid with a carousel-style lightbox viewer
+
+**Adding images:**
+Simply drop image files into the gallery folder. They'll automatically appear on the next build.
+
+**Configuration:**
+
+Gallery folder is configured in `src/_data/site.json`:
+
+```json
+{
+  "gallery_folder": "src/assets/media/gallery"
+}
+```
+
+Homepage carousel count is configured in `src/_data/homepage.json`:
+
+```json
+{
+  "carousel": {
+    "image_count": 5
+  }
+}
+```
+
+| Setting | File | Default | Description |
+|---------|------|---------|-------------|
+| `gallery_folder` | `site.json` | `src/assets/media/gallery` | Path from project root to gallery images |
+| `carousel.image_count` | `homepage.json` | `5` | Number of random images to show in homepage carousel |
+
+**Gallery page features:**
+- Responsive thumbnail grid
+- Click to open carousel-style lightbox
+- Keyboard navigation (arrow keys, Escape to close)
+- Image counter showing current position
+
 ### Personnel Directory Sync (Microsoft 365)
 
 Personnel data and photos can be automatically synced from Microsoft 365 (Entra ID). A GitHub Action runs daily to update the personnel directory.

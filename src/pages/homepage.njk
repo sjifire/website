@@ -67,8 +67,8 @@ header_image_source:
       <section class="carousel" tabindex="0" data-autoplay="{{ homepage.carousel.autoplay | default(true) }}" data-interval="{{ homepage.carousel.interval | default(5) }}" data-randomize="{{ homepage.carousel.randomize | default(false) }}">
         <div class="carousel__viewport">
           <div class="carousel__slides" aria-live="polite">
-            {% for img in homepage.carousel_images %}
-              <div id="carousel-slide-{{ loop.index }}" class="carousel__slide{{ ' active' if loop.first }}" role="group" aria-roledescription="slide" aria-label="Slide {{ loop.index }} of {{ homepage.carousel_images | length }}">
+            {% for img in gallery.carouselImages %}
+              <div id="carousel-slide-{{ loop.index }}" class="carousel__slide{{ ' active' if loop.first }}" role="group" aria-roledescription="slide" aria-label="Slide {{ loop.index }} of {{ gallery.carouselImages | length }}">
                 <img class="carousel__image leave-alone" src="{%- imgPath img.src | safe,  'f_auto,q_auto:good,c_limit,w_1000,h_800' -%}" alt="{{ img.alt }}" loading="{{ 'eager' if loop.first else 'lazy' }}">
               </div>
             {% endfor %}
@@ -85,13 +85,13 @@ header_image_source:
           </button>
         </div>
         <div class="carousel__indicators">
-          {% for img in homepage.carousel_images %}
+          {% for img in gallery.carouselImages %}
             <button type="button" class="carousel__dot{{ ' active' if loop.first }}" data-slide="{{ loop.index }}" aria-label="Go to slide {{ loop.index }}"></button>
           {% endfor %}
         </div>
         {% if homepage.carousel.show_thumbnails %}
         <div class="carousel__thumbnails">
-          {% for img in homepage.carousel_images %}
+          {% for img in gallery.carouselImages %}
             <button type="button" class="carousel__thumb{{ ' active' if loop.first }}" data-slide="{{ loop.index }}" aria-label="Go to slide {{ loop.index }}">
               <img class="leave-alone" src="{%- imgPath img.src | safe,  'f_auto,q_auto:good,c_fill,w_150,h_100' -%}" alt="{{ img.alt }}">
             </button>

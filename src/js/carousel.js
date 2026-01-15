@@ -10,6 +10,7 @@
   const autoplay = carousel.dataset.autoplay === 'true';
   const interval = (parseInt(carousel.dataset.interval, 10) || 5) * 1000;
   const randomize = carousel.dataset.randomize === 'true';
+  const maxSlides = parseInt(carousel.dataset.maxSlides, 10) || 0;
 
   // Randomize order if enabled
   if (randomize) {
@@ -40,10 +41,24 @@
     thumbsContainer?.children[0]?.classList.add('active');
   }
 
-  // Get elements after potential reordering
-  const slides = carousel.querySelectorAll('.carousel__slide');
-  const dots = carousel.querySelectorAll('.carousel__dot');
-  const thumbs = carousel.querySelectorAll('.carousel__thumb');
+  // Limit to maxSlides if set (hide extras after shuffling)
+  if (maxSlides > 0) {
+    const hideExtras = (container) => {
+      if (!container) return;
+      Array.from(container.children).forEach((child, i) => {
+        if (i >= maxSlides) child.style.display = 'none';
+      });
+    };
+    hideExtras(slidesContainer);
+    hideExtras(dotsContainer);
+    hideExtras(thumbsContainer);
+  }
+
+  // Get visible elements after potential reordering and limiting
+  const visibleFilter = (el) => el.style.display !== 'none';
+  const slides = Array.from(carousel.querySelectorAll('.carousel__slide')).filter(visibleFilter);
+  const dots = Array.from(carousel.querySelectorAll('.carousel__dot')).filter(visibleFilter);
+  const thumbs = Array.from(carousel.querySelectorAll('.carousel__thumb')).filter(visibleFilter);
   const prevBtn = carousel.querySelector('.carousel__btn--prev');
   const nextBtn = carousel.querySelector('.carousel__btn--next');
 

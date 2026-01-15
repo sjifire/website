@@ -1,0 +1,69 @@
+---
+title: "Photo Gallery"
+nav_order: 8
+layout: false
+---
+{% extends "base.njk" %}
+
+{% block content %}
+<div class="l-squeezed block-content">
+  <h1>{{ title }}</h1>
+  <p class="gallery-intro">A glimpse into the people, equipment, and community events that make up San Juan Island Fire & Rescue.</p>
+
+  <div class="photo-gallery">
+    {% for img in gallery.images %}
+      <button type="button" class="photo-gallery__item" data-index="{{ loop.index0 }}">
+        <img
+          class="photo-gallery__thumb leave-alone"
+          src="{%- imgPath img.src | safe, 'f_auto,q_auto:good,c_fill,w_300,h_200' -%}"
+          alt="{{ img.alt }}"
+          loading="lazy"
+        >
+      </button>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- Lightbox with carousel-style navigation -->
+<div class="gallery-lightbox" id="gallery-lightbox" role="dialog" aria-modal="true" aria-label="Photo viewer">
+  <div class="gallery-lightbox__backdrop"></div>
+  <button type="button" class="gallery-lightbox__close" aria-label="Close">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <line x1="18" y1="6" x2="6" y2="18"></line>
+      <line x1="6" y1="6" x2="18" y2="18"></line>
+    </svg>
+  </button>
+  <div class="gallery-lightbox__content">
+    <div class="gallery-lightbox__slides">
+      {% for img in gallery.images %}
+        <div class="gallery-lightbox__slide{{ ' active' if loop.first }}" data-index="{{ loop.index0 }}">
+          <img
+            class="gallery-lightbox__image leave-alone"
+            src="{%- imgPath img.src | safe, 'f_auto,q_auto:good,c_limit,w_1200,h_900' -%}"
+            alt="{{ img.alt }}"
+            loading="lazy"
+          >
+          <p class="gallery-lightbox__caption">{{ img.alt }}</p>
+        </div>
+      {% endfor %}
+    </div>
+    <button type="button" class="gallery-lightbox__btn gallery-lightbox__btn--prev" aria-label="Previous photo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="15 18 9 12 15 6"></polyline>
+      </svg>
+    </button>
+    <button type="button" class="gallery-lightbox__btn gallery-lightbox__btn--next" aria-label="Next photo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="9 6 15 12 9 18"></polyline>
+      </svg>
+    </button>
+  </div>
+  <div class="gallery-lightbox__counter">
+    <span class="gallery-lightbox__current">1</span> / <span class="gallery-lightbox__total">{{ gallery.images | length }}</span>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/js/gallery.js" defer></script>
+{% endblock %}
