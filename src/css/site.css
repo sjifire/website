@@ -1021,7 +1021,6 @@ body {
 .l-grid__subsidebar {
   grid-area: subsidebar;
   align-self: start;
-  margin-top: 30px;
 }
 
 .l-grid__quicklinks {
