@@ -117,10 +117,10 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addFilter("headerImageUrls", cloudinary.headerImageUrls);
 
   // ===============================
-  // Liquid-specific filters (replacing Nunjucks built-ins)
+  // Additional Liquid filters
   // ===============================
 
-  // Group array by attribute (like Nunjucks groupby)
+  // Group array by attribute
   eleventyConfig.addFilter("groupby", function(arr, attr) {
     if (!arr || !Array.isArray(arr)) return {};
     const groups = {};
@@ -132,7 +132,7 @@ module.exports = function(eleventyConfig) {
     return groups;
   });
 
-  // Convert object to sorted array of [key, value] pairs (like Nunjucks dictsort)
+  // Convert object to sorted array of [key, value] pairs
   eleventyConfig.addFilter("dictsort", function(obj) {
     if (!obj || typeof obj !== "object") return [];
     return Object.entries(obj).sort((a, b) => {
@@ -165,22 +165,11 @@ module.exports = function(eleventyConfig) {
       .replace(/-+$/, "");
   });
 
-  // Get length of array or string (Liquid has size but this is for compatibility)
-  eleventyConfig.addFilter("length", function(val) {
-    if (!val) return 0;
-    return val.length || 0;
-  });
-
-  // Default value filter (Liquid has default but this matches Nunjucks behavior)
+  // Default value filter (treats null, undefined, empty string, and false as missing)
   eleventyConfig.addFilter("default", function(val, defaultVal) {
     if (val === null || val === undefined || val === "" || val === false) {
       return defaultVal;
     }
-    return val;
-  });
-
-  // Safe filter - mark content as safe HTML (Liquid doesn't auto-escape in 11ty)
-  eleventyConfig.addFilter("safe", function(val) {
     return val;
   });
 

@@ -946,15 +946,13 @@ body {
 .l-grid--2col {
   grid-template-areas:
     "main main"
-    "sidebar sidebar"
-    "subsidebar subsidebar";
+    "sidebar sidebar";
 }
 
 .l-grid--2col.flipped {
   grid-template-areas:
     "sidebar sidebar"
-    "main main"
-    "subsidebar subsidebar";
+    "main main";
 }
 
 .l-grid__sidebar {
@@ -1018,11 +1016,6 @@ body {
     border-right: none;
 }
 
-.l-grid__subsidebar {
-  grid-area: subsidebar;
-  align-self: start;
-}
-
 .l-grid__quicklinks {
   grid-area: quicklinks;
 }
@@ -1032,8 +1025,7 @@ body {
   grid-template-areas:
     "quicklinks quicklinks"
     "sidebar sidebar"
-    "main main"
-    "subsidebar subsidebar";
+    "main main";
 }
 
 .l-grid--media {
@@ -1051,8 +1043,7 @@ body {
   .l-grid--2col,
   .l-grid--2col.flipped {
     grid-template-areas:
-      "main sidebar"
-      "main subsidebar";
+      "main sidebar";
     grid-template-columns: 2.5fr minmax(240px, 1fr);
     gap: 60px;
   }
@@ -1060,8 +1051,7 @@ body {
   .l-grid--home {
     grid-template-areas:
       "quicklinks sidebar"
-      "main sidebar"
-      "main subsidebar";
+      "main sidebar";
   }
 
   .l-grid--auto {
