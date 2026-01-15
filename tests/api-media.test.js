@@ -117,10 +117,10 @@ describe("media module", () => {
   });
 
   describe("getCorsHeaders", () => {
-    it("returns CORS headers with origin from request", () => {
+    it("returns CORS headers with allowed origin from whitelist", () => {
       const mockRequest = {
         headers: {
-          get: (name) => (name === "origin" ? "https://example.com" : null),
+          get: (name) => (name === "origin" ? "https://www.sjifire.org" : null),
         },
       };
 
@@ -128,7 +128,7 @@ describe("media module", () => {
 
       assert.strictEqual(
         headers["Access-Control-Allow-Origin"],
-        "https://example.com"
+        "https://www.sjifire.org"
       );
       assert.strictEqual(headers["Access-Control-Allow-Credentials"], "true");
       assert.strictEqual(
@@ -141,7 +141,19 @@ describe("media module", () => {
       );
     });
 
-    it("defaults to * when no origin header", () => {
+    it("returns first allowed origin for unknown origins (security)", () => {
+      const mockRequest = {
+        headers: {
+          get: (name) => (name === "origin" ? "https://malicious-site.com" : null),
+        },
+      };
+
+      const headers = getCorsHeaders(mockRequest);
+      // Should not reflect unknown origins - returns first configured origin
+      assert.strictEqual(headers["Access-Control-Allow-Origin"], "https://www.sjifire.org");
+    });
+
+    it("defaults to first allowed origin when no origin header", () => {
       const mockRequest = {
         headers: {
           get: () => null,
@@ -149,12 +161,23 @@ describe("media module", () => {
       };
 
       const headers = getCorsHeaders(mockRequest);
-      assert.strictEqual(headers["Access-Control-Allow-Origin"], "*");
+      assert.strictEqual(headers["Access-Control-Allow-Origin"], "https://www.sjifire.org");
     });
 
     it("handles null/undefined request gracefully", () => {
-      assert.strictEqual(getCorsHeaders(null)["Access-Control-Allow-Origin"], "*");
-      assert.strictEqual(getCorsHeaders(undefined)["Access-Control-Allow-Origin"], "*");
+      assert.strictEqual(getCorsHeaders(null)["Access-Control-Allow-Origin"], "https://www.sjifire.org");
+      assert.strictEqual(getCorsHeaders(undefined)["Access-Control-Allow-Origin"], "https://www.sjifire.org");
+    });
+
+    it("allows localhost origins for development", () => {
+      const mockRequest = {
+        headers: {
+          get: (name) => (name === "origin" ? "http://localhost:3000" : null),
+        },
+      };
+
+      const headers = getCorsHeaders(mockRequest);
+      assert.strictEqual(headers["Access-Control-Allow-Origin"], "http://localhost:3000");
     });
   });
 
