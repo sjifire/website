@@ -1,5 +1,6 @@
 const github = require("./github.js");
 const { optimizeImage } = require("./cloudinary.js");
+const siteConfig = require("../../site-config.json");
 
 const MEDIA_ROOT = "src/assets/media";
 const MEDIA_EXTENSIONS = ["jpg", "jpeg", "png", "gif", "webp", "svg", "pdf"];
@@ -80,14 +81,16 @@ function isWithinMediaRoot(filepath) {
   return normalizedPath.startsWith(MEDIA_ROOT) || normalizedPath.startsWith(MEDIA_ROOT.substring(0));
 }
 
-// Allowed origins for CORS - production, staging, and local development
-const ALLOWED_ORIGINS = [
-  "https://www.sjifire.org",
-  "https://sjifire.org",
-  "https://jolly-moss-0db15021e.1.azurestaticapps.net",
+// Allowed origins for CORS - loaded from config + localhost for development
+const LOCAL_ORIGINS = [
   "http://localhost:3000",
   "http://localhost:4001",
   "http://localhost:5173",
+  "http://localhost:8080",
+];
+const ALLOWED_ORIGINS = [
+  ...(siteConfig.corsAllowedOrigins || []),
+  ...LOCAL_ORIGINS,
 ];
 
 // CORS headers helper with origin whitelist
@@ -103,7 +106,7 @@ function getCorsHeaders(request) {
     allowOrigin = origin;
   } else {
     // Don't reflect unknown origins - use the primary production URL
-    allowOrigin = "https://www.sjifire.org";
+    allowOrigin = siteConfig.corsAllowedOrigins?.[0] || "https://www.sjifire.org";
   }
 
   return {

@@ -1,6 +1,11 @@
 {
   "prodUrl": "https://www.sjifire.org",
   "cloudinaryFetchUrl": "https://jolly-moss-0db15021e.1.azurestaticapps.net",
+  "corsAllowedOrigins": [
+    "https://www.sjifire.org",
+    "https://sjifire.org",
+    "https://jolly-moss-0db15021e.1.azurestaticapps.net"
+  ],
   "cloudinaryRootUrl": "https://res.cloudinary.com/san-juan-fire-district-3",
   "site_name": "San Juan Island Fire and Rescue",
   "site_desc": "San Juan Island Fire and Rescue provides fire, rescue, and marine emergency services to Friday Harbor and multiple islands within San Juan County, WA.",
