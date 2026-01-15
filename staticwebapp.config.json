@@ -23,6 +23,11 @@
     }
   },
   "globalHeaders": {
-    "content-security-policy": "default-src 'self' 'unsafe-inline' 'unsafe-eval' https:; img-src 'self' data: https:; font-src 'self' data: https:;"
+    "Content-Security-Policy": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: blob: https://res.cloudinary.com https://*.cloudinary.com; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://res.cloudinary.com https://api.cloudinary.com https://content.cloudinary.com https://identity.netlify.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self'",
+    "X-Content-Type-Options": "nosniff",
+    "X-Frame-Options": "DENY",
+    "X-XSS-Protection": "1; mode=block",
+    "Referrer-Policy": "strict-origin-when-cross-origin",
+    "Permissions-Policy": "geolocation=(), microphone=(), camera=(), payment=(), usb=()"
   }
 }

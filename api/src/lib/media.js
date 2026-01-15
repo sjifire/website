@@ -45,11 +45,69 @@ function isMediaFile(filename) {
   return MEDIA_EXTENSIONS.includes(ext);
 }
 
-// CORS headers helper
+/**
+ * Validate a path doesn't contain traversal sequences
+ * @param {string} path - Path to validate
+ * @returns {boolean} True if path is safe
+ */
+function isPathSafe(path) {
+  if (!path) return true;
+
+  // Check for path traversal patterns
+  const dangerousPatterns = [
+    "..",           // Parent directory traversal
+    "//",           // Double slash
+    "\\",           // Backslash (Windows path)
+    "%2e",          // URL-encoded dot
+    "%2f",          // URL-encoded slash
+    "%5c",          // URL-encoded backslash
+  ];
+
+  const lowerPath = path.toLowerCase();
+  return !dangerousPatterns.some(pattern => lowerPath.includes(pattern));
+}
+
+/**
+ * Validate filepath is within the media root
+ * @param {string} filepath - Full filepath to validate
+ * @returns {boolean} True if path is within MEDIA_ROOT
+ */
+function isWithinMediaRoot(filepath) {
+  if (!filepath) return false;
+
+  // Normalize and check it starts with media root
+  const normalizedPath = filepath.replace(/\/+/g, "/").replace(/^\//, "");
+  return normalizedPath.startsWith(MEDIA_ROOT) || normalizedPath.startsWith(MEDIA_ROOT.substring(0));
+}
+
+// Allowed origins for CORS - production, staging, and local development
+const ALLOWED_ORIGINS = [
+  "https://www.sjifire.org",
+  "https://sjifire.org",
+  "https://jolly-moss-0db15021e.1.azurestaticapps.net",
+  "http://localhost:3000",
+  "http://localhost:4001",
+  "http://localhost:5173",
+];
+
+// CORS headers helper with origin whitelist
 function getCorsHeaders(request) {
-  const origin = request?.headers?.get?.("origin") || "*";
+  const origin = request?.headers?.get?.("origin");
+  const isLocal = process.env.TINA_PUBLIC_IS_LOCAL === "true";
+
+  // In local dev, be more permissive; in production, use strict whitelist
+  let allowOrigin;
+  if (isLocal && origin?.startsWith("http://localhost")) {
+    allowOrigin = origin;
+  } else if (origin && ALLOWED_ORIGINS.includes(origin)) {
+    allowOrigin = origin;
+  } else {
+    // Don't reflect unknown origins - use the primary production URL
+    allowOrigin = "https://www.sjifire.org";
+  }
+
   return {
-    "Access-Control-Allow-Origin": origin,
+    "Access-Control-Allow-Origin": allowOrigin,
     "Access-Control-Allow-Credentials": "true",
     "Access-Control-Allow-Methods": "GET, POST, DELETE, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type",
@@ -79,6 +137,11 @@ function createMediaOperations(deps = {}) {
 
   // List files in the media directory
   async function listMedia(directory = "") {
+    // Validate directory path is safe
+    if (!isPathSafe(directory)) {
+      throw new Error("Invalid directory path");
+    }
+
     const { branch } = getGitHubConfig();
     const cleanDir = normalizeDirectory(directory);
     const mediaPath = cleanDir ? `${MEDIA_ROOT}/${cleanDir}` : MEDIA_ROOT;
@@ -121,6 +184,16 @@ function createMediaOperations(deps = {}) {
 
   // Upload a file to the media directory
   async function uploadMedia(filename, content, directory = "") {
+    // Validate inputs are safe
+    if (!isPathSafe(directory) || !isPathSafe(filename)) {
+      throw new Error("Invalid path");
+    }
+
+    // Validate file type
+    if (!isMediaFile(filename)) {
+      throw new Error("File type not allowed");
+    }
+
     const { branch } = getGitHubConfig();
     const cleanDir = normalizeDirectory(directory);
     const filePath = cleanDir
@@ -165,6 +238,15 @@ function createMediaOperations(deps = {}) {
 
   // Delete a file from the media directory
   async function deleteMedia(filepath) {
+    // Validate filepath is safe and within media root
+    if (!isPathSafe(filepath)) {
+      throw new Error("Invalid file path");
+    }
+
+    if (!isWithinMediaRoot(filepath)) {
+      throw new Error("File path must be within media directory");
+    }
+
     const { branch } = getGitHubConfig();
     const encodedPath = encodePathForGitHub(filepath);
     const existing = await githubRequest(`/contents/${encodedPath}?ref=${branch}`);

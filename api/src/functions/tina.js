@@ -1,5 +1,6 @@
 const { app } = require("@azure/functions");
 const { TinaNodeBackend, LocalBackendAuthProvider } = require("@tinacms/datalayer");
+const { requireAdmin, getUserForLogging } = require("../lib/auth.js");
 
 const isLocal = process.env.TINA_PUBLIC_IS_LOCAL === "true";
 
@@ -27,13 +28,21 @@ app.http("tina", {
     const path = request.params.path || "";
     context.log("TinaCMS request:", request.method, path);
 
-    // Health check endpoint
+    // Health check endpoint (public)
     if (path === "health") {
       return {
         status: 200,
         jsonBody: { status: "ok", timestamp: new Date().toISOString(), isLocal },
       };
     }
+
+    // Require admin authentication for all other operations
+    const authError = requireAdmin(request, context);
+    if (authError) {
+      return authError;
+    }
+
+    context.log(`TinaCMS access by user: ${getUserForLogging(request)}`);
 
     try {
       const tinaBackend = await getBackend();
@@ -77,7 +86,7 @@ app.http("tina", {
       context.error("TinaCMS error:", error.message, error.stack);
       return {
         status: 500,
-        jsonBody: { error: error.message },
+        jsonBody: { error: "Internal server error" },
       };
     }
   },

@@ -1,5 +1,6 @@
 const { app } = require("@azure/functions");
 const siteConfig = require("../../site-config.json");
+const { requireAdmin } = require("../lib/auth.js");
 
 const CLOUDINARY_ROOT = siteConfig.cloudinaryRootUrl;
 const SITE_URL = siteConfig.cloudinaryFetchUrl;
@@ -12,10 +13,22 @@ app.http("thumb", {
   authLevel: "anonymous",
   route: "thumb/{*path}",
   handler: async (request, context) => {
+    // Require admin authentication
+    const authError = requireAdmin(request, context);
+    if (authError) {
+      return authError;
+    }
+
     const requestPath = request.params.path;
 
     if (!requestPath) {
       return { status: 400, jsonBody: { error: "Path required" } };
+    }
+
+    // Validate path doesn't contain traversal sequences
+    const dangerousPatterns = ["..", "//", "\\", "%2e", "%2f", "%5c"];
+    if (dangerousPatterns.some(p => requestPath.toLowerCase().includes(p))) {
+      return { status: 400, jsonBody: { error: "Invalid path" } };
     }
 
     // Strip _thumb.jpg suffix (we add it for TinaCMS compatibility)
