@@ -43,7 +43,7 @@ Requires Node.js 20+. Output goes to `_site/`.
 
 ### Configuration Files
 
-- `.eleventy.js` - 11ty config with custom LiquidJS engine, filters (groupby, dictsort, cycler, round, slugify), shortcodes (imgPath), passthrough copies
+- `.eleventy.js` - 11ty config with custom LiquidJS engine, filters (groupby, dictsort, round, slugify), shortcodes (imgPath), passthrough copies
 - `.tina/config.ts` - TinaCMS schema and media configuration
 - `staticwebapp.config.json` - Azure routing, auth (requires AAD tenant ID), CSP headers
 

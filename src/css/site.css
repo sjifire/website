@@ -960,6 +960,7 @@ body {
 .l-grid__sidebar {
   grid-area: sidebar;
   font-size: 0.9rem;
+  align-self: start;
 }
 
 .l-grid__main {
@@ -1019,6 +1020,8 @@ body {
 
 .l-grid__subsidebar {
   grid-area: subsidebar;
+  align-self: start;
+  margin-top: 30px;
 }
 
 .l-grid__quicklinks {

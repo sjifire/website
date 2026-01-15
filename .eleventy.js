@@ -184,18 +184,6 @@ module.exports = function(eleventyConfig) {
     return val;
   });
 
-  // ===============================
-  // Custom Liquid tags
-  // ===============================
-
-  // Cycler tag implementation for alternating values
-  // Usage: {% cycler "odd", "even" as rowClass %}{{ rowClass }}{% endcycler %}
-  // Or simpler: use the cycler filter
-  eleventyConfig.addFilter("cycler", function(index, ...values) {
-    if (!values.length) return "";
-    return values[(index - 1) % values.length];
-  });
-
   return {
     dir: {
       input: "src",
