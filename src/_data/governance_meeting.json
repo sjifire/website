@@ -1,7 +1,7 @@
 {
   "label": "Board Meeting Schedule",
   "meeting_schedule": {
-    "week_of_month": 2,
+    "week_of_month": 3,
     "day_of_week": 2,
     "time": "15:00"
   },
