@@ -27,4 +27,17 @@ const images = fs
     alt: filenameToAlt(name),
   }));
 
-module.exports = { images };
+// Fisher-Yates shuffle for carousel selection
+function shuffle(array) {
+  const arr = [...array];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+// Random 5 images for homepage carousel (shuffled at build time)
+const carouselImages = shuffle(images).slice(0, 5);
+
+module.exports = { images, carouselImages };
