@@ -1,0 +1,26 @@
+---
+title: "Who We Are"
+nav_order: 1
+layout: page
+sidebar: |
+  <div class="sidebar-block">
+    <styled-image src="/assets/media/team-dinner.jpeg" alt="Team Dinner while on shift" size="full" />
+  </div>
+  <div class="sidebar-block">
+    <styled-image src="/assets/media/family-break-time.jpg" alt="Break Time" size="full" />
+  </div>
+  <div class="sidebar-block">
+    <styled-image src="/assets/media/Vols-2-edited-1-scaled.jpg" alt="Wildland Fire Drill" size="full" />
+  </div>
+---
+{% comment %}Pull who-we-are content from the MDX content-include file{% endcomment %}
+{%- assign whoWeAreContent = nil -%}
+{% for item in collections.contentIncludes %}
+  {% if item.data.contentFor == "who-we-are" %}
+    {%- assign whoWeAreContent = item.content -%}
+  {% endif %}
+{% endfor %}
+
+{{ whoWeAreContent | processStyledImages }}
+
+<div style="clear: both;"></div>

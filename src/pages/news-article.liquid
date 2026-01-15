@@ -1,0 +1,36 @@
+---js
+{
+  layout: "base",
+  pagination: {
+    data: "posts",
+    size: 1,
+    alias: "post",
+    reverse: true
+  },
+  permalink: "{{ post.url }}/index.html",
+  eleventyComputed: {
+    title: "{{ post.title }}",
+    description: "{{ post.lede | markdownify }}"
+  }
+}
+---
+
+<article class="l-squeezed">
+  <div class="block-content">
+    {{ post.body | markdownify }}
+  </div>
+</article>
+
+<nav class="l-squeezed pagination">
+  {% if pagination.href.previous %}
+    <a href="{{ pagination.href.previous | url }}">« Next</a>
+  {% else %}
+    <span>« Next</span>
+  {% endif %}
+    <a href="/news/">All</a>
+  {% if pagination.href.next %}
+    <a href="{{ pagination.href.next | url }}">Prev »</a>
+  {% else %}
+    <span>Prev »</span>
+  {% endif %}
+</nav>

@@ -1,0 +1,117 @@
+---
+title: San Juan Island Fire and Rescue
+permalink: /
+layout: base
+header_image_transform: /h_520,q_auto:eco,b_rgb:334155/e_art:incognito/o_30/e_gradient_fade:symmetric_pad,x_0.1/
+header_image_source:
+  - alldeptphoto2022_washout.jpg
+  - deptvehicles_washout.jpg
+scripts: '<script src="/js/carousel.js" defer></script>'
+---
+<div class="l-grid l-grid--2col l-grid--home">
+  <section class="l-grid__quicklinks quick-actions-box">
+    <header class="quick-actions-box__header">
+      <h2>Quick Links</h2>
+    </header>
+    <nav class="quick-actions-box__body" aria-label="Quick links">
+      <a href="/services/burn-permits/" class="btn btn-primary">
+        <svg><use xlink:href="#flame"></use></svg>
+        Burn Permits
+      </a>
+      <a href="/about/fire-insurance/" class="btn btn-primary">
+        <svg><use xlink:href="#fact-check"></use></svg>
+        Fire Insurance Info
+      </a>
+      <a href="/about/governance/" class="btn btn-primary">
+        <svg><use xlink:href="#stats"></use></svg>
+        Governance
+      </a>
+    </nav>
+  </section>
+  <div class="l-grid__main block-content">
+    <ul class="l-grid l-grid--auto">
+      {% assign limitedPosts = posts | reverse | limit: homepage.number_news_stories %}
+      {% for post in limitedPosts %}
+        <li class="card">
+          <div class="card__body">
+            <div class="news__type">
+              {% if post.pinned %}<svg class="pin-icon" aria-label="Pinned post"><use xlink:href="#pin"></use></svg>{% endif %}
+              {% render "post_type_icons.liquid", post: post %}
+              {{ post.post_type }}
+            </div>
+            <h3 class="news__headline">
+              <a href="{{ post.url }}/">
+                {{ post.title }}
+              </a>
+            </h3>
+            <time datetime="{{ post.date | htmlDateStringISO }}" pubdate="pubdate" class="news__date">
+              {{ post.date | postDateTerseISO }}
+            </time>
+            <div class="news__lede">
+              {{ post.lede | markdownify }}
+            </div>
+          </div>
+          <div class="card__footer">
+            <a href="{{ post.url }}/" class="news__readmore" aria-label="Read more about {{ post.title }}">Read more <svg aria-hidden="true"><use xlink:href="#right-arrow"></svg></a>
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+    <div style="margin-top:3rem" class="text-center">
+      <a class="btn btn-secondary" href="/news/">
+        News Archive »
+      </a>
+    </div>
+
+    {%- assign autoplay = homepage.carousel.autoplay | default: true -%}
+    {%- assign interval = homepage.carousel.interval | default: 5 -%}
+    {%- assign randomize = homepage.carousel.randomize | default: false -%}
+    <section class="carousel" tabindex="0" data-autoplay="{{ autoplay }}" data-interval="{{ interval }}" data-randomize="{{ randomize }}">
+      <div class="carousel__viewport">
+        <div class="carousel__slides" aria-live="polite">
+          {% for img in gallery.carouselImages %}
+            <div id="carousel-slide-{{ forloop.index }}" class="carousel__slide{% if forloop.first %} active{% endif %}" role="group" aria-roledescription="slide" aria-label="Slide {{ forloop.index }} of {{ gallery.carouselImages.size }}">
+              <img class="carousel__image leave-alone" src="{% imgPath img.src, 'f_auto,q_auto:good,c_limit,w_1000,h_800' %}" alt="{{ img.alt }}" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}">
+            </div>
+          {% endfor %}
+        </div>
+        <button type="button" class="carousel__btn carousel__btn--prev" aria-label="Previous slide">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </button>
+        <button type="button" class="carousel__btn carousel__btn--next" aria-label="Next slide">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="9 6 15 12 9 18"></polyline>
+          </svg>
+        </button>
+      </div>
+      <div class="carousel__indicators">
+        {% for img in gallery.carouselImages %}
+          <button type="button" class="carousel__dot{% if forloop.first %} active{% endif %}" data-slide="{{ forloop.index }}" aria-label="Go to slide {{ forloop.index }}"></button>
+        {% endfor %}
+      </div>
+      {% if homepage.carousel.show_thumbnails %}
+      <div class="carousel__thumbnails">
+        {% for img in gallery.carouselImages %}
+          <button type="button" class="carousel__thumb{% if forloop.first %} active{% endif %}" data-slide="{{ forloop.index }}" aria-label="Go to slide {{ forloop.index }}">
+            <img class="leave-alone" src="{% imgPath img.src, 'f_auto,q_auto:good,c_fill,w_150,h_100' %}" alt="{{ img.alt }}">
+          </button>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </section>
+  </div>
+
+  <aside class="l-grid__sidebar">
+    <div class="sidebar-block">
+      {% render "burn-status-widget.liquid", burn_status: burn_status, page: page %}
+    </div>
+    <div class="sidebar-block">
+      {% render "call-stats-widget.liquid", stats: stats, page: page %}
+    </div>
+    <div class="sidebar-block">
+      <iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2FSJIFire%2F&tabs=timeline&width=300&height=800&small_header=true&adapt_container_width=true&hide_cover=false&show_facepile=false&appId" width="100%" height="800" style="border:none;overflow:hidden" scrolling="yes" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" title="SJIFire Facebook Page"></iframe>
+    </div>
+  </aside>
+</div>

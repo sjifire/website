@@ -1,13 +1,13 @@
 <nav class="footer-nav">
   {% for item in nav.items %}
-    {% if item.children and item.children.length > 0 %}
+    {% if item.children and item.children.size > 0 %}
       <dl class="footer-navgroup">
         <dt class="footer-heading">{{ item.label }}</dt>
         {% for child in item.children %}
-          <dd class="footer-navlink"><a href="{{ child.url }}">{{ child.nav_title or child.label }}</a></dd>
+          <dd class="footer-navlink"><a href="{{ child.url }}">{% if child.nav_title %}{{ child.nav_title }}{% else %}{{ child.label }}{% endif %}</a></dd>
         {% endfor %}
       </dl>
-    {% elif item.url %}
+    {% elsif item.url %}
       <dl class="footer-navgroup">
         <dt class="footer-heading">{{ item.label }}</dt>
         <dd class="footer-navlink"><a href="{{ item.url }}">{{ item.label }}</a></dd>
@@ -34,7 +34,7 @@
 </nav>
 
 <aside class="footer-legal">
-  <p>&copy; {{ helpers.buildYear }} {{ site.site_name | safe }} | <a href="/disclaimer/">Disclaimer</a></p>
+  <p>&copy; {{ helpers.buildYear }} {{ site.site_name }} | <a href="/disclaimer/">Disclaimer</a></p>
   <address>
     San Juan County Fire District 3, 1011 Mullis Street, Friday Harbor, WA 98250<br>
     Office: <a href="tel:(360) 378-5334">(360) 378-5334</a> | Fax: (360) 378-2591 | Dispatch Non Emergency: <a href="tel:(360) 378-4151">(360) 378-4151</a>

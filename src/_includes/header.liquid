@@ -8,17 +8,18 @@
       <a href="/"><img src="{% imgPath '/assets/sjifire-logo-clear.png' %}" width="320" height="317" alt="San Juan Island Fire and Rescue Logo"></a>
     </li>
     {% for item in nav.items %}
-      {% if item.children and item.children.length > 0 %}
-        <li class="item has-submenu{{ ' active' if page.url.includes('/' + item.folder + '/') }}">
+      {% if item.children and item.children.size > 0 %}
+        {%- assign folderPath = '/' | append: item.folder | append: '/' -%}
+        <li class="item has-submenu{% if page.url contains folderPath %} active{% endif %}">
           <a tabindex="0">{{ item.label }}</a>
           <ul class="submenu">
             {% for child in item.children %}
-              <li class="subitem"><a href="{{ child.url }}">{{ child.nav_title or child.label }}</a></li>
+              <li class="subitem"><a href="{{ child.url }}">{% if child.nav_title %}{{ child.nav_title }}{% else %}{{ child.label }}{% endif %}</a></li>
             {% endfor %}
           </ul>
         </li>
-      {% elif item.url %}
-        <li class="item{{ ' active' if page.url.includes(item.url) }}">
+      {% elsif item.url %}
+        <li class="item{% if page.url contains item.url %} active{% endif %}">
           <a href="{{ item.url }}">{{ item.label }}</a>
         </li>
       {% endif %}
@@ -35,20 +36,20 @@
   </ul>
 </nav>
 
-{% if page.url === '/' or page.fileSlug === 'news-article' %}
-  <header class="page-header page-header--{{ 'home' if page.url === '/' else 'news' }}">
+{% if page.url == '/' or page.fileSlug == 'news-article' %}
+  <header class="page-header page-header--{% if page.url == '/' %}home{% else %}news{% endif %}">
     <div class="rap">
       <article class="l-squeezed">
           <h1>
-            {{ title | safe if page.url === '/' else post.title | safe }}
+            {% if page.url == '/' %}{{ title }}{% else %}{{ post.title }}{% endif %}
           </h1>
-          {% if page.fileSlug === 'news-article' %}
+          {% if page.fileSlug == 'news-article' %}
             <time datetime="{{ post.date | htmlDateStringISO }}" pubdate="pubdate">
               {{ post.date | postDateVerboseISO }}
             </time>
           {% endif %}
           <div class="lede">
-            {{ (preamble if page.url === '/' else post.lede) | markdownify | safe }}
+            {% if page.url == '/' %}{{ preamble | markdownify }}{% else %}{{ post.lede | markdownify }}{% endif %}
           </div>
       </article>
     </div>

@@ -1,0 +1,78 @@
+{%- if page.url == "/" -%}
+  {%- assign pageTitle = site.site_name -%}
+{%- else -%}
+  {%- assign pageTitle = title | append: " | " | append: site.site_name -%}
+{%- endif -%}
+{%- assign pageDsc = description | default: site.site_desc -%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% comment %}preload font?{% endcomment %}
+  <meta charset="utf-8">
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+  <title>{{ pageTitle }}</title>
+  {% comment %}meta-desc{% endcomment %}
+    <meta name="description" content="{{ pageDsc }}" />
+  {% comment %}icon tags{% endcomment %}
+    <link rel="icon" type="image/png" href="{% imgPath '/assets/sjifire-logo-clear.png' %}" />
+  {% comment %}og{% endcomment %}
+    <meta property="og:url" content="{{ site.prodUrl }}{{ page.url }}" key="ogurl" />
+    <meta property="og:type" content="website" />
+    {%- if page.fileSlug == 'news-article' and post.featured_image and post.featured_image.source != "" -%}
+      {%- assign ogImgPath = '/assets/media/' | append: post.featured_image.source -%}
+    {%- else -%}
+      {%- assign ogImgPath = '/assets/media/' | append: site.opengraph_image -%}
+    {%- endif -%}
+    <meta property="og:image" content="{% imgPath ogImgPath, 'f_auto,q_auto:good,c_fill,w_1200,h_630' %}" key="ogimage" />
+    <meta property="og:site_name" content="{{ site.site_name }}" key="ogsitename" />
+    <meta property="og:title" content="{{ pageTitle }}" key="ogtitle" />
+    <meta property="og:description" content="{{ pageDsc }}" key="ogdesc" />
+    <link rel="preconnect" href="//google-analytics.com" />
+    <link rel="preconnect" href="//googleapis.com" />
+    <link rel="preconnect" href="//gstatic.com" />
+    <link rel="preconnect" href="//googletagmanager.com" />
+    <link rel="preconnect" href="//clarity.ms/ "/>
+
+  <link rel="stylesheet" href="/css/site.css">
+</head>
+<body>
+
+  {% render "svg-sprite.svg" %}
+
+  <header id="home-header" class="site-header{% if page.url == '/' %} site-header--home{% endif %}" role="banner">
+    {% render "header.liquid", page: page, title: title, preamble: preamble, post: post, nav: nav %}
+  </header>
+
+  {% if page.fileSlug == 'news-article' and post.featured_image and post.featured_image.source != "" %}
+    {%- assign featuredImgPath = '/assets/media/' | append: post.featured_image.source -%}
+    <figure class="featured__media">
+      <img src="{% imgPath featuredImgPath, 'f_auto,c_limit,w_900,h_500' %}" alt="{{ post.featured_image.alt }}" loading="eager">
+    </figure>
+  {% endif %}
+
+  <main id='site-main' class="site-main{% if page.url == '/' %} site-main--overlap{% endif %}" role="main">
+    <div class="rap">
+      {{ content }}
+    </div>
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="rap">
+      {% render "footer.liquid", nav: nav, helpers: helpers, site: site %}
+    </div>
+  </footer>
+  {%- capture js -%}
+    {% render "nav-js.liquid" %}
+    {% if page.url == '/' %}
+      const imgs = {{ header_image_source | headerImageUrls: header_image_transform }};
+      const image = imgs[Math.floor(Math.random() * imgs.length)];
+      document.getElementById('home-header').style.setProperty('--home-header-bg-image', 'url('+image+')');
+    {% endif %}
+  {%- endcapture -%}
+  <script defer>
+    {{ js }}
+  </script>
+  {% if scripts %}{{ scripts }}{% endif %}
+</body>
+</html>

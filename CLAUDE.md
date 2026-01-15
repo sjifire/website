@@ -24,8 +24,8 @@ Requires Node.js 20+. Output goes to `_site/`.
 ### Directory Structure
 
 - `src/_data/` - Global data: site config (`site.json`), page data (`.yml`), dynamic loaders (`posts.js`, `media_releases.js`)
-- `src/_includes/` - Nunjucks templates: `base.njk` (root layout), `default_single_col_page.njk`/`default_double_col_page.njk` (page layouts), widgets, header/footer
-- `src/pages/` - Content pages (`.njk`/`.md`) - URLs generated without `/pages/` prefix via `pages.11tydata.js`
+- `src/_includes/` - LiquidJS templates: `base.liquid` (root layout), `page.liquid` (page layout with sidebar support), widgets, header/footer
+- `src/pages/` - Content pages (`.liquid`/`.md`/`.mdx`) - URLs generated without `/pages/` prefix via `pages.11tydata.js`
 - `src/posts/` - News posts as JSON files (`YYYY-MM-DD-slug.json`)
 - `src/media_releases/` - Press release metadata (JSON) linking to PDFs in `src/assets/media_releases/`
 - `scripts/` - Standalone ESM scripts for data sync (NERIS, M365 personnel)
@@ -33,7 +33,7 @@ Requires Node.js 20+. Output goes to `_site/`.
 
 ### Key Patterns
 
-**Template inheritance**: `base.njk` → layout templates → page templates. Pages auto-select layout based on sidebar presence in YAML frontmatter.
+**Template inheritance**: `base.liquid` → `page.liquid` → page templates. Pages use Eleventy's layout frontmatter (`layout: page` or `layout: base`). The `page.liquid` layout auto-selects two-column or single-column layout based on sidebar presence in frontmatter.
 
 **Content types**: Pages use YAML data files in `_data/` (e.g., `homepage.yml`). Posts and media releases are JSON files loaded by dynamic data files (`posts.js`, `media_releases.js`).
 
@@ -43,7 +43,7 @@ Requires Node.js 20+. Output goes to `_site/`.
 
 ### Configuration Files
 
-- `.eleventy.js` - 11ty config with custom Nunjucks filters, passthrough copies, RSS plugin
+- `.eleventy.js` - 11ty config with custom LiquidJS engine, filters (groupby, dictsort, round, slugify), shortcodes (imgPath), passthrough copies
 - `.tina/config.ts` - TinaCMS schema and media configuration
 - `staticwebapp.config.json` - Azure routing, auth (requires AAD tenant ID), CSP headers
 

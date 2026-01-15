@@ -5,8 +5,7 @@
       <div>
         <span class="widget__title">Fire Safety</span>
         <div class="timeframe">
-          Burn Season: {{ burn_status.burn_season_start | postDateTerseNoYearISO -}}-
-          {{- burn_status.burn_season_end | postDateTerseNoYearISO }}
+          Burn Season: {{ burn_status.burn_season_start | postDateTerseNoYearISO }}-{{ burn_status.burn_season_end | postDateTerseNoYearISO }}
         </div>
       </div>
     </div>
@@ -16,7 +15,7 @@
       <th>
         Fire Danger
       </th>
-      <td class="level level--{{burn_status.fire_status | slugify}}">
+      <td class="level level--{{ burn_status.fire_status | slugify }}">
         {{ burn_status.fire_status }}
       </td>
     </tr>
@@ -24,7 +23,7 @@
       <th>
         Residential Burn Permits
       </th>
-      <td class="level level--{{burn_status.burn_ban_status | slugify}}">
+      <td class="level level--{{ burn_status.burn_ban_status | slugify }}">
         {{ burn_status.burn_ban_status }}
       </td>
     </tr>
@@ -32,7 +31,7 @@
       <th>
         Commercial Burn Permits
       </th>
-      <td class="level level--{{burn_status.commercial_burn_ban_status | slugify}}">
+      <td class="level level--{{ burn_status.commercial_burn_ban_status | slugify }}">
         {{ burn_status.commercial_burn_ban_status }}
       </td>
     </tr>
@@ -40,7 +39,7 @@
       <th>
         Recreational Fires: San Juan County
       </th>
-      <td class="level level--{{burn_status.rec_campfire_status | slugify}}">
+      <td class="level level--{{ burn_status.rec_campfire_status | slugify }}">
         {{ burn_status.rec_campfire_status }}
       </td>
     </tr>
@@ -48,7 +47,7 @@
       <th>
         Recreational Fires: State Park & DNR
       </th>
-      <td class="level level--{{burn_status.state_campfire_status | slugify}}">
+      <td class="level level--{{ burn_status.state_campfire_status | slugify }}">
         {{ burn_status.state_campfire_status }}
       </td>
     </tr>
@@ -56,12 +55,12 @@
       <th>
         Recreational Fires: National Parks
       </th>
-      <td class="level level--{{burn_status.np_campfire_status | slugify}}">
+      <td class="level level--{{ burn_status.np_campfire_status | slugify }}">
         {{ burn_status.np_campfire_status }}
       </td>
     </tr>
   </tbody>
-  {% if page.url === '/' %}
+  {% if page.url == '/' %}
     <tfoot class="widget__foot">
       <td colspan="2">
         <a href="/services/burn-permits/">More Info »</a>

@@ -1,0 +1,45 @@
+---
+layout: base
+---
+{% if sidebar or sidebar_content or include_burn_widget or include_incident_widget %}
+  {% comment %}Two-column layout{% endcomment %}
+  <div class="l-grid l-grid--2col{% if mobile_layout_flipped == true %} flipped{% endif %}">
+    <div class="l-grid__main block-content">
+      <h1>{{ title }}</h1>
+      {% if preamble %}
+        <div class="lede">
+          {{ preamble | markdownify }}
+        </div>
+      {% endif %}
+      {{ content | processStyledImages }}
+    </div>
+
+    <aside class="l-grid__sidebar">
+      {% if include_burn_widget %}
+        <div class="sidebar-block">
+          {% render "burn-status-widget.liquid", burn_status: burn_status, page: page %}
+        </div>
+      {% endif %}
+      {% if include_incident_widget %}
+        <div class="sidebar-block">
+          {% render "call-stats-widget.liquid", stats: stats, page: page %}
+        </div>
+      {% endif %}
+      {% if sidebar %}
+        {{ sidebar | markdownify | processStyledImages }}
+      {% endif %}
+      {% if sidebar_content %}{{ sidebar_content }}{% endif %}
+    </aside>
+  </div>
+{% else %}
+  {% comment %}Single-column layout{% endcomment %}
+  <div class="l-squeezed block-content">
+    <h1>{{ title }}</h1>
+    {% if preamble %}
+      <div class="lede">
+        {{ preamble | markdownify }}
+      </div>
+    {% endif %}
+    {{ content | processStyledImages }}
+  </div>
+{% endif %}

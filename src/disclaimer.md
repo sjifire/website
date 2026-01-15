@@ -1,6 +1,6 @@
 ---
 title: Disclaimer
-layout: page.njk
+layout: page
 permalink: /disclaimer/
 preamble: |
   The information on this internet site is presented in good faith by San
