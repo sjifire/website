@@ -1,6 +1,5 @@
-const CleanCSS = require("clean-css");
-const { minify } = require("terser");
 const yaml = require("js-yaml");
+const { Liquid } = require("liquidjs");
 const createCloudinary = require("./src/_lib/cloudinary");
 const { dateFilters, getNextMeeting } = require("./src/_lib/date-utils");
 
@@ -9,6 +8,18 @@ const isProduction = process.env.ELEVENTY_ENV === "production";
 module.exports = function(eleventyConfig) {
   const siteData = require("./src/_data/site.json");
   const cloudinary = createCloudinary(siteData, isProduction);
+
+  // Create custom Liquid engine with additional options
+  const liquidEngine = new Liquid({
+    extname: ".liquid",
+    root: ["src/_includes/", "src/"],
+    dynamicPartials: true,
+    strictFilters: false,
+    jsTruthy: true, // Use JavaScript truthiness (empty arrays/objects are truthy but we handle this)
+  });
+
+  // Set Eleventy to use our custom Liquid engine
+  eleventyConfig.setLibrary("liquid", liquidEngine);
 
   // Add YAML support for data files
   eleventyConfig.addDataExtension("yml,yaml", (contents) => yaml.load(contents));
@@ -20,17 +31,12 @@ module.exports = function(eleventyConfig) {
   // Copy Azure Static Web Apps config to output root
   eleventyConfig.addPassthroughCopy({ "staticwebapp.config.json": "staticwebapp.config.json" });
 
-  // Process CSS files as templates with minification in production
+  // Process CSS files as templates
   eleventyConfig.addTemplateFormats("css");
   eleventyConfig.addExtension("css", {
     outputFileExtension: "css",
     compile: async function(inputContent) {
-      return async () => {
-        if (isProduction) {
-          return new CleanCSS({}).minify(inputContent).styles;
-        }
-        return inputContent;
-      };
+      return async () => inputContent;
     }
   });
 
@@ -39,26 +45,36 @@ module.exports = function(eleventyConfig) {
     key: "md",  // Treat MDX as markdown
   });
 
-  // Collection for content includes (MDX files that feed into NJK templates)
+  // Collection for content includes (MDX files that feed into Liquid templates)
   eleventyConfig.addCollection("contentIncludes", function(collectionApi) {
     return collectionApi.getFilteredByTag("content-include");
   });
 
-  // Date filters (see src/_lib/date-filters.js for implementation)
+  // ===============================
+  // Date filters (from date-utils.js)
+  // ===============================
   Object.entries(dateFilters).forEach(([name, filter]) => {
     eleventyConfig.addFilter(name, filter);
   });
+
+  // ===============================
+  // Custom filters
+  // ===============================
+
+  // Limit array to N items
   eleventyConfig.addFilter("limit", function(array, limit) {
     if(!array) return;
     if(!limit) return array;
     return array.slice(0, parseInt(limit, 10));
   });
 
+  // Filter array by object property value
   eleventyConfig.addFilter("pluckByValue", function (arr, value, attr) {
-    if(!arr || !value) return; // sometimes we get an undefined through here
+    if(!arr || !value) return;
     return arr.filter((item) => item[attr] === value);
   });
 
+  // Format numbers with locale
   eleventyConfig.addFilter("formatNumber", (num) => {
     return num.toLocaleString();
   });
@@ -68,29 +84,15 @@ module.exports = function(eleventyConfig) {
     return getNextMeeting(schedule, override, siteData.timezone);
   });
 
-
-  eleventyConfig.addNunjucksAsyncFilter(
-    "jsmin",
-    async function (code, callback) {
-      try {
-        if (!isProduction) return callback(null, code);
-        const minified = await minify(code);
-        callback(null, minified.code);
-      } catch (err) {
-        console.error("Terser error: ", err);
-        // Fail gracefully.
-        callback(null, code);
-      }
-    }
-  );
-
+  // Markdown rendering filter
   const mdRender = require("markdown-it")({
     linkify: true,
     typographer: true,
     html: true,
   }).use(require("markdown-it-attrs"));
+
   eleventyConfig.addFilter("markdownify", function (rawString) {
-    if(!rawString) return; // sometimes we get an undefined through here
+    if(!rawString) return;
     return mdRender.render(rawString);
   });
 
@@ -104,17 +106,95 @@ module.exports = function(eleventyConfig) {
       const size = attrs.match(/size=["']([^"']+)["']/)?.[1] || "full";
       const align = attrs.match(/align=["']([^"']+)["']/)?.[1] || "center";
       const classes = `styled-image styled-image--${size} styled-image--${align}`;
-      // Process image through Cloudinary for optimization
       const optimizedSrc = cloudinary.imgPath(src, "f_auto,q_auto:good");
       return `<figure class="${classes}"><img src="${optimizedSrc}" alt="${alt}" /><figcaption>${alt}</figcaption></figure>`;
     });
   });
 
-
   // Cloudinary image path shortcode and filters
   eleventyConfig.addShortcode("imgPath", cloudinary.imgPath);
   eleventyConfig.addFilter("imgPath", cloudinary.imgPath);
   eleventyConfig.addFilter("headerImageUrls", cloudinary.headerImageUrls);
+
+  // ===============================
+  // Liquid-specific filters (replacing Nunjucks built-ins)
+  // ===============================
+
+  // Group array by attribute (like Nunjucks groupby)
+  eleventyConfig.addFilter("groupby", function(arr, attr) {
+    if (!arr || !Array.isArray(arr)) return {};
+    const groups = {};
+    arr.forEach(item => {
+      const key = item[attr];
+      if (!groups[key]) groups[key] = [];
+      groups[key].push(item);
+    });
+    return groups;
+  });
+
+  // Convert object to sorted array of [key, value] pairs (like Nunjucks dictsort)
+  eleventyConfig.addFilter("dictsort", function(obj) {
+    if (!obj || typeof obj !== "object") return [];
+    return Object.entries(obj).sort((a, b) => {
+      if (a[0] < b[0]) return -1;
+      if (a[0] > b[0]) return 1;
+      return 0;
+    });
+  });
+
+  // Round with optional precision and method (extending Liquid's built-in round)
+  eleventyConfig.addFilter("round", function(num, precision = 0, method) {
+    if (num === null || num === undefined) return num;
+    const factor = Math.pow(10, precision);
+    if (method === "ceil") {
+      return Math.ceil(num * factor) / factor;
+    } else if (method === "floor") {
+      return Math.floor(num * factor) / factor;
+    }
+    return Math.round(num * factor) / factor;
+  });
+
+  // Slugify string (URL-safe lowercase)
+  eleventyConfig.addFilter("slugify", function(str) {
+    if (!str) return "";
+    return str.toString().toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/[^\w-]+/g, "")
+      .replace(/--+/g, "-")
+      .replace(/^-+/, "")
+      .replace(/-+$/, "");
+  });
+
+  // Get length of array or string (Liquid has size but this is for compatibility)
+  eleventyConfig.addFilter("length", function(val) {
+    if (!val) return 0;
+    return val.length || 0;
+  });
+
+  // Default value filter (Liquid has default but this matches Nunjucks behavior)
+  eleventyConfig.addFilter("default", function(val, defaultVal) {
+    if (val === null || val === undefined || val === "" || val === false) {
+      return defaultVal;
+    }
+    return val;
+  });
+
+  // Safe filter - mark content as safe HTML (Liquid doesn't auto-escape in 11ty)
+  eleventyConfig.addFilter("safe", function(val) {
+    return val;
+  });
+
+  // ===============================
+  // Custom Liquid tags
+  // ===============================
+
+  // Cycler tag implementation for alternating values
+  // Usage: {% cycler "odd", "even" as rowClass %}{{ rowClass }}{% endcycler %}
+  // Or simpler: use the cycler filter
+  eleventyConfig.addFilter("cycler", function(index, ...values) {
+    if (!values.length) return "";
+    return values[(index - 1) % values.length];
+  });
 
   return {
     dir: {
@@ -123,8 +203,8 @@ module.exports = function(eleventyConfig) {
       includes: "_includes",
       data: "_data"
     },
-    templateFormats: ["md", "mdx", "njk", "html"],
-    markdownTemplateEngine: "njk",
-    htmlTemplateEngine: "njk"
+    templateFormats: ["md", "mdx", "liquid", "html"],
+    markdownTemplateEngine: "liquid",
+    htmlTemplateEngine: "liquid"
   };
 };

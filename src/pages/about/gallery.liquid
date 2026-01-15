@@ -1,21 +1,19 @@
 ---
 title: "Photo Gallery"
 nav_order: 8
-layout: false
+layout: base
+scripts: '<script src="/js/gallery.js" defer></script>'
 ---
-{% extends "base.njk" %}
-
-{% block content %}
 <div class="l-squeezed block-content">
   <h1>{{ title }}</h1>
   <p class="gallery-intro">A glimpse into the people, equipment, and community events that make up San Juan Island Fire & Rescue.</p>
 
   <div class="photo-gallery">
     {% for img in gallery.images %}
-      <button type="button" class="photo-gallery__item" data-index="{{ loop.index0 }}">
+      <button type="button" class="photo-gallery__item" data-index="{{ forloop.index0 }}">
         <img
           class="photo-gallery__thumb leave-alone"
-          src="{%- imgPath img.src | safe, 'f_auto,q_auto:good,c_fill,w_300,h_200' -%}"
+          src="{% imgPath img.src, 'f_auto,q_auto:good,c_fill,w_300,h_200' %}"
           alt="{{ img.alt }}"
           loading="lazy"
         >
@@ -36,10 +34,10 @@ layout: false
   <div class="gallery-lightbox__content">
     <div class="gallery-lightbox__slides">
       {% for img in gallery.images %}
-        <div class="gallery-lightbox__slide{{ ' active' if loop.first }}" data-index="{{ loop.index0 }}">
+        <div class="gallery-lightbox__slide{% if forloop.first %} active{% endif %}" data-index="{{ forloop.index0 }}">
           <img
             class="gallery-lightbox__image leave-alone"
-            src="{%- imgPath img.src | safe, 'f_auto,q_auto:good,c_limit,w_1200,h_900' -%}"
+            src="{% imgPath img.src, 'f_auto,q_auto:good,c_limit,w_1200,h_900' %}"
             alt="{{ img.alt }}"
             loading="lazy"
           >
@@ -59,11 +57,6 @@ layout: false
     </button>
   </div>
   <div class="gallery-lightbox__counter">
-    <span class="gallery-lightbox__current">1</span> / <span class="gallery-lightbox__total">{{ gallery.images | length }}</span>
+    <span class="gallery-lightbox__current">1</span> / <span class="gallery-lightbox__total">{{ gallery.images.size }}</span>
   </div>
 </div>
-{% endblock %}
-
-{% block scripts %}
-<script src="/js/gallery.js" defer></script>
-{% endblock %}

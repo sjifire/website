@@ -11,8 +11,7 @@
     </div>
   </caption>
   <tbody class="widget__body">
-    {% set cls = cycler("odd", "even") %}
-    <tr class="{{ cls.next() }}">
+    <tr class="odd">
       <th>
         Calls
       </th>
@@ -20,7 +19,7 @@
         {{ stats.incident_stats.num_incidents }}
       </td>
     </tr>
-    <tr class="{{ cls.next() }}">
+    <tr class="even">
       <th>
         Calls
         <aside>Last 365 days</aside>
@@ -29,7 +28,7 @@
         {{ stats.incident_stats.num_incidents_last_365_days | formatNumber }}
       </td>
     </tr>
-    <tr class="{{ cls.next() }}">
+    <tr class="odd">
       <th>
         Reaction Time
         <aside>Seconds</aside>
@@ -38,53 +37,60 @@
         {{ stats.unit_time_stats.first_unit_reaction.median }}
       </td>
     </tr>
-    <tr class="{{ cls.next() }}">
+    <tr class="even">
       <th rowspan=3>
         Travel Time
         <aside>Minutes (% of calls)</aside>
       </th>
       <td>
         {% if stats.region_stats.central and stats.region_stats.central.num_incidents > 0 -%}
-          {{ (stats.region_stats.central.unit_travel_time.median/60) | round(1) }}
-          <aside>Central ({{((stats.region_stats.central.num_incidents/stats.incident_stats.num_incidents) * 100) | round }}%)</aside>
+          {%- assign travelTime = stats.region_stats.central.unit_travel_time.median | divided_by: 60.0 | round: 1 -%}
+          {%- assign pct = stats.region_stats.central.num_incidents | times: 100.0 | divided_by: stats.incident_stats.num_incidents | round -%}
+          {{ travelTime }}
+          <aside>Central ({{ pct }}%)</aside>
         {% else %}
            --
           <aside>Central (0%)</aside>
         {% endif -%}
       </td>
     </tr>
-    <tr class="{{ cls.next() }}">
+    <tr class="odd">
       <td>
         {% if stats.region_stats.south and stats.region_stats.south.num_incidents > 0 -%}
-          {{ (stats.region_stats.south.unit_travel_time.median/60) | round(1) }}
-          <aside>South ({{((stats.region_stats.south.num_incidents/stats.incident_stats.num_incidents) * 100) | round }}%)</aside>
+          {%- assign travelTime = stats.region_stats.south.unit_travel_time.median | divided_by: 60.0 | round: 1 -%}
+          {%- assign pct = stats.region_stats.south.num_incidents | times: 100.0 | divided_by: stats.incident_stats.num_incidents | round -%}
+          {{ travelTime }}
+          <aside>South ({{ pct }}%)</aside>
         {% else %}
            --
           <aside>South (0%)</aside>
         {% endif -%}
       </td>
     </tr>
-    <tr class="{{ cls.next() }}">
+    <tr class="even">
       <td>
         {% if stats.region_stats.north and stats.region_stats.north.num_incidents > 0 -%}
-          {{ (stats.region_stats.north.unit_travel_time.median/60) | round(1) }}
-          <aside>North ({{((stats.region_stats.north.num_incidents/stats.incident_stats.num_incidents) * 100) | round }}%)</aside>
+          {%- assign travelTime = stats.region_stats.north.unit_travel_time.median | divided_by: 60.0 | round: 1 -%}
+          {%- assign pct = stats.region_stats.north.num_incidents | times: 100.0 | divided_by: stats.incident_stats.num_incidents | round -%}
+          {{ travelTime }}
+          <aside>North ({{ pct }}%)</aside>
         {% else %}
            --
           <aside>North (0%)</aside>
         {% endif -%}
       </td>
     </tr>
-    <tr class="{{ cls.next() }}">
+    <tr class="odd">
       <th>
         Responder Time on Calls
         <aside>Minutes</aside>
       </th>
       <td>
-        {{ (stats.personnel_stats.time_on_incidents.sum/60) | round | formatNumber }}
+        {%- assign timeOnCalls = stats.personnel_stats.time_on_incidents.sum | divided_by: 60.0 | round -%}
+        {{ timeOnCalls | formatNumber }}
       </td>
     </tr>
-    <tr class="{{ cls.next() }}">
+    <tr class="even">
       <th>
         Unique Responders
       </th>
@@ -92,17 +98,17 @@
         {{ stats.personnel_stats.num_unique_responders }}
       </td>
     </tr>
-    {% if page.url !== '/' %}
-    <tr class="{{ cls.next() }}">
+    {% if page.url != '/' %}
+    <tr class="odd">
       <th>
         Responders per Call
         <aside>Median</aside>
       </th>
       <td>
-        {{ stats.personnel_stats.num_per_incidents.median | round(0, 'ceil') }}
+        {{ stats.personnel_stats.num_per_incidents.median | round: 0, 'ceil' }}
       </td>
     </tr>
-    <tr class="{{ cls.next() }}">
+    <tr class="even">
       <th rowspan=4>
         Incident Types
       </th>
@@ -111,25 +117,25 @@
         <aside>Fire</aside>
       </td>
     </tr>
-    <tr class="{{ cls.next() }}">
+    <tr class="odd">
       <td>
         {{ stats.incident_stats.types.medical_rescue }}
         <aside>Medical Assists</aside>
       </td>
     </tr>
-    <tr class="{{ cls.next() }}">
+    <tr class="even">
       <td>
         {{ stats.incident_stats.types.downgraded }}
         <aside>Downgraded</aside>
       </td>
     </tr>
-    <tr class="{{ cls.next() }}">
+    <tr class="odd">
       <td>
         {{ stats.incident_stats.types.cancelled }}
         <aside>Cancelled</aside>
       </td>
     </tr>
-    <tr class="{{ cls.next() }}">
+    <tr class="even">
       <th rowspan=2>
         Time of Day
       </th>
@@ -138,13 +144,13 @@
         <aside>Daytime</aside>
       </td>
     </tr>
-    <tr class="{{ cls.next() }}">
+    <tr class="odd">
       <td>
         {{ stats.incident_stats.num_nighttime_incidents }}
         <aside>Nighttime</aside>
       </td>
     </tr>
-    <tr class="{{ cls.next() }}">
+    <tr class="even">
       <th>
         Simultaneous Calls
       </th>
@@ -154,7 +160,7 @@
     </tr>
     {% endif %}
   </tbody>
-  {% if page.url === '/' %}
+  {% if page.url == '/' %}
     <tfoot class="widget__foot">
       <td colspan="2">
         <a href="/about/incidents/">More Info »</a>

@@ -5,75 +5,76 @@ pagination:
   size: 24
   alias: post
   reverse: true
-permalink: "/news/{% if pagination.pageNumber > 0 %}page-{{ pagination.pageNumber + 1 }}/{% endif %}index.html"
-layout: false
+permalink: "/news/{% if pagination.pageNumber > 0 %}page-{{ pagination.pageNumber | plus: 1 }}/{% endif %}index.html"
+layout: page
 sidebar: " "
 ---
-{% extends "page.njk" %}
-
-{% block main_content %}
-  <header class="hgroup">
-    <div class="lede">
-      {{ news.preamble | markdownify | safe }}
-    </div>
-  </header>
-  <ul class="l-grid l-grid--auto">
-    {% for post in pagination.items %}
-      <li class="card">
-        <div class="card__body">
-          <div class="news__type">
-            {% if post.pinned %}<svg class="pin-icon" aria-label="Pinned post"><use xlink:href="#pin"></use></svg>{% endif %}
-            {% include "post_type_icons.njk" %}
-            {{ post.post_type }}
-          </div>
-          <h3 class="news__headline">
-            <a href="{{ post.url }}/">
-              {{ post.title | safe }}
-            </a>
-          </h3>
-          <time datetime="{{ post.date | htmlDateStringISO }}" pubdate="pubdate" class="news__date">
-            {{ post.date | postDateTerseISO }}
-          </time>
-          <div class="news__lede">
-            {{ post.lede | markdownify | safe }}
-          </div>
+<header class="hgroup">
+  <div class="lede">
+    {{ news.preamble | markdownify }}
+  </div>
+</header>
+<ul class="l-grid l-grid--auto">
+  {% for post in pagination.items %}
+    <li class="card">
+      <div class="card__body">
+        <div class="news__type">
+          {% if post.pinned %}<svg class="pin-icon" aria-label="Pinned post"><use xlink:href="#pin"></use></svg>{% endif %}
+          {% render "post_type_icons.liquid", post: post %}
+          {{ post.post_type }}
         </div>
-        <div class="card__footer">
-          <a href="{{ post.url }}/" class="news__readmore" aria-label="Read more about {{ post.title }}">Read more <svg aria-hidden="true"><use xlink:href="#right-arrow"></svg></a>
+        <h3 class="news__headline">
+          <a href="{{ post.url }}/">
+            {{ post.title }}
+          </a>
+        </h3>
+        <time datetime="{{ post.date | htmlDateStringISO }}" pubdate="pubdate" class="news__date">
+          {{ post.date | postDateTerseISO }}
+        </time>
+        <div class="news__lede">
+          {{ post.lede | markdownify }}
         </div>
-      </li>
-    {% endfor %}
-  </ul>
+      </div>
+      <div class="card__footer">
+        <a href="{{ post.url }}/" class="news__readmore" aria-label="Read more about {{ post.title }}">Read more <svg aria-hidden="true"><use xlink:href="#right-arrow"></svg></a>
+      </div>
+    </li>
+  {% endfor %}
+</ul>
 
-  {% if pagination.href.previous or pagination.href.next %}
-    <nav class="pagination">
-      {% if pagination.href.previous %}
-        <a href="{{ pagination.href.previous | url }}">«</a>
-      {% else %}
-        <span>«</span>
-      {% endif %}
-    {%- for pageEntry in pagination.pages %}
-      {% if page.url == pagination.hrefs[ loop.index0 ] %}
-        <span>{{ loop.index }}</span>
-      {% else %}
-        <a href="{{ pagination.hrefs[ loop.index0 ] | url }}">{{ loop.index }}</a>
-      {% endif %}
-    {%- endfor %}
-      {% if pagination.href.next %}
-        <a href="{{ pagination.href.next | url }}">»</a>
-      {% else %}
-        <span>»</span>
-      {% endif %}
-    </nav>
-  {% endif %}
-{% endblock %}
+{% if pagination.href.previous or pagination.href.next %}
+  <nav class="pagination">
+    {% if pagination.href.previous %}
+      <a href="{{ pagination.href.previous | url }}">«</a>
+    {% else %}
+      <span>«</span>
+    {% endif %}
+  {%- for pageEntry in pagination.pages %}
+    {% if page.url == pagination.hrefs[forloop.index0] %}
+      <span>{{ forloop.index }}</span>
+    {% else %}
+      <a href="{{ pagination.hrefs[forloop.index0] | url }}">{{ forloop.index }}</a>
+    {% endif %}
+  {%- endfor %}
+    {% if pagination.href.next %}
+      <a href="{{ pagination.href.next | url }}">»</a>
+    {% else %}
+      <span>»</span>
+    {% endif %}
+  </nav>
+{% endif %}
 
-{% block sidebar_content %}
-  {% for year, set in media_releases | groupby('year') | dictsort | reverse %}
-    <details class="block-content" {{ 'open' if loop.first }}>
+{%- capture sidebar_content -%}
+  {%- assign groupedReleases = media_releases | groupby: 'year' -%}
+  {%- assign sortedGroups = groupedReleases | dictsort | reverse -%}
+  {% for group in sortedGroups %}
+    {%- assign year = group[0] -%}
+    {%- assign releases = group[1] -%}
+    <details class="block-content"{% if forloop.first %} open{% endif %}>
       <summary class="sidebar__heading">Media Releases: {{ year }}</summary>
       <dl class="sidebar__desc-list">
-        {% for media_release in set | reverse %}
+        {%- assign reversedReleases = releases | reverse -%}
+        {% for media_release in reversedReleases %}
           <dt>
             {{ media_release.date | postDateTerseNoYearISO }}
           </dt>
@@ -83,7 +84,7 @@ sidebar: " "
             </a>
           </dd>
         {% endfor %}
-      </ul>
+      </dl>
     </details>
   {% endfor %}
-{% endblock %}
+{%- endcapture -%}

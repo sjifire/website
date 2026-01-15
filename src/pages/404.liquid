@@ -1,14 +1,10 @@
 ---
 title: "Page Not Found (404 Error)"
 permalink: "/404.html"
-layout: false
+layout: base
 ---
-{% extends "base.njk" %}
-
-{% block content %}
-  <div class="l-squeezed block-content">
-    <h1>{{ title | safe }}</h1>
-    <p>We apologize for the inconvenience.</p>
-    <p><a href="/">Return to the homepage</a></p>
-  </div>
-{% endblock %}
+<div class="l-squeezed block-content">
+  <h1>{{ title }}</h1>
+  <p>We apologize for the inconvenience.</p>
+  <p><a href="/">Return to the homepage</a></p>
+</div>

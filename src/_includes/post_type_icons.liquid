@@ -1,16 +1,16 @@
-{%- switch post.post_type %}
-  {%- case 'News' -%}
+{%- case post.post_type -%}
+  {%- when 'News' -%}
     <svg><use xlink:href='#news' /></svg>
-  {%- case 'Advisory' -%}
+  {%- when 'Advisory' -%}
     <svg><use xlink:href='#alert' /></svg>
-  {%- case 'Announcement' -%}
+  {%- when 'Announcement' -%}
     <svg><use xlink:href='#warning' /></svg>
-  {%- case 'On Scene' -%}
+  {%- when 'On Scene' -%}
     <svg><use xlink:href='#rescue' /></svg>
-  {%- case 'Member Profile' -%}
+  {%- when 'Member Profile' -%}
     <svg><use xlink:href='#profile' /></svg>
-  {%- case 'Fact Check' -%}
+  {%- when 'Fact Check' -%}
     <svg><use xlink:href='#fact-check' /></svg>
-  {%- case 'Department Highlight' -%}
+  {%- when 'Department Highlight' -%}
     <svg><use xlink:href='#highlight' /></svg>
-{% endswitch -%}
+{%- endcase -%}

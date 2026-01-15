@@ -1,33 +1,26 @@
 ---
 title: "Who We Are"
 nav_order: 1
-layout: false
+layout: page
+sidebar: |
+  <div class="sidebar-block">
+    <styled-image src="/assets/media/team-dinner.jpeg" alt="Team Dinner while on shift" size="full" />
+  </div>
+  <div class="sidebar-block">
+    <styled-image src="/assets/media/family-break-time.jpg" alt="Break Time" size="full" />
+  </div>
+  <div class="sidebar-block">
+    <styled-image src="/assets/media/Vols-2-edited-1-scaled.jpg" alt="Wildland Fire Drill" size="full" />
+  </div>
 ---
-{% extends "page.njk" %}
-
-{# Pull who-we-are content from the MDX content-include file #}
-{% set whoWeAreContent = null %}
+{% comment %}Pull who-we-are content from the MDX content-include file{% endcomment %}
+{%- assign whoWeAreContent = nil -%}
 {% for item in collections.contentIncludes %}
   {% if item.data.contentFor == "who-we-are" %}
-    {% set whoWeAreContent = item.content %}
+    {%- assign whoWeAreContent = item.content -%}
   {% endif %}
 {% endfor %}
 
-{# Set sidebar with images #}
-{% set sidebar %}
-<div class="sidebar-block">
-  <styled-image src="/assets/media/team-dinner.jpeg" alt="Team Dinner while on shift" size="full" />
-</div>
-<div class="sidebar-block">
-  <styled-image src="/assets/media/family-break-time.jpg" alt="Break Time" size="full" />
-</div>
-<div class="sidebar-block">
-  <styled-image src="/assets/media/Vols-2-edited-1-scaled.jpg" alt="Wildland Fire Drill" size="full" />
-</div>
-{% endset %}
-
-{% block main_content %}
-{{ whoWeAreContent | processStyledImages | safe }}
+{{ whoWeAreContent | processStyledImages }}
 
 <div style="clear: both;"></div>
-{% endblock %}

@@ -7,19 +7,19 @@ const navigationJson = require("./navigation.json");
 const navigationConfig = navigationJson.items;
 const headerHighlightUrl = navigationJson.header_highlight_url;
 
-// Read all MDX/NJK pages and extract frontmatter
+// Read all MDX/Liquid/MD pages and extract frontmatter
 function getPages(folder) {
   const folderPath = path.join(pagesDir, folder);
   if (!fs.existsSync(folderPath)) return [];
 
   return fs
     .readdirSync(folderPath)
-    .filter((file) => /\.(mdx|njk|md)$/.test(file))
+    .filter((file) => /\.(mdx|liquid|md)$/.test(file))
     .map((file) => {
       const filePath = path.join(folderPath, file);
       const content = fs.readFileSync(filePath, "utf8");
       const { data } = matter(content);
-      const slug = file.replace(/\.(mdx|njk|md)$/, "");
+      const slug = file.replace(/\.(mdx|liquid|md)$/, "");
 
       // Skip pages with permalink: false (content includes)
       if (data.permalink === false) return null;
@@ -49,7 +49,7 @@ function getPageInfo(url) {
   const folderPath = path.join(pagesDir, folder);
 
   // Find matching file
-  const extensions = [".mdx", ".njk", ".md"];
+  const extensions = [".mdx", ".liquid", ".md"];
   for (const ext of extensions) {
     const filePath = path.join(folderPath, slug + ext);
     if (fs.existsSync(filePath)) {

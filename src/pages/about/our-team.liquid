@@ -1,40 +1,41 @@
 ---
 title: "Our Team"
 nav_order: 2
-layout: false
+layout: page
 ---
-{% extends "page.njk" %}
+{%- assign cloudinaryDefaults = "f_auto,q_auto:good,g_faces,c_fill,w_315,h_328" -%}
+{%- assign defaultPersonImg = "/assets/media/personnel_imgs/images.jpg" -%}
 
-{% set cloudinaryDefaults = "f_auto,q_auto:good,g_faces,c_fill,w_315,h_328" %}
-{% set defaultPersonImg = "/assets/media/personnel_imgs/images.jpg" %}
-
-{# Pull personnel data from the MDX content-include file #}
-{% set personnelData = null %}
-{% set bodyContent = null %}
+{% comment %}Pull personnel data from the MDX content-include file{% endcomment %}
+{%- assign personnelData = nil -%}
+{%- assign bodyContent = nil -%}
 {% for item in collections.contentIncludes %}
   {% if item.data.contentFor == "our-team" %}
-    {% set personnelData = item.data.personnel %}
-    {% set bodyContent = item.content %}
+    {%- assign personnelData = item.data.personnel -%}
+    {%- assign bodyContent = item.content -%}
   {% endif %}
 {% endfor %}
 
-{% block main_content_single %}
 {% if bodyContent %}
-<div class="lead">{{ bodyContent | safe }}</div>
+<div class="lead">{{ bodyContent }}</div>
 {% endif %}
 
 {% if personnelData %}
-{% set staffOnly = personnelData | pluckByValue('staff', 'staff_type') %}
-{% set volunteersOnly = personnelData | pluckByValue('volunteer', 'staff_type') %}
+{%- assign staffOnly = personnelData | pluckByValue: 'staff', 'staff_type' -%}
+{%- assign volunteersOnly = personnelData | pluckByValue: 'volunteer', 'staff_type' -%}
 
 <section class="personnel-section">
   <h2>Staff</h2>
   <div class="l-grid l-grid--personnel">
     {% for person in staffOnly %}
-      {% set imgSrc = person.photo if person.photo else defaultPersonImg %}
+      {%- if person.photo -%}
+        {%- assign imgSrc = person.photo -%}
+      {%- else -%}
+        {%- assign imgSrc = defaultPersonImg -%}
+      {%- endif -%}
       <div class="person">
         <div class="person__img">
-          <img src="{%- imgPath imgSrc, cloudinaryDefaults -%}" alt="{{ person.first_name }} {{ person.last_name }}" width="157.5" height="164">
+          <img src="{% imgPath imgSrc, cloudinaryDefaults %}" alt="{{ person.first_name }} {{ person.last_name }}" width="157.5" height="164">
         </div>
         <h3>{{ person.first_name }} {{ person.last_name }}</h3>
         {% if person.rank or person.title %}<h4>
@@ -44,7 +45,8 @@ layout: false
         </h4>
         {% endif %}
         <ul>
-          {% for role in person.roles | sort %}
+          {%- assign sortedRoles = person.roles | sort -%}
+          {% for role in sortedRoles %}
             <li>{{ role }}</li>
           {% endfor %}
         </ul>
@@ -57,10 +59,14 @@ layout: false
   <h2>Volunteers</h2>
   <div class="l-grid l-grid--personnel">
     {% for person in volunteersOnly %}
-      {% set imgSrc = person.photo if person.photo else defaultPersonImg %}
+      {%- if person.photo -%}
+        {%- assign imgSrc = person.photo -%}
+      {%- else -%}
+        {%- assign imgSrc = defaultPersonImg -%}
+      {%- endif -%}
       <div class="person">
         <div class="person__img">
-          <img src="{%- imgPath imgSrc, cloudinaryDefaults -%}" alt="Headshot of {{ person.first_name }} {{ person.last_name }}" width="157.5" height="164">
+          <img src="{% imgPath imgSrc, cloudinaryDefaults %}" alt="Headshot of {{ person.first_name }} {{ person.last_name }}" width="157.5" height="164">
         </div>
         <h3>{{ person.first_name }} {{ person.last_name }}</h3>
         {% if person.rank or person.title %}<h4>
@@ -70,7 +76,8 @@ layout: false
         </h4>
         {% endif %}
         <ul>
-          {% for role in person.roles | sort %}
+          {%- assign sortedRoles = person.roles | sort -%}
+          {% for role in sortedRoles %}
             <li>{{ role }}</li>
           {% endfor %}
         </ul>
@@ -83,5 +90,3 @@ layout: false
   <p><em>Personnel data is not available in this environment. Run <code>npm run sync-personnel</code> to generate personnel data, or this data will be generated automatically during the production build.</em></p>
 </section>
 {% endif %}
-
-{% endblock %}

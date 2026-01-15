@@ -22,7 +22,7 @@ module.exports = {
 			if (data.layout) {
 				return data.layout;
 			}
-			return "page.njk";
+			return "page";
 		}
 	}
 };
