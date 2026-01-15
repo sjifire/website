@@ -4,8 +4,7 @@ const site = require("./site.json");
 const homepage = require("./homepage.json");
 
 // Configuration from site.json (folder path) and homepage.json (carousel count)
-const config = site.gallery || {};
-const folderPath = config.folder || "src/assets/media/gallery";
+const folderPath = site.gallery_folder || "src/assets/media/gallery";
 const carouselCount = homepage.carousel?.image_count || 5;
 
 // Resolve folder path from project root

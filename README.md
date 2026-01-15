@@ -297,9 +297,7 @@ Gallery folder is configured in `src/_data/site.json`:
 
 ```json
 {
-  "gallery": {
-    "folder": "src/assets/media/gallery"
-  }
+  "gallery_folder": "src/assets/media/gallery"
 }
 ```
 
@@ -315,7 +313,7 @@ Homepage carousel count is configured in `src/_data/homepage.json`:
 
 | Setting | File | Default | Description |
 |---------|------|---------|-------------|
-| `gallery.folder` | `site.json` | `src/assets/media/gallery` | Path from project root to gallery images |
+| `gallery_folder` | `site.json` | `src/assets/media/gallery` | Path from project root to gallery images |
 | `carousel.image_count` | `homepage.json` | `5` | Number of random images to show in homepage carousel |
 
 **Gallery page features:**

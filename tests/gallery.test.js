@@ -134,7 +134,7 @@ describe("Gallery Data Loader", () => {
     it("reads folder from site.json", () => {
       const site = require("../src/_data/site.json");
       const gallery = require("../src/_data/gallery.js");
-      const folderPath = site.gallery?.folder || "src/assets/media/gallery";
+      const folderPath = site.gallery_folder || "src/assets/media/gallery";
       // Derive expected web path (strip "src" prefix)
       const expectedWebPath = "/" + folderPath.replace(/^src\//, "");
       if (gallery.images.length > 0) {
