@@ -7,6 +7,10 @@
   "timezone": "America/Los_Angeles",
   "opengraph_image": "sjifire-logo-clear.png",
   "enable_cloudinary_rewrites": false,
+  "gallery": {
+    "folder": "gallery",
+    "carouselCount": 5
+  },
   "github": {
     "owner": "sjifire",
     "repo": "website",

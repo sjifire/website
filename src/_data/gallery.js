@@ -1,7 +1,13 @@
 const fs = require("fs");
 const path = require("path");
+const site = require("./site.json");
 
-const galleryFolder = path.resolve(__dirname, "../assets/media/gallery");
+// Configuration from site.json with defaults
+const config = site.gallery || {};
+const folderName = config.folder || "gallery";
+const carouselCount = config.carouselCount || 5;
+
+const galleryFolder = path.resolve(__dirname, `../assets/media/${folderName}`);
 
 // Supported image extensions
 const imageExtensions = [".jpg", ".jpeg", ".png", ".gif", ".webp"];
@@ -15,18 +21,6 @@ function filenameToAlt(filename) {
     .trim();
 }
 
-const images = fs
-  .readdirSync(galleryFolder)
-  .filter((name) => {
-    const ext = path.extname(name).toLowerCase();
-    return imageExtensions.includes(ext);
-  })
-  .sort()
-  .map((name) => ({
-    src: `/assets/media/gallery/${name}`,
-    alt: filenameToAlt(name),
-  }));
-
 // Fisher-Yates shuffle for carousel selection
 function shuffle(array) {
   const arr = [...array];
@@ -37,7 +31,23 @@ function shuffle(array) {
   return arr;
 }
 
-// Random 5 images for homepage carousel (shuffled at build time)
-const carouselImages = shuffle(images).slice(0, 5);
+// Read and process images if folder exists
+let images = [];
+if (fs.existsSync(galleryFolder)) {
+  images = fs
+    .readdirSync(galleryFolder)
+    .filter((name) => {
+      const ext = path.extname(name).toLowerCase();
+      return imageExtensions.includes(ext);
+    })
+    .sort()
+    .map((name) => ({
+      src: `/assets/media/${folderName}/${name}`,
+      alt: filenameToAlt(name),
+    }));
+}
+
+// Random images for homepage carousel (shuffled at build time)
+const carouselImages = shuffle(images).slice(0, carouselCount);
 
 module.exports = { images, carouselImages };
