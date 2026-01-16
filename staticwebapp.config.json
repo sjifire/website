@@ -23,7 +23,7 @@
     }
   },
   "globalHeaders": {
-    "Content-Security-Policy": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://res.cloudinary.com https://*.cloudinary.com; font-src 'self' data:; connect-src 'self' https://res.cloudinary.com https://api.cloudinary.com https://content.cloudinary.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self'",
+    "Content-Security-Policy": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://res.cloudinary.com https://*.cloudinary.com; font-src 'self' data:; connect-src 'self' https://res.cloudinary.com https://api.cloudinary.com https://content.cloudinary.com; frame-src 'self' https://www.facebook.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self'",
     "X-Content-Type-Options": "nosniff",
     "X-Frame-Options": "DENY",
     "X-XSS-Protection": "1; mode=block",
