@@ -1,7 +1,7 @@
 const yaml = require("js-yaml");
 const { Liquid } = require("liquidjs");
 const createCloudinary = require("./src/_lib/cloudinary");
-const { dateFilters, getNextMeeting } = require("./src/_lib/date-utils");
+const { dateFilters, getNextMeeting, formatMeetingSchedule } = require("./src/_lib/date-utils");
 
 const isProduction = process.env.ELEVENTY_ENV === "production";
 
@@ -82,6 +82,11 @@ module.exports = function(eleventyConfig) {
   // Next meeting date filter for governance page
   eleventyConfig.addFilter("nextMeetingDate", function(schedule, override) {
     return getNextMeeting(schedule, override, siteData.timezone);
+  });
+
+  // Format meeting schedule as readable string (e.g., "third Tuesday of every month at 3:00 PM")
+  eleventyConfig.addFilter("formatMeetingSchedule", function(schedule) {
+    return formatMeetingSchedule(schedule);
   });
 
   // Markdown rendering filter

@@ -1,6 +1,6 @@
 const { describe, it } = require("node:test");
 const assert = require("node:assert");
-const { createDateFilter, dateFilters, getNextMeetingDate, getNextMeeting, parseTimeString, DateTime } = require("../src/_lib/date-utils");
+const { createDateFilter, dateFilters, getNextMeetingDate, getNextMeeting, parseTimeString, formatMeetingSchedule, DateTime } = require("../src/_lib/date-utils");
 
 const TEST_TIMEZONE = "America/Los_Angeles";
 
@@ -522,6 +522,150 @@ describe("getNextMeeting", () => {
       assert.strictEqual(result.date.month, 12, "Month should be December");
       assert.strictEqual(result.date.day, 25, "Day should be 25 (Christmas)");
       assert.ok(result.formatted.includes("December 25"), `Formatted should include "December 25", got "${result.formatted}"`);
+    });
+  });
+});
+
+describe("formatMeetingSchedule", () => {
+  describe("ordinal formatting", () => {
+    it("formats first week correctly", () => {
+      const schedule = { week_of_month: 1, day_of_week: 2, time: "15:00" };
+      const result = formatMeetingSchedule(schedule);
+      assert.ok(result.startsWith("first"), `Should start with "first", got "${result}"`);
+    });
+
+    it("formats second week correctly", () => {
+      const schedule = { week_of_month: 2, day_of_week: 2, time: "15:00" };
+      const result = formatMeetingSchedule(schedule);
+      assert.ok(result.startsWith("second"), `Should start with "second", got "${result}"`);
+    });
+
+    it("formats third week correctly", () => {
+      const schedule = { week_of_month: 3, day_of_week: 2, time: "15:00" };
+      const result = formatMeetingSchedule(schedule);
+      assert.ok(result.startsWith("third"), `Should start with "third", got "${result}"`);
+    });
+
+    it("formats fourth week correctly", () => {
+      const schedule = { week_of_month: 4, day_of_week: 2, time: "15:00" };
+      const result = formatMeetingSchedule(schedule);
+      assert.ok(result.startsWith("fourth"), `Should start with "fourth", got "${result}"`);
+    });
+
+    it("formats fifth week correctly", () => {
+      const schedule = { week_of_month: 5, day_of_week: 2, time: "15:00" };
+      const result = formatMeetingSchedule(schedule);
+      assert.ok(result.startsWith("fifth"), `Should start with "fifth", got "${result}"`);
+    });
+  });
+
+  describe("day of week formatting", () => {
+    it("formats Sunday correctly", () => {
+      const schedule = { week_of_month: 2, day_of_week: 0, time: "15:00" };
+      const result = formatMeetingSchedule(schedule);
+      assert.ok(result.includes("Sunday"), `Should include "Sunday", got "${result}"`);
+    });
+
+    it("formats Monday correctly", () => {
+      const schedule = { week_of_month: 2, day_of_week: 1, time: "15:00" };
+      const result = formatMeetingSchedule(schedule);
+      assert.ok(result.includes("Monday"), `Should include "Monday", got "${result}"`);
+    });
+
+    it("formats Tuesday correctly", () => {
+      const schedule = { week_of_month: 2, day_of_week: 2, time: "15:00" };
+      const result = formatMeetingSchedule(schedule);
+      assert.ok(result.includes("Tuesday"), `Should include "Tuesday", got "${result}"`);
+    });
+
+    it("formats Wednesday correctly", () => {
+      const schedule = { week_of_month: 2, day_of_week: 3, time: "15:00" };
+      const result = formatMeetingSchedule(schedule);
+      assert.ok(result.includes("Wednesday"), `Should include "Wednesday", got "${result}"`);
+    });
+
+    it("formats Thursday correctly", () => {
+      const schedule = { week_of_month: 2, day_of_week: 4, time: "15:00" };
+      const result = formatMeetingSchedule(schedule);
+      assert.ok(result.includes("Thursday"), `Should include "Thursday", got "${result}"`);
+    });
+
+    it("formats Friday correctly", () => {
+      const schedule = { week_of_month: 2, day_of_week: 5, time: "15:00" };
+      const result = formatMeetingSchedule(schedule);
+      assert.ok(result.includes("Friday"), `Should include "Friday", got "${result}"`);
+    });
+
+    it("formats Saturday correctly", () => {
+      const schedule = { week_of_month: 2, day_of_week: 6, time: "15:00" };
+      const result = formatMeetingSchedule(schedule);
+      assert.ok(result.includes("Saturday"), `Should include "Saturday", got "${result}"`);
+    });
+  });
+
+  describe("time formatting", () => {
+    it("formats 3:00 PM correctly", () => {
+      const schedule = { week_of_month: 2, day_of_week: 2, time: "15:00" };
+      const result = formatMeetingSchedule(schedule);
+      assert.ok(result.includes("3:00 PM"), `Should include "3:00 PM", got "${result}"`);
+    });
+
+    it("formats 9:30 AM correctly", () => {
+      const schedule = { week_of_month: 2, day_of_week: 2, time: "09:30" };
+      const result = formatMeetingSchedule(schedule);
+      assert.ok(result.includes("9:30 AM"), `Should include "9:30 AM", got "${result}"`);
+    });
+
+    it("formats 12:00 PM (noon) correctly", () => {
+      const schedule = { week_of_month: 2, day_of_week: 2, time: "12:00" };
+      const result = formatMeetingSchedule(schedule);
+      assert.ok(result.includes("12:00 PM"), `Should include "12:00 PM", got "${result}"`);
+    });
+
+    it("formats midnight correctly", () => {
+      const schedule = { week_of_month: 2, day_of_week: 2, time: "00:00" };
+      const result = formatMeetingSchedule(schedule);
+      assert.ok(result.includes("12:00 AM"), `Should include "12:00 AM", got "${result}"`);
+    });
+
+    it("formats 6:45 PM correctly", () => {
+      const schedule = { week_of_month: 2, day_of_week: 2, time: "18:45" };
+      const result = formatMeetingSchedule(schedule);
+      assert.ok(result.includes("6:45 PM"), `Should include "6:45 PM", got "${result}"`);
+    });
+  });
+
+  describe("full output format", () => {
+    it("produces expected full format for second Tuesday at 3:00 PM", () => {
+      const schedule = { week_of_month: 2, day_of_week: 2, time: "15:00" };
+      const result = formatMeetingSchedule(schedule);
+      assert.strictEqual(result, "second Tuesday of every month at 3:00 PM");
+    });
+
+    it("produces expected full format for third Tuesday at 3:00 PM", () => {
+      const schedule = { week_of_month: 3, day_of_week: 2, time: "15:00" };
+      const result = formatMeetingSchedule(schedule);
+      assert.strictEqual(result, "third Tuesday of every month at 3:00 PM");
+    });
+
+    it("produces expected full format for first Monday at 9:00 AM", () => {
+      const schedule = { week_of_month: 1, day_of_week: 1, time: "09:00" };
+      const result = formatMeetingSchedule(schedule);
+      assert.strictEqual(result, "first Monday of every month at 9:00 AM");
+    });
+
+    it("produces expected full format for fourth Thursday at 6:30 PM", () => {
+      const schedule = { week_of_month: 4, day_of_week: 4, time: "18:30" };
+      const result = formatMeetingSchedule(schedule);
+      assert.strictEqual(result, "fourth Thursday of every month at 6:30 PM");
+    });
+  });
+
+  describe("string value handling", () => {
+    it("handles string values from TinaCMS", () => {
+      const schedule = { week_of_month: "3", day_of_week: "2", time: "15:00" };
+      const result = formatMeetingSchedule(schedule);
+      assert.strictEqual(result, "third Tuesday of every month at 3:00 PM");
     });
   });
 });

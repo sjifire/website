@@ -146,6 +146,30 @@ function getNextMeeting(schedule, override, timezone) {
   return formatMeetingResult(nextDate);
 }
 
+/**
+ * Format a meeting schedule as a human-readable string
+ * @param {Object} schedule - Schedule config with week_of_month, day_of_week, time
+ * @returns {string} e.g., "third Tuesday of every month at 3:00 PM"
+ */
+function formatMeetingSchedule(schedule) {
+  const ordinals = ['', 'first', 'second', 'third', 'fourth', 'fifth'];
+  const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+  const weekOfMonth = parseInt(schedule.week_of_month, 10);
+  const dayOfWeek = parseInt(schedule.day_of_week, 10);
+  const { hour, minute } = parseTimeString(schedule.time);
+
+  const ordinal = ordinals[weekOfMonth] || `${weekOfMonth}th`;
+  const dayName = days[dayOfWeek];
+
+  // Format time in 12-hour format
+  const hour12 = hour % 12 || 12;
+  const ampm = hour >= 12 ? 'PM' : 'AM';
+  const timeStr = minute === 0 ? `${hour12}:00 ${ampm}` : `${hour12}:${minute.toString().padStart(2, '0')} ${ampm}`;
+
+  return `${ordinal} ${dayName} of every month at ${timeStr}`;
+}
+
 // Pre-configured date filters
 const dateFilters = {
   // "Jan 15" - short format without year
@@ -167,6 +191,7 @@ module.exports = {
   getNextMeetingDate,
   getNextMeeting,
   formatMeetingResult,
+  formatMeetingSchedule,
   parseTimeString,
   DateTime,
 };
