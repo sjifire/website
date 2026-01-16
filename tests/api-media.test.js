@@ -6,6 +6,8 @@ const {
   MEDIA_EXTENSIONS,
   formatMediaItem,
   isMediaFile,
+  isPathSafe,
+  isWithinMediaRoot,
   getCorsHeaders,
   createMediaOperations,
 } = require("../api/src/lib/media.js");
@@ -58,6 +60,84 @@ describe("media module", () => {
       assert.strictEqual(isMediaFile(null), false);
       assert.strictEqual(isMediaFile(undefined), false);
       assert.strictEqual(isMediaFile(""), false);
+    });
+  });
+
+  describe("isPathSafe", () => {
+    it("returns true for safe paths", () => {
+      assert.strictEqual(isPathSafe("photo.jpg"), true);
+      assert.strictEqual(isPathSafe("events/photo.jpg"), true);
+      assert.strictEqual(isPathSafe("deep/nested/path/file.pdf"), true);
+      assert.strictEqual(isPathSafe("file-with-dashes.jpg"), true);
+      assert.strictEqual(isPathSafe("file_with_underscores.jpg"), true);
+    });
+
+    it("returns true for null/undefined/empty (no path to traverse)", () => {
+      assert.strictEqual(isPathSafe(null), true);
+      assert.strictEqual(isPathSafe(undefined), true);
+      assert.strictEqual(isPathSafe(""), true);
+    });
+
+    it("returns false for parent directory traversal (..)", () => {
+      assert.strictEqual(isPathSafe("../etc/passwd"), false);
+      assert.strictEqual(isPathSafe("events/../../../etc/passwd"), false);
+      assert.strictEqual(isPathSafe(".."), false);
+      assert.strictEqual(isPathSafe("foo/.."), false);
+    });
+
+    it("returns false for double slashes", () => {
+      assert.strictEqual(isPathSafe("events//photo.jpg"), false);
+      assert.strictEqual(isPathSafe("//etc/passwd"), false);
+    });
+
+    it("returns false for backslashes (Windows paths)", () => {
+      assert.strictEqual(isPathSafe("events\\photo.jpg"), false);
+      assert.strictEqual(isPathSafe("..\\..\\etc\\passwd"), false);
+    });
+
+    it("returns false for URL-encoded traversal attempts", () => {
+      assert.strictEqual(isPathSafe("%2e%2e/etc/passwd"), false); // ..
+      assert.strictEqual(isPathSafe("events%2f..%2f../etc"), false); // /
+      assert.strictEqual(isPathSafe("events%5c..%5c../etc"), false); // \
+    });
+
+    it("is case-insensitive for encoded patterns", () => {
+      assert.strictEqual(isPathSafe("%2E%2E/etc/passwd"), false);
+      assert.strictEqual(isPathSafe("%2F..%2F../etc"), false);
+      assert.strictEqual(isPathSafe("%5C..%5C../etc"), false);
+    });
+  });
+
+  describe("isWithinMediaRoot", () => {
+    it("returns true for paths within media root", () => {
+      assert.strictEqual(isWithinMediaRoot("src/assets/media/photo.jpg"), true);
+      assert.strictEqual(isWithinMediaRoot("src/assets/media/events/photo.jpg"), true);
+      assert.strictEqual(isWithinMediaRoot("src/assets/media/deep/nested/path/file.pdf"), true);
+    });
+
+    it("returns true for paths with leading slash", () => {
+      assert.strictEqual(isWithinMediaRoot("/src/assets/media/photo.jpg"), true);
+    });
+
+    it("returns true for paths with multiple slashes (normalized)", () => {
+      assert.strictEqual(isWithinMediaRoot("src//assets//media//photo.jpg"), true);
+    });
+
+    it("returns false for paths outside media root", () => {
+      assert.strictEqual(isWithinMediaRoot("src/assets/other/photo.jpg"), false);
+      assert.strictEqual(isWithinMediaRoot("etc/passwd"), false);
+      assert.strictEqual(isWithinMediaRoot("src/pages/index.html"), false);
+    });
+
+    it("returns false for null/undefined/empty", () => {
+      assert.strictEqual(isWithinMediaRoot(null), false);
+      assert.strictEqual(isWithinMediaRoot(undefined), false);
+      assert.strictEqual(isWithinMediaRoot(""), false);
+    });
+
+    it("returns false for partial matches", () => {
+      assert.strictEqual(isWithinMediaRoot("src/assets/media_releases/doc.pdf"), false);
+      assert.strictEqual(isWithinMediaRoot("src/assets/mediafiles/photo.jpg"), false);
     });
   });
 
@@ -141,7 +221,7 @@ describe("media module", () => {
       );
     });
 
-    it("returns first allowed origin for unknown origins (security)", () => {
+    it("returns default origin when request origin not in whitelist", () => {
       const mockRequest = {
         headers: {
           get: (name) => (name === "origin" ? "https://malicious-site.com" : null),
@@ -153,7 +233,7 @@ describe("media module", () => {
       assert.strictEqual(headers["Access-Control-Allow-Origin"], "https://www.sjifire.org");
     });
 
-    it("defaults to first allowed origin when no origin header", () => {
+    it("defaults to production URL when no origin header", () => {
       const mockRequest = {
         headers: {
           get: () => null,
@@ -169,7 +249,10 @@ describe("media module", () => {
       assert.strictEqual(getCorsHeaders(undefined)["Access-Control-Allow-Origin"], "https://www.sjifire.org");
     });
 
-    it("allows localhost origins for development", () => {
+    it("allows localhost origins in local development mode", () => {
+      const originalEnv = process.env.TINA_PUBLIC_IS_LOCAL;
+      process.env.TINA_PUBLIC_IS_LOCAL = "true";
+
       const mockRequest = {
         headers: {
           get: (name) => (name === "origin" ? "http://localhost:3000" : null),
@@ -178,6 +261,13 @@ describe("media module", () => {
 
       const headers = getCorsHeaders(mockRequest);
       assert.strictEqual(headers["Access-Control-Allow-Origin"], "http://localhost:3000");
+
+      // Restore
+      if (originalEnv === undefined) {
+        delete process.env.TINA_PUBLIC_IS_LOCAL;
+      } else {
+        process.env.TINA_PUBLIC_IS_LOCAL = originalEnv;
+      }
     });
   });
 

@@ -1,6 +1,7 @@
 const { app } = require("@azure/functions");
 const siteConfig = require("../../site-config.json");
 const { requireAdmin } = require("../lib/auth.js");
+const { isPathSafe } = require("../lib/media.js");
 
 const CLOUDINARY_ROOT = siteConfig.cloudinaryRootUrl;
 const SITE_URL = siteConfig.cloudinaryFetchUrl;
@@ -26,8 +27,7 @@ app.http("thumb", {
     }
 
     // Validate path doesn't contain traversal sequences
-    const dangerousPatterns = ["..", "//", "\\", "%2e", "%2f", "%5c"];
-    if (dangerousPatterns.some(p => requestPath.toLowerCase().includes(p))) {
+    if (!isPathSafe(requestPath)) {
       return { status: 400, jsonBody: { error: "Invalid path" } };
     }
 

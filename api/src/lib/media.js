@@ -78,7 +78,15 @@ function isWithinMediaRoot(filepath) {
 
   // Normalize and check it starts with media root
   const normalizedPath = filepath.replace(/\/+/g, "/").replace(/^\//, "");
-  return normalizedPath.startsWith(MEDIA_ROOT) || normalizedPath.startsWith(MEDIA_ROOT.substring(0));
+
+  // Must start with MEDIA_ROOT and either end there or have a slash after
+  if (!normalizedPath.startsWith(MEDIA_ROOT)) {
+    return false;
+  }
+
+  // Check that what follows is either nothing or a slash (not a partial match like "media_releases")
+  const remainder = normalizedPath.slice(MEDIA_ROOT.length);
+  return remainder === "" || remainder.startsWith("/");
 }
 
 // Allowed origins for CORS - loaded from config + localhost for development
@@ -277,6 +285,8 @@ module.exports = {
   MEDIA_EXTENSIONS,
   formatMediaItem,
   isMediaFile,
+  isPathSafe,
+  isWithinMediaRoot,
   getCorsHeaders,
   createMediaOperations,
   // Export default operations for convenience
