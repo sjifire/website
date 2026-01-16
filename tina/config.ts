@@ -333,6 +333,13 @@ export default defineConfig({
               },
             ],
           },
+          {
+            type: "image",
+            name: "header_images",
+            label: "Header Background Images",
+            description: "Images shown in the homepage header (randomly selected on each page load)",
+            list: true,
+          },
         ],
       },
       {
