@@ -71,7 +71,7 @@ scripts: '<script src="/js/carousel.js" defer></script>'
         <div class="carousel__slides" aria-live="polite">
           {% for img in gallery.carouselImages %}
             <div id="carousel-slide-{{ forloop.index }}" class="carousel__slide{% if forloop.first %} active{% endif %}" role="group" aria-roledescription="slide" aria-label="Slide {{ forloop.index }} of {{ gallery.carouselImages.size }}">
-              <img class="carousel__image leave-alone" src="{% imgPath img.src, 'f_auto,q_auto:good,c_limit,w_1000,h_800' %}" alt="{{ img.alt }}" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}">
+              <img class="carousel__image leave-alone" src="{% imgPath img.src, 'f_auto,q_auto:good,c_fill,g_auto,w_1000,h_800' %}" alt="{{ img.alt }}" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}">
             </div>
           {% endfor %}
         </div>
@@ -95,7 +95,7 @@ scripts: '<script src="/js/carousel.js" defer></script>'
       <div class="carousel__thumbnails">
         {% for img in gallery.carouselImages %}
           <button type="button" class="carousel__thumb{% if forloop.first %} active{% endif %}" data-slide="{{ forloop.index }}" aria-label="Go to slide {{ forloop.index }}">
-            <img class="leave-alone" src="{% imgPath img.src, 'f_auto,q_auto:good,c_fill,w_150,h_100' %}" alt="{{ img.alt }}">
+            <img class="leave-alone" src="{% imgPath img.src, 'f_auto,q_auto:good,c_fill,g_auto,w_150,h_100' %}" alt="{{ img.alt }}">
           </button>
         {% endfor %}
       </div>
