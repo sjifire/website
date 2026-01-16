@@ -145,6 +145,37 @@ describe('cloudinary module', () => {
 
       assert.ok(parsed[0].includes('/h_520,q_auto:eco,b_rgb:334155/e_art:incognito/o_30/'));
     });
+
+    it('handles object format with src property', () => {
+      const images = [{ src: 'gallery/photo1.jpg' }, { src: 'gallery/photo2.jpg' }];
+      const transform = '/h_520/';
+      const result = cloudinary.headerImageUrls(images, transform);
+      const parsed = JSON.parse(result);
+
+      assert.strictEqual(parsed.length, 2);
+      assert.strictEqual(
+        parsed[0],
+        'https://res.cloudinary.com/test-account/image/fetch/h_520/https://example.com/assets/media/gallery/photo1.jpg'
+      );
+    });
+
+    it('handles mixed string and object formats', () => {
+      const images = ['photo1.jpg', { src: 'photo2.jpg' }];
+      const transform = '/h_520/';
+      const result = cloudinary.headerImageUrls(images, transform);
+      const parsed = JSON.parse(result);
+
+      assert.strictEqual(parsed.length, 2);
+    });
+
+    it('filters out objects without src property', () => {
+      const images = [{ src: 'photo1.jpg' }, { notSrc: 'photo2.jpg' }, null];
+      const transform = '/h_520/';
+      const result = cloudinary.headerImageUrls(images, transform);
+      const parsed = JSON.parse(result);
+
+      assert.strictEqual(parsed.length, 1);
+    });
   });
 
   describe('_config exposure', () => {

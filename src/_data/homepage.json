@@ -8,7 +8,7 @@
     "image_count": 5
   },
   "header_images": [
-    "gallery/dept_rigs_and_crews_2025.jpg",
-    "gallery/s31_fleet.jpg"
+    { "src": "gallery/dept_rigs_and_crews_2025.jpg" },
+    { "src": "gallery/s31_fleet.jpg" }
   ]
 }
