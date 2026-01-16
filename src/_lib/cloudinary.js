@@ -48,20 +48,19 @@ function createCloudinary(siteData, isProduction) {
 
   /**
    * Generate an array of Cloudinary URLs for header images
-   * Used for the homepage header carousel
-   * @param {string[]} imageSources - Array of image filenames
-   * @param {string} transforms - Cloudinary transformation string (can include path segments)
+   * @param {string[]} imageSources - Array of image paths starting with /assets/media/
+   * @param {string} transforms - Cloudinary transformation string
    * @returns {string} JSON string of URL array for use in JavaScript
    */
   function headerImageUrls(imageSources, transforms) {
     if (!imageSources || !Array.isArray(imageSources)) return "[]";
 
-    const urls = imageSources.map(image => {
-      const cleanImage = image.replace(/^\/+/, "");
-      // Header images use a special transform format with path segments
-      // e.g., /h_520,q_auto:eco/e_art:incognito/...
-      return `${cloudinaryRootUrl}/image/fetch${transforms}${cloudinaryFetchUrl}/assets/media/${cleanImage}`;
-    });
+    const urls = imageSources
+      .filter(image => image && typeof image === "string")
+      .map(image => {
+        const cleanPath = image.replace(/^\/+/, "");
+        return `${cloudinaryRootUrl}/image/fetch${transforms}${cloudinaryFetchUrl}/${cleanPath}`;
+      });
 
     return JSON.stringify(urls);
   }

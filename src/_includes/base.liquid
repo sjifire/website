@@ -65,7 +65,7 @@
   {%- capture js -%}
     {% render "nav-js.liquid" %}
     {% if page.url == '/' %}
-      const imgs = {{ header_image_source | headerImageUrls: header_image_transform }};
+      const imgs = {{ homepage.header_images | headerImageUrls: header_image_transform }};
       const image = imgs[Math.floor(Math.random() * imgs.length)];
       document.getElementById('home-header').style.setProperty('--home-header-bg-image', 'url('+image+')');
     {% endif %}

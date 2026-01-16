@@ -6,5 +6,9 @@
     "show_thumbnails": true,
     "randomize": true,
     "image_count": 5
-  }
+  },
+  "header_images": [
+    "/assets/media/gallery/dept_rigs_and_crews_2025.jpg",
+    "/assets/media/gallery/s31_fleet.jpg"
+  ]
 }

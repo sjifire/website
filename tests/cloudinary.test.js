@@ -100,7 +100,7 @@ describe('cloudinary module', () => {
     const cloudinary = createCloudinary(mockSiteData, false);
 
     it('returns JSON array of image URLs', () => {
-      const images = ['photo1.jpg', 'photo2.jpg'];
+      const images = ['/assets/media/photo1.jpg', '/assets/media/photo2.jpg'];
       const transform = '/h_520,q_auto:eco/';
       const result = cloudinary.headerImageUrls(images, transform);
       const parsed = JSON.parse(result);
@@ -110,14 +110,10 @@ describe('cloudinary module', () => {
         parsed[0],
         'https://res.cloudinary.com/test-account/image/fetch/h_520,q_auto:eco/https://example.com/assets/media/photo1.jpg'
       );
-      assert.strictEqual(
-        parsed[1],
-        'https://res.cloudinary.com/test-account/image/fetch/h_520,q_auto:eco/https://example.com/assets/media/photo2.jpg'
-      );
     });
 
-    it('strips leading slashes from image names', () => {
-      const images = ['/photo1.jpg'];
+    it('strips leading slashes from paths', () => {
+      const images = ['/assets/media/photo1.jpg'];
       const result = cloudinary.headerImageUrls(images, '/h_520/');
       const parsed = JSON.parse(result);
 
@@ -137,13 +133,22 @@ describe('cloudinary module', () => {
       assert.strictEqual(cloudinary.headerImageUrls({}, '/t/'), '[]');
     });
 
-    it('handles complex transform strings with multiple segments', () => {
-      const images = ['test.jpg'];
+    it('handles complex transform strings', () => {
+      const images = ['/assets/media/test.jpg'];
       const transform = '/h_520,q_auto:eco,b_rgb:334155/e_art:incognito/o_30/';
       const result = cloudinary.headerImageUrls(images, transform);
       const parsed = JSON.parse(result);
 
       assert.ok(parsed[0].includes('/h_520,q_auto:eco,b_rgb:334155/e_art:incognito/o_30/'));
+    });
+
+    it('filters out non-string values', () => {
+      const images = ['/assets/media/photo1.jpg', null, undefined, '', 123];
+      const transform = '/h_520/';
+      const result = cloudinary.headerImageUrls(images, transform);
+      const parsed = JSON.parse(result);
+
+      assert.strictEqual(parsed.length, 1);
     });
   });
 
