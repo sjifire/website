@@ -13,7 +13,7 @@ scripts: '<script src="/js/gallery.js" defer></script>'
       <button type="button" class="photo-gallery__item" data-index="{{ forloop.index0 }}">
         <img
           class="photo-gallery__thumb leave-alone"
-          src="{% imgPath img.src, 'f_auto,q_auto:good,c_fill,w_300,h_200' %}"
+          src="{% imgPath img.src, 'f_auto,q_auto:good,c_fill,g_auto:faces,w_300,h_200' %}"
           alt="{{ img.alt }}"
           loading="lazy"
         >
