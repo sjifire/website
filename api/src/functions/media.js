@@ -5,6 +5,7 @@ const {
   deleteMedia,
   getCorsHeaders,
 } = require("../lib/media.js");
+const { requireAdmin, getUserForLogging } = require("../lib/auth.js");
 
 app.http("media", {
   methods: ["GET", "POST", "DELETE", "OPTIONS"],
@@ -16,6 +17,14 @@ app.http("media", {
     if (request.method === "OPTIONS") {
       return { status: 204, headers: corsHeaders };
     }
+
+    // Require admin authentication
+    const authError = requireAdmin(request, context);
+    if (authError) {
+      return { ...authError, headers: corsHeaders };
+    }
+
+    context.log(`Media API access by user: ${getUserForLogging(request)}`);
 
     try {
       if (request.method === "GET") {
@@ -53,8 +62,8 @@ app.http("media", {
 
       return { status: 405, headers: corsHeaders, jsonBody: { error: "Method not allowed" } };
     } catch (error) {
-      context.error("Media error:", error.message);
-      return { status: 500, headers: corsHeaders, jsonBody: { error: error.message } };
+      context.error("Media error:", error.message, error.stack);
+      return { status: 500, headers: corsHeaders, jsonBody: { error: "Internal server error" } };
     }
   },
 });

@@ -1,5 +1,6 @@
 const github = require("./github.js");
 const { optimizeImage } = require("./cloudinary.js");
+const siteConfig = require("../../site-config.json");
 
 const MEDIA_ROOT = "src/assets/media";
 const MEDIA_EXTENSIONS = ["jpg", "jpeg", "png", "gif", "webp", "svg", "pdf"];
@@ -45,11 +46,79 @@ function isMediaFile(filename) {
   return MEDIA_EXTENSIONS.includes(ext);
 }
 
-// CORS headers helper
+/**
+ * Validate a path doesn't contain traversal sequences
+ * @param {string} path - Path to validate
+ * @returns {boolean} True if path is safe
+ */
+function isPathSafe(path) {
+  if (!path) return true;
+
+  // Check for path traversal patterns
+  const dangerousPatterns = [
+    "..",           // Parent directory traversal
+    "//",           // Double slash
+    "\\",           // Backslash (Windows path)
+    "%2e",          // URL-encoded dot
+    "%2f",          // URL-encoded slash
+    "%5c",          // URL-encoded backslash
+  ];
+
+  const lowerPath = path.toLowerCase();
+  return !dangerousPatterns.some(pattern => lowerPath.includes(pattern));
+}
+
+/**
+ * Validate filepath is within the media root
+ * @param {string} filepath - Full filepath to validate
+ * @returns {boolean} True if path is within MEDIA_ROOT
+ */
+function isWithinMediaRoot(filepath) {
+  if (!filepath) return false;
+
+  // Normalize and check it starts with media root
+  const normalizedPath = filepath.replace(/\/+/g, "/").replace(/^\//, "");
+
+  // Must start with MEDIA_ROOT and either end there or have a slash after
+  if (!normalizedPath.startsWith(MEDIA_ROOT)) {
+    return false;
+  }
+
+  // Check that what follows is either nothing or a slash (not a partial match like "media_releases")
+  const remainder = normalizedPath.slice(MEDIA_ROOT.length);
+  return remainder === "" || remainder.startsWith("/");
+}
+
+// Allowed origins for CORS - loaded from config + localhost for development
+const LOCAL_ORIGINS = [
+  "http://localhost:3000",
+  "http://localhost:4001",
+  "http://localhost:5173",
+  "http://localhost:8080",
+];
+const ALLOWED_ORIGINS = [
+  ...(siteConfig.corsAllowedOrigins || []),
+  ...LOCAL_ORIGINS,
+];
+
+// CORS headers helper with origin whitelist
 function getCorsHeaders(request) {
-  const origin = request?.headers?.get?.("origin") || "*";
+  const origin = request?.headers?.get?.("origin");
+  const isLocal = process.env.TINA_PUBLIC_IS_LOCAL === "true";
+
+  // In local dev, be more permissive; in production, use strict whitelist
+  let allowOrigin;
+  if (isLocal && origin?.startsWith("http://localhost")) {
+    allowOrigin = origin;
+  } else if (origin && ALLOWED_ORIGINS.includes(origin)) {
+    allowOrigin = origin;
+  } else {
+    // Don't reflect unknown origins - use the primary production URL
+    allowOrigin = siteConfig.corsAllowedOrigins?.[0] || "https://www.sjifire.org";
+  }
+
   return {
-    "Access-Control-Allow-Origin": origin,
+    "Access-Control-Allow-Origin": allowOrigin,
     "Access-Control-Allow-Credentials": "true",
     "Access-Control-Allow-Methods": "GET, POST, DELETE, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type",
@@ -79,6 +148,11 @@ function createMediaOperations(deps = {}) {
 
   // List files in the media directory
   async function listMedia(directory = "") {
+    // Validate directory path is safe
+    if (!isPathSafe(directory)) {
+      throw new Error("Invalid directory path");
+    }
+
     const { branch } = getGitHubConfig();
     const cleanDir = normalizeDirectory(directory);
     const mediaPath = cleanDir ? `${MEDIA_ROOT}/${cleanDir}` : MEDIA_ROOT;
@@ -121,6 +195,16 @@ function createMediaOperations(deps = {}) {
 
   // Upload a file to the media directory
   async function uploadMedia(filename, content, directory = "") {
+    // Validate inputs are safe
+    if (!isPathSafe(directory) || !isPathSafe(filename)) {
+      throw new Error("Invalid path");
+    }
+
+    // Validate file type
+    if (!isMediaFile(filename)) {
+      throw new Error("File type not allowed");
+    }
+
     const { branch } = getGitHubConfig();
     const cleanDir = normalizeDirectory(directory);
     const filePath = cleanDir
@@ -165,6 +249,15 @@ function createMediaOperations(deps = {}) {
 
   // Delete a file from the media directory
   async function deleteMedia(filepath) {
+    // Validate filepath is safe and within media root
+    if (!isPathSafe(filepath)) {
+      throw new Error("Invalid file path");
+    }
+
+    if (!isWithinMediaRoot(filepath)) {
+      throw new Error("File path must be within media directory");
+    }
+
     const { branch } = getGitHubConfig();
     const encodedPath = encodePathForGitHub(filepath);
     const existing = await githubRequest(`/contents/${encodedPath}?ref=${branch}`);
@@ -192,6 +285,8 @@ module.exports = {
   MEDIA_EXTENSIONS,
   formatMediaItem,
   isMediaFile,
+  isPathSafe,
+  isWithinMediaRoot,
   getCorsHeaders,
   createMediaOperations,
   // Export default operations for convenience
