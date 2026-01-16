@@ -334,26 +334,11 @@ export default defineConfig({
             ],
           },
           {
-            type: "object",
+            type: "image",
             name: "header_images",
             label: "Header Background Images",
             description: "Images shown in the homepage header (randomly selected on each page load)",
             list: true,
-            ui: {
-              itemProps: (item) => {
-                const src = item?.src || "";
-                const filename = src.split("/").pop() || "New Image";
-                return { label: filename };
-              },
-            },
-            fields: [
-              {
-                type: "image",
-                name: "src",
-                label: "Image",
-                required: true,
-              },
-            ],
           },
         ],
       },
