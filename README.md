@@ -91,37 +91,53 @@ Now that you have your Static Web App URL:
 
 **Important**: The platform must be **Web**, not "Single-page application"
 
-### 6. Link Authentication to Static Web App
+### 6. Configure Authentication
 
-1. Go to your Static Web App in Azure Portal
-2. Click "Settings" > "Authentication" in the left menu
-3. Click "Add identity provider"
-4. Select "Microsoft"
-5. Fill in:
-   - **Application (client) ID**: Your `AAD_CLIENT_ID`
-   - **Client secret**: Your `AAD_CLIENT_SECRET`
-   - **Issuer URL**: `https://login.microsoftonline.com/<TENANT_ID>/v2.0` (replace with your tenant ID)
-   - **Allowed token audiences**: `api://<AAD_CLIENT_ID>`
-6. Click "Add"
+Authentication is configured via `staticwebapp.config.json` using Custom mode with Entra ID. The config file already contains the identity provider settings - you just need to:
+
+1. Update the `openIdIssuer` URL in `staticwebapp.config.json` with your tenant ID:
+   ```json
+   "openIdIssuer": "https://login.microsoftonline.com/YOUR_TENANT_ID/v2.0"
+   ```
+
+2. Add environment variables to your Static Web App (see step 8)
 
 To find your Tenant ID: Microsoft Entra ID > Overview > "Tenant ID"
 
 ### 7. Configure Admin Access Control
 
-The admin panel (`/admin`) requires users to have the `admin` role. Azure Static Web Apps Standard plan is required for custom role assignments.
+The admin panel (`/admin`) uses Entra ID security groups for access control. Users in the admin group automatically get access - no invitation links required.
+
+#### Create a Security Group
+
+1. Go to Azure Portal > Microsoft Entra ID > Groups
+2. Click "New group"
+3. Fill in:
+   - **Group type**: Security
+   - **Group name**: Website Admins
+   - **Membership type**: Assigned
+4. Click "Create"
+5. Copy the **Object ID** and update `adminGroupId` in `src/_data/site.json`
+
+#### Configure Group Claims
+
+The app registration must include group memberships in the token:
+
+1. Go to Microsoft Entra ID > App registrations > your app
+2. Click "Token configuration"
+3. Click "+ Add groups claim"
+4. Select **Security groups**
+5. Under "ID" token, check **Group ID**
+6. Click "Add"
 
 #### Adding Users
 
 To grant someone admin access:
 
-1. Go to your Static Web App in Azure Portal
-2. Click **Role management** in the left menu
-3. Click **Invite**
-4. Enter:
-   - **Invitee email**: The user's email address
-   - **Role**: `admin`
-5. Click **Generate**
-6. Share the invitation link with the user, or they can go directly to `/admin` and sign in
+1. Go to Microsoft Entra ID > Groups > Website Admins
+2. Click "Members" > "+ Add members"
+3. Search for and select the user(s)
+4. Click "Select"
 
 The user can now log in at `/admin` with their Microsoft account.
 
@@ -129,13 +145,11 @@ The user can now log in at `/admin` with their Microsoft account.
 
 To revoke admin access:
 
-1. Go to your Static Web App in Azure Portal
-2. Click **Role management** in the left menu
-3. Find the user and click **Delete**
+1. Go to Microsoft Entra ID > Groups > Website Admins
+2. Click "Members"
+3. Select the user(s) and click "Remove"
 
 The user will be denied access on their next login attempt.
-
-> **Note**: The Free plan only supports `anonymous` and `authenticated` roles. The Standard plan (~$9/month) is required to assign custom roles like `admin`.
 
 ### 8. Configure Static Web App Environment Variables
 
@@ -144,6 +158,8 @@ The user will be denied access on their next login attempt.
 
 | Name | Value | Description |
 |------|-------|-------------|
+| `AAD_CLIENT_ID` | `xxxxxxxx-xxxx-...` | Entra ID app registration client ID (from step 2) |
+| `AAD_CLIENT_SECRET` | `xxxxxxxx` | Entra ID app registration client secret (from step 2) |
 | `COSMOS_DB_CONNECTION_STRING` | `mongodb+srv://...` | Cosmos DB connection string from step 3 |
 | `COSMOS_DB_NAME` | `tinacms` | Database name (optional, defaults to "tinacms") |
 | `GITHUB_APP_ID` | `123456` | GitHub App ID from step 1 |
