@@ -194,7 +194,8 @@ function createMediaOperations(deps = {}) {
   }
 
   // Upload a file to the media directory
-  async function uploadMedia(filename, content, directory = "") {
+  // author: optional { name, email } for commit attribution
+  async function uploadMedia(filename, content, directory = "", author = null) {
     // Validate inputs are safe
     if (!isPathSafe(directory) || !isPathSafe(filename)) {
       throw new Error("Invalid path");
@@ -226,15 +227,24 @@ function createMediaOperations(deps = {}) {
       // File doesn't exist, that's fine
     }
 
-    const commitMessage = sha
+    // Build commit message with author attribution
+    let commitMessage = sha
       ? `Update media: ${filename}`
       : `Add media: ${filename}${optimized ? " (optimized)" : ""}`;
+    if (author?.email) {
+      commitMessage += ` by ${author.email}`;
+    }
 
     const body = {
       message: commitMessage,
       content: finalContent,
       branch,
       ...(sha && { sha }),
+      // Include author/committer for audit trail
+      ...(author && {
+        author: { name: author.name, email: author.email },
+        committer: { name: author.name, email: author.email },
+      }),
     };
 
     const result = await githubRequest(`/contents/${encodedPath}`, {
@@ -248,7 +258,8 @@ function createMediaOperations(deps = {}) {
   }
 
   // Delete a file from the media directory
-  async function deleteMedia(filepath) {
+  // author: optional { name, email } for commit attribution
+  async function deleteMedia(filepath, author = null) {
     // Validate filepath is safe and within media root
     if (!isPathSafe(filepath)) {
       throw new Error("Invalid file path");
@@ -262,12 +273,23 @@ function createMediaOperations(deps = {}) {
     const encodedPath = encodePathForGitHub(filepath);
     const existing = await githubRequest(`/contents/${encodedPath}?ref=${branch}`);
 
+    // Build commit message with author attribution
+    let commitMessage = `Delete media: ${filepath.split("/").pop()}`;
+    if (author?.email) {
+      commitMessage += ` by ${author.email}`;
+    }
+
     await githubRequest(`/contents/${encodedPath}`, {
       method: "DELETE",
       body: JSON.stringify({
-        message: `Delete media: ${filepath.split("/").pop()}`,
+        message: commitMessage,
         sha: existing.sha,
         branch,
+        // Include author/committer for audit trail
+        ...(author && {
+          author: { name: author.name, email: author.email },
+          committer: { name: author.name, email: author.email },
+        }),
       }),
     });
 

@@ -1,6 +1,6 @@
 const { createDatabase, createLocalDatabase, resolve: tinaResolve } = require("@tinacms/datalayer");
 const { MongodbLevel } = require("mongodb-level");
-const { GitHubProvider } = require("tinacms-gitprovider-github");
+const { AuthoredGitHubProvider } = require("../src/lib/git-provider.js");
 const { getGitHubToken, getGitHubConfig } = require("../src/lib/github.js");
 
 const isLocal = process.env.TINA_PUBLIC_IS_LOCAL === "true";
@@ -22,7 +22,7 @@ async function createProdDatabase() {
   console.log("  GitHub token generated successfully");
 
   return createDatabase({
-    gitProvider: new GitHubProvider({
+    gitProvider: new AuthoredGitHubProvider({
       branch,
       owner,
       repo,
