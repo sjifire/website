@@ -96,9 +96,35 @@ function getUserForLogging(request) {
   return principal.userDetails || principal.userId || "unknown";
 }
 
+/**
+ * Get Git author info from the authenticated user for commit attribution
+ * @param {Request} request - Azure Functions request object
+ * @returns {{name: string, email: string} | null} Author info for Git commits, or null if not authenticated
+ */
+function getGitAuthor(request) {
+  const principal = getClientPrincipal(request);
+  if (!principal) {
+    return null;
+  }
+
+  // userDetails is typically the email address from Azure AD
+  const email = principal.userDetails;
+  // Try to extract a display name from claims, or fall back to email prefix
+  const name = principal.claims?.find(c => c.typ === "name")?.val
+    || (email ? email.split("@")[0] : null)
+    || principal.userId
+    || "Unknown User";
+
+  return {
+    name,
+    email: email || `${principal.userId}@users.noreply.github.com`,
+  };
+}
+
 module.exports = {
   getClientPrincipal,
   hasAdminRole,
   requireAdmin,
   getUserForLogging,
+  getGitAuthor,
 };

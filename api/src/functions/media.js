@@ -5,7 +5,7 @@ const {
   deleteMedia,
   getCorsHeaders,
 } = require("../lib/media.js");
-const { requireAdmin, getUserForLogging } = require("../lib/auth.js");
+const { requireAdmin, getUserForLogging, getGitAuthor } = require("../lib/auth.js");
 
 app.http("media", {
   methods: ["GET", "POST", "DELETE", "OPTIONS"],
@@ -24,6 +24,7 @@ app.http("media", {
       return { ...authError, headers: corsHeaders };
     }
 
+    const author = getGitAuthor(request);
     context.log(`Media API access by user: ${getUserForLogging(request)}`);
 
     try {
@@ -44,7 +45,7 @@ app.http("media", {
 
         const arrayBuffer = await file.arrayBuffer();
         const base64Content = Buffer.from(arrayBuffer).toString("base64");
-        const result = await uploadMedia(file.name, base64Content, directory);
+        const result = await uploadMedia(file.name, base64Content, directory, author);
         return { status: 200, headers: corsHeaders, jsonBody: result };
       }
 
@@ -56,7 +57,7 @@ app.http("media", {
           return { status: 400, headers: corsHeaders, jsonBody: { error: "No filepath provided" } };
         }
 
-        await deleteMedia(filepath);
+        await deleteMedia(filepath, author);
         return { status: 200, headers: corsHeaders, jsonBody: { success: true } };
       }
 

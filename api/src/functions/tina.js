@@ -1,6 +1,7 @@
 const { app } = require("@azure/functions");
 const { TinaNodeBackend, LocalBackendAuthProvider } = require("@tinacms/datalayer");
-const { requireAdmin, getUserForLogging } = require("../lib/auth.js");
+const { requireAdmin, getUserForLogging, getGitAuthor } = require("../lib/auth.js");
+const { runWithAuthor } = require("../lib/git-provider.js");
 
 const isLocal = process.env.TINA_PUBLIC_IS_LOCAL === "true";
 
@@ -42,52 +43,56 @@ app.http("tina", {
       return authError;
     }
 
+    const author = getGitAuthor(request);
     context.log(`TinaCMS access by user: ${getUserForLogging(request)}`);
 
-    try {
-      const tinaBackend = await getBackend();
+    // Wrap the request in author context so git commits include user attribution
+    return runWithAuthor(author, async () => {
+      try {
+        const tinaBackend = await getBackend();
 
-      // Convert Azure Functions request to Node-like request
-      const body = await request.text();
-      const nodeReq = {
-        method: request.method,
-        url: `/api/tina/${path}`,
-        headers: Object.fromEntries(request.headers.entries()),
-        body: body ? JSON.parse(body) : undefined,
-        query: Object.fromEntries(new URL(request.url).searchParams.entries()),
-      };
+        // Convert Azure Functions request to Node-like request
+        const body = await request.text();
+        const nodeReq = {
+          method: request.method,
+          url: `/api/tina/${path}`,
+          headers: Object.fromEntries(request.headers.entries()),
+          body: body ? JSON.parse(body) : undefined,
+          query: Object.fromEntries(new URL(request.url).searchParams.entries()),
+        };
 
-      // Create response collector
-      let statusCode = 200;
-      const headers = {};
-      const chunks = [];
+        // Create response collector
+        let statusCode = 200;
+        const headers = {};
+        const chunks = [];
 
-      const nodeRes = {
-        statusCode: 200,
-        setHeader: (name, value) => { headers[name.toLowerCase()] = value; },
-        getHeader: (name) => headers[name.toLowerCase()],
-        writeHead: (code, hdrs) => {
-          statusCode = code;
-          if (hdrs) Object.entries(hdrs).forEach(([k, v]) => { headers[k.toLowerCase()] = v; });
-        },
-        write: (chunk) => { chunks.push(chunk); return true; },
-        end: (chunk) => { if (chunk) chunks.push(chunk); },
-      };
+        const nodeRes = {
+          statusCode: 200,
+          setHeader: (name, value) => { headers[name.toLowerCase()] = value; },
+          getHeader: (name) => headers[name.toLowerCase()],
+          writeHead: (code, hdrs) => {
+            statusCode = code;
+            if (hdrs) Object.entries(hdrs).forEach(([k, v]) => { headers[k.toLowerCase()] = v; });
+          },
+          write: (chunk) => { chunks.push(chunk); return true; },
+          end: (chunk) => { if (chunk) chunks.push(chunk); },
+        };
 
-      await tinaBackend(nodeReq, nodeRes);
+        await tinaBackend(nodeReq, nodeRes);
 
-      const responseBody = chunks.join("");
-      return {
-        status: statusCode,
-        headers,
-        body: responseBody,
-      };
-    } catch (error) {
-      context.error("TinaCMS error:", error.message, error.stack);
-      return {
-        status: 500,
-        jsonBody: { error: "Internal server error" },
-      };
-    }
+        const responseBody = chunks.join("");
+        return {
+          status: statusCode,
+          headers,
+          body: responseBody,
+        };
+      } catch (error) {
+        context.error("TinaCMS error:", error.message, error.stack);
+        return {
+          status: 500,
+          jsonBody: { error: "Internal server error" },
+        };
+      }
+    });
   },
 });
