@@ -6,6 +6,7 @@ const {
   hasAdminRole,
   requireAdmin,
   getUserForLogging,
+  getGitAuthor,
 } = require("../api/src/lib/auth.js");
 
 // Helper to create a mock request with headers
@@ -294,6 +295,121 @@ describe("auth module", () => {
       });
 
       assert.strictEqual(getUserForLogging(request), "preferred@example.com");
+    });
+  });
+
+  describe("getGitAuthor", () => {
+    it("returns null when no client principal", () => {
+      const request = createMockRequest({});
+      assert.strictEqual(getGitAuthor(request), null);
+    });
+
+    it("returns author object with email from userDetails", () => {
+      const principal = {
+        userId: "user123",
+        userDetails: "jane.doe@sjifire.org",
+        userRoles: ["admin"],
+      };
+      const request = createMockRequest({
+        "x-ms-client-principal": encodeClientPrincipal(principal),
+      });
+
+      const author = getGitAuthor(request);
+      assert.strictEqual(author.email, "jane.doe@sjifire.org");
+    });
+
+    it("extracts name from email prefix when no name claim", () => {
+      const principal = {
+        userId: "user123",
+        userDetails: "jane.doe@sjifire.org",
+        userRoles: ["admin"],
+      };
+      const request = createMockRequest({
+        "x-ms-client-principal": encodeClientPrincipal(principal),
+      });
+
+      const author = getGitAuthor(request);
+      assert.strictEqual(author.name, "jane.doe");
+    });
+
+    it("uses name claim when available", () => {
+      const principal = {
+        userId: "user123",
+        userDetails: "jane.doe@sjifire.org",
+        userRoles: ["admin"],
+        claims: [
+          { typ: "name", val: "Jane Doe" },
+          { typ: "oid", val: "some-guid" },
+        ],
+      };
+      const request = createMockRequest({
+        "x-ms-client-principal": encodeClientPrincipal(principal),
+      });
+
+      const author = getGitAuthor(request);
+      assert.strictEqual(author.name, "Jane Doe");
+      assert.strictEqual(author.email, "jane.doe@sjifire.org");
+    });
+
+    it("falls back to userId for name when no email", () => {
+      const principal = {
+        userId: "user-guid-123",
+        userRoles: ["admin"],
+      };
+      const request = createMockRequest({
+        "x-ms-client-principal": encodeClientPrincipal(principal),
+      });
+
+      const author = getGitAuthor(request);
+      assert.strictEqual(author.name, "user-guid-123");
+    });
+
+    it("generates noreply email when userDetails is missing", () => {
+      const principal = {
+        userId: "user-guid-123",
+        userRoles: ["admin"],
+      };
+      const request = createMockRequest({
+        "x-ms-client-principal": encodeClientPrincipal(principal),
+      });
+
+      const author = getGitAuthor(request);
+      assert.strictEqual(author.email, "user-guid-123@users.noreply.github.com");
+    });
+
+    it("returns 'Unknown User' for name when no identifiable info", () => {
+      const principal = {
+        userRoles: ["admin"],
+      };
+      const request = createMockRequest({
+        "x-ms-client-principal": encodeClientPrincipal(principal),
+      });
+
+      const author = getGitAuthor(request);
+      assert.strictEqual(author.name, "Unknown User");
+    });
+
+    it("handles empty claims array", () => {
+      const principal = {
+        userId: "user123",
+        userDetails: "test@example.com",
+        userRoles: ["admin"],
+        claims: [],
+      };
+      const request = createMockRequest({
+        "x-ms-client-principal": encodeClientPrincipal(principal),
+      });
+
+      const author = getGitAuthor(request);
+      assert.strictEqual(author.name, "test");
+      assert.strictEqual(author.email, "test@example.com");
+    });
+
+    it("returns null for invalid principal", () => {
+      const request = createMockRequest({
+        "x-ms-client-principal": "invalid-base64!!!",
+      });
+      assert.strictEqual(getGitAuthor(request), null);
     });
   });
 });

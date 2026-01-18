@@ -567,6 +567,96 @@ describe("media module", () => {
       // Filename should be URL-encoded
       assert.ok(putCall.endpoint.includes("my%20photo.jpg"), "Filename with space should be URL-encoded");
     });
+
+    it("includes author info in commit when provided", async () => {
+      const calls = [];
+      const mockGithubRequest = async (endpoint, options) => {
+        calls.push({ endpoint, options });
+        if (!options?.method) {
+          throw new Error("404");
+        }
+        return {
+          content: {
+            path: "src/assets/media/photo.jpg",
+            name: "photo.jpg",
+          },
+        };
+      };
+
+      const mediaOps = createMediaOperations({
+        getGitHubConfig: mockGetGitHubConfig,
+        githubRequest: mockGithubRequest,
+      });
+
+      const author = { name: "Jane Doe", email: "jane@sjifire.org" };
+      await mediaOps.uploadMedia("photo.jpg", "content", "", author);
+
+      const putCall = calls.find((c) => c.options?.method === "PUT");
+      const body = JSON.parse(putCall.options.body);
+
+      assert.strictEqual(body.message, "Add media: photo.jpg by jane@sjifire.org");
+      assert.deepStrictEqual(body.author, { name: "Jane Doe", email: "jane@sjifire.org" });
+      assert.deepStrictEqual(body.committer, { name: "Jane Doe", email: "jane@sjifire.org" });
+    });
+
+    it("omits author fields when author is null", async () => {
+      const calls = [];
+      const mockGithubRequest = async (endpoint, options) => {
+        calls.push({ endpoint, options });
+        if (!options?.method) {
+          throw new Error("404");
+        }
+        return {
+          content: {
+            path: "src/assets/media/photo.jpg",
+            name: "photo.jpg",
+          },
+        };
+      };
+
+      const mediaOps = createMediaOperations({
+        getGitHubConfig: mockGetGitHubConfig,
+        githubRequest: mockGithubRequest,
+      });
+
+      await mediaOps.uploadMedia("photo.jpg", "content", "", null);
+
+      const putCall = calls.find((c) => c.options?.method === "PUT");
+      const body = JSON.parse(putCall.options.body);
+
+      assert.strictEqual(body.message, "Add media: photo.jpg");
+      assert.strictEqual(body.author, undefined);
+      assert.strictEqual(body.committer, undefined);
+    });
+
+    it("includes author in update commit message", async () => {
+      const calls = [];
+      const mockGithubRequest = async (endpoint, options) => {
+        calls.push({ endpoint, options });
+        if (!options?.method) {
+          return { sha: "existing-sha" };
+        }
+        return {
+          content: {
+            path: "src/assets/media/photo.jpg",
+            name: "photo.jpg",
+          },
+        };
+      };
+
+      const mediaOps = createMediaOperations({
+        getGitHubConfig: mockGetGitHubConfig,
+        githubRequest: mockGithubRequest,
+      });
+
+      const author = { name: "John Smith", email: "john@example.com" };
+      await mediaOps.uploadMedia("photo.jpg", "newcontent", "", author);
+
+      const putCall = calls.find((c) => c.options?.method === "PUT");
+      const body = JSON.parse(putCall.options.body);
+
+      assert.strictEqual(body.message, "Update media: photo.jpg by john@example.com");
+    });
   });
 
   describe("deleteMedia (with dependency injection)", () => {
@@ -626,6 +716,57 @@ describe("media module", () => {
       const deleteCall = calls.find((c) => c.options?.method === "DELETE");
       const body = JSON.parse(deleteCall.options.body);
       assert.strictEqual(body.message, "Delete media: file.jpg");
+    });
+
+    it("includes author info in delete commit when provided", async () => {
+      const calls = [];
+      const mockGithubRequest = async (endpoint, options) => {
+        calls.push({ endpoint, options });
+        if (!options?.method) {
+          return { sha: "file-sha" };
+        }
+        return {};
+      };
+
+      const mediaOps = createMediaOperations({
+        getGitHubConfig: mockGetGitHubConfig,
+        githubRequest: mockGithubRequest,
+      });
+
+      const author = { name: "Jane Doe", email: "jane@sjifire.org" };
+      await mediaOps.deleteMedia("src/assets/media/photo.jpg", author);
+
+      const deleteCall = calls.find((c) => c.options?.method === "DELETE");
+      const body = JSON.parse(deleteCall.options.body);
+
+      assert.strictEqual(body.message, "Delete media: photo.jpg by jane@sjifire.org");
+      assert.deepStrictEqual(body.author, { name: "Jane Doe", email: "jane@sjifire.org" });
+      assert.deepStrictEqual(body.committer, { name: "Jane Doe", email: "jane@sjifire.org" });
+    });
+
+    it("omits author fields when author is null for delete", async () => {
+      const calls = [];
+      const mockGithubRequest = async (endpoint, options) => {
+        calls.push({ endpoint, options });
+        if (!options?.method) {
+          return { sha: "file-sha" };
+        }
+        return {};
+      };
+
+      const mediaOps = createMediaOperations({
+        getGitHubConfig: mockGetGitHubConfig,
+        githubRequest: mockGithubRequest,
+      });
+
+      await mediaOps.deleteMedia("src/assets/media/photo.jpg", null);
+
+      const deleteCall = calls.find((c) => c.options?.method === "DELETE");
+      const body = JSON.parse(deleteCall.options.body);
+
+      assert.strictEqual(body.message, "Delete media: photo.jpg");
+      assert.strictEqual(body.author, undefined);
+      assert.strictEqual(body.committer, undefined);
     });
   });
 });
