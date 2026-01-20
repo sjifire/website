@@ -1,8 +1,17 @@
 const { app } = require("@azure/functions");
+const path = require("path");
 
 // Admin group ID from API site config
-const siteConfig = require("../../site-config.json");
-const ADMIN_GROUP_ID = siteConfig.adminGroupId;
+let ADMIN_GROUP_ID = null;
+let configLoadError = null;
+
+try {
+  const configPath = path.join(__dirname, "../../site-config.json");
+  const siteConfig = require(configPath);
+  ADMIN_GROUP_ID = siteConfig.adminGroupId;
+} catch (error) {
+  configLoadError = error.message;
+}
 
 /**
  * Determines user roles based on Entra ID group membership.
@@ -59,6 +68,23 @@ app.http("getRoles", {
   authLevel: "anonymous",
   route: "auth/get-roles",
   handler: getRolesHandler,
+});
+
+// Debug endpoint to verify configuration
+app.http("getRolesDebug", {
+  methods: ["GET"],
+  authLevel: "anonymous",
+  route: "auth/get-roles/debug",
+  handler: async (request, context) => {
+    return {
+      status: 200,
+      jsonBody: {
+        adminGroupIdSet: !!ADMIN_GROUP_ID,
+        configLoadError,
+        dirname: __dirname,
+      },
+    };
+  },
 });
 
 // Export for testing
