@@ -20,10 +20,6 @@
       "allowedRoles": ["anonymous", "authenticated"]
     },
     {
-      "route": "/api/auth/get-roles/debug",
-      "allowedRoles": ["anonymous"]
-    },
-    {
       "route": "/admin/*",
       "allowedRoles": ["admin"]
     },
