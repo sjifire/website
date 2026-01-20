@@ -2,3 +2,4 @@
 require("./tina.js");
 require("./media.js");
 require("./thumb.js");
+require("./getRoles.js");
