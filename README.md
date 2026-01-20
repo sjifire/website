@@ -160,6 +160,7 @@ The user will be denied access on their next login attempt.
 |------|-------|-------------|
 | `AAD_CLIENT_ID` | `xxxxxxxx-xxxx-...` | Entra ID app registration client ID (from step 2) |
 | `AAD_CLIENT_SECRET` | `xxxxxxxx` | Entra ID app registration client secret (from step 2) |
+| `ADMIN_GROUP_ID` | `xxxxxxxx-xxxx-...` | Entra ID security group Object ID for admin access (from step 7) |
 | `COSMOS_DB_CONNECTION_STRING` | `mongodb+srv://...` | Cosmos DB connection string from step 3 |
 | `COSMOS_DB_NAME` | `tinacms` | Database name (optional, defaults to "tinacms") |
 | `GITHUB_APP_ID` | `123456` | GitHub App ID from step 1 |
