@@ -1746,6 +1746,22 @@ select.form-control:focus::-ms-value {
   margin: 0 0 1rem 1.5rem;
 }
 
+/* Side-by-side images */
+.image-pair {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 1.5rem 0;
+}
+
+.image-pair img {
+  flex: 1 1 300px;
+  max-width: 350px;
+  height: auto;
+  object-fit: cover;
+}
+
 /* Photo Gallery */
 .gallery-intro {
   color: var(--muted-gray);
