@@ -1,8 +1,16 @@
 const { app } = require("@azure/functions");
 
-// Admin group ID is configured in site.json
-const siteConfig = require("../../../src/_data/site.json");
-const ADMIN_GROUP_ID = siteConfig.adminGroupId;
+// Admin group ID from environment variable (set in Azure Static Web App config)
+// Falls back to site.json for local development
+let ADMIN_GROUP_ID = process.env.ADMIN_GROUP_ID;
+if (!ADMIN_GROUP_ID) {
+  try {
+    const siteConfig = require("../../../src/_data/site.json");
+    ADMIN_GROUP_ID = siteConfig.adminGroupId;
+  } catch {
+    // site.json not available in deployed API context
+  }
+}
 
 /**
  * Determines user roles based on Entra ID group membership.
