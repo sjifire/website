@@ -69,5 +69,24 @@ app.http("getRoles", {
   handler: getRolesHandler,
 });
 
+// Debug endpoint to verify configuration (GET /api/auth/get-roles/debug)
+app.http("getRolesDebug", {
+  methods: ["GET"],
+  authLevel: "anonymous",
+  route: "auth/get-roles/debug",
+  handler: async (request, context) => {
+    return {
+      status: 200,
+      jsonBody: {
+        adminGroupIdSet: !!ADMIN_GROUP_ID,
+        adminGroupIdLength: ADMIN_GROUP_ID ? ADMIN_GROUP_ID.length : 0,
+        adminGroupIdPreview: ADMIN_GROUP_ID ? ADMIN_GROUP_ID.substring(0, 8) + "..." : null,
+        nodeEnv: process.env.NODE_ENV,
+        timestamp: new Date().toISOString(),
+      },
+    };
+  },
+});
+
 // Export for testing
 module.exports = { getRolesFromClaims, getRolesHandler, ADMIN_GROUP_ID };
