@@ -1757,7 +1757,7 @@ select.form-control:focus::-ms-value {
 
 .image-pair img {
   flex: 1 1 300px;
-  max-width: 400px;
+  max-width: 350px;
   height: auto;
   object-fit: cover;
 }
