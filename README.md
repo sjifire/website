@@ -179,6 +179,54 @@ After deployment:
 - Site: `https://<your-site>.azurestaticapps.net/`
 - Admin: `https://<your-site>.azurestaticapps.net/admin/` (requires Entra ID login)
 
+### Troubleshooting Authentication
+
+#### Useful Endpoints
+
+| Endpoint | Description |
+|----------|-------------|
+| `/.auth/me` | Shows current user info and assigned roles |
+| `/.auth/logout` | Logs out and clears session |
+| `/.auth/login/aad` | Triggers Entra ID login |
+
+#### Common Issues
+
+**403 Forbidden after logging in**
+
+You're authenticated but don't have the "admin" role. Check `/.auth/me` to see your current roles.
+
+Causes:
+- User not in the admin security group (check Entra ID > Groups)
+- Group claims not configured (see "Configure Group Claims" above)
+- `adminGroupId` in `api/site-config.json` doesn't match the group's Object ID
+
+**Changes to Entra ID not taking effect**
+
+After making changes in Azure Portal (redirect URIs, group membership, etc.), you must log out and log back in. Your session caches the authentication state from when you first logged in.
+
+1. Go to `/.auth/logout`
+2. Go to `/admin` to trigger fresh login
+
+**AADSTS700054: response_type 'id_token' is not enabled**
+
+Enable ID tokens in your app registration:
+1. Azure Portal > Entra ID > App registrations > your app
+2. Authentication > Implicit grant and hybrid flows
+3. Check "ID tokens"
+4. Save
+
+**AADSTS50011: redirect URI mismatch**
+
+Add all your site URLs to the app registration:
+1. Azure Portal > Entra ID > App registrations > your app
+2. Authentication > Add URI
+3. Add: `https://<your-site>.azurestaticapps.net/.auth/login/aad/callback`
+4. For PR previews, also add the preview URL pattern
+
+**Environment variables not working in preview deployments**
+
+Azure Static Web Apps environment variables are per-environment. Variables set for "production" don't apply to PR preview environments. Set them for each environment in Azure Portal > Static Web App > Environment variables.
+
 
 ## Local Development
 
