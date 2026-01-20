@@ -14,7 +14,28 @@ const GOVERNANCE_FILE = path.join(
   "src/_data/governance_meeting.json"
 );
 
+/**
+ * Wait for Eleventy to rebuild by polling the page until expected content appears.
+ * This is more reliable than a fixed timeout since rebuild times vary.
+ */
+async function waitForEleventyRebuild(page, url, expectedText, maxAttempts = 10) {
+  for (let i = 0; i < maxAttempts; i++) {
+    await page.goto(url, { waitUntil: "networkidle" });
+    const content = await page.locator(".sidebar-block").first().locator("strong").first().textContent();
+    if (content && content.includes(expectedText)) {
+      return;
+    }
+    // Wait before retrying
+    await page.waitForTimeout(1000);
+  }
+  // Final attempt - let the test assertion handle the failure
+  await page.goto(url, { waitUntil: "networkidle" });
+}
+
 test.describe("Governance Meeting Override", () => {
+  // These tests must run serially because they modify a shared data file
+  test.describe.configure({ mode: 'serial' });
+
   let originalContent;
 
   test.beforeAll(async () => {
@@ -42,10 +63,8 @@ test.describe("Governance Meeting Override", () => {
 
     fs.writeFileSync(GOVERNANCE_FILE, JSON.stringify(data, null, 2));
 
-    // Need to wait for eleventy to rebuild - give it a moment
-    await page.waitForTimeout(1000);
-
-    await page.goto("/about/governance/");
+    // Poll until Eleventy rebuilds with our expected content
+    await waitForEleventyRebuild(page, "/about/governance/", "March 15");
 
     const meetingSection = page.locator(".sidebar-block").first();
     const dateTimeText = await meetingSection.locator("strong").first().textContent();
@@ -73,13 +92,20 @@ test.describe("Governance Meeting Override", () => {
     };
 
     fs.writeFileSync(GOVERNANCE_FILE, JSON.stringify(data, null, 2));
-    await page.waitForTimeout(1000);
 
-    await page.goto("/about/governance/");
+    // Poll until Eleventy rebuilds - we look for absence of override note
+    // by waiting for the page to NOT show March 15 (from previous test)
+    for (let i = 0; i < 10; i++) {
+      await page.goto("/about/governance/", { waitUntil: "networkidle" });
+      const noteElement = page.locator(".sidebar-block").first().locator("em");
+      const isVisible = await noteElement.isVisible();
+      if (!isVisible) break;
+      await page.waitForTimeout(1000);
+    }
 
     const meetingSection = page.locator(".sidebar-block").first();
 
-    // Should NOT show the override note since date is in past
+    // Should NOT show the override note since override is disabled
     const noteElement = meetingSection.locator("em");
     await expect(noteElement).not.toBeVisible();
 
@@ -101,9 +127,9 @@ test.describe("Governance Meeting Override", () => {
     };
 
     fs.writeFileSync(GOVERNANCE_FILE, JSON.stringify(data, null, 2));
-    await page.waitForTimeout(1000);
 
-    await page.goto("/about/governance/");
+    // Poll until Eleventy rebuilds with our expected content
+    await waitForEleventyRebuild(page, "/about/governance/", "January 20");
 
     const meetingSection = page.locator(".sidebar-block").first();
     const dateTimeText = await meetingSection.locator("strong").first().textContent();
