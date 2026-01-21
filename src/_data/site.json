@@ -1,5 +1,6 @@
 {
   "prodUrl": "https://www.sjifire.org",
+  "publicDocumentsUrl": "https://sjifires.sharepoint.com/:f:/s/SJIFirePublicRecords/IgBbJPhsXp0iTLx2WataGf3dARGo93hz2540LD3Gmcu4LRk",
   "cloudinaryFetchUrl": "https://jolly-moss-0db15021e.1.azurestaticapps.net",
   "corsAllowedOrigins": [
     "https://www.sjifire.org",
