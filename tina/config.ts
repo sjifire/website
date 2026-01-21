@@ -516,12 +516,6 @@ export default defineConfig({
             ui: { component: () => null },
           },
           {
-            type: "boolean",
-            name: "enable_cloudinary_rewrites",
-            label: "Enable Cloudinary Rewrites",
-            ui: { component: () => null },
-          },
-          {
             type: "string",
             name: "timezone",
             label: "Timezone",

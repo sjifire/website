@@ -5,99 +5,58 @@ const createCloudinary = require('../src/_lib/cloudinary');
 // Mock site configuration
 const mockSiteData = {
   cloudinaryRootUrl: 'https://res.cloudinary.com/test-account',
-  cloudinaryFetchUrl: 'https://example.com',
-  enable_cloudinary_rewrites: false
+  cloudinaryFetchUrl: 'https://example.com'
 };
 
 describe('cloudinary module', () => {
   describe('imgPath', () => {
-    describe('development mode (isProduction = false)', () => {
-      const cloudinary = createCloudinary(mockSiteData, false);
+    const cloudinary = createCloudinary(mockSiteData);
 
-      it('returns direct Cloudinary URL with default transforms', () => {
-        const result = cloudinary.imgPath('/assets/media/photo.jpg');
-        assert.strictEqual(
-          result,
-          'https://res.cloudinary.com/test-account/image/fetch/f_auto/https://example.com/assets/media/photo.jpg'
-        );
-      });
-
-      it('returns direct Cloudinary URL with custom transforms', () => {
-        const result = cloudinary.imgPath('/assets/media/photo.jpg', 'f_auto,q_auto:good,w_500');
-        assert.strictEqual(
-          result,
-          'https://res.cloudinary.com/test-account/image/fetch/f_auto,q_auto:good,w_500/https://example.com/assets/media/photo.jpg'
-        );
-      });
-
-      it('strips leading slashes from asset path', () => {
-        const result = cloudinary.imgPath('///assets/media/photo.jpg');
-        assert.strictEqual(
-          result,
-          'https://res.cloudinary.com/test-account/image/fetch/f_auto/https://example.com/assets/media/photo.jpg'
-        );
-      });
-
-      it('handles empty asset path', () => {
-        const result = cloudinary.imgPath('');
-        assert.strictEqual(result, '');
-      });
-
-      it('handles null/undefined asset path', () => {
-        assert.strictEqual(cloudinary.imgPath(null), '');
-        assert.strictEqual(cloudinary.imgPath(undefined), '');
-      });
-
-      it('works with PDF page extraction transform', () => {
-        const result = cloudinary.imgPath('/assets/media_releases/doc.pdf', 'f_auto,pg_1');
-        assert.strictEqual(
-          result,
-          'https://res.cloudinary.com/test-account/image/fetch/f_auto,pg_1/https://example.com/assets/media_releases/doc.pdf'
-        );
-      });
+    it('returns direct Cloudinary URL with default transforms', () => {
+      const result = cloudinary.imgPath('/assets/media/photo.jpg');
+      assert.strictEqual(
+        result,
+        'https://res.cloudinary.com/test-account/image/fetch/f_auto/https://example.com/assets/media/photo.jpg'
+      );
     });
 
-    describe('production mode without rewrites', () => {
-      const siteData = { ...mockSiteData, enable_cloudinary_rewrites: false };
-      const cloudinary = createCloudinary(siteData, true);
-
-      it('returns direct Cloudinary URL (same as dev)', () => {
-        const result = cloudinary.imgPath('/assets/media/photo.jpg');
-        assert.strictEqual(
-          result,
-          'https://res.cloudinary.com/test-account/image/fetch/f_auto/https://example.com/assets/media/photo.jpg'
-        );
-      });
+    it('returns direct Cloudinary URL with custom transforms', () => {
+      const result = cloudinary.imgPath('/assets/media/photo.jpg', 'f_auto,q_auto:good,w_500');
+      assert.strictEqual(
+        result,
+        'https://res.cloudinary.com/test-account/image/fetch/f_auto,q_auto:good,w_500/https://example.com/assets/media/photo.jpg'
+      );
     });
 
-    describe('production mode with rewrites enabled', () => {
-      const siteData = { ...mockSiteData, enable_cloudinary_rewrites: true };
-      const cloudinary = createCloudinary(siteData, true);
+    it('strips leading slashes from asset path', () => {
+      const result = cloudinary.imgPath('///assets/media/photo.jpg');
+      assert.strictEqual(
+        result,
+        'https://res.cloudinary.com/test-account/image/fetch/f_auto/https://example.com/assets/media/photo.jpg'
+      );
+    });
 
-      it('returns /optim/ URL with transforms as query param', () => {
-        const result = cloudinary.imgPath('/assets/media/photo.jpg');
-        assert.strictEqual(result, '/optim/assets/media/photo.jpg?c_param=f_auto');
-      });
+    it('handles empty asset path', () => {
+      const result = cloudinary.imgPath('');
+      assert.strictEqual(result, '');
+    });
 
-      it('returns /optim/ URL with custom transforms', () => {
-        const result = cloudinary.imgPath('/assets/media/photo.jpg', 'f_auto,w_500');
-        assert.strictEqual(result, '/optim/assets/media/photo.jpg?c_param=f_auto,w_500');
-      });
+    it('handles null/undefined asset path', () => {
+      assert.strictEqual(cloudinary.imgPath(null), '');
+      assert.strictEqual(cloudinary.imgPath(undefined), '');
+    });
 
-      it('prevents double-transformation for already processed paths', () => {
-        const result = cloudinary.imgPath('/optim/assets/media/photo.jpg');
-        assert.strictEqual(result, '/optim/assets/media/photo.jpg');
-      });
-
-      it('prevents double-transformation without leading slash', () => {
-        const result = cloudinary.imgPath('optim/assets/media/photo.jpg');
-        assert.strictEqual(result, '/optim/assets/media/photo.jpg');
-      });
+    it('works with PDF page extraction transform', () => {
+      const result = cloudinary.imgPath('/assets/media_releases/doc.pdf', 'f_auto,pg_1');
+      assert.strictEqual(
+        result,
+        'https://res.cloudinary.com/test-account/image/fetch/f_auto,pg_1/https://example.com/assets/media_releases/doc.pdf'
+      );
     });
   });
 
   describe('headerImageUrls', () => {
-    const cloudinary = createCloudinary(mockSiteData, false);
+    const cloudinary = createCloudinary(mockSiteData);
 
     it('returns JSON array of image URLs', () => {
       const images = ['/assets/media/photo1.jpg', '/assets/media/photo2.jpg'];
@@ -154,12 +113,10 @@ describe('cloudinary module', () => {
 
   describe('_config exposure', () => {
     it('exposes configuration for testing/debugging', () => {
-      const cloudinary = createCloudinary(mockSiteData, true);
+      const cloudinary = createCloudinary(mockSiteData);
 
       assert.strictEqual(cloudinary._config.cloudinaryRootUrl, mockSiteData.cloudinaryRootUrl);
       assert.strictEqual(cloudinary._config.cloudinaryFetchUrl, mockSiteData.cloudinaryFetchUrl);
-      assert.strictEqual(cloudinary._config.enableRewrites, false);
-      assert.strictEqual(cloudinary._config.isProduction, true);
     });
   });
 });
