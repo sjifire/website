@@ -21,6 +21,53 @@ async function getBackend() {
   return backend;
 }
 
+async function buildNodeRequest(request, path) {
+  const body = await request.text();
+  return {
+    method: request.method,
+    url: `/api/tina/${path}`,
+    headers: Object.fromEntries(request.headers.entries()),
+    body: body ? JSON.parse(body) : undefined,
+    query: Object.fromEntries(new URL(request.url).searchParams.entries()),
+  };
+}
+
+function createResponseCollector() {
+  let statusCode = 200;
+  const headers = {};
+  const chunks = [];
+
+  const nodeRes = {
+    statusCode: 200,
+    setHeader: (name, value) => { headers[name.toLowerCase()] = value; },
+    getHeader: (name) => headers[name.toLowerCase()],
+    writeHead: (code, hdrs) => {
+      statusCode = code;
+      if (hdrs) Object.entries(hdrs).forEach(([k, v]) => { headers[k.toLowerCase()] = v; });
+    },
+    write: (chunk) => { chunks.push(chunk); return true; },
+    end: (chunk) => { if (chunk) chunks.push(chunk); },
+  };
+
+  const getResponse = () => ({
+    status: statusCode,
+    headers,
+    body: chunks.join(""),
+  });
+
+  return { nodeRes, getResponse };
+}
+
+async function handleTinaRequest(request, path) {
+  const tinaBackend = await getBackend();
+  const nodeReq = await buildNodeRequest(request, path);
+  const { nodeRes, getResponse } = createResponseCollector();
+
+  await tinaBackend(nodeReq, nodeRes);
+
+  return getResponse();
+}
+
 app.http("tina", {
   methods: ["GET", "POST", "PUT", "DELETE"],
   authLevel: "anonymous",
@@ -29,7 +76,6 @@ app.http("tina", {
     const path = request.params.path || "";
     context.log("TinaCMS request:", request.method, path);
 
-    // Health check endpoint (public)
     if (path === "health") {
       return {
         status: 200,
@@ -37,7 +83,6 @@ app.http("tina", {
       };
     }
 
-    // Require admin authentication for all other operations
     const authError = requireAdmin(request, context);
     if (authError) {
       return authError;
@@ -46,52 +91,12 @@ app.http("tina", {
     const author = getGitAuthor(request);
     context.log(`TinaCMS access by user: ${getUserForLogging(request)}`);
 
-    // Wrap the request in author context so git commits include user attribution
     return runWithAuthor(author, async () => {
       try {
-        const tinaBackend = await getBackend();
-
-        // Convert Azure Functions request to Node-like request
-        const body = await request.text();
-        const nodeReq = {
-          method: request.method,
-          url: `/api/tina/${path}`,
-          headers: Object.fromEntries(request.headers.entries()),
-          body: body ? JSON.parse(body) : undefined,
-          query: Object.fromEntries(new URL(request.url).searchParams.entries()),
-        };
-
-        // Create response collector
-        let statusCode = 200;
-        const headers = {};
-        const chunks = [];
-
-        const nodeRes = {
-          statusCode: 200,
-          setHeader: (name, value) => { headers[name.toLowerCase()] = value; },
-          getHeader: (name) => headers[name.toLowerCase()],
-          writeHead: (code, hdrs) => {
-            statusCode = code;
-            if (hdrs) Object.entries(hdrs).forEach(([k, v]) => { headers[k.toLowerCase()] = v; });
-          },
-          write: (chunk) => { chunks.push(chunk); return true; },
-          end: (chunk) => { if (chunk) chunks.push(chunk); },
-        };
-
-        await tinaBackend(nodeReq, nodeRes);
-
-        const responseBody = chunks.join("");
-        return {
-          status: statusCode,
-          headers,
-          body: responseBody,
-        };
+        return await handleTinaRequest(request, path);
       } catch (error) {
         context.error("TinaCMS error:", error.message, error.stack);
-        return {
-          status: 500,
-          jsonBody: { error: "Internal server error" },
-        };
+        return { status: 500, jsonBody: { error: "Internal server error" } };
       }
     });
   },
