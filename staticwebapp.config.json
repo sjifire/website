@@ -33,11 +33,6 @@
       "statusCode": 301
     },
     {
-      "route": "/about/emergency-personnel/",
-      "redirect": "/about/our-team/",
-      "statusCode": 301
-    },
-    {
       "route": "/governance",
       "redirect": "/about/governance/",
       "statusCode": 301
@@ -58,17 +53,7 @@
       "statusCode": 301
     },
     {
-      "route": "/about/board-of-commissioners/",
-      "redirect": "/about/governance/",
-      "statusCode": 301
-    },
-    {
       "route": "/governance/documents",
-      "redirect": "/about/governance/",
-      "statusCode": 301
-    },
-    {
-      "route": "/governance/documents/",
       "redirect": "/about/governance/",
       "statusCode": 301
     },
@@ -78,17 +63,7 @@
       "statusCode": 301
     },
     {
-      "route": "/governance/board-of-commissioners/",
-      "redirect": "/about/governance/",
-      "statusCode": 301
-    },
-    {
       "route": "/board-of-commissioners",
-      "redirect": "/about/governance/",
-      "statusCode": 301
-    },
-    {
-      "route": "/board-of-commissioners/",
       "redirect": "/about/governance/",
       "statusCode": 301
     },
@@ -98,17 +73,7 @@
       "statusCode": 301
     },
     {
-      "route": "/contact-us/",
-      "redirect": "/contact/",
-      "statusCode": 301
-    },
-    {
       "route": "/about/staff",
-      "redirect": "/about/key-information/",
-      "statusCode": 301
-    },
-    {
-      "route": "/about/staff/",
       "redirect": "/about/key-information/",
       "statusCode": 301
     },
@@ -118,17 +83,7 @@
       "statusCode": 301
     },
     {
-      "route": "/about-us/",
-      "redirect": "/about/who-we-are/",
-      "statusCode": 301
-    },
-    {
       "route": "/about/about-san-juan-fire-and-rescue",
-      "redirect": "/about/key-information/",
-      "statusCode": 301
-    },
-    {
-      "route": "/about/about-san-juan-fire-and-rescue/",
       "redirect": "/about/key-information/",
       "statusCode": 301
     },
@@ -138,17 +93,7 @@
       "statusCode": 301
     },
     {
-      "route": "/privacy-policy/",
-      "redirect": "/disclaimer/",
-      "statusCode": 301
-    },
-    {
       "route": "/firewise",
-      "redirect": "/services/firewise/",
-      "statusCode": 301
-    },
-    {
-      "route": "/firewise/",
       "redirect": "/services/firewise/",
       "statusCode": 301
     },
@@ -158,17 +103,7 @@
       "statusCode": 301
     },
     {
-      "route": "/ems/",
-      "redirect": "/news/2022-01-18-we-are-an-ems-agency/",
-      "statusCode": 301
-    },
-    {
       "route": "/news/2022-01-18-sjifandr-is-an-ems-agency",
-      "redirect": "/news/2022-01-18-we-are-an-ems-agency/",
-      "statusCode": 301
-    },
-    {
-      "route": "/news/2022-01-18-sjifandr-is-an-ems-agency/",
       "redirect": "/news/2022-01-18-we-are-an-ems-agency/",
       "statusCode": 301
     }
