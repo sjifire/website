@@ -16,11 +16,11 @@ eleventyExcludeFromCollections: true
   </author>
   <generator>Eleventy</generator>
   {%- assign sortedPosts = posts | sort: "date" | reverse %}
-  {%- for post in sortedPosts limit: 20 %}
+  {%- for post in sortedPosts %}
   <entry>
     <title>{{ post.title | escape }}</title>
-    <link href="{{ site.prodUrl }}/news/{{ post.slug }}/" rel="alternate" type="text/html"/>
-    <id>{{ site.prodUrl }}/news/{{ post.slug }}/</id>
+    <link href="{{ site.prodUrl }}{{ post.url }}/" rel="alternate" type="text/html"/>
+    <id>{{ site.prodUrl }}{{ post.url }}/</id>
     <published>{{ post.date | date: "%Y-%m-%dT%H:%M:%SZ" }}</published>
     <updated>{{ post.date | date: "%Y-%m-%dT%H:%M:%SZ" }}</updated>
     {%- if post.excerpt %}
