@@ -4,38 +4,34 @@ eleventyExcludeFromCollections: true
 ---
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  {%- comment %}Static pages from collections{% endcomment %}
-  {%- for page in collections.all %}
-  {%- unless page.url == false or page.url contains '/admin' or page.url contains '/api' or page.url contains '/404' or page.url == '/thank-you/' or page.url contains '.css' or page.url contains '.xml' or page.url contains '/news/page-' or page.data.nav_hidden or page.data.excludeFromSitemap %}
-  {%- comment %}Skip individual news articles from collections - we'll add them from posts data{% endcomment %}
-  {%- unless page.url contains '/news/' and page.url != '/news/' and page.url != '/news/media-releases/' %}
+  {%- comment %}Homepage{% endcomment %}
   <url>
-    <loc>{{ site.prodUrl }}{{ page.url }}</loc>
-    {%- if page.date %}
-    <lastmod>{{ page.date | date: "%Y-%m-%d" }}</lastmod>
-    {%- endif %}
-    {%- if page.url == '/' %}
+    <loc>{{ site.prodUrl }}/</loc>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
-    {%- elsif page.url contains '/about/' or page.url contains '/services/' %}
+  </url>
+  {%- comment %}Navigation items from header/footer{% endcomment %}
+  {%- for item in nav.items %}
+    {%- if item.children and item.children.size > 0 %}
+      {%- for child in item.children %}
+  <url>
+    <loc>{{ site.prodUrl }}{{ child.url }}</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    {%- else %}
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-    {%- endif %}
   </url>
-  {%- endunless %}
-  {%- endunless %}
-  {%- endfor %}
-  {%- comment %}News articles from posts data{% endcomment %}
-  {%- assign sortedPosts = posts | sort: "date" | reverse %}
-  {%- for post in sortedPosts %}
+      {%- endfor %}
+    {%- elsif item.url %}
   <url>
-    <loc>{{ site.prodUrl }}{{ post.url }}/</loc>
-    <lastmod>{{ post.date | date: "%Y-%m-%d" }}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <loc>{{ site.prodUrl }}{{ item.url }}</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
+    {%- endif %}
   {%- endfor %}
+  {%- comment %}Footer-only pages{% endcomment %}
+  <url>
+    <loc>{{ site.prodUrl }}/disclaimer/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
 </urlset>
