@@ -1,0 +1,37 @@
+---
+permalink: /sitemap.xml
+eleventyExcludeFromCollections: true
+---
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  {%- comment %}Homepage{% endcomment %}
+  <url>
+    <loc>{{ site.prodUrl }}/</loc>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  {%- comment %}Navigation items from header/footer{% endcomment %}
+  {%- for item in nav.items %}
+    {%- if item.children and item.children.size > 0 %}
+      {%- for child in item.children %}
+  <url>
+    <loc>{{ site.prodUrl }}{{ child.url }}</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+      {%- endfor %}
+    {%- elsif item.url %}
+  <url>
+    <loc>{{ site.prodUrl }}{{ item.url }}</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+    {%- endif %}
+  {%- endfor %}
+  {%- comment %}Footer-only pages{% endcomment %}
+  <url>
+    <loc>{{ site.prodUrl }}/disclaimer/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
+</urlset>

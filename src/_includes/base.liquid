@@ -16,6 +16,10 @@
     <meta name="description" content="{{ pageDsc }}" />
   {% comment %}icon tags{% endcomment %}
     <link rel="icon" type="image/png" href="{% imgPath '/assets/sjifire-logo-clear.png' %}" />
+  {% comment %}RSS feed{% endcomment %}
+    <link rel="alternate" type="application/atom+xml" title="{{ site.site_name }} News Feed" href="{{ site.prodUrl }}/news/feed.xml" />
+  {% comment %}canonical URL{% endcomment %}
+    <link rel="canonical" href="{{ site.prodUrl }}{{ page.url }}" />
   {% comment %}og{% endcomment %}
     <meta property="og:url" content="{{ site.prodUrl }}{{ page.url }}" key="ogurl" />
     <meta property="og:type" content="website" />
@@ -28,6 +32,17 @@
     <meta property="og:site_name" content="{{ site.site_name }}" key="ogsitename" />
     <meta property="og:title" content="{{ pageTitle }}" key="ogtitle" />
     <meta property="og:description" content="{{ pageDsc }}" key="ogdesc" />
+  {% comment %}twitter cards{% endcomment %}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="{{ pageTitle }}" />
+    <meta name="twitter:description" content="{{ pageDsc }}" />
+    <meta name="twitter:image" content="{% imgPath ogImgPath, 'f_auto,q_auto:good,c_fill,w_1200,h_630' %}" />
+  {% comment %}additional SEO{% endcomment %}
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="geo.region" content="US-WA" />
+    <meta name="geo.placename" content="Friday Harbor" />
+    <meta name="geo.position" content="48.5232;-123.0245" />
+    <meta name="ICBM" content="48.5232, -123.0245" />
     <link rel="preconnect" href="//google-analytics.com" />
     <link rel="preconnect" href="//googleapis.com" />
     <link rel="preconnect" href="//gstatic.com" />
@@ -35,6 +50,82 @@
     <link rel="preconnect" href="//clarity.ms/ "/>
 
   <link rel="stylesheet" href="/css/site.css">
+
+  {% comment %}JSON-LD Structured Data{% endcomment %}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FireStation",
+    "@id": "{{ site.prodUrl }}/#organization",
+    "name": "{{ site.site_name }}",
+    "alternateName": "SJIF&R",
+    "legalName": "San Juan County Fire District #3",
+    "url": "{{ site.prodUrl }}",
+    "logo": "{{ site.prodUrl }}/assets/sjifire-logo-clear.png",
+    "description": "{{ site.site_desc }}",
+    "telephone": "360-378-5334",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "1011 Mullis Street",
+      "addressLocality": "Friday Harbor",
+      "addressRegion": "WA",
+      "postalCode": "98250",
+      "addressCountry": "US"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 48.5232,
+      "longitude": -123.0245
+    },
+    "areaServed": {
+      "@type": "Place",
+      "name": "San Juan Island, San Juan County, Washington"
+    },
+    "sameAs": [
+      "https://www.facebook.com/SJIFire/",
+      "https://www.instagram.com/sjifire/"
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "url": "{{ site.prodUrl }}",
+    "name": "{{ site.site_name }}",
+    "description": "{{ site.site_desc }}",
+    "publisher": {
+      "@id": "{{ site.prodUrl }}/#organization"
+    }
+  }
+  </script>
+  {%- if page.fileSlug == 'news-article' and post -%}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    "headline": "{{ post.title | escape }}",
+    "description": "{{ post.excerpt | default: post.title | escape }}",
+    "datePublished": "{{ post.date | date: '%Y-%m-%dT%H:%M:%S-08:00' }}",
+    "dateModified": "{{ post.date | date: '%Y-%m-%dT%H:%M:%S-08:00' }}",
+    "author": {
+      "@type": "Organization",
+      "@id": "{{ site.prodUrl }}/#organization"
+    },
+    "publisher": {
+      "@id": "{{ site.prodUrl }}/#organization"
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "{{ site.prodUrl }}{{ page.url }}"
+    }
+    {%- if post.featured_image and post.featured_image.source != "" -%}
+    {%- assign articleImgPath = '/assets/media/' | append: post.featured_image.source -%}
+    ,"image": "{% imgPath articleImgPath, 'f_auto,q_auto:good,w_1200' %}"
+    {%- endif %}
+  }
+  </script>
+  {%- endif -%}
 </head>
 <body>
 
