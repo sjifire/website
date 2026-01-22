@@ -9,17 +9,11 @@ const DEFAULT_TRANSFORMS = "f_auto";
  * Creates Cloudinary utility functions bound to site configuration
  * @param {Object} siteData - Site configuration from site.json
  * @param {string} siteData.cloudinaryRootUrl - Cloudinary base URL (e.g., https://res.cloudinary.com/account)
- * @param {string} siteData.cloudinaryFetchUrl - Origin URL for fetch (e.g., https://sjifire.netlify.app)
- * @param {boolean} siteData.enable_cloudinary_rewrites - Whether to use /optim/ route rewrites
- * @param {boolean} isProduction - Whether running in production mode
+ * @param {string} siteData.cloudinaryFetchUrl - Origin URL for fetch (e.g., https://sjifire.org)
  * @returns {Object} Object containing Cloudinary utility functions
  */
-function createCloudinary(siteData, isProduction) {
-  const {
-    cloudinaryRootUrl,
-    cloudinaryFetchUrl,
-    enable_cloudinary_rewrites: enableRewrites
-  } = siteData;
+function createCloudinary(siteData) {
+  const { cloudinaryRootUrl, cloudinaryFetchUrl } = siteData;
 
   /**
    * Generate a Cloudinary image URL for a given asset path
@@ -30,19 +24,7 @@ function createCloudinary(siteData, isProduction) {
   function imgPath(assetPath, transforms = DEFAULT_TRANSFORMS) {
     if (!assetPath) return "";
 
-    // Strip leading slashes - Cloudinary has issues with double slashes
     const cleanPath = assetPath.replace(/^\/+/, "");
-
-    // Production with rewrites enabled: use /optim/ route
-    if (isProduction && enableRewrites) {
-      // Prevent double-transformation if already processed
-      if (/^(\/)?optim\//.test(cleanPath)) {
-        return `/${cleanPath}`;
-      }
-      return `/optim/${cleanPath}?c_param=${transforms}`;
-    }
-
-    // Default: direct Cloudinary fetch URL
     return `${cloudinaryRootUrl}/image/fetch/${transforms}/${cloudinaryFetchUrl}/${cleanPath}`;
   }
 
@@ -69,7 +51,7 @@ function createCloudinary(siteData, isProduction) {
     imgPath,
     headerImageUrls,
     // Expose for testing
-    _config: { cloudinaryRootUrl, cloudinaryFetchUrl, enableRewrites, isProduction }
+    _config: { cloudinaryRootUrl, cloudinaryFetchUrl }
   };
 }
 

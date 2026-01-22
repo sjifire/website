@@ -39,7 +39,7 @@ Requires Node.js 20+. Output goes to `_site/`.
 
 **Date handling**: All dates use Luxon with explicit UTC timezone to avoid DST issues. Multiple date filters exist for different formats (`postDateTerseISO`, `postDateVerboseISO`, etc.).
 
-**Image optimization**: Production builds use Cloudinary via `imgPath` shortcode. Set `enable_cloudinary_rewrites` in `site.json`.
+**Image optimization**: Production builds use Cloudinary via `imgPath` shortcode for automatic format conversion and optimization.
 
 ### Configuration Files
 

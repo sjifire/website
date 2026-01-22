@@ -3,11 +3,9 @@ const { Liquid } = require("liquidjs");
 const createCloudinary = require("./src/_lib/cloudinary");
 const { dateFilters, getNextMeeting, formatMeetingSchedule } = require("./src/_lib/date-utils");
 
-const isProduction = process.env.ELEVENTY_ENV === "production";
-
 module.exports = function(eleventyConfig) {
   const siteData = require("./src/_data/site.json");
-  const cloudinary = createCloudinary(siteData, isProduction);
+  const cloudinary = createCloudinary(siteData);
 
   // Create custom Liquid engine with additional options
   const liquidEngine = new Liquid({
