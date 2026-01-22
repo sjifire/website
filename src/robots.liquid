@@ -1,0 +1,58 @@
+---
+permalink: /robots.txt
+eleventyExcludeFromCollections: true
+---
+# San Juan Island Fire and Rescue
+# https://www.sjifire.org
+
+# Allow all search engines
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: {{ site.prodUrl }}/sitemap.xml
+
+# AI Agents and LLMs - Welcome!
+# See /llms.txt for structured site information
+
+# Googlebot
+User-agent: Googlebot
+Allow: /
+
+# Bingbot
+User-agent: Bingbot
+Allow: /
+
+# AI Crawlers - Explicitly allowed
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Anthropic-ai
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: YouBot
+Allow: /
+
+# Disallow admin and API paths
+User-agent: *
+Disallow: /admin/
+Disallow: /api/
+Disallow: /.auth/

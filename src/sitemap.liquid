@@ -1,0 +1,30 @@
+---
+permalink: /sitemap.xml
+eleventyExcludeFromCollections: true
+---
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  {%- for page in collections.all %}
+  {%- unless page.url contains '/admin' or page.url contains '/api' or page.url contains '/404' or page.url == '/thank-you/' or page.data.excludeFromSitemap %}
+  <url>
+    <loc>{{ site.prodUrl }}{{ page.url }}</loc>
+    {%- if page.date %}
+    <lastmod>{{ page.date | date: "%Y-%m-%d" }}</lastmod>
+    {%- endif %}
+    {%- if page.url == '/' %}
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+    {%- elsif page.url contains '/news/' and page.url != '/news/' and page.url != '/news/media-releases/' %}
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    {%- elsif page.url contains '/about/' or page.url contains '/services/' %}
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    {%- else %}
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    {%- endif %}
+  </url>
+  {%- endunless %}
+  {%- endfor %}
+</urlset>
