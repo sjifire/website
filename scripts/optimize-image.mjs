@@ -15,7 +15,7 @@
 
 import 'dotenv/config';
 import { readFileSync, writeFileSync, statSync, readdirSync } from 'node:fs';
-import { resolve, relative, extname, basename } from 'node:path';
+import { resolve, extname, basename } from 'node:path';
 import { optimizeImageBuffer } from './cloudinary-optimize.mjs';
 
 const MIN_SIZE_BYTES = 500 * 1024; // 500KB
