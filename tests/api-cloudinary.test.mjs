@@ -1,7 +1,7 @@
-const { describe, it, beforeEach, afterEach, mock } = require("node:test");
-const assert = require("node:assert");
+import { describe, it, afterEach } from "node:test";
+import assert from "node:assert";
 
-const {
+import {
   optimizeImage,
   isOptimizableFile,
   getCloudinaryConfig,
@@ -9,7 +9,7 @@ const {
   CLOUD_NAME,
   MIN_SIZE_BYTES,
   TRANSFORM,
-} = require("../api/src/lib/cloudinary.js");
+} from "../api/src/lib/cloudinary.js";
 
 describe("cloudinary module", () => {
   describe("constants", () => {

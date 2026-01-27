@@ -1,13 +1,13 @@
-const { describe, it, afterEach } = require("node:test");
-const assert = require("node:assert");
+import { describe, it, afterEach } from "node:test";
+import assert from "node:assert";
 
-const {
+import {
   getClientPrincipal,
   hasAdminRole,
   requireAdmin,
   getUserForLogging,
   getGitAuthor,
-} = require("../api/src/lib/auth.js");
+} from "../api/src/lib/auth.js";
 
 // Helper to create a mock request with headers
 function createMockRequest(headers = {}) {
