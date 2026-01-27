@@ -14,8 +14,8 @@ permissions:
   contents: read
 
 jobs:
-  lint:
-    name: Lint
+  ci:
+    name: Lint & Test
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -29,30 +29,13 @@ jobs:
           cache: "npm"
 
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --prefer-offline
 
       - name: Run ESLint
         run: npm run lint:js
 
       - name: Run Stylelint
         run: npm run lint:css
-
-  test:
-    name: Tests
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-          cache: "npm"
-
-      - name: Install dependencies
-        run: npm ci
 
       - name: Cache Playwright browsers
         uses: actions/cache@v4
