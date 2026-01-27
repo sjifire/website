@@ -1,7 +1,7 @@
-const { app } = require("@azure/functions");
-const { TinaNodeBackend, LocalBackendAuthProvider } = require("@tinacms/datalayer");
-const { requireAdmin, getUserForLogging, getGitAuthor } = require("../lib/auth.js");
-const { runWithAuthor } = require("../lib/git-provider.js");
+import { app } from "@azure/functions";
+import { TinaNodeBackend, LocalBackendAuthProvider } from "@tinacms/datalayer";
+import { requireAdmin, getUserForLogging, getGitAuthor } from "../lib/auth.js";
+import { runWithAuthor } from "../lib/git-provider.js";
 
 const isLocal = process.env.TINA_PUBLIC_IS_LOCAL === "true";
 
@@ -10,7 +10,7 @@ let backend = null;
 async function getBackend() {
   if (backend) return backend;
 
-  const { getDatabase } = require("../../tina/database.js");
+  const { getDatabase } = await import("../../tina/database.js");
   const database = await getDatabase();
 
   backend = TinaNodeBackend({

@@ -1,11 +1,11 @@
-const { app } = require("@azure/functions");
-const {
+import { app } from "@azure/functions";
+import {
   listMedia,
   uploadMedia,
   deleteMedia,
   getCorsHeaders,
-} = require("../lib/media.js");
-const { requireAdmin, getUserForLogging, getGitAuthor } = require("../lib/auth.js");
+} from "../lib/media.js";
+import { requireAdmin, getUserForLogging, getGitAuthor } from "../lib/auth.js";
 
 async function handleGet(request, corsHeaders) {
   const directory = new URL(request.url).searchParams.get("directory") || "";

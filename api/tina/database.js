@@ -1,7 +1,7 @@
-const { createDatabase, createLocalDatabase, resolve: tinaResolve } = require("@tinacms/datalayer");
-const { MongodbLevel } = require("mongodb-level");
-const { AuthoredGitHubProvider } = require("../src/lib/git-provider.js");
-const { getGitHubToken, getGitHubConfig } = require("../src/lib/github.js");
+import { createDatabase, createLocalDatabase, resolve as tinaResolve } from "@tinacms/datalayer";
+import { MongodbLevel } from "mongodb-level";
+import { AuthoredGitHubProvider } from "../src/lib/git-provider.js";
+import { getGitHubToken, getGitHubConfig } from "../src/lib/github.js";
 
 const isLocal = process.env.TINA_PUBLIC_IS_LOCAL === "true";
 
@@ -51,9 +51,7 @@ function createDatabaseClient(database) {
 }
 
 // Export a function that returns the databaseClient (handles async for prod)
-async function getDatabase() {
+export async function getDatabase() {
   const database = isLocal ? createLocalDatabase() : await createProdDatabase();
   return createDatabaseClient(database);
 }
-
-module.exports = { getDatabase };

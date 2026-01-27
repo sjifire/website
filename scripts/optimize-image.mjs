@@ -13,24 +13,28 @@
  *   - Resizes to max 2000x2000, auto quality
  */
 
-import 'dotenv/config';
-import { readFileSync, writeFileSync, statSync, readdirSync } from 'node:fs';
-import { resolve, extname, basename } from 'node:path';
-import { optimizeImageBuffer } from './cloudinary-optimize.mjs';
+import "dotenv/config";
+import { readFileSync, writeFileSync, statSync, readdirSync } from "node:fs";
+import { resolve, extname, basename } from "node:path";
+import {
+  optimizeImageBuffer,
+  MIN_SIZE_BYTES,
+  OPTIMIZABLE_EXTENSIONS,
+  TRANSFORM,
+} from "../api/src/lib/cloudinary.js";
 
-const MIN_SIZE_BYTES = 500 * 1024; // 500KB
-const OPTIMIZABLE_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif', '.webp'];
-const TRANSFORM = 'w_2000,h_2000,c_limit,q_auto:good';
+// Convert extensions to include dot prefix for path matching
+const OPTIMIZABLE_EXTS = OPTIMIZABLE_EXTENSIONS.map(ext => `.${ext}`);
 
 function formatBytes(bytes) {
-  if (bytes < 1024) return bytes + ' B';
-  if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
-  return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+  if (bytes < 1024) return bytes + " B";
+  if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
+  return (bytes / (1024 * 1024)).toFixed(2) + " MB";
 }
 
 function isOptimizable(filePath) {
   const ext = extname(filePath).toLowerCase();
-  return OPTIMIZABLE_EXTENSIONS.includes(ext);
+  return OPTIMIZABLE_EXTS.includes(ext);
 }
 
 function getFilesRecursive(dir, files = []) {
@@ -54,14 +58,14 @@ async function optimizeFile(inputPath, outputPath, inPlace = false) {
   // Skip small files
   if (inputSize < MIN_SIZE_BYTES) {
     console.log(`[SKIP] ${displayName} (${formatBytes(inputSize)} < ${formatBytes(MIN_SIZE_BYTES)})`);
-    return { status: 'skipped', reason: 'too_small' };
+    return { status: "skipped", reason: "too_small" };
   }
 
   process.stdout.write(`[OPTIMIZING] ${displayName} (${formatBytes(inputSize)})... `);
 
   const result = await optimizeImageBuffer(inputBuffer, {
     transform: TRANSFORM,
-    format: extname(inputPath).toLowerCase() === '.png' ? 'png' : 'jpg'
+    format: extname(inputPath).toLowerCase() === ".png" ? "png" : "jpg"
   });
 
   if (!result.optimized) {
@@ -71,7 +75,7 @@ async function optimizeFile(inputPath, outputPath, inPlace = false) {
       writeFileSync(outputPath, inputBuffer);
       console.log(`  Copied original to: ${outputPath}`);
     }
-    return { status: 'error', reason: result.reason };
+    return { status: "error", reason: result.reason };
   }
 
   const outputSize = result.buffer.length;
@@ -79,7 +83,7 @@ async function optimizeFile(inputPath, outputPath, inPlace = false) {
   // Skip if not smaller (for in-place optimization)
   if (inPlace && outputSize >= inputSize) {
     console.log(`skipped (optimized not smaller: ${formatBytes(outputSize)})`);
-    return { status: 'skipped', reason: 'not_smaller' };
+    return { status: "skipped", reason: "not_smaller" };
   }
 
   writeFileSync(outputPath, result.buffer);
@@ -87,7 +91,7 @@ async function optimizeFile(inputPath, outputPath, inPlace = false) {
   console.log(`${formatBytes(inputSize)} → ${formatBytes(outputSize)} (${savings}% smaller)`);
 
   return {
-    status: 'optimized',
+    status: "optimized",
     inputSize,
     outputSize,
     savedBytes: inputSize - outputSize
@@ -98,10 +102,10 @@ async function main() {
   const args = process.argv.slice(2);
 
   if (args.length === 0) {
-    console.error('Usage:');
-    console.error('  node scripts/optimize-image.mjs <input> <output>   # Single file');
-    console.error('  node scripts/optimize-image.mjs <file> [file...]   # In-place');
-    console.error('  node scripts/optimize-image.mjs <directory>        # Batch');
+    console.error("Usage:");
+    console.error("  node scripts/optimize-image.mjs <input> <output>   # Single file");
+    console.error("  node scripts/optimize-image.mjs <file> [file...]   # In-place");
+    console.error("  node scripts/optimize-image.mjs <directory>        # Batch");
     process.exit(1);
   }
 
@@ -148,7 +152,7 @@ async function main() {
   }
 
   if (files.length === 0) {
-    console.error('No optimizable images found');
+    console.error("No optimizable images found");
     process.exit(1);
   }
 
@@ -172,11 +176,11 @@ async function main() {
       try {
         const result = await optimizeFile(filePath, filePath, true);
 
-        if (result.status === 'optimized') {
+        if (result.status === "optimized") {
           optimizedCount++;
           totalOriginal += result.inputSize;
           totalSaved += result.savedBytes;
-        } else if (result.status === 'skipped') {
+        } else if (result.status === "skipped") {
           skippedCount++;
         } else {
           errorCount++;
@@ -187,8 +191,8 @@ async function main() {
       }
     }
 
-    console.log('\n' + '='.repeat(50));
-    console.log('Summary:');
+    console.log("\n" + "=".repeat(50));
+    console.log("Summary:");
     console.log(`  Optimized: ${optimizedCount} files`);
     console.log(`  Skipped: ${skippedCount} files`);
     console.log(`  Errors: ${errorCount} files`);

@@ -1,9 +1,13 @@
-const github = require("./github.js");
-const { optimizeImage } = require("./cloudinary.js");
+import { createRequire } from "node:module";
+import * as github from "./github.js";
+import { optimizeImage } from "./cloudinary.js";
+
+// ESM doesn't support JSON imports without flags, so use createRequire
+const require = createRequire(import.meta.url);
 const siteConfig = require("../../site-config.json");
 
-const MEDIA_ROOT = "src/assets/media";
-const MEDIA_EXTENSIONS = ["jpg", "jpeg", "png", "gif", "webp", "svg", "pdf"];
+export const MEDIA_ROOT = "src/assets/media";
+export const MEDIA_EXTENSIONS = ["jpg", "jpeg", "png", "gif", "webp", "svg", "pdf"];
 const LOCAL_AZURE_FUNCTIONS_URL = "http://localhost:7071";
 
 // API base URL - in production this is relative, locally it needs the full URL
@@ -14,7 +18,7 @@ function getApiBase() {
 }
 
 // Format a GitHub file item into TinaCMS media format
-function formatMediaItem(repoPath, filename, directory) {
+export function formatMediaItem(repoPath, filename, directory) {
   const publicPath = repoPath.replace(/^src\//, "/");
   const isPdf = filename.toLowerCase().endsWith(".pdf");
 
@@ -40,7 +44,7 @@ function formatMediaItem(repoPath, filename, directory) {
   };
 }
 
-function isMediaFile(filename) {
+export function isMediaFile(filename) {
   if (!filename) return false;
   const ext = filename.toLowerCase().split(".").pop();
   return MEDIA_EXTENSIONS.includes(ext);
@@ -51,7 +55,7 @@ function isMediaFile(filename) {
  * @param {string} path - Path to validate
  * @returns {boolean} True if path is safe
  */
-function isPathSafe(path) {
+export function isPathSafe(path) {
   if (!path) return true;
 
   // Check for path traversal patterns
@@ -73,7 +77,7 @@ function isPathSafe(path) {
  * @param {string} filepath - Full filepath to validate
  * @returns {boolean} True if path is within MEDIA_ROOT
  */
-function isWithinMediaRoot(filepath) {
+export function isWithinMediaRoot(filepath) {
   if (!filepath) return false;
 
   // Normalize and check it starts with media root
@@ -102,7 +106,7 @@ const ALLOWED_ORIGINS = [
 ];
 
 // CORS headers helper with origin whitelist
-function getCorsHeaders(request) {
+export function getCorsHeaders(request) {
   const origin = request?.headers?.get?.("origin");
   const isLocal = process.env.TINA_PUBLIC_IS_LOCAL === "true";
 
@@ -126,7 +130,7 @@ function getCorsHeaders(request) {
 }
 
 // Factory function to create media operations with injected dependencies
-function createMediaOperations(deps = {}) {
+export function createMediaOperations(deps = {}) {
   const { getGitHubConfig, githubRequest } = { ...github, ...deps };
 
   // Normalize and encode path for GitHub API URLs
@@ -223,7 +227,7 @@ function createMediaOperations(deps = {}) {
     try {
       const existing = await githubRequest(`/contents/${encodedPath}?ref=${branch}`);
       sha = existing.sha;
-    } catch (e) {
+    } catch {
       // File doesn't exist, that's fine
     }
 
@@ -302,17 +306,6 @@ function createMediaOperations(deps = {}) {
 // Create default instance with real dependencies
 const defaultOps = createMediaOperations();
 
-module.exports = {
-  MEDIA_ROOT,
-  MEDIA_EXTENSIONS,
-  formatMediaItem,
-  isMediaFile,
-  isPathSafe,
-  isWithinMediaRoot,
-  getCorsHeaders,
-  createMediaOperations,
-  // Export default operations for convenience
-  listMedia: defaultOps.listMedia,
-  uploadMedia: defaultOps.uploadMedia,
-  deleteMedia: defaultOps.deleteMedia,
-};
+export const listMedia = defaultOps.listMedia;
+export const uploadMedia = defaultOps.uploadMedia;
+export const deleteMedia = defaultOps.deleteMedia;

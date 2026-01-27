@@ -8,8 +8,8 @@
  * without modifying the GitHubProvider interface.
  */
 
-const { AsyncLocalStorage } = require("node:async_hooks");
-const { Octokit } = require("@octokit/rest");
+import { AsyncLocalStorage } from "node:async_hooks";
+import { Octokit } from "@octokit/rest";
 
 // AsyncLocalStorage instance for request-scoped author context
 const authorContext = new AsyncLocalStorage();
@@ -20,7 +20,7 @@ const authorContext = new AsyncLocalStorage();
  * @param {Function} fn - Function to run with context
  * @returns {Promise<any>} Result of fn
  */
-function runWithAuthor(author, fn) {
+export function runWithAuthor(author, fn) {
   return authorContext.run(author, fn);
 }
 
@@ -28,14 +28,14 @@ function runWithAuthor(author, fn) {
  * Get the current author context (if any)
  * @returns {{name: string, email: string} | undefined}
  */
-function getAuthorContext() {
+export function getAuthorContext() {
   return authorContext.getStore();
 }
 
 /**
  * Custom GitHub provider that adds author info to commits
  */
-class AuthoredGitHubProvider {
+export class AuthoredGitHubProvider {
   constructor(options) {
     this.owner = options.owner;
     this.repo = options.repo;
@@ -153,9 +153,3 @@ class AuthoredGitHubProvider {
     });
   }
 }
-
-module.exports = {
-  AuthoredGitHubProvider,
-  runWithAuthor,
-  getAuthorContext,
-};

@@ -1,6 +1,7 @@
 {
   "name": "api",
   "version": "1.0.0",
+  "type": "module",
   "main": "src/functions/index.js",
   "engines": {
     "node": ">=20"

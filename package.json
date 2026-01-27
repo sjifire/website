@@ -13,7 +13,7 @@
     "api:install": "cd api && npm install",
     "start": "npm-run-all --parallel dev api:dev",
     "lint": "npm run lint:js && npm run lint:css",
-    "lint:js": "eslint -c tests/eslint.config.mjs .eleventy.js src/_data/ src/_lib/ src/pages/",
+    "lint:js": "eslint -c tests/eslint.config.mjs .eleventy.js src/_data/ src/_lib/ src/pages/ api/src/ api/tina/ scripts/",
     "lint:css": "stylelint --config tests/stylelint.config.json src/css/**/*.css",
     "test": "npm run test:unit && npm run test:e2e",
     "test:unit": "node --test tests/*.test.js",

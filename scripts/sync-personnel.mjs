@@ -21,27 +21,27 @@
  *   npm run sync-personnel -- --hash-threshold=15
  */
 
-import 'dotenv/config';
-import { writeFile, readFile, mkdir, access } from 'node:fs/promises';
-import { readFileSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
-import { dirname, join } from 'node:path';
-import { MSGraphClient } from './msgraph-client.mjs';
-import { hashJpegBuffer, hammingDistance } from './image-hash.mjs';
-import { optimizeImageBuffer, getCloudinaryConfig } from './cloudinary-optimize.mjs';
+import "dotenv/config";
+import { writeFile, readFile, mkdir, access } from "node:fs/promises";
+import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import { dirname, join } from "node:path";
+import { MSGraphClient } from "./msgraph-client.mjs";
+import { hashJpegBuffer, hammingDistance } from "./image-hash.mjs";
+import { optimizeImageBuffer, getCloudinaryConfig } from "../api/src/lib/cloudinary.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const SITE_CONFIG_PATH = join(__dirname, '..', 'src', '_data', 'site.json');
-const OUTPUT_PATH = join(__dirname, '..', 'src', 'pages', 'about', 'our-team-data.mdx');
-const PHOTOS_DIR = join(__dirname, '..', 'src', 'assets', 'media', 'personnel_imgs');
-const PHOTO_HASHES_PATH = join(__dirname, '..', 'src', 'assets', 'media', 'personnel_imgs', '.photo-hashes.json');
+const SITE_CONFIG_PATH = join(__dirname, "..", "src", "_data", "site.json");
+const OUTPUT_PATH = join(__dirname, "..", "src", "pages", "about", "our-team-data.mdx");
+const PHOTOS_DIR = join(__dirname, "..", "src", "assets", "media", "personnel_imgs");
+const PHOTO_HASHES_PATH = join(__dirname, "..", "src", "assets", "media", "personnel_imgs", ".photo-hashes.json");
 
 // Load site configuration
-const siteConfig = JSON.parse(readFileSync(SITE_CONFIG_PATH, 'utf-8'));
+const siteConfig = JSON.parse(readFileSync(SITE_CONFIG_PATH, "utf-8"));
 const syncConfig = siteConfig.personnelSync || {};
 
 // Cloudinary transform: 1000x1000 crop centered on face
-const PHOTO_TRANSFORM = 'w_1000,h_1000,c_fill,g_faces,q_auto';
+const PHOTO_TRANSFORM = "w_1000,h_1000,c_fill,g_faces,q_auto";
 const DEFAULT_HASH_THRESHOLD = 10;
 
 // Group ID → role name mapping from site.json
@@ -63,10 +63,10 @@ function parseArgs() {
   };
 
   for (const arg of process.argv.slice(2)) {
-    if (arg === '--force-refresh') {
+    if (arg === "--force-refresh") {
       args.forceRefresh = true;
-    } else if (arg.startsWith('--hash-threshold=')) {
-      args.hashThreshold = parseInt(arg.split('=')[1], 10);
+    } else if (arg.startsWith("--hash-threshold=")) {
+      args.hashThreshold = parseInt(arg.split("=")[1], 10);
     }
   }
 
@@ -78,7 +78,7 @@ function parseArgs() {
  */
 async function loadPhotoHashes() {
   try {
-    const data = await readFile(PHOTO_HASHES_PATH, 'utf-8');
+    const data = await readFile(PHOTO_HASHES_PATH, "utf-8");
     return JSON.parse(data);
   } catch {
     return {};
@@ -93,7 +93,7 @@ async function savePhotoHashes(hashes) {
     obj[key] = hashes[key];
     return obj;
   }, {});
-  await writeFile(PHOTO_HASHES_PATH, JSON.stringify(sorted, null, 2) + '\n');
+  await writeFile(PHOTO_HASHES_PATH, JSON.stringify(sorted, null, 2) + "\n");
 }
 
 /**
@@ -114,19 +114,19 @@ async function fileExists(path) {
 function normalizeFilename(firstName, lastName) {
   return `${firstName}_${lastName}`
     .toLowerCase()
-    .replace(/\s+/g, '_')
-    .replace(/[^a-z0-9_]/g, '');
+    .replace(/\s+/g, "_")
+    .replace(/[^a-z0-9_]/g, "");
 }
 
 // Ranks in sort order (Chief first). Used for sorting personnel.
 const RANKS = [
-  'Chief',
-  'Assistant Chief',
-  'Battalion Chief',
-  'Division Chief',
-  'Captain',
-  'Lieutenant',
-  'Apparatus Operator'
+  "Chief",
+  "Assistant Chief",
+  "Battalion Chief",
+  "Division Chief",
+  "Captain",
+  "Lieutenant",
+  "Apparatus Operator"
 ];
 
 // Same ranks sorted by length (longest first) for parsing jobTitle without partial matches
@@ -147,13 +147,13 @@ function parseJobTitle(jobTitle) {
     if (jobTitle.toLowerCase().includes(r.toLowerCase())) {
       rank = r;
       // Remove rank from title
-      title = jobTitle.replace(new RegExp(r, 'i'), '');
+      title = jobTitle.replace(new RegExp(r, "i"), "");
       break;
     }
   }
 
   // Clean up separators: leading/trailing spaces, dashes, colons, underscores, commas
-  title = title.replace(/^[\s\-:_,]+|[\s\-:_,]+$/g, '').trim();
+  title = title.replace(/^[\s\-:_,]+|[\s\-:_,]+$/g, "").trim();
 
   return {
     rank,
@@ -208,7 +208,7 @@ function isInAnyGroup(userGroups, targetGroupIds) {
  */
 function parseGroupIds(envValue) {
   if (!envValue) return [];
-  return envValue.split(',').map(id => id.trim()).filter(id => id.length > 0);
+  return envValue.split(",").map(id => id.trim()).filter(id => id.length > 0);
 }
 
 /**
@@ -216,13 +216,13 @@ function parseGroupIds(envValue) {
  */
 function generateMDX(personnel) {
   const yaml = [
-    '---',
-    'permalink: false',
-    'tags: content-include',
-    'contentFor: our-team',
-    'title: Our Team',
-    'intro: Our department is made up of dedicated career staff and volunteers who live and work in our island community.',
-    'personnel:',
+    "---",
+    "permalink: false",
+    "tags: content-include",
+    "contentFor: our-team",
+    "title: Our Team",
+    "intro: Our department is made up of dedicated career staff and volunteers who live and work in our island community.",
+    "personnel:",
   ];
 
   for (const person of personnel) {
@@ -239,7 +239,7 @@ function generateMDX(personnel) {
     yaml.push(`    staff_type: ${person.staff_type}`);
 
     if (person.roles.length > 0) {
-      yaml.push('    roles:');
+      yaml.push("    roles:");
       for (const role of [...person.roles].sort()) {
         yaml.push(`      - ${role}`);
       }
@@ -250,10 +250,10 @@ function generateMDX(personnel) {
     }
   }
 
-  yaml.push('---');
-  yaml.push('');
+  yaml.push("---");
+  yaml.push("");
 
-  return yaml.join('\n');
+  return yaml.join("\n");
 }
 
 /**
@@ -262,8 +262,8 @@ function generateMDX(personnel) {
 async function main() {
   const args = parseArgs();
 
-  console.log('Personnel Sync from Microsoft 365');
-  console.log('==================================');
+  console.log("Personnel Sync from Microsoft 365");
+  console.log("==================================");
 
   // Validate environment
   const tenantId = process.env.MS_GRAPH_TENANT_ID;
@@ -271,10 +271,10 @@ async function main() {
   const clientSecret = process.env.MS_GRAPH_CLIENT_SECRET;
 
   if (!tenantId || !clientId || !clientSecret) {
-    console.error('Missing required environment variables:');
-    if (!tenantId) console.error('  - MS_GRAPH_TENANT_ID');
-    if (!clientId) console.error('  - MS_GRAPH_CLIENT_ID');
-    if (!clientSecret) console.error('  - MS_GRAPH_CLIENT_SECRET');
+    console.error("Missing required environment variables:");
+    if (!tenantId) console.error("  - MS_GRAPH_TENANT_ID");
+    if (!clientId) console.error("  - MS_GRAPH_CLIENT_ID");
+    if (!clientSecret) console.error("  - MS_GRAPH_CLIENT_SECRET");
     process.exit(1);
   }
 
@@ -287,12 +287,12 @@ async function main() {
     ? parseGroupIds(process.env.MS_GRAPH_VOLUNTEER_GROUP)
     : (syncConfig.volunteerGroups || []);
   const syncPhotos = process.env.SYNC_PHOTOS !== undefined
-    ? process.env.SYNC_PHOTOS !== 'false'
+    ? process.env.SYNC_PHOTOS !== "false"
     : (syncConfig.syncPhotos !== false);
 
-  console.log(`Personnel group: ${personnelGroupId || '(all users)'}`);
-  console.log(`Staff groups: ${staffGroupIds.length > 0 ? staffGroupIds.join(', ') : '(not configured)'}`);
-  console.log(`Volunteer groups: ${volunteerGroupIds.length > 0 ? volunteerGroupIds.join(', ') : '(not configured)'}`);
+  console.log(`Personnel group: ${personnelGroupId || "(all users)"}`);
+  console.log(`Staff groups: ${staffGroupIds.length > 0 ? staffGroupIds.join(", ") : "(not configured)"}`);
+  console.log(`Volunteer groups: ${volunteerGroupIds.length > 0 ? volunteerGroupIds.join(", ") : "(not configured)"}`);
   console.log(`Sync photos: ${syncPhotos}`);
   console.log(`Force refresh photos: ${args.forceRefresh}`);
   console.log(`Hash threshold: ${args.hashThreshold} bits`);
@@ -300,7 +300,7 @@ async function main() {
   // Check Cloudinary config
   const cloudinaryConfig = getCloudinaryConfig();
   if (syncPhotos && !cloudinaryConfig) {
-    console.warn('\nWarning: CLOUDINARY_API_KEY/SECRET not set - photos will be saved without optimization');
+    console.warn("\nWarning: CLOUDINARY_API_KEY/SECRET not set - photos will be saved without optimization");
   } else if (syncPhotos) {
     console.log(`Cloudinary transform: ${PHOTO_TRANSFORM}`);
   }
@@ -309,10 +309,10 @@ async function main() {
   const client = new MSGraphClient({ tenantId, clientId, clientSecret });
 
   // Fetch users
-  console.log('\nFetching users from Microsoft 365...');
+  console.log("\nFetching users from Microsoft 365...");
 
   let users = [];
-  const selectFields = ['id', 'givenName', 'surname', 'displayName', 'jobTitle', 'userPrincipalName'];
+  const selectFields = ["id", "givenName", "surname", "displayName", "jobTitle", "userPrincipalName"];
 
   if (personnelGroupId) {
     // Fetch from specific group
@@ -364,11 +364,11 @@ async function main() {
     const userGroups = groupsResponse.value || [];
 
     // Determine staff type
-    let staffType = 'volunteer'; // Default to volunteer
+    let staffType = "volunteer"; // Default to volunteer
     if (isInAnyGroup(userGroups, staffGroupIds)) {
-      staffType = 'staff';
+      staffType = "staff";
     } else if (isInAnyGroup(userGroups, volunteerGroupIds)) {
-      staffType = 'volunteer';
+      staffType = "volunteer";
     }
 
     // Determine roles from groups
@@ -376,20 +376,20 @@ async function main() {
 
     // Only include users who have at least one role, unless explicitly included
     if (roles.length === 0) {
-      const userEmail = (user.userPrincipalName || '').toLowerCase();
+      const userEmail = (user.userPrincipalName || "").toLowerCase();
       const isExplicitlyIncluded = includeWithoutRole.includes(userEmail);
 
       if (!isExplicitlyIncluded) {
         usersWithoutRoles.push({
           name: `${user.givenName} ${user.surname}`,
           displayName: user.displayName,
-          jobTitle: user.jobTitle || '(no job title)',
+          jobTitle: user.jobTitle || "(no job title)",
           email: userEmail,
         });
-        console.log(`    Skipped: no assigned role`);
+        console.log("    Skipped: no assigned role");
         continue;
       }
-      console.log(`    Included without role (explicit exception)`);
+      console.log("    Included without role (explicit exception)");
     }
 
     // Parse jobTitle into rank and title
@@ -426,14 +426,14 @@ async function main() {
 
           // Check if we should save the photo
           let shouldSave = false;
-          let reason = '';
+          let reason = "";
 
           if (args.forceRefresh) {
             shouldSave = true;
-            reason = 'force refresh';
+            reason = "force refresh";
           } else if (!photoExists) {
             shouldSave = true;
-            reason = 'new photo';
+            reason = "new photo";
             photoStats.downloaded++;
           } else if (!existingHash) {
             // No stored hash, compute from existing file and compare
@@ -452,7 +452,7 @@ async function main() {
               }
             } catch {
               shouldSave = true;
-              reason = 'could not read existing';
+              reason = "could not read existing";
             }
           } else {
             // Compare with stored hash
@@ -470,7 +470,7 @@ async function main() {
           if (shouldSave) {
             await writeFile(photoPath, finalBuffer);
             const sizeKB = Math.round(finalBuffer.length / 1024);
-            const optStatus = optimized.optimized ? 'cloudinary' : optimized.reason;
+            const optStatus = optimized.optimized ? "cloudinary" : optimized.reason;
             console.log(`    Photo saved: ${reason} (${sizeKB}KB, ${optStatus})`);
           } else {
             console.log(`    Photo skipped: ${reason}`);
@@ -481,7 +481,7 @@ async function main() {
           person.photo = photoUrl;
         } else {
           photoStats.skippedNoPhoto++;
-          console.log(`    No photo in M365`);
+          console.log("    No photo in M365");
 
           // Keep existing photo if we have one
           if (photoExists) {
@@ -518,11 +518,11 @@ async function main() {
   personnel.sort((a, b) => {
     // Staff before volunteers
     if (a.staff_type !== b.staff_type) {
-      return a.staff_type === 'staff' ? -1 : 1;
+      return a.staff_type === "staff" ? -1 : 1;
     }
 
     // Within staff, sort by rank first
-    if (a.staff_type === 'staff') {
+    if (a.staff_type === "staff") {
       const aRankIdx = a.rank ? RANKS.indexOf(a.rank) : 999;
       const bRankIdx = b.rank ? RANKS.indexOf(b.rank) : 999;
       if (aRankIdx !== bRankIdx) return aRankIdx - bRankIdx;
@@ -535,14 +535,14 @@ async function main() {
   });
 
   // Generate output
-  console.log(`\nGenerating personnel data file...`);
+  console.log("\nGenerating personnel data file...");
   const mdxContent = generateMDX(personnel);
   await writeFile(OUTPUT_PATH, mdxContent);
 
-  console.log(`\nSummary:`);
+  console.log("\nSummary:");
   console.log(`  Total personnel: ${personnel.length}`);
-  console.log(`  Staff: ${personnel.filter(p => p.staff_type === 'staff').length}`);
-  console.log(`  Volunteers: ${personnel.filter(p => p.staff_type === 'volunteer').length}`);
+  console.log(`  Staff: ${personnel.filter(p => p.staff_type === "staff").length}`);
+  console.log(`  Volunteers: ${personnel.filter(p => p.staff_type === "volunteer").length}`);
   console.log(`  With photos: ${personnel.filter(p => p.photo).length}`);
 
   // List users who are in personnel group but have no assigned role
@@ -551,13 +551,13 @@ async function main() {
     for (const user of usersWithoutRoles) {
       console.log(`  - ${user.name} <${user.email}> (${user.jobTitle})`);
     }
-    console.log(`\nTo include these users, either:`);
-    console.log(`  1. Add them to a roleGroup in M365`);
-    console.log(`  2. Add their email to personnelSync.includeWithoutRole in site.json`);
+    console.log("\nTo include these users, either:");
+    console.log("  1. Add them to a roleGroup in M365");
+    console.log("  2. Add their email to personnelSync.includeWithoutRole in site.json");
   }
 
   if (syncPhotos) {
-    console.log(`\nPhoto sync:`);
+    console.log("\nPhoto sync:");
     console.log(`  New photos downloaded: ${photoStats.downloaded}`);
     console.log(`  Photos updated (changed): ${photoStats.updated}`);
     console.log(`  Photos skipped (unchanged): ${photoStats.skippedUnchanged}`);
@@ -565,10 +565,10 @@ async function main() {
   }
 
   console.log(`\nOutput written to ${OUTPUT_PATH}`);
-  console.log('Done!');
+  console.log("Done!");
 }
 
 main().catch(err => {
-  console.error('Error:', err.message);
+  console.error("Error:", err.message);
   process.exit(1);
 });
