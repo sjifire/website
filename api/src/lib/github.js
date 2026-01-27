@@ -1,11 +1,11 @@
-require("dotenv").config({ path: require("path").resolve(__dirname, "../../../.env") });
-const { createAppAuth } = require("@octokit/auth-app");
+import "dotenv/config";
+import { createAppAuth } from "@octokit/auth-app";
 
 // Always use main branch for TinaCMS operations
 const branch = "main";
 
 // Generate a GitHub installation access token from App credentials
-async function getGitHubToken() {
+export async function getGitHubToken() {
   const appId = process.env.GITHUB_APP_ID;
   const privateKey = process.env.GITHUB_APP_PRIVATE_KEY;
   const installationId = process.env.GITHUB_APP_INSTALLATION_ID;
@@ -37,7 +37,7 @@ async function getGitHubToken() {
   return token;
 }
 
-function getGitHubConfig() {
+export function getGitHubConfig() {
   return {
     owner: process.env.GITHUB_OWNER,
     repo: process.env.GITHUB_REPO,
@@ -46,7 +46,7 @@ function getGitHubConfig() {
 }
 
 // Generic GitHub API request helper
-async function githubRequest(endpoint, options = {}) {
+export async function githubRequest(endpoint, options = {}) {
   const token = await getGitHubToken();
   const { owner, repo } = getGitHubConfig();
 
@@ -69,5 +69,3 @@ async function githubRequest(endpoint, options = {}) {
 
   return response.json();
 }
-
-module.exports = { getGitHubToken, getGitHubConfig, githubRequest };

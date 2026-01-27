@@ -1,5 +1,5 @@
 // Load all function registrations
-require("./tina.js");
-require("./media.js");
-require("./thumb.js");
-require("./getRoles.js");
+import "./tina.js";
+import "./media.js";
+import "./thumb.js";
+import "./getRoles.js";

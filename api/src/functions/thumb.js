@@ -1,7 +1,11 @@
-const { app } = require("@azure/functions");
+import { app } from "@azure/functions";
+import { createRequire } from "node:module";
+import { requireAdmin } from "../lib/auth.js";
+import { isPathSafe } from "../lib/media.js";
+
+// ESM doesn't support JSON imports without flags, so use createRequire
+const require = createRequire(import.meta.url);
 const siteConfig = require("../../site-config.json");
-const { requireAdmin } = require("../lib/auth.js");
-const { isPathSafe } = require("../lib/media.js");
 
 const CLOUDINARY_ROOT = siteConfig.cloudinaryRootUrl;
 const SITE_URL = siteConfig.cloudinaryFetchUrl;
@@ -35,7 +39,7 @@ app.http("thumb", {
     const cleanPath = requestPath.replace(/_thumb\.jpg$/i, "");
 
     // Only process PDFs
-    if (!cleanPath.toLowerCase().endsWith('.pdf')) {
+    if (!cleanPath.toLowerCase().endsWith(".pdf")) {
       return { status: 400, jsonBody: { error: "Only PDF thumbnails supported" } };
     }
 

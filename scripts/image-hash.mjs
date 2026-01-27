@@ -3,8 +3,8 @@
  * Uses blockhash algorithm to compare images visually rather than byte-by-byte
  */
 
-import jpeg from 'jpeg-js';
-import { bmvbhash } from 'blockhash-core';
+import jpeg from "jpeg-js";
+import { bmvbhash } from "blockhash-core";
 
 /**
  * Decode a JPEG buffer to raw pixel data
@@ -50,7 +50,7 @@ export function hashJpegBuffer(buffer, bits = 16) {
  */
 export function hammingDistance(hash1, hash2) {
   if (hash1.length !== hash2.length) {
-    throw new Error('Hash lengths must match');
+    throw new Error("Hash lengths must match");
   }
 
   let distance = 0;

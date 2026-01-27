@@ -1,11 +1,11 @@
-const { describe, it } = require("node:test");
-const assert = require("node:assert");
+import { describe, it } from "node:test";
+import assert from "node:assert";
 
-const {
+import {
   AuthoredGitHubProvider,
   runWithAuthor,
   getAuthorContext,
-} = require("../api/src/lib/git-provider.js");
+} from "../api/src/lib/git-provider.js";
 
 describe("git-provider module", () => {
   describe("runWithAuthor / getAuthorContext", () => {

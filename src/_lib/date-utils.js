@@ -152,8 +152,8 @@ function getNextMeeting(schedule, override, timezone) {
  * @returns {string} e.g., "third Tuesday of every month at 3:00 PM"
  */
 function formatMeetingSchedule(schedule) {
-  const ordinals = ['', 'first', 'second', 'third', 'fourth', 'fifth'];
-  const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  const ordinals = ["", "first", "second", "third", "fourth", "fifth"];
+  const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
   const weekOfMonth = parseInt(schedule.week_of_month, 10);
   const dayOfWeek = parseInt(schedule.day_of_week, 10);
@@ -164,8 +164,8 @@ function formatMeetingSchedule(schedule) {
 
   // Format time in 12-hour format
   const hour12 = hour % 12 || 12;
-  const ampm = hour >= 12 ? 'PM' : 'AM';
-  const timeStr = minute === 0 ? `${hour12}:00 ${ampm}` : `${hour12}:${minute.toString().padStart(2, '0')} ${ampm}`;
+  const ampm = hour >= 12 ? "PM" : "AM";
+  const timeStr = minute === 0 ? `${hour12}:00 ${ampm}` : `${hour12}:${minute.toString().padStart(2, "0")} ${ampm}`;
 
   return `${ordinal} ${dayName} of every month at ${timeStr}`;
 }

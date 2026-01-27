@@ -1,7 +1,11 @@
-const { app } = require("@azure/functions");
+import { app } from "@azure/functions";
+import { createRequire } from "node:module";
+
+// ESM doesn't support JSON imports without flags, so use createRequire
+const require = createRequire(import.meta.url);
+const siteConfig = require("../../site-config.json");
 
 // Admin group ID from API site config
-const siteConfig = require("../../site-config.json");
 const ADMIN_GROUP_ID = siteConfig.adminGroupId;
 
 /**
@@ -13,7 +17,7 @@ const ADMIN_GROUP_ID = siteConfig.adminGroupId;
  * @param {string} adminGroupId - The Entra ID group ID for admin access
  * @returns {{ roles: string[] }} Object containing array of assigned roles
  */
-function getRolesFromClaims(body, adminGroupId) {
+export function getRolesFromClaims(body, adminGroupId) {
   const roles = [];
   const claims = body?.claims || [];
 
@@ -33,7 +37,7 @@ function getRolesFromClaims(body, adminGroupId) {
  * Azure Function handler for role assignment.
  * Called by Azure Static Web Apps during authentication.
  */
-async function getRolesHandler(request, context) {
+export async function getRolesHandler(request, context) {
   try {
     const body = await request.json();
     const result = getRolesFromClaims(body, ADMIN_GROUP_ID);
@@ -62,4 +66,4 @@ app.http("getRoles", {
 });
 
 // Export for testing
-module.exports = { getRolesFromClaims, getRolesHandler, ADMIN_GROUP_ID };
+export { ADMIN_GROUP_ID };

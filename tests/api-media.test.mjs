@@ -1,7 +1,7 @@
-const { describe, it, beforeEach } = require("node:test");
-const assert = require("node:assert");
+import { describe, it, beforeEach } from "node:test";
+import assert from "node:assert";
 
-const {
+import {
   MEDIA_ROOT,
   MEDIA_EXTENSIONS,
   formatMediaItem,
@@ -10,7 +10,7 @@ const {
   isWithinMediaRoot,
   getCorsHeaders,
   createMediaOperations,
-} = require("../api/src/lib/media.js");
+} from "../api/src/lib/media.js";
 
 describe("media module", () => {
   describe("constants", () => {

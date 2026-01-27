@@ -17,7 +17,7 @@ const REQUIRED_ROLE = "admin";
  * @param {Request} request - Azure Functions request object
  * @returns {Object|null} Parsed client principal or null
  */
-function getClientPrincipal(request) {
+export function getClientPrincipal(request) {
   const header = request.headers.get("x-ms-client-principal");
   if (!header) {
     return null;
@@ -26,7 +26,7 @@ function getClientPrincipal(request) {
   try {
     const decoded = Buffer.from(header, "base64").toString("utf8");
     return JSON.parse(decoded);
-  } catch (e) {
+  } catch {
     return null;
   }
 }
@@ -36,7 +36,7 @@ function getClientPrincipal(request) {
  * @param {Request} request - Azure Functions request object
  * @returns {boolean} True if user has admin role
  */
-function hasAdminRole(request) {
+export function hasAdminRole(request) {
   const principal = getClientPrincipal(request);
   if (!principal) {
     return false;
@@ -54,7 +54,7 @@ function hasAdminRole(request) {
  * @param {Object} context - Azure Functions context for logging
  * @returns {Object|null} Error response object or null if authenticated
  */
-function requireAdmin(request, context) {
+export function requireAdmin(request, context) {
   // Allow local development to bypass auth
   const isLocal = process.env.TINA_PUBLIC_IS_LOCAL === "true";
   if (isLocal) {
@@ -88,7 +88,7 @@ function requireAdmin(request, context) {
  * @param {Request} request - Azure Functions request object
  * @returns {string} User identifier for logs
  */
-function getUserForLogging(request) {
+export function getUserForLogging(request) {
   const principal = getClientPrincipal(request);
   if (!principal) {
     return "anonymous";
@@ -101,7 +101,7 @@ function getUserForLogging(request) {
  * @param {Request} request - Azure Functions request object
  * @returns {{name: string, email: string} | null} Author info for Git commits, or null if not authenticated
  */
-function getGitAuthor(request) {
+export function getGitAuthor(request) {
   const principal = getClientPrincipal(request);
   if (!principal) {
     return null;
@@ -120,11 +120,3 @@ function getGitAuthor(request) {
     email: email || `${principal.userId}@users.noreply.github.com`,
   };
 }
-
-module.exports = {
-  getClientPrincipal,
-  hasAdminRole,
-  requireAdmin,
-  getUserForLogging,
-  getGitAuthor,
-};
