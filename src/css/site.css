@@ -1721,15 +1721,24 @@ select.form-control:focus::-ms-value {
   margin-top: 0.5rem;
 }
 
-/* Sizes */
-.block-content .styled-image--small img { max-width: 25%; }
-.block-content .styled-image--medium img { max-width: 50%; }
-.block-content .styled-image--large img { max-width: 75%; }
-.block-content .styled-image--full img { max-width: 100%; }
+/* Sizes - constrain both figure and img for proper floating */
+.block-content .styled-image--small { max-width: 25%; }
+.block-content .styled-image--medium { max-width: 50%; }
+.block-content .styled-image--large { max-width: 75%; }
+.block-content .styled-image--full { max-width: 100%; }
+
+.block-content .styled-image--small img,
+.block-content .styled-image--medium img,
+.block-content .styled-image--large img,
+.block-content .styled-image--full img {
+  max-width: 100%;
+}
 
 /* Alignment */
 .block-content .styled-image--center {
   text-align: center;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .block-content .styled-image--center img {
