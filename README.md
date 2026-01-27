@@ -341,6 +341,23 @@ To get credentials: https://console.cloudinary.com/settings/api-keys
 
 **Without credentials:** Image uploads still work normally, they're just stored at their original size.
 
+**Manual optimization (CLI):**
+
+For images added outside of TinaCMS (e.g., from local folders), use the optimization script:
+
+```bash
+# Single file with new name/location
+node scripts/optimize-image.mjs ~/Downloads/photo.jpg src/assets/media/descriptive_name.jpg
+
+# Optimize existing files in-place
+node scripts/optimize-image.mjs src/assets/media/gallery/
+
+# Optimize specific files in-place
+node scripts/optimize-image.mjs file1.jpg file2.jpg file3.jpg
+```
+
+The script automatically skips files under 500KB and skips if the optimized result isn't smaller. Typically reduces file sizes by 80-90%. Requires `.env` with Cloudinary credentials.
+
 ### Photo Gallery
 
 The site includes a photo gallery that displays images from a configurable folder. Images appear on both the gallery page (`/about/gallery/`) and the homepage carousel.

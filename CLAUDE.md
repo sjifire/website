@@ -41,6 +41,34 @@ Requires Node.js 20+. Output goes to `_site/`.
 
 **Image optimization**: Production builds use Cloudinary via `imgPath` shortcode for automatic format conversion and optimization.
 
+### Adding New Images
+
+**IMPORTANT:** When adding new images to the site (e.g., from user-provided folders), always optimize them through Cloudinary before saving to reduce disk space.
+
+```bash
+# Single file with new name/location
+node scripts/optimize-image.mjs ~/Downloads/photo.jpg src/assets/media/descriptive_name.jpg
+
+# Optimize existing files in-place
+node scripts/optimize-image.mjs src/assets/media/gallery/
+
+# Optimize specific files in-place
+node scripts/optimize-image.mjs file1.jpg file2.jpg file3.jpg
+```
+
+The script automatically:
+- Skips files under 500KB (already small enough)
+- Skips if optimized result isn't smaller than original
+- Resizes to max 2000x2000, auto quality
+
+Typically reduces file sizes by 80-90%. Requires Cloudinary credentials in `.env` (`CLOUDINARY_API_KEY` and `CLOUDINARY_API_SECRET`).
+
+**Image naming conventions:**
+- Use lowercase with underscores: `brigade_water_rescue_training.jpg`
+- Use descriptive names that indicate content
+- Place general images in `src/assets/media/`
+- Place gallery-worthy action shots in `src/assets/media/gallery/`
+
 ### Configuration Files
 
 - `.eleventy.js` - 11ty config with custom LiquidJS engine, filters (groupby, dictsort, round, slugify), shortcodes (imgPath), passthrough copies
