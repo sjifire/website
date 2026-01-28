@@ -118,7 +118,7 @@ app.http("tina", {
           jsonBody: {
             error: "Internal server error",
             message: error.message,
-            stack: error.stack?.split('\n').slice(0, 5),
+            stack: error.stack?.split("\n").slice(0, 5),
           }
         };
       }
