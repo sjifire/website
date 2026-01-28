@@ -23,6 +23,13 @@
     {% endif %}
   {% endfor %}
 
+  {% if nav.headerHighlight %}
+  <dl class="footer-navgroup">
+    <dt class="footer-heading">{{ nav.headerHighlight.nav_title }}</dt>
+    <dd class="footer-navlink"><a href="{{ nav.headerHighlight.url }}">Become a Volunteer</a></dd>
+  </dl>
+  {% endif %}
+
   <dl class="footer-navgroup">
     <dt class="footer-heading">Resources</dt>
     <dd class="footer-navlink"><a href="https://www.office.com/?auth=2">Member Login</a></dd>
