@@ -1,7 +1,8 @@
 import { createDatabase, createLocalDatabase } from "@tinacms/datalayer";
-// @ts-ignore - mongodb-level is CommonJS, use default import
-import mongodbLevel from "mongodb-level";
-const { MongodbLevel } = mongodbLevel;
+// @ts-ignore - no types for mongodb-level
+import * as MongodbLevelModule from "mongodb-level";
+// Handle both ESM default export and CommonJS module.exports
+const MongodbLevel = (MongodbLevelModule as any).MongodbLevel || (MongodbLevelModule as any).default?.MongodbLevel;
 // @ts-ignore - no types for tinacms-gitprovider-github
 import { GitHubProvider } from "tinacms-gitprovider-github";
 
