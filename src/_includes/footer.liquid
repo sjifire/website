@@ -7,21 +7,28 @@
           <dd class="footer-navlink"><a href="{{ child.url }}">{% if child.nav_title %}{{ child.nav_title }}{% else %}{{ child.label }}{% endif %}</a></dd>
         {% endfor %}
       </dl>
-    {% elsif item.url %}
+    {% elsif item.url and item.label != "Gallery" and item.label != "Contact" %}
       <dl class="footer-navgroup">
         <dt class="footer-heading">{{ item.label }}</dt>
         <dd class="footer-navlink"><a href="{{ item.url }}">{{ item.label }}</a></dd>
-        {% if item.label == "Contact" %}
-          <dd class="footer-navlink">
-            <a href="https://www.facebook.com/SJIFire/"><svg class="footer-icon"><use xlink:href="#facebook"></use></svg> Facebook</a>
-          </dd>
-          <dd class="footer-navlink">
-            <a href="https://www.instagram.com/sjifire/"><svg class="footer-icon"><use xlink:href="#instagram"></use></svg> Instagram</a>
-          </dd>
-        {% endif %}
       </dl>
     {% endif %}
   {% endfor %}
+
+  <dl class="footer-navgroup">
+    <dt class="footer-heading">Connect</dt>
+    <dd class="footer-navlink"><a href="/gallery/">Gallery</a></dd>
+    <dd class="footer-navlink"><a href="/contact/">Contact Us</a></dd>
+    {% if nav.headerHighlight %}
+    <dd class="footer-navlink"><a href="{{ nav.headerHighlight.url }}">Become a Volunteer</a></dd>
+    {% endif %}
+    <dd class="footer-navlink">
+      <a href="https://www.facebook.com/SJIFire/"><svg class="footer-icon"><use xlink:href="#facebook"></use></svg> Facebook</a>
+    </dd>
+    <dd class="footer-navlink">
+      <a href="https://www.instagram.com/sjifire/"><svg class="footer-icon"><use xlink:href="#instagram"></use></svg> Instagram</a>
+    </dd>
+  </dl>
 
   <dl class="footer-navgroup">
     <dt class="footer-heading">Resources</dt>
