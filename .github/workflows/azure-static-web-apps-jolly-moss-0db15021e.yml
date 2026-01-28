@@ -1,6 +1,8 @@
 name: Azure Static Web Apps CI/CD
 
 on:
+  # Manual trigger for ad-hoc deployments
+  workflow_dispatch:
   # Main branch: only deploy after CI passes
   workflow_run:
     workflows: ["CI"]
@@ -20,9 +22,11 @@ concurrency:
 
 jobs:
   build_and_deploy_job:
+    # For workflow_dispatch: always run (manual trigger)
     # For workflow_run (main): only if CI succeeded
     # For pull_request: always run (except on close)
     if: |
+      github.event_name == 'workflow_dispatch' ||
       (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success') ||
       (github.event_name == 'pull_request' && github.event.action != 'closed')
     runs-on: ubuntu-latest
