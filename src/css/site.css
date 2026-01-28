@@ -1161,6 +1161,36 @@ body {
   text-decoration: underline;
 }
 
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  margin: 24px 0;
+}
+
+.card--link {
+  padding: 24px;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card--link:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 16px rgb(0, 0, 0, 0.2);
+}
+
+.card--link h3 {
+  color: var(--red);
+  margin-top: 0;
+  margin-bottom: 12px;
+}
+
+.card--link p {
+  margin: 0;
+  color: #333;
+}
+
 .widget {
   width: 100%;
   table-layout: fixed;
