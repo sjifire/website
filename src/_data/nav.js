@@ -42,14 +42,32 @@ function getPageInfo(url) {
 
   // Parse URL to get folder and slug (e.g., /about/join/ -> about, join)
   const parts = url.replace(/^\/|\/$/g, "").split("/");
-  if (parts.length < 2) return null;
+
+  const extensions = [".mdx", ".liquid", ".md"];
+
+  // Handle top-level pages (e.g., /join/)
+  if (parts.length === 1) {
+    const slug = parts[0];
+    for (const ext of extensions) {
+      const filePath = path.join(pagesDir, slug + ext);
+      if (fs.existsSync(filePath)) {
+        const content = fs.readFileSync(filePath, "utf8");
+        const { data } = matter(content);
+        return {
+          title: data.title,
+          nav_title: data.nav_title || data.title,
+          url: url,
+        };
+      }
+    }
+    return null;
+  }
 
   const folder = parts[0];
   const slug = parts[1];
   const folderPath = path.join(pagesDir, folder);
 
   // Find matching file
-  const extensions = [".mdx", ".liquid", ".md"];
   for (const ext of extensions) {
     const filePath = path.join(folderPath, slug + ext);
     if (fs.existsSync(filePath)) {
