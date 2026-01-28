@@ -8,7 +8,7 @@ const pages = [
   // About pages
   { path: "/about/governance/", name: "Governance" },
   { path: "/about/who-we-are/", name: "Who We Are" },
-  { path: "/about/join/", name: "Join" },
+  { path: "/join/", name: "Join" },
   { path: "/about/key-information/", name: "Key Information" },
   { path: "/about/levy-2024/", name: "Levy 2024" },
   { path: "/about/stations-equipment/", name: "Stations & Equipment" },
