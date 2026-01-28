@@ -1,5 +1,7 @@
 import { createDatabase, createLocalDatabase, resolve as tinaResolve } from "@tinacms/datalayer";
-import { MongodbLevel } from "mongodb-level";
+// mongodb-level is CommonJS, use default import
+import mongodbLevel from "mongodb-level";
+const { MongodbLevel } = mongodbLevel;
 import { AuthoredGitHubProvider } from "../src/lib/git-provider.js";
 import { getGitHubToken, getGitHubConfig } from "../src/lib/github.js";
 
