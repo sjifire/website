@@ -1,5 +1,7 @@
 import { createDatabase, createLocalDatabase, resolve as tinaResolve } from "@tinacms/datalayer";
-import { MongodbLevel } from "mongodb-level";
+// Handle both ESM default export and CommonJS module.exports
+import * as MongodbLevelModule from "mongodb-level";
+const MongodbLevel = MongodbLevelModule.MongodbLevel || MongodbLevelModule.default?.MongodbLevel;
 import { AuthoredGitHubProvider } from "../src/lib/git-provider.js";
 import { getGitHubToken, getGitHubConfig } from "../src/lib/github.js";
 

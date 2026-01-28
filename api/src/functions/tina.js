@@ -77,9 +77,25 @@ app.http("tina", {
     context.log("TinaCMS request:", request.method, path);
 
     if (path === "health") {
+      // Check required environment variables (don't expose values, just presence)
+      const envCheck = {
+        GITHUB_APP_ID: !!process.env.GITHUB_APP_ID,
+        GITHUB_APP_PRIVATE_KEY: !!process.env.GITHUB_APP_PRIVATE_KEY,
+        GITHUB_APP_INSTALLATION_ID: !!process.env.GITHUB_APP_INSTALLATION_ID,
+        GITHUB_OWNER: !!process.env.GITHUB_OWNER,
+        GITHUB_REPO: !!process.env.GITHUB_REPO,
+        COSMOS_DB_CONNECTION_STRING: !!process.env.COSMOS_DB_CONNECTION_STRING,
+      };
+      const allConfigured = Object.values(envCheck).every(Boolean);
+
       return {
         status: 200,
-        jsonBody: { status: "ok", timestamp: new Date().toISOString(), isLocal },
+        jsonBody: {
+          status: allConfigured ? "ok" : "misconfigured",
+          timestamp: new Date().toISOString(),
+          isLocal,
+          envCheck,
+        },
       };
     }
 
@@ -96,7 +112,15 @@ app.http("tina", {
         return await handleTinaRequest(request, path);
       } catch (error) {
         context.error("TinaCMS error:", error.message, error.stack);
-        return { status: 500, jsonBody: { error: "Internal server error" } };
+        // Include error details for debugging (remove in production once stable)
+        return {
+          status: 500,
+          jsonBody: {
+            error: "Internal server error",
+            message: error.message,
+            stack: error.stack?.split("\n").slice(0, 5),
+          }
+        };
       }
     });
   },
