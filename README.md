@@ -106,50 +106,49 @@ To find your Tenant ID: Microsoft Entra ID > Overview > "Tenant ID"
 
 ### 7. Configure Admin Access Control
 
-The admin panel (`/admin`) uses Entra ID security groups for access control. Users in the admin group automatically get access - no invitation links required.
+The admin panel (`/admin`) uses Entra ID Enterprise Application assignment for access control. Only users explicitly assigned to the application can access the admin interface.
 
-#### Create a Security Group
+**Security Verification:** The application uses Microsoft Graph API to verify that "User assignment required" is enabled. If this setting is disabled (or cannot be verified), all admin access is denied. This prevents accidental exposure if the setting is changed. This requires the `MS_GRAPH_*` environment variables and `Application.Read.All` permission on the Personnel Sync app (see Personnel Sync setup).
 
-1. Go to Azure Portal > Microsoft Entra ID > Groups
-2. Click "New group"
-3. Fill in:
-   - **Group type**: Security
-   - **Group name**: Website Admins
-   - **Membership type**: Assigned
-4. Click "Create"
-5. Copy the **Object ID** and update `adminGroupId` in `api/site-config.json`
+#### Initial Setup: Enable User Assignment
 
-#### Configure Group Claims
+This only needs to be done once when setting up the application:
 
-The app registration must include group memberships in the token:
+1. Go to [Azure Portal](https://portal.azure.com) > **Microsoft Entra ID** > **Enterprise applications**
+2. Search for and select **"website-admin"**
+3. Click **Properties** in the left sidebar
+4. Set **"Assignment required?"** to **Yes**
+5. Click **Save**
 
-1. Go to Microsoft Entra ID > App registrations > your app
-2. Click "Token configuration"
-3. Click "+ Add groups claim"
-4. Select **Security groups**
-5. Under "ID" token, check **Group ID**
-6. Click "Add"
+#### Granting Admin Access
 
-#### Adding Users
+To give a user access to `/admin`:
 
-To grant someone admin access:
+1. Go to [Azure Portal](https://portal.azure.com) > **Microsoft Entra ID** > **Enterprise applications**
+2. Search for and select **"website-admin"**
+3. Click **Users and groups** in the left sidebar
+4. Click **+ Add user/group**
+5. Click **None Selected** under "Users"
+6. Search for the user by name or email (e.g., `kenglish@sjifire.org`)
+7. Click on the user to select them (checkmark appears)
+8. Click **Select**
+9. Click **Assign**
 
-1. Go to Microsoft Entra ID > Groups > Website Admins
-2. Click "Members" > "+ Add members"
-3. Search for and select the user(s)
-4. Click "Select"
+The user can now log in at `/admin` with their Microsoft account. Changes take effect immediately.
 
-The user can now log in at `/admin` with their Microsoft account.
+#### Revoking Admin Access
 
-#### Removing Users
+To remove a user's access to `/admin`:
 
-To revoke admin access:
+1. Go to [Azure Portal](https://portal.azure.com) > **Microsoft Entra ID** > **Enterprise applications**
+2. Search for and select **"website-admin"**
+3. Click **Users and groups** in the left sidebar
+4. Find the user in the list
+5. Click the checkbox next to their name
+6. Click **Remove** in the toolbar
+7. Confirm the removal
 
-1. Go to Microsoft Entra ID > Groups > Website Admins
-2. Click "Members"
-3. Select the user(s) and click "Remove"
-
-The user will be denied access on their next login attempt.
+The user will see an error (AADSTS50105) on their next login attempt. If they're currently logged in, they'll lose access when their session expires or they log out.
 
 ### 8. Configure Static Web App Environment Variables
 
@@ -167,6 +166,9 @@ The user will be denied access on their next login attempt.
 | `GITHUB_APP_INSTALLATION_ID` | `12345678` | Installation ID from step 1 |
 | `GITHUB_OWNER` | `your-org` | GitHub username or organization |
 | `GITHUB_REPO` | `your-repo` | Repository name |
+| `MS_GRAPH_TENANT_ID` | `xxxxxxxx-xxxx-...` | Entra ID tenant ID (for admin security verification) |
+| `MS_GRAPH_CLIENT_ID` | `xxxxxxxx-xxxx-...` | MS Graph app client ID (from Personnel Sync setup) |
+| `MS_GRAPH_CLIENT_SECRET` | `xxxxxxxx` | MS Graph app client secret (from Personnel Sync setup) |
 | `GITHUB_BRANCH` | `main` | Branch for content (optional, defaults to "main") |
 | `CLOUDINARY_API_KEY` | `123456789012345` | Cloudinary API key (optional, for image optimization) |
 | `CLOUDINARY_API_SECRET` | `abcdefg...` | Cloudinary API secret (optional, for image optimization) |
@@ -195,10 +197,14 @@ After deployment:
 
 You're authenticated but don't have the "admin" role. Check `/.auth/me` to see your current roles.
 
-Causes:
-- User not in the admin security group (check Entra ID > Groups)
-- Group claims not configured (see "Configure Group Claims" above)
-- `adminGroupId` in `api/site-config.json` doesn't match the group's Object ID
+This should not happen with the current configuration. If it does, verify the `/api/auth/get-roles` function is deployed correctly.
+
+**AADSTS50105: User not assigned to the application**
+
+The user is not assigned to the Enterprise Application:
+1. Go to Entra ID > Enterprise applications > your app
+2. Click "Users and groups"
+3. Add the user (see "Adding Users" above)
 
 **Changes to Entra ID not taking effect**
 
@@ -420,6 +426,7 @@ Personnel data and photos can be automatically synced from Microsoft 365 (Entra 
 7. Add these permissions:
    - `User.Read.All` - Read user profiles
    - `GroupMember.Read.All` - Read group memberships
+   - `Application.Read.All` - Verify admin portal security settings
 8. Click "Grant admin consent for [your org]"
 9. Go to "Certificates & secrets" > "New client secret"
 10. Create a secret and copy the **Value** immediately
