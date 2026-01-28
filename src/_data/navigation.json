@@ -23,6 +23,10 @@
       "folder": "services"
     },
     {
+      "label": "Gallery",
+      "url": "/about/gallery/"
+    },
+    {
       "label": "Contact",
       "url": "/contact/"
     }
