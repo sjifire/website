@@ -2,35 +2,27 @@
 title: Questions or Comments?
 nav_title: Contact
 preamble: ''
-sidebar: |
-  <div class="sidebar-block">
-    <h3 class="sidebar__heading">Emergency: CALL 911</h3>
-  </div>
-  <div class="sidebar-block">
-    <h3 class="sidebar__heading">Address</h3>
-    <address>
-      San Juan County Fire District 3<br>
-      1011 Mullis Street<br>
-      Friday Harbor, WA 98250
-    </address>
-    <address>
-      Office: <a href="tel:+13603785334">(360) 378-5334</a><br/>
-      Fax: (360) 378-2591<br/>
-      Dispatch Non Emergency: <a href="tel:+13603784151">(360) 378-4151</a>
-    </address>
-  </div>
-  <div class="sidebar-block">
-    <h3 class="sidebar__heading">Office Hours</h3>
-    <p>
-      8 a.m. to 4 p.m., Monday through Friday<br/>
-      Except Holidays
-    </p>
-  </div>
-  <div class="sidebar-block">
-    <figure class="embed-responsive embed-responsive-16by9">
-      <iframe title="HQ location" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4248.38934322883!2d-123.02445167834331!3d48.523208538641285!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x548f7eed6a631a9f%3A0x943116e04dc9aac3!2sSan%20Juan%20Fire%20Protection%20District!5e0!3m2!1sen!2sus!4v1633656761107!5m2!1sen!2sus" loading="lazy"></iframe>
-    </figure>
-  </div>
+sidebar_blocks:
+  - _template: richText
+    heading: "Emergency: CALL 911"
+  - _template: contact
+    heading: Address
+    organization: San Juan County Fire District 3
+    address_line1: 1011 Mullis Street
+    address_line2: Friday Harbor, WA 98250
+    phone: "(360) 378-5334"
+    phone_label: Office
+    fax: "(360) 378-2591"
+  - _template: contact
+    heading: Non-Emergency Dispatch
+    phone: "(360) 378-4151"
+  - _template: hours
+    heading: Office Hours
+    hours_text: "8 a.m. to 4 p.m., Monday through Friday"
+    note: Except Holidays
+  - _template: embed
+    embed_url: https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4248.38934322883!2d-123.02445167834331!3d48.523208538641285!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x548f7eed6a631a9f%3A0x943116e04dc9aac3!2sSan%20Juan%20Fire%20Protection%20District!5e0!3m2!1sen!2sus!4v1633656761107!5m2!1sen!2sus
+    title: HQ location
 ---
 
 If you have an emergency, **CALL 911**.

@@ -377,9 +377,255 @@ export default defineConfig({
             description: "Page will still be accessible but won't appear in menu",
           },
           {
-            type: "rich-text",
-            name: "sidebar",
-            label: "Sidebar"
+            type: "boolean",
+            name: "include_burn_widget",
+            label: "Show Burn Status Widget",
+            description: "Display the current burn status in the sidebar",
+          },
+          {
+            type: "boolean",
+            name: "include_incident_widget",
+            label: "Show Incident Stats Widget",
+            description: "Display incident statistics in the sidebar",
+          },
+          {
+            type: "object",
+            name: "sidebar_blocks",
+            label: "Sidebar Blocks",
+            list: true,
+            ui: {
+              itemProps: (item) => ({
+                label: item?.heading || item?._template || "Block",
+              }),
+            },
+            templates: [
+              {
+                name: "richText",
+                label: "Rich Text Block",
+                ui: {
+                  itemProps: (item) => ({
+                    label: item?.heading || "Rich Text",
+                  }),
+                },
+                fields: [
+                  {
+                    type: "string",
+                    name: "heading",
+                    label: "Heading",
+                  },
+                  {
+                    type: "rich-text",
+                    name: "content",
+                    label: "Content",
+                  },
+                ],
+              },
+              {
+                name: "button",
+                label: "Call to Action Button",
+                ui: {
+                  itemProps: (item) => ({
+                    label: item?.heading || "Button",
+                  }),
+                },
+                fields: [
+                  {
+                    type: "string",
+                    name: "heading",
+                    label: "Heading",
+                  },
+                  {
+                    type: "string",
+                    name: "description",
+                    label: "Description",
+                    ui: {
+                      component: "textarea",
+                    },
+                  },
+                  {
+                    type: "string",
+                    name: "button_text",
+                    label: "Button Text",
+                    required: true,
+                  },
+                  {
+                    type: "string",
+                    name: "button_url",
+                    label: "Button URL",
+                    required: true,
+                  },
+                  {
+                    type: "boolean",
+                    name: "new_tab",
+                    label: "Open in New Tab",
+                  },
+                ],
+              },
+              {
+                name: "list",
+                label: "Bulleted List",
+                ui: {
+                  itemProps: (item) => ({
+                    label: item?.heading || "List",
+                  }),
+                },
+                fields: [
+                  {
+                    type: "string",
+                    name: "heading",
+                    label: "Heading",
+                  },
+                  {
+                    type: "string",
+                    name: "intro",
+                    label: "Intro Text",
+                    description: "Optional text before the list",
+                  },
+                  {
+                    type: "string",
+                    name: "items",
+                    label: "List Items",
+                    list: true,
+                  },
+                ],
+              },
+              {
+                name: "contact",
+                label: "Contact Info",
+                ui: {
+                  itemProps: (item) => ({
+                    label: item?.heading || "Contact",
+                  }),
+                },
+                fields: [
+                  {
+                    type: "string",
+                    name: "heading",
+                    label: "Heading",
+                  },
+                  {
+                    type: "string",
+                    name: "organization",
+                    label: "Organization Name",
+                  },
+                  {
+                    type: "string",
+                    name: "address_line1",
+                    label: "Address Line 1",
+                  },
+                  {
+                    type: "string",
+                    name: "address_line2",
+                    label: "Address Line 2",
+                  },
+                  {
+                    type: "string",
+                    name: "phone",
+                    label: "Phone",
+                  },
+                  {
+                    type: "string",
+                    name: "phone_label",
+                    label: "Phone Label",
+                    description: "e.g., 'Office', 'Dispatch'",
+                  },
+                  {
+                    type: "string",
+                    name: "fax",
+                    label: "Fax",
+                  },
+                  {
+                    type: "string",
+                    name: "email",
+                    label: "Email",
+                  },
+                ],
+              },
+              {
+                name: "hours",
+                label: "Hours of Operation",
+                ui: {
+                  itemProps: (item) => ({
+                    label: item?.heading || "Hours",
+                  }),
+                },
+                fields: [
+                  {
+                    type: "string",
+                    name: "heading",
+                    label: "Heading",
+                  },
+                  {
+                    type: "string",
+                    name: "hours_text",
+                    label: "Hours",
+                    description: "e.g., '8 a.m. to 4 p.m., Monday through Friday'",
+                    ui: {
+                      component: "textarea",
+                    },
+                  },
+                  {
+                    type: "string",
+                    name: "note",
+                    label: "Note",
+                    description: "e.g., 'Except Holidays'",
+                  },
+                ],
+              },
+              {
+                name: "embed",
+                label: "Embed (Map, Video, etc.)",
+                ui: {
+                  itemProps: (item) => ({
+                    label: item?.heading || "Embed",
+                  }),
+                },
+                fields: [
+                  {
+                    type: "string",
+                    name: "heading",
+                    label: "Heading",
+                  },
+                  {
+                    type: "string",
+                    name: "embed_url",
+                    label: "Embed URL",
+                    description: "URL for iframe src (Google Maps embed, YouTube, etc.)",
+                    required: true,
+                  },
+                  {
+                    type: "string",
+                    name: "title",
+                    label: "Accessibility Title",
+                    description: "Describes the embed for screen readers",
+                    required: true,
+                  },
+                ],
+              },
+              {
+                name: "image",
+                label: "Image",
+                ui: {
+                  itemProps: (item) => ({
+                    label: item?.alt || "Image",
+                  }),
+                },
+                fields: [
+                  {
+                    type: "image",
+                    name: "src",
+                    label: "Image",
+                    required: true,
+                  },
+                  {
+                    type: "string",
+                    name: "alt",
+                    label: "Alt Text",
+                    required: true,
+                  },
+                ],
+              },
+            ],
           },
           {
             type: "rich-text",
