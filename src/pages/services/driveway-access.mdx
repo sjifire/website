@@ -1,23 +1,22 @@
 ---
 title: Driveway & Road Access
 nav_hidden: true
-sidebar: >
-  <div class="sidebar-block">
-    <h3 class="sidebar__heading">Request an Inspection</h3>
-    <p>Schedule a driveway clearance inspection to ensure emergency vehicles can reach your home.</p>
-    <a class="btn btn-primary" href="https://forms.office.com/Pages/ResponsePage.aspx?id=j4QiQRfDZ0KcB3xQQVDRvVafkl0BixBCpOYQ4VdsPFZUMlgxSEtST0NYMVVWV0FUMTY3SDVISFUwVi4u" target="_blank" rel="noopener">Request Service</a>
-  </div>
-
-  <div class="sidebar-block">
-    <h3 class="sidebar__heading">Fire Marshal</h3>
-    <p>For access requirements and fire code questions:</p>
-    <p><a href="https://www.sanjuancountywa.gov/1088/Fire-Marshal" target="_blank" rel="noopener">County Fire Marshal</a></p>
-  </div>
-
-  <div class="sidebar-block">
-    <h3 class="sidebar__heading">Address Assignment</h3>
-    <p><a href="https://www.sanjuancountywa.gov/505/Addressing" target="_blank" rel="noopener">San Juan County Public Works</a></p>
-  </div>
+sidebar_blocks:
+  - _template: button
+    heading: Request an Inspection
+    description: Schedule a driveway clearance inspection to ensure emergency vehicles can reach your home.
+    button_text: Request Service
+    button_url: https://forms.office.com/Pages/ResponsePage.aspx?id=j4QiQRfDZ0KcB3xQQVDRvVafkl0BixBCpOYQ4VdsPFZUMlgxSEtST0NYMVVWV0FUMTY3SDVISFUwVi4u
+    new_tab: true
+  - _template: richText
+    heading: Fire Marshal
+    content: |
+      For access requirements and fire code questions:
+      [County Fire Marshal](https://www.sanjuancountywa.gov/1088/Fire-Marshal)
+  - _template: richText
+    heading: Address Assignment
+    content: |
+      [San Juan County Public Works](https://www.sanjuancountywa.gov/505/Addressing)
 ---
 
 When seconds count, your driveway matters. Fire apparatus need adequate width, clearance, and a solid surface to reach your home. Driveways that don't meet access requirements can delay emergency response or prevent fire trucks from reaching your property at all.

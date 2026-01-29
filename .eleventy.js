@@ -87,11 +87,12 @@ module.exports = function(eleventyConfig) {
     return formatMeetingSchedule(schedule);
   });
 
-  // Markdown rendering filter
+  // Markdown rendering filter (with breaks: true so newlines become <br>)
   const mdRender = require("markdown-it")({
     linkify: true,
     typographer: true,
     html: true,
+    breaks: true,
   }).use(require("markdown-it-attrs"));
 
   eleventyConfig.addFilter("markdownify", function (rawString) {

@@ -1,0 +1,46 @@
+{% comment %}
+  Renders structured sidebar blocks from TinaCMS
+  Usage: {% render "sidebar-blocks.liquid", blocks: sidebar_blocks %}
+
+  Block types:
+  - richText: Heading + markdown content (use for general content, lists, contact info, etc.)
+  - button: Call-to-action with styled button
+  - embed: Iframes for maps, videos, etc.
+  - image: Sidebar image with Cloudinary optimization
+{% endcomment %}
+
+{% for block in blocks %}
+  <div class="sidebar-block">
+    {% case block._template %}
+
+      {% when "richText" %}
+        {% if block.heading %}
+          <h3 class="sidebar__heading">{{ block.heading }}</h3>
+        {% endif %}
+        {% if block.content %}
+          {{ block.content | markdownify }}
+        {% endif %}
+
+      {% when "button" %}
+        {% if block.heading %}
+          <h3 class="sidebar__heading">{{ block.heading }}</h3>
+        {% endif %}
+        {% if block.description %}
+          <p>{{ block.description }}</p>
+        {% endif %}
+        <a class="btn btn-primary" href="{{ block.button_url }}"{% if block.new_tab %} target="_blank" rel="noopener"{% endif %}>{{ block.button_text }}</a>
+
+      {% when "embed" %}
+        {% if block.heading %}
+          <h3 class="sidebar__heading">{{ block.heading }}</h3>
+        {% endif %}
+        <figure class="embed-responsive embed-responsive-16by9">
+          <iframe title="{{ block.title }}" src="{{ block.embed_url }}" loading="lazy"></iframe>
+        </figure>
+
+      {% when "image" %}
+        <styled-image src="{{ block.src }}" alt="{{ block.alt }}" size="full" />
+
+    {% endcase %}
+  </div>
+{% endfor %}
