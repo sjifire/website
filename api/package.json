@@ -8,6 +8,8 @@
   },
   "dependencies": {
     "@azure/functions": "^4.0.0",
+    "@azure/identity": "^4.13.0",
+    "@microsoft/microsoft-graph-client": "^3.0.7",
     "@octokit/auth-app": "^8.1.2",
     "@tinacms/datalayer": "^2.0.5",
     "dotenv": "^17.2.3",
