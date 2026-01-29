@@ -12,8 +12,6 @@ const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
  * Gets an access token for Microsoft Graph API.
  */
 async function getGraphToken(tenantId, clientId, clientSecret) {
-  console.log("[getRoles] Requesting Graph API token...");
-
   const response = await fetch(
     `https://login.microsoftonline.com/${tenantId}/oauth2/v2.0/token`,
     {
@@ -34,7 +32,6 @@ async function getGraphToken(tenantId, clientId, clientSecret) {
     throw new Error(`Token request failed: ${response.status} - ${errorText}`);
   }
 
-  console.log("[getRoles] Graph API token obtained successfully");
   const data = await response.json();
   return data.access_token;
 }
@@ -46,12 +43,10 @@ async function getGraphToken(tenantId, clientId, clientSecret) {
  * @returns {Promise<boolean>} True if assignment is required, false otherwise
  */
 export async function isAssignmentRequired() {
-  console.log("[getRoles] isAssignmentRequired called");
   const now = Date.now();
 
   // Return cached result if still valid
   if (assignmentRequiredCache !== null && now < cacheExpiry) {
-    console.log("[getRoles] Returning cached result:", assignmentRequiredCache);
     return assignmentRequiredCache;
   }
 
@@ -62,14 +57,6 @@ export async function isAssignmentRequired() {
 
   // The app ID of the SWA auth app (the one we're checking)
   const swaAppId = process.env.AAD_CLIENT_ID;
-
-  // Debug: Log which env vars are present (not their values)
-  console.log("[getRoles] Environment check:", {
-    MS_GRAPH_TENANT_ID: tenantId ? "SET" : "MISSING",
-    MS_GRAPH_CLIENT_ID: graphClientId ? "SET" : "MISSING",
-    MS_GRAPH_CLIENT_SECRET: graphClientSecret ? "SET (length: " + graphClientSecret.length + ")" : "MISSING",
-    AAD_CLIENT_ID: swaAppId ? "SET" : "MISSING",
-  });
 
   if (!tenantId || !graphClientId || !graphClientSecret || !swaAppId) {
     console.error(
@@ -84,7 +71,6 @@ export async function isAssignmentRequired() {
 
     // Query the service principal by appId to get appRoleAssignmentRequired
     const graphUrl = `https://graph.microsoft.com/v1.0/servicePrincipals?$filter=appId eq '${swaAppId}'&$select=appRoleAssignmentRequired`;
-    console.log("[getRoles] Querying Graph API:", graphUrl);
 
     const response = await fetch(graphUrl, {
       headers: { Authorization: `Bearer ${token}` },
@@ -97,8 +83,6 @@ export async function isAssignmentRequired() {
     }
 
     const data = await response.json();
-    console.log("[getRoles] Graph API response:", JSON.stringify(data));
-
     const { value } = data;
 
     if (!value || value.length === 0) {
@@ -107,7 +91,6 @@ export async function isAssignmentRequired() {
     }
 
     const isRequired = value[0].appRoleAssignmentRequired === true;
-    console.log("[getRoles] appRoleAssignmentRequired:", isRequired);
 
     // Cache the result
     assignmentRequiredCache = isRequired;
@@ -119,8 +102,6 @@ export async function isAssignmentRequired() {
           "Any user in the tenant can access /admin. " +
           "Enable it in Azure Portal > Entra ID > Enterprise Apps > Properties."
       );
-    } else {
-      console.log("[getRoles] Verified: User assignment required is enabled");
     }
 
     return isRequired;
@@ -149,19 +130,12 @@ export function clearCache() {
  * 3. If enabled, grants admin role (assigned users already passed Azure AD check)
  */
 export async function getRolesHandler(request, _context) {
-  console.log("[getRoles] Handler invoked");
-
   try {
-    // Log request details
-    console.log("[getRoles] Request URL:", request.url);
-    console.log("[getRoles] Request method:", request.method);
-
     // Verify that "User assignment required" is enabled
     const isRequired = await isAssignmentRequired();
-    console.log("[getRoles] isAssignmentRequired result:", isRequired);
 
     if (!isRequired) {
-      console.warn("[getRoles] Access denied - cannot verify User assignment required setting");
+      // Access denied - security setting not verified
       return {
         status: 200,
         jsonBody: { roles: [] },
@@ -173,20 +147,18 @@ export async function getRolesHandler(request, _context) {
     let body = {};
     try {
       body = await request.json();
-      console.log("[getRoles] Request body userId:", body.userId);
-    } catch (e) {
-      console.warn("[getRoles] Could not parse request body:", e.message);
+    } catch {
+      // Body parsing is optional - userId is just for logging
     }
 
-    console.log("[getRoles] Granting admin role to user:", body.userId);
+    console.log("[getRoles] Granting admin role to user:", body.userId || "unknown");
 
     return {
       status: 200,
       jsonBody: { roles: ["admin"] },
     };
   } catch (error) {
-    console.error("[getRoles] Handler error:", error.message);
-    console.error("[getRoles] Error stack:", error.stack);
+    console.error("[getRoles] Error:", error.message);
     return {
       status: 200,
       jsonBody: { roles: [] },
