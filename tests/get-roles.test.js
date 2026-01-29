@@ -1,4 +1,4 @@
-const { describe, it } = require("node:test");
+const { describe, it, beforeEach, afterEach, mock } = require("node:test");
 const assert = require("node:assert");
 
 /**
@@ -11,126 +11,181 @@ const assert = require("node:assert");
  */
 
 describe("getRoles", () => {
+  let originalEnv;
+
+  beforeEach(() => {
+    originalEnv = { ...process.env };
+  });
+
+  afterEach(() => {
+    process.env = originalEnv;
+    mock.reset();
+  });
+
   describe("isAssignmentRequired", () => {
-    // We test the logic by simulating different scenarios
+    it("returns false when AAD_CLIENT_ID is missing", async () => {
+      delete process.env.AAD_CLIENT_ID;
+      process.env.MS_GRAPH_TENANT_ID = "tenant";
+      process.env.MS_GRAPH_CLIENT_ID = "client";
+      process.env.MS_GRAPH_CLIENT_SECRET = "secret";
 
-    it("returns false when credentials are missing", async () => {
-      // Save original env
-      const originalEnv = { ...process.env };
+      const { isAssignmentRequired } = await import(
+        `../api/src/functions/getRoles.js?t=${Date.now()}`
+      );
+      const result = await isAssignmentRequired();
+      assert.strictEqual(result, false);
+    });
 
-      // Clear required env vars
+    it("returns false when MS_GRAPH credentials are missing", async () => {
+      process.env.AAD_CLIENT_ID = "app-id";
       delete process.env.MS_GRAPH_TENANT_ID;
       delete process.env.MS_GRAPH_CLIENT_ID;
       delete process.env.MS_GRAPH_CLIENT_SECRET;
-      delete process.env.AAD_CLIENT_ID;
 
-      // Import fresh to test with missing env
-      // Since we can't easily re-import, we test the behavior conceptually
-      // The function should return false (fail closed) when credentials missing
-
-      // Restore env
-      Object.assign(process.env, originalEnv);
-
-      // Document expected behavior
-      assert.ok(
-        true,
-        "Function should return false (deny access) when credentials are missing"
+      const { isAssignmentRequired } = await import(
+        `../api/src/functions/getRoles.js?t=${Date.now()}`
       );
-    });
-
-    it("fails closed on Graph API errors", () => {
-      // Document: if Graph API call fails, function returns false (denies access)
-      // This is "fail closed" security - when in doubt, deny access
-      assert.ok(
-        true,
-        "Function should return false (deny access) when Graph API fails"
-      );
-    });
-
-    it("is called once per login (session cookie caches roles for 8 hours)", () => {
-      // Note: No in-memory caching needed because Azure SWA calls rolesSource
-      // once during login and caches the result in the session cookie
-      assert.ok(true, "Roles cached in session cookie by Azure SWA");
+      const result = await isAssignmentRequired();
+      assert.strictEqual(result, false);
     });
   });
 
   describe("getRolesHandler", () => {
-    describe("when User assignment required is enabled", () => {
-      it("grants admin role to authenticated users", () => {
-        // When isAssignmentRequired returns true:
-        // - User has passed Azure AD authentication
-        // - User must be assigned to the Enterprise App (enforced by Azure AD)
-        // - Therefore, grant admin role
+    it("returns status 200 with roles array", async () => {
+      // Even when denying access, status is 200 (Azure SWA requirement)
+      delete process.env.AAD_CLIENT_ID; // Force isAssignmentRequired to return false
 
-        // Expected response:
-        const expectedResponse = {
-          status: 200,
-          jsonBody: { roles: ["admin"] },
-        };
+      const { getRolesHandler } = await import(
+        `../api/src/functions/getRoles.js?t=${Date.now()}`
+      );
 
-        assert.deepStrictEqual(expectedResponse.jsonBody, { roles: ["admin"] });
-      });
+      const mockRequest = {
+        json: async () => ({ userId: "test-user" }),
+      };
+
+      const result = await getRolesHandler(mockRequest);
+
+      assert.strictEqual(result.status, 200);
+      assert.ok(Array.isArray(result.jsonBody.roles));
     });
 
-    describe("when User assignment required is NOT enabled", () => {
-      it("denies access by returning empty roles", () => {
-        // When isAssignmentRequired returns false:
-        // - Either the setting is disabled, OR
-        // - We couldn't verify the setting (credentials missing, API error, etc.)
-        // - In either case, deny access (fail closed)
+    it("returns empty roles when isAssignmentRequired returns false", async () => {
+      delete process.env.AAD_CLIENT_ID; // Force failure
 
-        // Expected response:
-        const expectedResponse = {
-          status: 200,
-          jsonBody: { roles: [] },
-        };
+      const { getRolesHandler } = await import(
+        `../api/src/functions/getRoles.js?t=${Date.now()}`
+      );
 
-        assert.deepStrictEqual(expectedResponse.jsonBody, { roles: [] });
-      });
+      const mockRequest = {
+        json: async () => ({}),
+      };
+
+      const result = await getRolesHandler(mockRequest);
+
+      assert.deepStrictEqual(result.jsonBody, { roles: [] });
     });
 
-    describe("error handling", () => {
-      it("returns empty roles on any error (fail closed)", () => {
-        // If anything goes wrong, return empty roles
-        // This ensures we don't accidentally grant access on errors
+    it("handles request body parsing errors gracefully", async () => {
+      delete process.env.AAD_CLIENT_ID;
 
-        const expectedResponse = {
-          status: 200,
-          jsonBody: { roles: [] },
-        };
+      const { getRolesHandler } = await import(
+        `../api/src/functions/getRoles.js?t=${Date.now()}`
+      );
 
-        assert.deepStrictEqual(expectedResponse.jsonBody, { roles: [] });
-      });
+      const mockRequest = {
+        json: async () => {
+          throw new Error("Invalid JSON");
+        },
+      };
+
+      // Should not throw, should return empty roles
+      const result = await getRolesHandler(mockRequest);
+
+      assert.strictEqual(result.status, 200);
+      assert.deepStrictEqual(result.jsonBody, { roles: [] });
+    });
+
+  });
+
+  describe("fail closed security model", () => {
+    it("denies access (empty roles) when AAD_CLIENT_ID missing", async () => {
+      delete process.env.AAD_CLIENT_ID;
+
+      const { isAssignmentRequired } = await import(
+        `../api/src/functions/getRoles.js?t=${Date.now()}`
+      );
+
+      assert.strictEqual(await isAssignmentRequired(), false);
+    });
+
+    it("denies access (empty roles) when MS_GRAPH_TENANT_ID missing", async () => {
+      process.env.AAD_CLIENT_ID = "app-id";
+      delete process.env.MS_GRAPH_TENANT_ID;
+      process.env.MS_GRAPH_CLIENT_ID = "client";
+      process.env.MS_GRAPH_CLIENT_SECRET = "secret";
+
+      const { isAssignmentRequired } = await import(
+        `../api/src/functions/getRoles.js?t=${Date.now()}`
+      );
+
+      assert.strictEqual(await isAssignmentRequired(), false);
+    });
+
+    it("denies access (empty roles) when MS_GRAPH_CLIENT_ID missing", async () => {
+      process.env.AAD_CLIENT_ID = "app-id";
+      process.env.MS_GRAPH_TENANT_ID = "tenant";
+      delete process.env.MS_GRAPH_CLIENT_ID;
+      process.env.MS_GRAPH_CLIENT_SECRET = "secret";
+
+      const { isAssignmentRequired } = await import(
+        `../api/src/functions/getRoles.js?t=${Date.now()}`
+      );
+
+      assert.strictEqual(await isAssignmentRequired(), false);
+    });
+
+    it("denies access (empty roles) when MS_GRAPH_CLIENT_SECRET missing", async () => {
+      process.env.AAD_CLIENT_ID = "app-id";
+      process.env.MS_GRAPH_TENANT_ID = "tenant";
+      process.env.MS_GRAPH_CLIENT_ID = "client";
+      delete process.env.MS_GRAPH_CLIENT_SECRET;
+
+      const { isAssignmentRequired } = await import(
+        `../api/src/functions/getRoles.js?t=${Date.now()}`
+      );
+
+      assert.strictEqual(await isAssignmentRequired(), false);
     });
   });
 
-  describe("security model documentation", () => {
-    it("verifies Enterprise App configuration via Graph API", () => {
-      // The function uses Microsoft Graph API to check the service principal's
-      // appRoleAssignmentRequired property. This ensures that even if the
-      // Azure Portal setting is changed, access will be denied.
+  describe("response format", () => {
+    it("always returns status 200 (Azure SWA requirement)", async () => {
+      delete process.env.AAD_CLIENT_ID;
 
-      assert.ok(true, "Uses Graph API to verify appRoleAssignmentRequired");
+      const { getRolesHandler } = await import(
+        `../api/src/functions/getRoles.js?t=${Date.now()}`
+      );
+
+      const result = await getRolesHandler({ json: async () => ({}) });
+
+      // Azure SWA rolesSource must return 200, even for "denied"
+      assert.strictEqual(result.status, 200);
     });
 
-    it("requires MS_GRAPH credentials with Application.Read.All permission", () => {
-      // Required environment variables:
-      // - MS_GRAPH_TENANT_ID: Azure AD tenant ID
-      // - MS_GRAPH_CLIENT_ID: App registration client ID (Personnel Sync app)
-      // - MS_GRAPH_CLIENT_SECRET: App registration client secret
-      // - AAD_CLIENT_ID: The SWA app's client ID (the one being checked)
-      //
-      // Required Graph API permission on Personnel Sync app: Application.Read.All
+    it("returns jsonBody with roles array", async () => {
+      delete process.env.AAD_CLIENT_ID;
 
-      assert.ok(true, "Documents required credentials and permissions");
+      const { getRolesHandler } = await import(
+        `../api/src/functions/getRoles.js?t=${Date.now()}`
+      );
+
+      const result = await getRolesHandler({ json: async () => ({}) });
+
+      assert.ok("jsonBody" in result);
+      assert.ok("roles" in result.jsonBody);
+      assert.ok(Array.isArray(result.jsonBody.roles));
     });
 
-    it("fails closed - denies access when unable to verify", () => {
-      // Security principle: when in doubt, deny access
-      // If credentials are missing, Graph API fails, or setting is disabled,
-      // the function returns empty roles (no admin access)
-
-      assert.ok(true, "Fails closed for security");
-    });
   });
+
 });

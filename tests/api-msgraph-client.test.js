@@ -116,30 +116,4 @@ describe("api/lib/msgraph-client", () => {
     });
   });
 
-  describe("getServicePrincipal behavior documentation", () => {
-    it("returns service principal object when found", () => {
-      // Expected behavior when service principal exists:
-      // Returns { appRoleAssignmentRequired: true/false, ... }
-      const expectedResult = { appRoleAssignmentRequired: true };
-      assert.ok("appRoleAssignmentRequired" in expectedResult);
-    });
-
-    it("returns null when service principal not found", () => {
-      // Expected behavior when appId doesn't match any service principal
-      const expectedResult = null;
-      assert.strictEqual(expectedResult, null);
-    });
-
-    it("returns null on 404 error", () => {
-      // Expected behavior: 404 errors are caught and return null
-      // This is graceful handling for non-existent apps
-      assert.ok(true, "404 errors return null instead of throwing");
-    });
-
-    it("throws on other errors", () => {
-      // Expected behavior: non-404 errors (403, 500, etc.) are thrown
-      // This ensures we don't silently fail on permission issues
-      assert.ok(true, "Non-404 errors are thrown to caller");
-    });
-  });
 });
