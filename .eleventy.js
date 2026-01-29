@@ -5,7 +5,13 @@ const { dateFilters, getNextMeeting, formatMeetingSchedule } = require("./src/_l
 
 module.exports = function(eleventyConfig) {
   const siteData = require("./src/_data/site.json");
-  const cloudinary = createCloudinary(siteData);
+
+  // Allow environment variable to override Cloudinary fetch URL (for PR staging environments)
+  const cloudinaryConfig = {
+    ...siteData,
+    cloudinaryFetchUrl: process.env.CLOUDINARY_FETCH_URL || siteData.cloudinaryFetchUrl
+  };
+  const cloudinary = createCloudinary(cloudinaryConfig);
 
   // Create custom Liquid engine with additional options
   const liquidEngine = new Liquid({
