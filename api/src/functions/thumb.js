@@ -17,7 +17,7 @@ app.http("thumb", {
   methods: ["GET", "HEAD"],
   authLevel: "anonymous",
   route: "thumb/{*path}",
-  handler: async (request, _context) => {
+  handler: async (request) => {
     // Require admin authentication
     const authError = requireAdmin(request);
     if (authError) {

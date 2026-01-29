@@ -72,7 +72,7 @@ app.http("tina", {
   methods: ["GET", "POST", "PUT", "DELETE"],
   authLevel: "anonymous",
   route: "tina/{*path}",
-  handler: async (request, _context) => {
+  handler: async (request) => {
     const path = request.params.path || "";
     console.log("TinaCMS request:", request.method, path);
 

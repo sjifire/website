@@ -44,7 +44,7 @@ app.http("media", {
   methods: ["GET", "POST", "DELETE", "OPTIONS"],
   authLevel: "anonymous",
   route: "media/{*path}",
-  handler: async (request, _context) => {
+  handler: async (request) => {
     const corsHeaders = getCorsHeaders(request);
 
     if (request.method === "OPTIONS") {
