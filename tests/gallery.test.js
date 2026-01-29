@@ -47,13 +47,19 @@ describe("Gallery Data Loader", () => {
       });
     });
 
-    it("images are sorted alphabetically", () => {
+    it("images are sorted by stable hash", () => {
+      const crypto = require("crypto");
       const gallery = require("../src/_data/gallery.js");
+
+      // Verify order matches hash-based sorting
       if (gallery.images.length > 1) {
+        const hashString = (str) => crypto.createHash("md5").update(str).digest("hex");
         for (let i = 1; i < gallery.images.length; i++) {
           const prev = path.basename(gallery.images[i - 1].src);
           const curr = path.basename(gallery.images[i].src);
-          assert.ok(prev <= curr, `Images should be sorted: ${prev} <= ${curr}`);
+          const prevHash = hashString(prev);
+          const currHash = hashString(curr);
+          assert.ok(prevHash <= currHash, `Images should be sorted by hash: ${prev} <= ${curr}`);
         }
       }
     });

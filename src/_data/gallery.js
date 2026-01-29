@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+const crypto = require("crypto");
 const site = require("./site.json");
 const homepage = require("./homepage.json");
 
@@ -17,13 +18,20 @@ const webPath = "/" + folderPath.replace(/^src\//, "");
 // Supported image extensions
 const imageExtensions = [".jpg", ".jpeg", ".png", ".gif", ".webp"];
 
-// Convert filename to readable alt text
+// Convert filename to readable alt text with Title Case
 function filenameToAlt(filename) {
   const name = path.basename(filename, path.extname(filename));
   return name
     .replace(/[-_]/g, " ")
     .replace(/\s+/g, " ")
-    .trim();
+    .trim()
+    .replace(/\b\w/g, (char) => char.toUpperCase())
+    .replace(/\bSjifr\b/g, "SJIFR"); // Handle acronym
+}
+
+// Hash string using crypto for stable pseudo-random ordering
+function hashString(str) {
+  return crypto.createHash("md5").update(str).digest("hex");
 }
 
 // Fisher-Yates shuffle for carousel selection
@@ -45,7 +53,7 @@ if (fs.existsSync(galleryFolder)) {
       const ext = path.extname(name).toLowerCase();
       return imageExtensions.includes(ext);
     })
-    .sort()
+    .sort((a, b) => hashString(a).localeCompare(hashString(b))) // Stable pseudo-random order
     .map((name) => ({
       src: `${webPath}/${name}`,
       alt: filenameToAlt(name),

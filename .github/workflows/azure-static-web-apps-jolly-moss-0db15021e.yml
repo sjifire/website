@@ -49,6 +49,10 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Set Cloudinary fetch URL for staging
+        if: github.event_name == 'pull_request'
+        run: echo "CLOUDINARY_FETCH_URL=https://jolly-moss-0db15021e-${{ github.event.pull_request.number }}.westus2.1.azurestaticapps.net" >> $GITHUB_ENV
+
       - name: Build TinaCMS and index schema
         run: npx tinacms build --skip-cloud-checks
         env:
