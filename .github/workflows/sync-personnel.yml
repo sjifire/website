@@ -1,4 +1,4 @@
-name: Sync Personnel from M365
+name: Sync Personnel from MS365
 
 on:
   schedule:

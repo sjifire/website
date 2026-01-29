@@ -481,7 +481,7 @@ async function main() {
           person.photo = photoUrl;
         } else {
           photoStats.skippedNoPhoto++;
-          console.log("    No photo in M365");
+          console.log("    No photo in MS365");
 
           // Keep existing photo if we have one
           if (photoExists) {
@@ -552,7 +552,7 @@ async function main() {
       console.log(`  - ${user.name} <${user.email}> (${user.jobTitle})`);
     }
     console.log("\nTo include these users, either:");
-    console.log("  1. Add them to a roleGroup in M365");
+    console.log("  1. Add them to a roleGroup in MS365");
     console.log("  2. Add their email to personnelSync.includeWithoutRole in site.json");
   }
 
@@ -561,7 +561,7 @@ async function main() {
     console.log(`  New photos downloaded: ${photoStats.downloaded}`);
     console.log(`  Photos updated (changed): ${photoStats.updated}`);
     console.log(`  Photos skipped (unchanged): ${photoStats.skippedUnchanged}`);
-    console.log(`  No photo in M365: ${photoStats.skippedNoPhoto}`);
+    console.log(`  No photo in MS365: ${photoStats.skippedNoPhoto}`);
   }
 
   console.log(`\nOutput written to ${OUTPUT_PATH}`);

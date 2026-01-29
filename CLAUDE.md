@@ -28,7 +28,7 @@ Requires Node.js 20+. Output goes to `_site/`.
 - `src/pages/` - Content pages (`.liquid`/`.md`/`.mdx`) - URLs generated without `/pages/` prefix via `pages.11tydata.js`
 - `src/posts/` - News posts as JSON files (`YYYY-MM-DD-slug.json`)
 - `src/media_releases/` - Press release metadata (JSON) linking to PDFs in `src/assets/media_releases/`
-- `scripts/` - Standalone ESM scripts for data sync (NERIS, M365 personnel)
+- `scripts/` - Standalone ESM scripts for data sync (NERIS, MS365 personnel)
 - `api/` - Azure Functions backend (TypeScript) for GitHub content operations and auth
 
 ### Key Patterns
