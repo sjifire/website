@@ -1,6 +1,12 @@
 {% comment %}
   Renders structured sidebar blocks from TinaCMS
   Usage: {% render "sidebar-blocks.liquid", blocks: sidebar_blocks %}
+
+  Block types:
+  - richText: Heading + markdown content (use for general content, lists, contact info, etc.)
+  - button: Call-to-action with styled button
+  - embed: Iframes for maps, videos, etc.
+  - image: Sidebar image with Cloudinary optimization
 {% endcomment %}
 
 {% for block in blocks %}
@@ -23,49 +29,6 @@
           <p>{{ block.description }}</p>
         {% endif %}
         <a class="btn btn-primary" href="{{ block.button_url }}"{% if block.new_tab %} target="_blank" rel="noopener"{% endif %}>{{ block.button_text }}</a>
-
-      {% when "list" %}
-        {% if block.heading %}
-          <h3 class="sidebar__heading">{{ block.heading }}</h3>
-        {% endif %}
-        {% if block.intro %}
-          <p>{{ block.intro }}</p>
-        {% endif %}
-        {% if block.items.size > 0 %}
-          <ul class="sidebar-list">
-            {% for item in block.items %}
-              <li>{{ item }}</li>
-            {% endfor %}
-          </ul>
-        {% endif %}
-
-      {% when "contact" %}
-        {% if block.heading %}
-          <h3 class="sidebar__heading">{{ block.heading }}</h3>
-        {% endif %}
-        <address>
-          {% if block.organization %}{{ block.organization }}<br>{% endif %}
-          {% if block.address_line1 %}{{ block.address_line1 }}<br>{% endif %}
-          {% if block.address_line2 %}{{ block.address_line2 }}{% endif %}
-        </address>
-        {% if block.phone or block.fax or block.email %}
-          <address>
-            {% if block.phone %}
-              {% if block.phone_label %}{{ block.phone_label }}: {% endif %}<a href="tel:{{ block.phone | remove: '(' | remove: ')' | remove: ' ' | remove: '-' }}">{{ block.phone }}</a><br>
-            {% endif %}
-            {% if block.fax %}Fax: {{ block.fax }}<br>{% endif %}
-            {% if block.email %}<a href="mailto:{{ block.email }}">{{ block.email }}</a>{% endif %}
-          </address>
-        {% endif %}
-
-      {% when "hours" %}
-        {% if block.heading %}
-          <h3 class="sidebar__heading">{{ block.heading }}</h3>
-        {% endif %}
-        <p>
-          {{ block.hours_text | newline_to_br }}
-          {% if block.note %}<br>{{ block.note }}{% endif %}
-        </p>
 
       {% when "embed" %}
         {% if block.heading %}
