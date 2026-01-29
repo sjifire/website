@@ -11,7 +11,9 @@ const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
 /**
  * Gets an access token for Microsoft Graph API.
  */
-async function getGraphToken(tenantId, clientId, clientSecret) {
+async function getGraphToken(tenantId, clientId, clientSecret, context) {
+  context.log("[getRoles] Requesting Graph API token...");
+
   const response = await fetch(
     `https://login.microsoftonline.com/${tenantId}/oauth2/v2.0/token`,
     {
@@ -27,9 +29,12 @@ async function getGraphToken(tenantId, clientId, clientSecret) {
   );
 
   if (!response.ok) {
-    throw new Error(`Token request failed: ${response.status}`);
+    const errorText = await response.text();
+    context.error(`[getRoles] Token request failed: ${response.status}`, errorText);
+    throw new Error(`Token request failed: ${response.status} - ${errorText}`);
   }
 
+  context.log("[getRoles] Graph API token obtained successfully");
   const data = await response.json();
   return data.access_token;
 }
@@ -42,10 +47,12 @@ async function getGraphToken(tenantId, clientId, clientSecret) {
  * @returns {Promise<boolean>} True if assignment is required, false otherwise
  */
 export async function isAssignmentRequired(context) {
+  context.log("[getRoles] isAssignmentRequired called");
   const now = Date.now();
 
   // Return cached result if still valid
   if (assignmentRequiredCache !== null && now < cacheExpiry) {
+    context.log("[getRoles] Returning cached result:", assignmentRequiredCache);
     return assignmentRequiredCache;
   }
 
@@ -57,37 +64,51 @@ export async function isAssignmentRequired(context) {
   // The app ID of the SWA auth app (the one we're checking)
   const swaAppId = process.env.AAD_CLIENT_ID;
 
+  // Debug: Log which env vars are present (not their values)
+  context.log("[getRoles] Environment check:", {
+    MS_GRAPH_TENANT_ID: tenantId ? "SET" : "MISSING",
+    MS_GRAPH_CLIENT_ID: graphClientId ? "SET" : "MISSING",
+    MS_GRAPH_CLIENT_SECRET: graphClientSecret ? "SET (length: " + graphClientSecret.length + ")" : "MISSING",
+    AAD_CLIENT_ID: swaAppId ? "SET" : "MISSING",
+  });
+
   if (!tenantId || !graphClientId || !graphClientSecret || !swaAppId) {
     context.error(
-      "Missing credentials for Graph API check. Required: MS_GRAPH_TENANT_ID, MS_GRAPH_CLIENT_ID, MS_GRAPH_CLIENT_SECRET, AAD_CLIENT_ID"
+      "[getRoles] Missing credentials for Graph API check. Required: MS_GRAPH_TENANT_ID, MS_GRAPH_CLIENT_ID, MS_GRAPH_CLIENT_SECRET, AAD_CLIENT_ID"
     );
     // Fail closed - deny access if we can't verify
     return false;
   }
 
   try {
-    const token = await getGraphToken(tenantId, graphClientId, graphClientSecret);
+    const token = await getGraphToken(tenantId, graphClientId, graphClientSecret, context);
 
     // Query the service principal by appId to get appRoleAssignmentRequired
-    const response = await fetch(
-      `https://graph.microsoft.com/v1.0/servicePrincipals?$filter=appId eq '${swaAppId}'&$select=appRoleAssignmentRequired`,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    );
+    const graphUrl = `https://graph.microsoft.com/v1.0/servicePrincipals?$filter=appId eq '${swaAppId}'&$select=appRoleAssignmentRequired`;
+    context.log("[getRoles] Querying Graph API:", graphUrl);
+
+    const response = await fetch(graphUrl, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
 
     if (!response.ok) {
-      throw new Error(`Graph API request failed: ${response.status}`);
+      const errorText = await response.text();
+      context.error(`[getRoles] Graph API request failed: ${response.status}`, errorText);
+      throw new Error(`Graph API request failed: ${response.status} - ${errorText}`);
     }
 
-    const { value } = await response.json();
+    const data = await response.json();
+    context.log("[getRoles] Graph API response:", JSON.stringify(data));
+
+    const { value } = data;
 
     if (!value || value.length === 0) {
-      context.error(`Service principal not found for appId: ${swaAppId}`);
+      context.error(`[getRoles] Service principal not found for appId: ${swaAppId}`);
       return false;
     }
 
     const isRequired = value[0].appRoleAssignmentRequired === true;
+    context.log("[getRoles] appRoleAssignmentRequired:", isRequired);
 
     // Cache the result
     assignmentRequiredCache = isRequired;
@@ -95,17 +116,17 @@ export async function isAssignmentRequired(context) {
 
     if (!isRequired) {
       context.error(
-        "SECURITY: 'User assignment required' is NOT enabled on the Enterprise App! " +
+        "[getRoles] SECURITY: 'User assignment required' is NOT enabled on the Enterprise App! " +
           "Any user in the tenant can access /admin. " +
           "Enable it in Azure Portal > Entra ID > Enterprise Apps > Properties."
       );
     } else {
-      context.log("Verified: User assignment required is enabled");
+      context.log("[getRoles] Verified: User assignment required is enabled");
     }
 
     return isRequired;
   } catch (error) {
-    context.error("Failed to verify assignment required setting:", error.message);
+    context.error("[getRoles] Failed to verify assignment required setting:", error.message);
     // Fail closed - deny access if we can't verify
     return false;
   }
@@ -129,12 +150,19 @@ export function clearCache() {
  * 3. If enabled, grants admin role (assigned users already passed Azure AD check)
  */
 export async function getRolesHandler(request, context) {
+  context.log("[getRoles] Handler invoked");
+
   try {
+    // Log request details
+    context.log("[getRoles] Request URL:", request.url);
+    context.log("[getRoles] Request method:", request.method);
+
     // Verify that "User assignment required" is enabled
     const isRequired = await isAssignmentRequired(context);
+    context.log("[getRoles] isAssignmentRequired result:", isRequired);
 
     if (!isRequired) {
-      context.warn("Access denied - cannot verify User assignment required setting");
+      context.warn("[getRoles] Access denied - cannot verify User assignment required setting");
       return {
         status: 200,
         jsonBody: { roles: [] },
@@ -143,15 +171,23 @@ export async function getRolesHandler(request, context) {
 
     // User assignment is required and user passed Azure AD auth,
     // so they must be assigned to the app - grant admin access
-    const body = await request.json();
-    context.log("GetRoles: Granting admin role", { userId: body.userId });
+    let body = {};
+    try {
+      body = await request.json();
+      context.log("[getRoles] Request body userId:", body.userId);
+    } catch (e) {
+      context.warn("[getRoles] Could not parse request body:", e.message);
+    }
+
+    context.log("[getRoles] Granting admin role to user:", body.userId);
 
     return {
       status: 200,
       jsonBody: { roles: ["admin"] },
     };
   } catch (error) {
-    context.error("GetRoles error:", error.message);
+    context.error("[getRoles] Handler error:", error.message);
+    context.error("[getRoles] Error stack:", error.stack);
     return {
       status: 200,
       jsonBody: { roles: [] },
