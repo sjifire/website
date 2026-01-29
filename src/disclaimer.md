@@ -2,11 +2,7 @@
 title: Disclaimer
 layout: page
 permalink: /disclaimer/
-preamble: |
-  The information on this internet site is presented in good faith by San
-  Juan Fire District #3 ("SJF&R"). SJF&R believes the information to be correct, but
-  SJF&R makes no representations or warranties as to the completeness or accuracy
-  of any information on the internet site.
+preamble: 'The information on this internet site is presented in good faith by San Juan Fire District #3 ("SJF&R"). SJF&R believes the information to be correct, but SJF&R makes no representations or warranties as to the completeness or accuracy of any information on the internet site.'
 ---
 
 All information on this internet site is subject to change without notice. SJF&R shall not be responsible for any damages of any sort, including indirect, incidental, or consequential damages, arising out of the use of its internet site or reliance on the information available on its internet site.
