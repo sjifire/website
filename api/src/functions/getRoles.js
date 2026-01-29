@@ -148,7 +148,7 @@ export function clearCache() {
  * 2. If not enabled (or can't verify), denies access (returns no roles)
  * 3. If enabled, grants admin role (assigned users already passed Azure AD check)
  */
-export async function getRolesHandler(request, context) {
+export async function getRolesHandler(request, _context) {
   console.log("[getRoles] Handler invoked");
 
   try {
