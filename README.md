@@ -53,13 +53,13 @@ TinaCMS uses Cosmos DB for content indexing. Free tier (M25) works fine.
 
 ---
 
-### 5. Cloudinary *(Optional)*
+### 5. Cloudinary
 
-For automatic image optimization. Get API credentials from https://console.cloudinary.com/settings/api-keys
+For image optimization. Get API credentials from https://console.cloudinary.com/settings/api-keys
 
 ---
 
-### 6. Microsoft Graph API *(Optional)*
+### 6. Microsoft Graph API
 
 For personnel sync and admin security verification. Create a separate app registration with these application permissions:
 - `User.Read.All`
