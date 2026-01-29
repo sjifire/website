@@ -24,14 +24,6 @@ function encodeClientPrincipal(principal) {
   return Buffer.from(JSON.stringify(principal)).toString("base64");
 }
 
-// Helper to create a mock context for logging
-function createMockContext() {
-  return {
-    warn: () => {},
-    log: () => {},
-    error: () => {},
-  };
-}
 
 describe("auth module", () => {
   describe("getClientPrincipal", () => {
@@ -152,17 +144,15 @@ describe("auth module", () => {
     it("returns null (allows access) in local development mode", () => {
       process.env.TINA_PUBLIC_IS_LOCAL = "true";
       const request = createMockRequest({});
-      const context = createMockContext();
 
-      assert.strictEqual(requireAdmin(request, context), null);
+      assert.strictEqual(requireAdmin(request), null);
     });
 
     it("returns 401 when no client principal in production", () => {
       process.env.TINA_PUBLIC_IS_LOCAL = "false";
       const request = createMockRequest({});
-      const context = createMockContext();
 
-      const result = requireAdmin(request, context);
+      const result = requireAdmin(request);
       assert.strictEqual(result.status, 401);
       assert.deepStrictEqual(result.jsonBody, { error: "Authentication required" });
     });
@@ -176,9 +166,8 @@ describe("auth module", () => {
       const request = createMockRequest({
         "x-ms-client-principal": encodeClientPrincipal(principal),
       });
-      const context = createMockContext();
 
-      const result = requireAdmin(request, context);
+      const result = requireAdmin(request);
       assert.strictEqual(result.status, 403);
       assert.deepStrictEqual(result.jsonBody, { error: "Admin role required" });
     });
@@ -192,52 +181,15 @@ describe("auth module", () => {
       const request = createMockRequest({
         "x-ms-client-principal": encodeClientPrincipal(principal),
       });
-      const context = createMockContext();
 
-      assert.strictEqual(requireAdmin(request, context), null);
-    });
-
-    it("logs warning on unauthorized access attempt", () => {
-      process.env.TINA_PUBLIC_IS_LOCAL = "false";
-      const request = createMockRequest({});
-      let loggedMessage = null;
-      const context = {
-        warn: (msg) => { loggedMessage = msg; },
-        log: () => {},
-        error: () => {},
-      };
-
-      requireAdmin(request, context);
-      assert.ok(loggedMessage.includes("Unauthorized"));
-    });
-
-    it("logs warning with userId on forbidden access", () => {
-      process.env.TINA_PUBLIC_IS_LOCAL = "false";
-      const principal = {
-        userId: "user456",
-        userRoles: ["authenticated"],
-      };
-      const request = createMockRequest({
-        "x-ms-client-principal": encodeClientPrincipal(principal),
-      });
-      let loggedMessage = null;
-      const context = {
-        warn: (msg) => { loggedMessage = msg; },
-        log: () => {},
-        error: () => {},
-      };
-
-      requireAdmin(request, context);
-      assert.ok(loggedMessage.includes("user456"));
-      assert.ok(loggedMessage.includes("Forbidden"));
+      assert.strictEqual(requireAdmin(request), null);
     });
 
     it("returns 401 when TINA_PUBLIC_IS_LOCAL is not set", () => {
       delete process.env.TINA_PUBLIC_IS_LOCAL;
       const request = createMockRequest({});
-      const context = createMockContext();
 
-      const result = requireAdmin(request, context);
+      const result = requireAdmin(request);
       assert.strictEqual(result.status, 401);
     });
   });

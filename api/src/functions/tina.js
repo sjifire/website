@@ -72,9 +72,9 @@ app.http("tina", {
   methods: ["GET", "POST", "PUT", "DELETE"],
   authLevel: "anonymous",
   route: "tina/{*path}",
-  handler: async (request, context) => {
+  handler: async (request) => {
     const path = request.params.path || "";
-    context.log("TinaCMS request:", request.method, path);
+    console.log("TinaCMS request:", request.method, path);
 
     if (path === "health") {
       // Check required environment variables (don't expose values, just presence)
@@ -99,19 +99,19 @@ app.http("tina", {
       };
     }
 
-    const authError = requireAdmin(request, context);
+    const authError = requireAdmin(request);
     if (authError) {
       return authError;
     }
 
     const author = getGitAuthor(request);
-    context.log(`TinaCMS access by user: ${getUserForLogging(request)}`);
+    console.log(`TinaCMS access by user: ${getUserForLogging(request)}`);
 
     return runWithAuthor(author, async () => {
       try {
         return await handleTinaRequest(request, path);
       } catch (error) {
-        context.error("TinaCMS error:", error.message, error.stack);
+        console.error("TinaCMS error:", error.message, error.stack);
         // Include error details for debugging (remove in production once stable)
         return {
           status: 500,

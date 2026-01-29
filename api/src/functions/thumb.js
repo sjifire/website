@@ -17,9 +17,9 @@ app.http("thumb", {
   methods: ["GET", "HEAD"],
   authLevel: "anonymous",
   route: "thumb/{*path}",
-  handler: async (request, context) => {
+  handler: async (request) => {
     // Require admin authentication
-    const authError = requireAdmin(request, context);
+    const authError = requireAdmin(request);
     if (authError) {
       return authError;
     }
@@ -46,7 +46,7 @@ app.http("thumb", {
     // Construct Cloudinary fetch URL
     const cloudinaryUrl = `${CLOUDINARY_ROOT}/image/fetch/${DEFAULT_TRANSFORMS}/${SITE_URL}/assets/media/${cleanPath}`;
 
-    context.log(`Thumbnail redirect: ${requestPath} -> ${cloudinaryUrl}`);
+    console.log(`Thumbnail redirect: ${requestPath} -> ${cloudinaryUrl}`);
 
     // Redirect to Cloudinary
     return {
