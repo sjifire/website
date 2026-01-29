@@ -17,13 +17,15 @@ const webPath = "/" + folderPath.replace(/^src\//, "");
 // Supported image extensions
 const imageExtensions = [".jpg", ".jpeg", ".png", ".gif", ".webp"];
 
-// Convert filename to readable alt text
+// Convert filename to readable alt text with Title Case
 function filenameToAlt(filename) {
   const name = path.basename(filename, path.extname(filename));
   return name
     .replace(/[-_]/g, " ")
     .replace(/\s+/g, " ")
-    .trim();
+    .trim()
+    .replace(/\b\w/g, (char) => char.toUpperCase())
+    .replace(/\bSjifr\b/g, "SJIFR"); // Handle acronym
 }
 
 // Fisher-Yates shuffle for carousel selection
