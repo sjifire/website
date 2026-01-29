@@ -29,7 +29,7 @@ Requires Node.js 20+. Output goes to `_site/`.
 - `src/posts/` - News posts as JSON files (`YYYY-MM-DD-slug.json`)
 - `src/media_releases/` - Press release metadata (JSON) linking to PDFs in `src/assets/media_releases/`
 - `scripts/` - Standalone ESM scripts for data sync (NERIS, M365 personnel)
-- `api/` - Azure Functions backend (TypeScript) for GitHub content operations and auth
+- `api/` - Azure Functions backend for GitHub content operations and auth
 
 ### Key Patterns
 
@@ -77,7 +77,7 @@ Typically reduces file sizes by 80-90%. Requires Cloudinary credentials in `.env
 
 ### Authentication
 
-Admin routes (`/admin/*`, `/api/*`) require Azure AD authentication configured via `staticwebapp.config.json`. See README.md for Azure AD setup.
+Admin routes (`/admin/*`, `/api/*`) require Azure AD authentication. Access is controlled via Enterprise App user assignments in Entra ID. The app verifies "User assignment required" is enabled via Graph API before granting the admin role.
 
 ### Incident Statistics (NERIS)
 
@@ -106,7 +106,7 @@ npm run stats
 Personnel data and photos are synced daily from Microsoft 365 via Microsoft Graph API.
 
 **Files:**
-- `scripts/msgraph-client.mjs` - ESM client for Microsoft Graph API
+- `scripts/msgraph-client.mjs` - Microsoft Graph API client (uses official @microsoft/microsoft-graph-client SDK)
 - `scripts/sync-personnel.mjs` - Syncs users/photos to `our-team-data.mdx`
 - `scripts/image-hash.mjs` - Perceptual hashing for photo change detection
 - `scripts/cloudinary-optimize.mjs` - Photo optimization via Cloudinary
@@ -133,12 +133,6 @@ Personnel data and photos are synced daily from Microsoft 365 via Microsoft Grap
   }
 }
 ```
-
-**Azure AD App Setup:**
-1. Create App Registration in Azure Portal
-2. Add API Permission: Microsoft Graph → Application → `User.Read.All`, `GroupMember.Read.All`
-3. Grant admin consent
-4. Create client secret
 
 **Local Testing:**
 ```bash
