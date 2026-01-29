@@ -1,32 +1,5 @@
 import { app } from "@azure/functions";
-
-/**
- * Gets an access token for Microsoft Graph API.
- */
-async function getGraphToken(tenantId, clientId, clientSecret) {
-  const response = await fetch(
-    `https://login.microsoftonline.com/${tenantId}/oauth2/v2.0/token`,
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams({
-        client_id: clientId,
-        client_secret: clientSecret,
-        scope: "https://graph.microsoft.com/.default",
-        grant_type: "client_credentials",
-      }),
-    }
-  );
-
-  if (!response.ok) {
-    const errorText = await response.text();
-    console.error(`[getRoles] Token request failed: ${response.status}`, errorText);
-    throw new Error(`Token request failed: ${response.status} - ${errorText}`);
-  }
-
-  const data = await response.json();
-  return data.access_token;
-}
+import { createMSGraphClient } from "../lib/msgraph-client.js";
 
 /**
  * Checks if "User assignment required" is enabled on the Enterprise App.
@@ -35,42 +8,30 @@ async function getGraphToken(tenantId, clientId, clientSecret) {
  * @returns {Promise<boolean>} True if assignment is required, false otherwise
  */
 export async function isAssignmentRequired() {
-  const tenantId = process.env.MS_GRAPH_TENANT_ID;
-  const graphClientId = process.env.MS_GRAPH_CLIENT_ID;
-  const graphClientSecret = process.env.MS_GRAPH_CLIENT_SECRET;
   const swaAppId = process.env.AAD_CLIENT_ID;
 
-  if (!tenantId || !graphClientId || !graphClientSecret || !swaAppId) {
+  if (!swaAppId) {
+    console.error("[getRoles] Missing AAD_CLIENT_ID environment variable");
+    return false;
+  }
+
+  const client = createMSGraphClient();
+  if (!client) {
     console.error(
-      "[getRoles] Missing credentials for Graph API check. Required: MS_GRAPH_TENANT_ID, MS_GRAPH_CLIENT_ID, MS_GRAPH_CLIENT_SECRET, AAD_CLIENT_ID"
+      "[getRoles] Missing MS Graph credentials. Required: MS_GRAPH_TENANT_ID, MS_GRAPH_CLIENT_ID, MS_GRAPH_CLIENT_SECRET"
     );
     return false;
   }
 
   try {
-    const token = await getGraphToken(tenantId, graphClientId, graphClientSecret);
+    const servicePrincipal = await client.getServicePrincipal(swaAppId);
 
-    const graphUrl = `https://graph.microsoft.com/v1.0/servicePrincipals?$filter=appId eq '${swaAppId}'&$select=appRoleAssignmentRequired`;
-
-    const response = await fetch(graphUrl, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error(`[getRoles] Graph API request failed: ${response.status}`, errorText);
-      throw new Error(`Graph API request failed: ${response.status} - ${errorText}`);
-    }
-
-    const data = await response.json();
-    const { value } = data;
-
-    if (!value || value.length === 0) {
+    if (!servicePrincipal) {
       console.error(`[getRoles] Service principal not found for appId: ${swaAppId}`);
       return false;
     }
 
-    const isRequired = value[0].appRoleAssignmentRequired === true;
+    const isRequired = servicePrincipal.appRoleAssignmentRequired === true;
 
     if (!isRequired) {
       console.error(

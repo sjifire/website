@@ -1,18 +1,15 @@
 /**
  * Microsoft Graph API Client (ESM)
- * For accessing Microsoft 365 user directory data
+ * Wrapper around @microsoft/microsoft-graph-client for accessing Microsoft 365 data
  * https://learn.microsoft.com/en-us/graph/overview
  */
 
-const GRAPH_BASE_URL = "https://graph.microsoft.com/v1.0";
-const AUTH_URL = "https://login.microsoftonline.com";
+import { Client } from "@microsoft/microsoft-graph-client";
+import { ClientSecretCredential } from "@azure/identity";
+import { TokenCredentialAuthenticationProvider } from "@microsoft/microsoft-graph-client/authProviders/azureTokenCredentials/index.js";
 
 export class MSGraphClient {
-  #tenantId;
-  #clientId;
-  #clientSecret;
-  #accessToken;
-  #tokenExpiry;
+  #client;
 
   /**
    * @param {Object} config
@@ -24,77 +21,19 @@ export class MSGraphClient {
     if (!tenantId || !clientId || !clientSecret) {
       throw new Error("MSGraphClient requires tenantId, clientId, and clientSecret");
     }
-    this.#tenantId = tenantId;
-    this.#clientId = clientId;
-    this.#clientSecret = clientSecret;
-  }
 
-  /**
-   * Authenticate using client credentials flow
-   */
-  async #authenticate() {
-    // Return cached token if still valid (with 60s buffer)
-    if (this.#accessToken && this.#tokenExpiry && Date.now() < this.#tokenExpiry - 60000) {
-      return this.#accessToken;
-    }
+    // Create credential using Azure Identity
+    const credential = new ClientSecretCredential(tenantId, clientId, clientSecret);
 
-    const tokenUrl = `${AUTH_URL}/${this.#tenantId}/oauth2/v2.0/token`;
-
-    const response = await fetch(tokenUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      body: new URLSearchParams({
-        grant_type: "client_credentials",
-        client_id: this.#clientId,
-        client_secret: this.#clientSecret,
-        scope: "https://graph.microsoft.com/.default",
-      }),
+    // Create auth provider for Graph client
+    const authProvider = new TokenCredentialAuthenticationProvider(credential, {
+      scopes: ["https://graph.microsoft.com/.default"],
     });
 
-    if (!response.ok) {
-      const error = await response.text();
-      throw new Error(`Microsoft Graph authentication failed: ${response.status} - ${error}`);
-    }
-
-    const data = await response.json();
-    this.#accessToken = data.access_token;
-    this.#tokenExpiry = Date.now() + (data.expires_in * 1000);
-    return this.#accessToken;
-  }
-
-  /**
-   * Make authenticated API request
-   */
-  async #request(path, options = {}) {
-    const token = await this.#authenticate();
-    const url = path.startsWith("http") ? path : `${GRAPH_BASE_URL}${path}`;
-
-    const response = await fetch(url, {
-      method: options.method || "GET",
-      headers: {
-        "Authorization": `Bearer ${token}`,
-        ...(options.binary ? {} : { "Content-Type": "application/json" }),
-        ...options.headers,
-      },
-      body: options.body ? JSON.stringify(options.body) : undefined,
+    // Initialize Graph client
+    this.#client = Client.initWithMiddleware({
+      authProvider,
     });
-
-    if (!response.ok) {
-      // 404 for photos means no photo set
-      if (response.status === 404 && path.includes("/photo")) {
-        return null;
-      }
-      const error = await response.text();
-      throw new Error(`Microsoft Graph API error: ${response.status} - ${error}`);
-    }
-
-    if (options.binary) {
-      return response.arrayBuffer();
-    }
-
-    return response.json();
   }
 
   /**
@@ -106,23 +45,14 @@ export class MSGraphClient {
    * @param {number} [options.top] - Max results per page
    */
   async listUsers(options = {}) {
-    const params = new URLSearchParams();
+    let request = this.#client.api("/users");
 
-    if (options.filter) {
-      params.append("$filter", options.filter);
-    }
-    if (options.select?.length) {
-      params.append("$select", options.select.join(","));
-    }
-    if (options.orderBy) {
-      params.append("$orderby", options.orderBy);
-    }
-    if (options.top) {
-      params.append("$top", options.top.toString());
-    }
+    if (options.filter) request = request.filter(options.filter);
+    if (options.select?.length) request = request.select(options.select);
+    if (options.orderBy) request = request.orderby(options.orderBy);
+    if (options.top) request = request.top(options.top);
 
-    const query = params.toString();
-    return this.#request(`/users${query ? `?${query}` : ""}`);
+    return request.get();
   }
 
   /**
@@ -131,12 +61,9 @@ export class MSGraphClient {
    * @param {string[]} [select] - Fields to return
    */
   async getGroupMembers(groupId, select = []) {
-    const params = new URLSearchParams();
-    if (select.length) {
-      params.append("$select", select.join(","));
-    }
-    const query = params.toString();
-    return this.#request(`/groups/${groupId}/members${query ? `?${query}` : ""}`);
+    let request = this.#client.api(`/groups/${groupId}/members`);
+    if (select.length) request = request.select(select);
+    return request.get();
   }
 
   /**
@@ -145,12 +72,9 @@ export class MSGraphClient {
    * @param {string[]} [select] - Fields to return
    */
   async getUser(userId, select = []) {
-    const params = new URLSearchParams();
-    if (select.length) {
-      params.append("$select", select.join(","));
-    }
-    const query = params.toString();
-    return this.#request(`/users/${userId}${query ? `?${query}` : ""}`);
+    let request = this.#client.api(`/users/${userId}`);
+    if (select.length) request = request.select(select);
+    return request.get();
   }
 
   /**
@@ -161,13 +85,24 @@ export class MSGraphClient {
    */
   async getUserPhoto(userId, size = "648x648") {
     try {
-      return await this.#request(`/users/${userId}/photos/${size}/$value`, { binary: true });
-    } catch {
+      const response = await this.#client
+        .api(`/users/${userId}/photos/${size}/$value`)
+        .get();
+      return response;
+    } catch (error) {
       // Try default photo endpoint if specific size fails
-      if (size !== "648x648") {
-        return this.#request(`/users/${userId}/photo/$value`, { binary: true });
+      if (size !== "648x648" && error.statusCode !== 404) {
+        try {
+          return await this.#client.api(`/users/${userId}/photo/$value`).get();
+        } catch {
+          return null;
+        }
       }
-      return null;
+      // 404 means no photo
+      if (error.statusCode === 404) {
+        return null;
+      }
+      throw error;
     }
   }
 
@@ -176,7 +111,7 @@ export class MSGraphClient {
    * @param {string} userId - User ID or userPrincipalName
    */
   async getUserGroups(userId) {
-    return this.#request(`/users/${userId}/memberOf`);
+    return this.#client.api(`/users/${userId}/memberOf`).get();
   }
 
   /**
@@ -186,20 +121,42 @@ export class MSGraphClient {
    * @param {string[]} [options.select] - Fields to return
    */
   async listGroups(options = {}) {
-    const params = new URLSearchParams();
-    if (options.filter) {
-      params.append("$filter", options.filter);
+    let request = this.#client.api("/groups");
+    if (options.filter) request = request.filter(options.filter);
+    if (options.select?.length) request = request.select(options.select);
+    return request.get();
+  }
+
+  /**
+   * Get a service principal by app ID
+   * @param {string} appId - Application (client) ID
+   * @param {string[]} [select] - Fields to return
+   * @returns {Object|null} Service principal or null if not found
+   */
+  async getServicePrincipal(appId, select = ["appRoleAssignmentRequired"]) {
+    try {
+      const response = await this.#client
+        .api("/servicePrincipals")
+        .filter(`appId eq '${appId}'`)
+        .select(select)
+        .get();
+
+      if (!response.value || response.value.length === 0) {
+        return null;
+      }
+
+      return response.value[0];
+    } catch (error) {
+      if (error.statusCode === 404) {
+        return null;
+      }
+      throw error;
     }
-    if (options.select?.length) {
-      params.append("$select", options.select.join(","));
-    }
-    const query = params.toString();
-    return this.#request(`/groups${query ? `?${query}` : ""}`);
   }
 
   /**
    * Fetch all pages of results
-   * @param {Function} fetchFn - Function that returns paginated results
+   * @param {Object} initialResponse - Response from initial API call
    * @yields {Object} Individual items
    */
   async *fetchAllPages(initialResponse) {
@@ -211,7 +168,7 @@ export class MSGraphClient {
       }
 
       if (response["@odata.nextLink"]) {
-        response = await this.#request(response["@odata.nextLink"]);
+        response = await this.#client.api(response["@odata.nextLink"]).get();
       } else {
         break;
       }
