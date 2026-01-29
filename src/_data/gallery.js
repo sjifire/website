@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+const crypto = require("crypto");
 const site = require("./site.json");
 const homepage = require("./homepage.json");
 
@@ -28,15 +29,9 @@ function filenameToAlt(filename) {
     .replace(/\bSjifr\b/g, "SJIFR"); // Handle acronym
 }
 
-// Simple string hash for stable pseudo-random ordering
+// Hash string using crypto for stable pseudo-random ordering
 function hashString(str) {
-  let hash = 0;
-  for (let i = 0; i < str.length; i++) {
-    const char = str.charCodeAt(i);
-    hash = ((hash << 5) - hash) + char;
-    hash = hash & hash; // Convert to 32-bit integer
-  }
-  return hash;
+  return crypto.createHash("md5").update(str).digest("hex");
 }
 
 // Fisher-Yates shuffle for carousel selection
@@ -58,7 +53,7 @@ if (fs.existsSync(galleryFolder)) {
       const ext = path.extname(name).toLowerCase();
       return imageExtensions.includes(ext);
     })
-    .sort((a, b) => hashString(a) - hashString(b)) // Stable pseudo-random order
+    .sort((a, b) => hashString(a).localeCompare(hashString(b))) // Stable pseudo-random order
     .map((name) => ({
       src: `${webPath}/${name}`,
       alt: filenameToAlt(name),
