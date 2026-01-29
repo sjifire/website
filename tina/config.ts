@@ -381,12 +381,14 @@ export default defineConfig({
             name: "include_burn_widget",
             label: "Show Burn Status Widget",
             description: "Display the current burn status in the sidebar",
+            ui: { component: () => null },
           },
           {
             type: "boolean",
             name: "include_incident_widget",
             label: "Show Incident Stats Widget",
             description: "Display incident statistics in the sidebar",
+            ui: { component: () => null },
           },
           {
             type: "object",
