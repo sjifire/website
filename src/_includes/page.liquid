@@ -1,7 +1,7 @@
 ---
 layout: base
 ---
-{% if sidebar or sidebar_blocks.size > 0 or sidebar_content or include_burn_widget or include_incident_widget %}
+{% if sidebar_blocks.size > 0 or sidebar_content or include_burn_widget or include_incident_widget %}
   {% comment %}Two-column layout{% endcomment %}
   <div class="l-grid l-grid--2col{% if mobile_layout_flipped == true %} flipped{% endif %}">
     <div class="l-grid__main block-content">
@@ -29,10 +29,6 @@ layout: base
       {% if sidebar_blocks.size > 0 %}
         {% capture sidebar_blocks_html %}{% render "sidebar-blocks.liquid", blocks: sidebar_blocks %}{% endcapture %}
         {{ sidebar_blocks_html | processStyledImages }}
-      {% endif %}
-      {% comment %}Legacy: raw sidebar content (for backwards compatibility){% endcomment %}
-      {% if sidebar %}
-        {{ sidebar | markdownifyBreaks | processStyledImages }}
       {% endif %}
       {% if sidebar_content %}{{ sidebar_content }}{% endif %}
     </aside>
