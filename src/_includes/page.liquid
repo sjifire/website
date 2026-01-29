@@ -27,7 +27,8 @@ layout: base
       {% endif %}
       {% comment %}Structured sidebar blocks from TinaCMS{% endcomment %}
       {% if sidebar_blocks.size > 0 %}
-        {% render "sidebar-blocks.liquid", blocks: sidebar_blocks %}
+        {% capture sidebar_blocks_html %}{% render "sidebar-blocks.liquid", blocks: sidebar_blocks %}{% endcapture %}
+        {{ sidebar_blocks_html | processStyledImages }}
       {% endif %}
       {% comment %}Legacy: raw sidebar content (for backwards compatibility){% endcomment %}
       {% if sidebar %}
