@@ -31,7 +31,7 @@ layout: base
       {% endif %}
       {% comment %}Legacy: raw sidebar content (for backwards compatibility){% endcomment %}
       {% if sidebar %}
-        {{ sidebar | markdownify | processStyledImages }}
+        {{ sidebar | markdownifyBreaks | processStyledImages }}
       {% endif %}
       {% if sidebar_content %}{{ sidebar_content }}{% endif %}
     </aside>
