@@ -47,10 +47,10 @@ describe("getRoles", () => {
       );
     });
 
-    it("caches results for 5 minutes to reduce API calls", () => {
-      // Document: results are cached for CACHE_TTL_MS (5 minutes)
-      // This prevents hitting Graph API on every authentication
-      assert.ok(true, "Function caches Graph API results for 5 minutes");
+    it("is called once per login (session cookie caches roles for 8 hours)", () => {
+      // Note: No in-memory caching needed because Azure SWA calls rolesSource
+      // once during login and caches the result in the session cookie
+      assert.ok(true, "Roles cached in session cookie by Azure SWA");
     });
   });
 

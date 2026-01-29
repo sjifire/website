@@ -1,14 +1,6 @@
 import { app } from "@azure/functions";
 
 /**
- * Cache for the "User assignment required" check.
- * We cache this to avoid hitting Graph API on every auth.
- */
-let assignmentRequiredCache = null;
-let cacheExpiry = 0;
-const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
-
-/**
  * Gets an access token for Microsoft Graph API.
  */
 async function getGraphToken(tenantId, clientId, clientSecret) {
@@ -43,33 +35,21 @@ async function getGraphToken(tenantId, clientId, clientSecret) {
  * @returns {Promise<boolean>} True if assignment is required, false otherwise
  */
 export async function isAssignmentRequired() {
-  const now = Date.now();
-
-  // Return cached result if still valid
-  if (assignmentRequiredCache !== null && now < cacheExpiry) {
-    return assignmentRequiredCache;
-  }
-
-  // Use MS Graph credentials (same app registration as personnel sync)
   const tenantId = process.env.MS_GRAPH_TENANT_ID;
   const graphClientId = process.env.MS_GRAPH_CLIENT_ID;
   const graphClientSecret = process.env.MS_GRAPH_CLIENT_SECRET;
-
-  // The app ID of the SWA auth app (the one we're checking)
   const swaAppId = process.env.AAD_CLIENT_ID;
 
   if (!tenantId || !graphClientId || !graphClientSecret || !swaAppId) {
     console.error(
       "[getRoles] Missing credentials for Graph API check. Required: MS_GRAPH_TENANT_ID, MS_GRAPH_CLIENT_ID, MS_GRAPH_CLIENT_SECRET, AAD_CLIENT_ID"
     );
-    // Fail closed - deny access if we can't verify
     return false;
   }
 
   try {
     const token = await getGraphToken(tenantId, graphClientId, graphClientSecret);
 
-    // Query the service principal by appId to get appRoleAssignmentRequired
     const graphUrl = `https://graph.microsoft.com/v1.0/servicePrincipals?$filter=appId eq '${swaAppId}'&$select=appRoleAssignmentRequired`;
 
     const response = await fetch(graphUrl, {
@@ -92,10 +72,6 @@ export async function isAssignmentRequired() {
 
     const isRequired = value[0].appRoleAssignmentRequired === true;
 
-    // Cache the result
-    assignmentRequiredCache = isRequired;
-    cacheExpiry = now + CACHE_TTL_MS;
-
     if (!isRequired) {
       console.error(
         "[getRoles] SECURITY: 'User assignment required' is NOT enabled on the Enterprise App! " +
@@ -107,17 +83,8 @@ export async function isAssignmentRequired() {
     return isRequired;
   } catch (error) {
     console.error("[getRoles] Failed to verify assignment required setting:", error.message);
-    // Fail closed - deny access if we can't verify
     return false;
   }
-}
-
-/**
- * Clears the cache (useful for testing).
- */
-export function clearCache() {
-  assignmentRequiredCache = null;
-  cacheExpiry = 0;
 }
 
 /**
@@ -131,19 +98,15 @@ export function clearCache() {
  */
 export async function getRolesHandler(request) {
   try {
-    // Verify that "User assignment required" is enabled
     const isRequired = await isAssignmentRequired();
 
     if (!isRequired) {
-      // Access denied - security setting not verified
       return {
         status: 200,
         jsonBody: { roles: [] },
       };
     }
 
-    // User assignment is required and user passed Azure AD auth,
-    // so they must be assigned to the app - grant admin access
     let body = {};
     try {
       body = await request.json();
@@ -166,7 +129,6 @@ export async function getRolesHandler(request) {
   }
 }
 
-// Register the Azure Function
 app.http("getRoles", {
   methods: ["POST"],
   authLevel: "anonymous",
