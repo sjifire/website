@@ -52,13 +52,13 @@ app.http("media", {
     }
 
     // Require admin authentication
-    const authError = requireAdmin(request, context);
+    const authError = requireAdmin(request);
     if (authError) {
       return { ...authError, headers: corsHeaders };
     }
 
     const author = getGitAuthor(request);
-    context.log(`Media API access by user: ${getUserForLogging(request)}`);
+    console.log(`Media API access by user: ${getUserForLogging(request)}`);
 
     try {
       if (request.method === "GET") {
@@ -75,7 +75,7 @@ app.http("media", {
 
       return { status: 405, headers: corsHeaders, jsonBody: { error: "Method not allowed" } };
     } catch (error) {
-      context.error("Media error:", error.message, error.stack);
+      console.error("Media error:", error.message, error.stack);
       return { status: 500, headers: corsHeaders, jsonBody: { error: "Internal server error" } };
     }
   },

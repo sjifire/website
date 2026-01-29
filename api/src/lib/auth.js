@@ -51,10 +51,9 @@ export function hasAdminRole(request) {
  * Returns error response if not authenticated, null if OK
  *
  * @param {Request} request - Azure Functions request object
- * @param {Object} context - Azure Functions context for logging
  * @returns {Object|null} Error response object or null if authenticated
  */
-export function requireAdmin(request, context) {
+export function requireAdmin(request) {
   // Allow local development to bypass auth
   const isLocal = process.env.TINA_PUBLIC_IS_LOCAL === "true";
   if (isLocal) {
@@ -64,7 +63,7 @@ export function requireAdmin(request, context) {
   const principal = getClientPrincipal(request);
 
   if (!principal) {
-    context.warn("Unauthorized access attempt - no client principal");
+    console.warn("Unauthorized access attempt - no client principal");
     return {
       status: 401,
       jsonBody: { error: "Authentication required" },
@@ -73,7 +72,7 @@ export function requireAdmin(request, context) {
 
   if (!hasAdminRole(request)) {
     const userId = principal.userId || "unknown";
-    context.warn(`Forbidden access attempt by user ${userId} - missing admin role`);
+    console.warn(`Forbidden access attempt by user ${userId} - missing admin role`);
     return {
       status: 403,
       jsonBody: { error: "Admin role required" },
