@@ -94,9 +94,22 @@ module.exports = function(eleventyConfig) {
     html: true,
   }).use(require("markdown-it-attrs"));
 
+  // Markdown with line breaks (for sidebar content where single newlines should be <br>)
+  const mdRenderBreaks = require("markdown-it")({
+    linkify: true,
+    typographer: true,
+    html: true,
+    breaks: true,
+  }).use(require("markdown-it-attrs"));
+
   eleventyConfig.addFilter("markdownify", function (rawString) {
     if(!rawString) return;
     return mdRender.render(rawString);
+  });
+
+  eleventyConfig.addFilter("markdownifyBreaks", function (rawString) {
+    if(!rawString) return;
+    return mdRenderBreaks.render(rawString);
   });
 
   // Process TinaCMS styled-image components

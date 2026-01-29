@@ -18,7 +18,7 @@
           <h3 class="sidebar__heading">{{ block.heading }}</h3>
         {% endif %}
         {% if block.content %}
-          {{ block.content | markdownify }}
+          {{ block.content | markdownifyBreaks }}
         {% endif %}
 
       {% when "button" %}
