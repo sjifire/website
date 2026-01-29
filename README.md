@@ -8,52 +8,58 @@
 
 ## Required Services
 
-### GitHub App
+---
+
+### 1. GitHub App
 
 Create a GitHub App for TinaCMS to commit content changes.
 
-**Required permissions:**
-- Contents: Read & Write
-- Metadata: Read-only
+| Permissions | Note these values |
+|-------------|-------------------|
+| Contents: Read & Write | App ID |
+| Metadata: Read-only | Installation ID (from URL after installing) |
+| | Private key (.pem file contents) |
 
-**Note these values:**
-- App ID
-- Installation ID (from URL after installing on your repo)
-- Private key (.pem file contents)
+---
 
-### Microsoft Entra ID App Registration
+### 2. Microsoft Entra ID App Registration
 
 Create an app registration for admin authentication.
 
-**Configuration:**
-- Accounts in this organizational directory only
-- Redirect URI: `https://<your-site>.azurestaticapps.net/.auth/login/aad/callback` (Web platform)
-- Enable ID tokens (Authentication > Implicit grant)
+| Configuration | Note these values |
+|---------------|-------------------|
+| Accounts in this organizational directory only | Application (client) ID |
+| Redirect URI: `https://<your-site>.azurestaticapps.net/.auth/login/aad/callback` (Web platform) | Client secret |
+| Enable ID tokens (Authentication > Implicit grant) | Directory (tenant) ID |
 
-**Note these values:**
-- Application (client) ID
-- Client secret
-- Directory (tenant) ID
+---
 
-### Azure Cosmos DB for MongoDB (vCore)
+### 3. Azure Cosmos DB for MongoDB (vCore)
 
 TinaCMS uses Cosmos DB for content indexing. Free tier (M25) works fine.
 
 **Note:** Connection string with credentials
 
-### Azure Static Web App
+---
 
-**Build settings:**
-- App location: `/`
-- API location: `api`
-- Output location: `_site`
-- Plan type: Standard (required for custom auth)
+### 4. Azure Static Web App
 
-### Cloudinary (Optional)
+| Build setting | Value |
+|---------------|-------|
+| App location | `/` |
+| API location | `api` |
+| Output location | `_site` |
+| Plan type | Standard (required for custom auth) |
+
+---
+
+### 5. Cloudinary *(Optional)*
 
 For automatic image optimization. Get API credentials from https://console.cloudinary.com/settings/api-keys
 
-### Microsoft Graph API (Optional)
+---
+
+### 6. Microsoft Graph API *(Optional)*
 
 For personnel sync and admin security verification. Create a separate app registration with these application permissions:
 - `User.Read.All`
