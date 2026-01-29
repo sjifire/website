@@ -28,6 +28,17 @@ function filenameToAlt(filename) {
     .replace(/\bSjifr\b/g, "SJIFR"); // Handle acronym
 }
 
+// Simple string hash for stable pseudo-random ordering
+function hashString(str) {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash; // Convert to 32-bit integer
+  }
+  return hash;
+}
+
 // Fisher-Yates shuffle for carousel selection
 function shuffle(array) {
   const arr = [...array];
@@ -47,7 +58,7 @@ if (fs.existsSync(galleryFolder)) {
       const ext = path.extname(name).toLowerCase();
       return imageExtensions.includes(ext);
     })
-    .sort()
+    .sort((a, b) => hashString(a) - hashString(b)) // Stable pseudo-random order
     .map((name) => ({
       src: `${webPath}/${name}`,
       alt: filenameToAlt(name),
