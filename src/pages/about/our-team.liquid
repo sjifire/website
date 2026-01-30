@@ -39,7 +39,7 @@ layout: page
         </div>
         <h3>{{ person.first_name }} {{ person.last_name }}</h3>
         {% if person.rank %}<h4>{{ person.rank }}</h4>{% endif %}
-        {% if person.title %}<h5>{{ person.title }}</h5>{% endif %}
+        {% if person.title %}<h4>{{ person.title }}</h4>{% endif %}
         <ul>
           {%- assign sortedRoles = person.roles | sort -%}
           {% for role in sortedRoles %}
@@ -66,7 +66,7 @@ layout: page
         </div>
         <h3>{{ person.first_name }} {{ person.last_name }}</h3>
         {% if person.rank %}<h4>{{ person.rank }}</h4>{% endif %}
-        {% if person.title %}<h5>{{ person.title }}</h5>{% endif %}
+        {% if person.title %}<h4>{{ person.title }}</h4>{% endif %}
         <ul>
           {%- assign sortedRoles = person.roles | sort -%}
           {% for role in sortedRoles %}
