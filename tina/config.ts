@@ -601,6 +601,18 @@ export default defineConfig({
           },
           {
             type: "string",
+            name: "nav_title",
+            label: "Navigation Title",
+            description: "Override title shown in navigation (optional)",
+          },
+          {
+            type: "boolean",
+            name: "nav_hidden",
+            label: "Hide from Navigation",
+            description: "Page will still be accessible but won't appear in menu",
+          },
+          {
+            type: "string",
             name: "intro",
             label: "Introduction",
             description: "Introduction text shown above the team directory.",
