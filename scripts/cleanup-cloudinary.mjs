@@ -33,10 +33,10 @@ const require = createRequire(import.meta.url);
 const siteConfig = require("../api/site-config.json");
 
 // Extract cloud name from config
-const CLOUD_NAME = siteConfig.cloudinaryRootUrl.split("/").pop();
-const DEFAULT_MAX_AGE_DAYS = 30;
-const RESOURCE_TYPES = ["fetch", "upload"];
-const RATE_LIMIT_DELAY_MS = 200;
+export const CLOUD_NAME = siteConfig.cloudinaryRootUrl.split("/").pop();
+export const DEFAULT_MAX_AGE_DAYS = 30;
+export const RESOURCE_TYPES = ["fetch", "upload"];
+export const RATE_LIMIT_DELAY_MS = 200;
 
 function configure() {
   const apiKey = process.env.CLOUDINARY_API_KEY;
@@ -71,18 +71,18 @@ function getArgs() {
   return { dryRun: values["dry-run"], maxAgeDays };
 }
 
-function isOlderThan(dateString, maxAgeDays) {
+export function isOlderThan(dateString, maxAgeDays) {
   const date = new Date(dateString);
   const cutoff = new Date();
   cutoff.setDate(cutoff.getDate() - maxAgeDays);
   return date < cutoff;
 }
 
-function formatDate(dateString) {
+export function formatDate(dateString) {
   return new Date(dateString).toISOString().split("T")[0];
 }
 
-function formatBytes(bytes) {
+export function formatBytes(bytes) {
   if (bytes < 1024) return bytes + " B";
   if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
   return (bytes / (1024 * 1024)).toFixed(2) + " MB";
@@ -223,7 +223,11 @@ async function main() {
   console.log(`Space reclaimed: ${formatBytes(totalBytes)}`);
 }
 
-main().catch((err) => {
-  console.error("Error:", err.message);
-  process.exit(1);
-});
+// Run only when executed directly (not when imported for testing)
+const isMain = import.meta.url === `file://${process.argv[1]}`;
+if (isMain) {
+  main().catch((err) => {
+    console.error("Error:", err.message);
+    process.exit(1);
+  });
+}
