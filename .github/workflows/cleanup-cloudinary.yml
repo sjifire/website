@@ -1,0 +1,58 @@
+name: Cleanup Cloudinary Assets
+
+on:
+  schedule:
+    # Run weekly on Sundays at 5 AM UTC (9 PM PST / 10 PM PDT Saturday)
+    - cron: '0 5 * * 0'
+  workflow_dispatch:
+    # Allow manual trigger from GitHub Actions UI
+    inputs:
+      dry_run:
+        description: 'Dry run (show what would be deleted without deleting)'
+        required: false
+        default: 'false'
+        type: choice
+        options:
+          - 'false'
+          - 'true'
+      max_age_days:
+        description: 'Delete resources not accessed in N days'
+        required: false
+        default: '30'
+        type: string
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Cloudinary cleanup
+        env:
+          CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
+          CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
+        run: |
+          ARGS=""
+          if [ "${{ inputs.dry_run }}" = "true" ]; then
+            ARGS="$ARGS --dry-run"
+          fi
+          if [ -n "${{ inputs.max_age_days }}" ] && [ "${{ inputs.max_age_days }}" != "30" ]; then
+            ARGS="$ARGS --days=${{ inputs.max_age_days }}"
+          fi
+          node scripts/cleanup-cloudinary.mjs $ARGS
+
+      - name: Summary
+        run: echo "Cloudinary cleanup completed. Check the logs above for details."

@@ -4,6 +4,7 @@
   "scripts": {
     "stats": "node src/scripts/generate-stats.mjs",
     "sync-personnel": "node scripts/sync-personnel.mjs",
+    "cleanup-cloudinary": "node scripts/cleanup-cloudinary.mjs",
     "dev": "eleventy --serve --port=8080",
     "build": "eleventy",
     "tina:dev": "TINA_PUBLIC_IS_LOCAL=true tinacms dev -c \"npm run dev\"",
