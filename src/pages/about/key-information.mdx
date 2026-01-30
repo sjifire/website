@@ -147,10 +147,19 @@ See [County Assessor](https://www.sanjuancountywa.gov/164/Detail---Tax-Distribut
     {%- assign supportOnlyCount = supportOnlyCount | plus: 1 -%}
   {%- endunless -%}
 {%- endfor -%}
+{%- comment %}Administrative staff = staff without FF/AO roles{% endcomment -%}
+{%- assign adminCount = 0 -%}
+{%- for person in staffOnly -%}
+  {%- unless person.roles contains 'Firefighter' or person.roles contains 'Apparatus Operator' -%}
+    {%- assign adminCount = adminCount | plus: 1 -%}
+  {%- endunless -%}
+{%- endfor -%}
 
 * **Full-Time Firefighters:** {{ fullTimeCount }}
 
 * **Part-Time Firefighters:** {{ partTimeCount }}
+
+* **Administrative Staff:** {{ adminCount }}
 
 * **Volunteer Firefighters:** {{ volunteerFirefighters }}
 
@@ -161,6 +170,8 @@ See [County Assessor](https://www.sanjuancountywa.gov/164/Detail---Tax-Distribut
 * **Full-Time Firefighters:** --
 
 * **Part-Time Firefighters:** --
+
+* **Administrative Staff:** --
 
 * **Volunteer Firefighters:** --
 
