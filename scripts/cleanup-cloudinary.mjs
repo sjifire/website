@@ -57,8 +57,8 @@ function parseArgs() {
       dryRun = true;
     } else if (arg.startsWith("--days=")) {
       maxAgeDays = parseInt(arg.split("=")[1], 10);
-      if (isNaN(maxAgeDays) || maxAgeDays < 1) {
-        throw new Error("--days must be a positive integer");
+      if (isNaN(maxAgeDays) || maxAgeDays < 0) {
+        throw new Error("--days must be a non-negative integer");
       }
     }
   }
