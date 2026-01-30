@@ -344,31 +344,33 @@ function computeCounts(personnel) {
   const staff = personnel.filter(p => p.employee_type === "staff");
   const volunteers = personnel.filter(p => p.employee_type === "volunteer");
 
+  // Firefighter roles include operational certifications (AO, Marine) that indicate FF status
   const hasFirefighterRole = (p) =>
-    p.roles?.includes("Firefighter") || p.roles?.includes("Apparatus Operator");
+    p.roles?.includes("Firefighter") ||
+    p.roles?.includes("Wildland Firefighter") ||
+    p.roles?.includes("Apparatus Operator") ||
+    p.roles?.includes("Marine Crew");
 
-  // Full-time: FT Line Staff, Day Staff, or Administrative with FF/AO role
+  // Full-time: FT Line Staff, Day Staff, or Administrative with FF role
   const fullTimeTypes = ["FT Line Staff", "Day Staff", "Administrative"];
   const fullTimeFirefighters = staff.filter(
     p => fullTimeTypes.includes(p.staff_type) && hasFirefighterRole(p)
   ).length;
 
-  // Part-time: PT Line Staff with FF/AO role
+  // Part-time: PT Line Staff with FF role
   const partTimeFirefighters = staff.filter(
     p => p.staff_type === "PT Line Staff" && hasFirefighterRole(p)
   ).length;
 
-  // Administrative: staff without FF/AO role
+  // Administrative: staff without FF role
   const administrativeStaff = staff.filter(p => !hasFirefighterRole(p)).length;
 
-  // Volunteer firefighters: Firefighter or Wildland Firefighter role
-  const volunteerFirefighters = volunteers.filter(
-    p => p.roles?.includes("Firefighter") || p.roles?.includes("Wildland Firefighter")
-  ).length;
+  // Volunteer firefighters: any firefighter role
+  const volunteerFirefighters = volunteers.filter(p => hasFirefighterRole(p)).length;
 
   // Volunteer support: Support role but not a firefighter
   const volunteerSupport = volunteers.filter(
-    p => p.roles?.includes("Support") && !p.roles?.includes("Firefighter")
+    p => p.roles?.includes("Support") && !hasFirefighterRole(p)
   ).length;
 
   return {
