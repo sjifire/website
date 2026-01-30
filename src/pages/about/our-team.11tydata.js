@@ -1,9 +1,9 @@
 // Pull page config from the editable JSON in _data/
-export default {
-  eleventyComputed: {
-    title: (data) => data.ourTeamPage?.title,
-    nav_order: (data) => data.ourTeamPage?.nav_order,
-    nav_title: (data) => data.ourTeamPage?.nav_title,
-    nav_hidden: (data) => data.ourTeamPage?.nav_hidden,
-  },
+const ourTeamPage = require("../../_data/ourTeamPage.json");
+
+module.exports = {
+  title: ourTeamPage.title,
+  nav_order: ourTeamPage.nav_order,
+  nav_title: ourTeamPage.nav_title,
+  nav_hidden: ourTeamPage.nav_hidden,
 };
