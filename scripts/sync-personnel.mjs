@@ -143,9 +143,9 @@ function determineRoles(extAttrs) {
   // Parse comma-separated roles
   const roleList = rawRoles.split(",").map(r => r.trim().toLowerCase());
 
-  // Marine (Mate or Pilot)
+  // Marine Crew (Mate or Pilot)
   if (roleList.includes("mate") || roleList.includes("pilot")) {
-    roles.push("Marine");
+    roles.push("Marine Crew");
   }
 
   // Firefighter
@@ -198,11 +198,11 @@ function generateMDX(personnel) {
     yaml.push(`  - first_name: ${person.first_name}`);
     yaml.push(`    last_name: ${person.last_name}`);
 
-    if (person.rank) {
-      yaml.push(`    rank: ${person.rank}`);
-    }
     if (person.title) {
       yaml.push(`    title: ${person.title}`);
+    }
+    if (person.rank) {
+      yaml.push(`    rank: ${person.rank}`);
     }
 
     yaml.push(`    staff_type: ${person.staff_type}`);
