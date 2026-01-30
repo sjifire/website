@@ -1,6 +1,7 @@
 ---
 title: "Key Information"
 nav_order: 6
+layout: page
 sidebar_blocks:
   - _template: richText
     heading: "Contact"
@@ -27,6 +28,14 @@ sidebar_blocks:
     button_url: "/about/governance/"
     new_tab: false
 ---
+
+{% comment %}Pull personnel data from the MDX content-include file{% endcomment %}
+{%- assign personnelData = nil -%}
+{% for item in collections.contentIncludes %}
+  {% if item.data.contentFor == "our-team" %}
+    {%- assign personnelData = item.data.personnel -%}
+  {% endif %}
+{% endfor %}
 
 See [Who We Are](/about/who-we-are/) for our mission and values, or [Our Team](/about/our-team/) to meet our staff and volunteers.
 
@@ -65,7 +74,7 @@ See [Governance page](/about/governance/) for meeting details and public comment
 
 * **Response Statistics:** See our [Incidents page](/about/incidents/) for current response data
 
-<StyledImage src="/assets/media/district_map.png" alt="District Map" size="medium" align="center" />
+<img src="{% imgPath '/assets/media/district_map.png', 'f_auto,q_auto' %}" alt="District Map" class="img-medium img-center" />
 
 ## Insurance Info
 
@@ -95,17 +104,44 @@ See [Fire Insurance](/services/fire-insurance/) for station locations, equipment
 
 See [County Assessor](https://www.sanjuancountywa.gov/164/Detail---Tax-Distribution-by-Taxing-Dist) and [Governance page](/about/governance/) for budgets and financial details.
 
-## Staff & Volunteer Responders (Dec 2025)
+## Staff & Volunteer Responders
 
-* **Full-Time Firefighters:** 6
+{% if personnelData %}
+{%- assign ftLineStaff = personnelData | pluckByValue: 'FT Line Staff', 'staff_type' -%}
+{%- assign ptLineStaff = personnelData | pluckByValue: 'PT Line Staff', 'staff_type' -%}
+{%- assign volunteers = personnelData | pluckByValue: 'volunteer', 'employee_type' -%}
+{%- assign volunteerFFighters = volunteers | pluckByArrayIncludes: 'Firefighter', 'roles' -%}
+{%- assign volunteerWildland = volunteers | pluckByArrayIncludes: 'Wildland Firefighter', 'roles' -%}
+{%- assign volunteerFirefighters = volunteerFFighters.size | plus: volunteerWildland.size -%}
+{%- assign volunteerSupport = volunteers | pluckByArrayIncludes: 'Support', 'roles' -%}
+{%- comment %}Remove firefighters from support count to avoid double-counting{% endcomment -%}
+{%- assign supportOnlyCount = 0 -%}
+{%- for person in volunteerSupport -%}
+  {%- unless person.roles contains 'Firefighter' -%}
+    {%- assign supportOnlyCount = supportOnlyCount | plus: 1 -%}
+  {%- endunless -%}
+{%- endfor -%}
 
-* **Part-Time Firefighters:** 6
+* **Full-Time Firefighters:** {{ ftLineStaff.size }}
 
-* **Volunteer Firefighters:** 42
+* **Part-Time Firefighters:** {{ ptLineStaff.size }}
 
-* **Volunteer Support Personnel:** 4
+* **Volunteer Firefighters:** {{ volunteerFirefighters }}
 
-* **Total Active Members:** 58
+* **Volunteer Support Personnel:** {{ supportOnlyCount }}
+
+* **Total Active Members:** {{ personnelData.size }}
+{% else %}
+* **Full-Time Firefighters:** --
+
+* **Part-Time Firefighters:** --
+
+* **Volunteer Firefighters:** --
+
+* **Volunteer Support Personnel:** --
+
+* **Total Active Members:** --
+{% endif %}
 
 Interested in joining? See our [Join Us](/join/) page.
 

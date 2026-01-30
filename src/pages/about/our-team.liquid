@@ -21,8 +21,8 @@ layout: page
 {% endif %}
 
 {% if personnelData %}
-{%- assign staffOnly = personnelData | pluckByValue: 'staff', 'staff_type' -%}
-{%- assign volunteersOnly = personnelData | pluckByValue: 'volunteer', 'staff_type' -%}
+{%- assign staffOnly = personnelData | pluckByValue: 'staff', 'employee_type' -%}
+{%- assign volunteersOnly = personnelData | pluckByValue: 'volunteer', 'employee_type' -%}
 
 <section class="personnel-section">
   <h2>Staff</h2>
