@@ -470,8 +470,11 @@ async function main() {
   const removedPhotos = [];
 
   for (const file of existingPhotos) {
-    // Skip non-jpg files and the hashes file
+    // Skip non-jpg files
     if (!file.endsWith(".jpg")) continue;
+
+    // Skip placeholder images (personnel photos have firstname_lastname.jpg format)
+    if (!file.includes("_")) continue;
 
     if (!currentPhotoFiles.has(file)) {
       const photoPath = join(PHOTOS_DIR, file);
