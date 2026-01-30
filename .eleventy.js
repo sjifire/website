@@ -74,12 +74,6 @@ module.exports = function(eleventyConfig) {
     return arr.filter((item) => item[attr] === value);
   });
 
-  // Filter array where object property (array) includes value
-  eleventyConfig.addFilter("pluckByArrayIncludes", function (arr, value, attr) {
-    if(!arr || !value) return [];
-    return arr.filter((item) => Array.isArray(item[attr]) && item[attr].includes(value));
-  });
-
   // Format numbers with locale
   eleventyConfig.addFilter("formatNumber", (num) => {
     return num.toLocaleString();
