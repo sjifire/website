@@ -33,6 +33,7 @@
     "@tinacms/cli": "^2.1.0",
     "@tinacms/datalayer": "^2.0.6",
     "blockhash-core": "^0.1.0",
+    "cloudinary": "^2.9.0",
     "dotenv": "^17.2.3",
     "jpeg-js": "^0.4.4",
     "luxon": "^3.7.2",

@@ -6,7 +6,7 @@
  * - Fetch resources: CDN-cached images from the site
  * - Upload resources: Temporary uploads from image optimization
  *
- * Uses the Cloudinary Admin API to list and delete stale resources.
+ * Uses the Cloudinary Node.js SDK.
  *
  * Usage:
  *   node scripts/cleanup-cloudinary.mjs [--dry-run] [--days=30]
@@ -24,8 +24,10 @@
  */
 
 import "dotenv/config";
-import { createRequire } from "node:module";
+import { parseArgs } from "node:util";
 import { setTimeout } from "node:timers/promises";
+import { createRequire } from "node:module";
+import { v2 as cloudinary } from "cloudinary";
 
 const require = createRequire(import.meta.url);
 const siteConfig = require("../api/site-config.json");
@@ -33,8 +35,10 @@ const siteConfig = require("../api/site-config.json");
 // Extract cloud name from config
 const CLOUD_NAME = siteConfig.cloudinaryRootUrl.split("/").pop();
 const DEFAULT_MAX_AGE_DAYS = 30;
+const RESOURCE_TYPES = ["fetch", "upload"];
+const RATE_LIMIT_DELAY_MS = 200;
 
-function getConfig() {
+function configure() {
   const apiKey = process.env.CLOUDINARY_API_KEY;
   const apiSecret = process.env.CLOUDINARY_API_SECRET;
 
@@ -44,80 +48,27 @@ function getConfig() {
     );
   }
 
-  return { apiKey, apiSecret, cloudName: CLOUD_NAME };
+  cloudinary.config({
+    cloud_name: CLOUD_NAME,
+    api_key: apiKey,
+    api_secret: apiSecret,
+  });
 }
 
-function parseArgs() {
-  const args = process.argv.slice(2);
-  let dryRun = false;
-  let maxAgeDays = DEFAULT_MAX_AGE_DAYS;
-
-  for (const arg of args) {
-    if (arg === "--dry-run") {
-      dryRun = true;
-    } else if (arg.startsWith("--days=")) {
-      maxAgeDays = parseInt(arg.split("=")[1], 10);
-      if (isNaN(maxAgeDays) || maxAgeDays < 0) {
-        throw new Error("--days must be a non-negative integer");
-      }
-    }
-  }
-
-  return { dryRun, maxAgeDays };
-}
-
-async function cloudinaryRequest(config, endpoint, method = "GET", body = null) {
-  const auth = Buffer.from(`${config.apiKey}:${config.apiSecret}`).toString("base64");
-  const url = `https://api.cloudinary.com/v1_1/${config.cloudName}${endpoint}`;
-
-  const options = {
-    method,
-    headers: {
-      Authorization: `Basic ${auth}`,
-      "Content-Type": "application/json",
+function getArgs() {
+  const { values } = parseArgs({
+    options: {
+      "dry-run": { type: "boolean", default: false },
+      days: { type: "string", default: String(DEFAULT_MAX_AGE_DAYS) },
     },
-  };
-
-  if (body) {
-    options.body = JSON.stringify(body);
-  }
-
-  const response = await fetch(url, options);
-
-  if (!response.ok) {
-    const error = await response.text();
-    throw new Error(`Cloudinary API error (${response.status}): ${error}`);
-  }
-
-  return response.json();
-}
-
-// Resource types to clean up
-const RESOURCE_TYPES = ["fetch", "upload"];
-
-async function listResources(config, type, nextCursor = null) {
-  let endpoint = `/resources/image/${type}?max_results=500`;
-  if (nextCursor) {
-    endpoint += `&next_cursor=${encodeURIComponent(nextCursor)}`;
-  }
-
-  return cloudinaryRequest(config, endpoint);
-}
-
-async function deleteResource(config, publicId, type) {
-  // Delete a specific resource by public_id and type
-  return cloudinaryRequest(config, `/resources/image/${type}`, "DELETE", {
-    public_ids: [publicId],
   });
-}
 
-async function deleteDerivedResources(config, derivedIds) {
-  // Delete derived resources by their IDs
-  if (derivedIds.length === 0) return { deleted: {} };
+  const maxAgeDays = parseInt(values.days, 10);
+  if (isNaN(maxAgeDays) || maxAgeDays < 0) {
+    throw new Error("--days must be a non-negative integer");
+  }
 
-  return cloudinaryRequest(config, "/derived_resources", "DELETE", {
-    derived_resource_ids: derivedIds,
-  });
+  return { dryRun: values["dry-run"], maxAgeDays };
 }
 
 function isOlderThan(dateString, maxAgeDays) {
@@ -137,12 +88,26 @@ function formatBytes(bytes) {
   return (bytes / (1024 * 1024)).toFixed(2) + " MB";
 }
 
-// Rate limiting for free plan API limits
-const RATE_LIMIT_DELAY_MS = 200;
+async function listResources(type, nextCursor = null) {
+  const options = { type, max_results: 500, resource_type: "image" };
+  if (nextCursor) {
+    options.next_cursor = nextCursor;
+  }
+  return cloudinary.api.resources(options);
+}
+
+async function deleteResources(publicIds, type) {
+  return cloudinary.api.delete_resources(publicIds, { type, resource_type: "image" });
+}
+
+async function deleteDerivedResources(derivedIds) {
+  if (derivedIds.length === 0) return { deleted: {} };
+  return cloudinary.api.delete_derived_resources(derivedIds);
+}
 
 async function main() {
-  const { dryRun, maxAgeDays } = parseArgs();
-  const config = getConfig();
+  const { dryRun, maxAgeDays } = getArgs();
+  configure();
 
   console.log(`Cloudinary Cleanup - ${CLOUD_NAME}`);
   console.log(`Mode: ${dryRun ? "DRY RUN" : "LIVE"}`);
@@ -164,7 +129,7 @@ async function main() {
     console.log(`\n[${resourceType.toUpperCase()}] Scanning...`);
 
     do {
-      const result = await listResources(config, resourceType, nextCursor);
+      const result = await listResources(resourceType, nextCursor);
       const resources = result.resources || [];
       nextCursor = result.next_cursor;
 
@@ -178,8 +143,6 @@ async function main() {
 
       for (const resource of resources) {
         // Use created_at as proxy for last access if last_access not available
-        // Cloudinary's fetch resources are recreated on access, so created_at
-        // effectively represents last access for fetch-type resources
         const lastAccess = resource.last_access || resource.created_at;
 
         if (isOlderThan(lastAccess, maxAgeDays)) {
@@ -230,12 +193,12 @@ async function main() {
     try {
       // First delete derived resources if any
       if (item.derivedIds.length > 0) {
-        await deleteDerivedResources(config, item.derivedIds);
+        await deleteDerivedResources(item.derivedIds);
         await setTimeout(RATE_LIMIT_DELAY_MS);
       }
 
-      // Then delete the main resource
-      await deleteResource(config, item.publicId, item.type);
+      // Delete the main resource
+      await deleteResources([item.publicId], item.type);
       deletedCount++;
 
       // Rate limit to stay within free plan API limits
@@ -247,7 +210,7 @@ async function main() {
     } catch (error) {
       console.error(`  Failed to delete ${item.publicId}: ${error.message}`);
       // On rate limit errors, wait longer before continuing
-      if (error.message.includes("420") || error.message.includes("rate")) {
+      if (error.message.includes("420") || error.message.includes("Rate")) {
         console.log("  Rate limited, waiting 60 seconds...");
         await setTimeout(60000);
       }
