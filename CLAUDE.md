@@ -103,13 +103,22 @@ npm run stats
 
 ### Personnel Data (Microsoft 365)
 
-Personnel data and photos are synced daily from Microsoft 365 via Microsoft Graph API.
+Personnel data and photos are synced daily from Microsoft 365 via Microsoft Graph API, using Entra ID user attributes.
+
+**Entra ID Attributes Used:**
+- `employeeType` - Determines staff/volunteer classification:
+  - Administrative, Day Staff, FT Line Staff, PT Line Staff → "staff"
+  - Volunteer → "volunteer"
+  - Users without employeeType are excluded
+- `extensionAttribute1` - Rank (Chief, Battalion Chief, Captain, Lieutenant, etc.)
+- `extensionAttribute2` - Apparatus Operator certification expiration date (if future date, adds "Apparatus Operator" role)
+- `extensionAttribute3` - Comma-separated roles, simplified to: Marine (Mate/Pilot), Firefighter, Wildland Firefighter, Support
+- `jobTitle` - Display title
 
 **Files:**
 - `scripts/msgraph-client.mjs` - Microsoft Graph API client (uses official @microsoft/microsoft-graph-client SDK)
 - `scripts/sync-personnel.mjs` - Syncs users/photos to `our-team-data.mdx`
 - `scripts/image-hash.mjs` - Perceptual hashing for photo change detection
-- `scripts/cloudinary-optimize.mjs` - Photo optimization via Cloudinary
 - `.github/workflows/sync-personnel.yml` - Daily scheduled workflow (7 AM UTC)
 
 **Required GitHub Secrets:**
@@ -118,21 +127,6 @@ Personnel data and photos are synced daily from Microsoft 365 via Microsoft Grap
 - `MS_GRAPH_CLIENT_SECRET` - App registration client secret
 - `CLOUDINARY_API_KEY` - Cloudinary API key (for photo optimization)
 - `CLOUDINARY_API_SECRET` - Cloudinary API secret
-
-**Configuration in `src/_data/site.json`:**
-```json
-{
-  "personnelSync": {
-    "personnelGroup": "group-id",
-    "staffGroups": ["group-id-1", "group-id-2"],
-    "volunteerGroups": ["group-id-1", "group-id-2"],
-    "roleGroups": {
-      "group-id": "Role Name"
-    },
-    "syncPhotos": true
-  }
-}
-```
 
 **Local Testing:**
 ```bash
