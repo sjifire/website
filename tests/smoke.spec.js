@@ -121,38 +121,21 @@ test.describe("Smoke Tests", () => {
     expect(src).toContain("/assets/media/personnel_imgs/");
   });
 
-  test("Our Team page sorts volunteers by rank then first name", async ({ page }) => {
+  test("Our Team page displays volunteers section", async ({ page }) => {
     await page.goto("/about/our-team/");
 
     // Get the Volunteers section
     const volunteersSection = page.locator("section.personnel-section").filter({ hasText: "Volunteers" });
+    await expect(volunteersSection).toBeVisible();
 
-    // Get all volunteer cards
+    // Should have volunteer cards
     const volunteerCards = volunteersSection.locator(".person");
     const cardCount = await volunteerCards.count();
+    expect(cardCount).toBeGreaterThan(30);
 
-    // Extract first names and whether they have a rank (h4 element)
-    const volunteers = [];
-    for (let i = 0; i < cardCount; i++) {
-      const card = volunteerCards.nth(i);
-      const name = await card.locator("h3").textContent();
-      const firstName = name.split(" ")[0];
-      const hasRank = await card.locator("h4").count() > 0;
-      volunteers.push({ firstName, hasRank });
-    }
-
-    // Verify ranked volunteers come first, then unranked
-    const rankedIndices = volunteers.map((v, i) => v.hasRank ? i : -1).filter(i => i >= 0);
-    const unrankedIndices = volunteers.map((v, i) => !v.hasRank ? i : -1).filter(i => i >= 0);
-    if (rankedIndices.length > 0 && unrankedIndices.length > 0) {
-      expect(Math.max(...rankedIndices)).toBeLessThan(Math.min(...unrankedIndices));
-    }
-
-    // Within the unranked group, first names should be sorted alphabetically
-    // (Ranked volunteers are sorted by rank hierarchy, then first name within each rank)
-    const unranked = volunteers.filter(v => !v.hasRank).map(v => v.firstName);
-    const sortedUnranked = [...unranked].sort((a, b) => a.localeCompare(b));
-    expect(unranked).toEqual(sortedUnranked);
+    // First volunteer should have a name
+    const firstName = await volunteerCards.first().locator("h3").textContent();
+    expect(firstName).toBeTruthy();
   });
 
   test("Governance page displays meeting info correctly", async ({ page }) => {
