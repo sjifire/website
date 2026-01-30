@@ -1,12 +1,12 @@
 {
-  "generated": "2026-01-30T16:08:26.643Z",
+  "generated": "2026-01-30T18:44:53.530Z",
   "count": 58,
   "counts": {
     "fullTimeFirefighters": 9,
     "partTimeFirefighters": 4,
     "administrativeStaff": 2,
-    "volunteerFirefighters": 31,
-    "volunteerSupport": 8
+    "volunteerFirefighters": 36,
+    "volunteerSupport": 7
   },
   "personnel": [
     {
@@ -204,7 +204,9 @@
       "title": null,
       "employee_type": "volunteer",
       "staff_type": "Volunteer",
-      "roles": [],
+      "roles": [
+        "Firefighter"
+      ],
       "photo": null
     },
     {
