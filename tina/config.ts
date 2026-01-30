@@ -348,7 +348,7 @@ export default defineConfig({
         path: "src/pages",
         format: "mdx",
         match: {
-          exclude: "{about/our-team-data,homepage}",
+          exclude: "homepage",
         },
         fields: [
           {
@@ -569,38 +569,6 @@ export default defineConfig({
                 ],
               },
             ],
-          },
-        ],
-      },
-      {
-        name: "configOurTeam",
-        label: "Our Team",
-        path: "src/pages/about",
-        format: "mdx",
-        match: {
-          include: "our-team-data",
-        },
-        ui: {
-          allowedActions: {
-            create: false,
-            delete: false,
-          },
-          description: "Personnel list is automatically synced from Microsoft 365. To update staff or volunteer information, make changes in M365 and the website will update daily.",
-        },
-        fields: [
-          {
-            type: "string",
-            name: "title",
-            label: "Title",
-            isTitle: true,
-            required: true,
-          },
-          {
-            type: "rich-text",
-            name: "body",
-            label: "Body",
-            description: "Introduction text shown above the team directory. Personnel list is managed automatically.",
-            isBody: true,
           },
         ],
       },

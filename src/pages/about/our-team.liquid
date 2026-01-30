@@ -6,19 +6,10 @@ layout: page
 {%- assign cloudinaryDefaults = "f_auto,q_auto:good,g_faces,c_fill,w_315,h_328" -%}
 {%- assign defaultPersonImg = "/assets/media/personnel_imgs/images.jpg" -%}
 
-{% comment %}Pull personnel data from the MDX content-include file{% endcomment %}
-{%- assign personnelData = nil -%}
-{%- assign bodyContent = nil -%}
-{% for item in collections.contentIncludes %}
-  {% if item.data.contentFor == "our-team" %}
-    {%- assign personnelData = item.data.personnel -%}
-    {%- assign bodyContent = item.content -%}
-  {% endif %}
-{% endfor %}
+{% comment %}Personnel data from JSON file in _data folder{% endcomment %}
+{%- assign personnelData = personnel.personnel -%}
 
-{% if bodyContent %}
-<div class="lead">{{ bodyContent }}</div>
-{% endif %}
+<div class="lead">Our department is made up of dedicated career staff and volunteers who live and work in our island community.</div>
 
 {% if personnelData %}
 {%- assign staffOnly = personnelData | pluckByValue: 'staff', 'employee_type' -%}

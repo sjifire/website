@@ -21,19 +21,24 @@
  */
 
 import "dotenv/config";
-import { writeFile, readFile, mkdir, access, readdir, unlink } from "node:fs/promises";
+import { writeFile, readFile, mkdir, readdir, unlink } from "node:fs/promises";
+import { existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
+import { parseArgs } from "node:util";
 import { MSGraphClient } from "./msgraph-client.mjs";
 import { hashJpegBuffer, hammingDistance } from "./image-hash.mjs";
 import { optimizeImageBuffer, getCloudinaryConfig } from "../api/src/lib/cloudinary.js";
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const OUTPUT_PATH = join(__dirname, "..", "src", "pages", "about", "our-team-data.mdx");
-const PHOTOS_DIR = join(__dirname, "..", "src", "assets", "media", "personnel_imgs");
-const PHOTO_HASHES_PATH = join(__dirname, "..", "src", "assets", "media", "personnel_imgs", ".photo-hashes.json");
+// ============================================================================
+// Configuration
+// ============================================================================
 
-// Cloudinary transform: 1000x1000 crop centered on face
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const OUTPUT_PATH = join(__dirname, "..", "src", "_data", "personnel.json");
+const PHOTOS_DIR = join(__dirname, "..", "src", "assets", "media", "personnel_imgs");
+const PHOTO_HASHES_PATH = join(PHOTOS_DIR, ".photo-hashes.json");
+
 const PHOTO_TRANSFORM = "w_1000,h_1000,c_fill,g_faces,q_auto";
 const DEFAULT_HASH_THRESHOLD = 10;
 
@@ -45,7 +50,7 @@ const STAFF_EMPLOYEE_TYPES = [
   "PT Line Staff",
 ];
 
-// Ranks in sort order (Chief first). Used for sorting personnel.
+// Ranks in sort order (Chief first)
 const RANKS = [
   "Chief",
   "Assistant Chief",
@@ -55,63 +60,31 @@ const RANKS = [
   "Lieutenant",
 ];
 
-/**
- * Parse CLI arguments
- */
-function parseArgs() {
-  const args = {
-    forceRefresh: false,
-    hashThreshold: DEFAULT_HASH_THRESHOLD,
+// ============================================================================
+// CLI Argument Parsing (using Node.js built-in util.parseArgs)
+// ============================================================================
+
+function getCliArgs() {
+  const { values } = parseArgs({
+    options: {
+      "force-refresh": { type: "boolean", default: false },
+      "hash-threshold": { type: "string", default: String(DEFAULT_HASH_THRESHOLD) },
+    },
+    strict: false,
+  });
+
+  return {
+    forceRefresh: values["force-refresh"],
+    hashThreshold: parseInt(values["hash-threshold"], 10),
   };
-
-  for (const arg of process.argv.slice(2)) {
-    if (arg === "--force-refresh") {
-      args.forceRefresh = true;
-    } else if (arg.startsWith("--hash-threshold=")) {
-      args.hashThreshold = parseInt(arg.split("=")[1], 10);
-    }
-  }
-
-  return args;
 }
 
-/**
- * Load existing photo hashes
- */
-async function loadPhotoHashes() {
-  try {
-    const data = await readFile(PHOTO_HASHES_PATH, "utf-8");
-    return JSON.parse(data);
-  } catch {
-    return {};
-  }
-}
+// ============================================================================
+// Data Transformation Helpers
+// ============================================================================
 
 /**
- * Save photo hashes (sorted by filename for stable git diffs)
- */
-async function savePhotoHashes(hashes) {
-  const sorted = Object.keys(hashes).sort().reduce((obj, key) => {
-    obj[key] = hashes[key];
-    return obj;
-  }, {});
-  await writeFile(PHOTO_HASHES_PATH, JSON.stringify(sorted, null, 2) + "\n");
-}
-
-/**
- * Check if a file exists
- */
-async function fileExists(path) {
-  try {
-    await access(path);
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-/**
- * Normalize name for filename
+ * Normalize name for filename: "John Doe" -> "john_doe"
  */
 function normalizeFilename(firstName, lastName) {
   return `${firstName}_${lastName}`
@@ -121,26 +94,23 @@ function normalizeFilename(firstName, lastName) {
 }
 
 /**
- * Determine staff type from employeeType attribute
+ * Determine employee category from employeeType attribute
  */
-function determineStaffType(employeeType) {
+function determineEmployeeType(employeeType) {
   if (!employeeType) return null;
   if (STAFF_EMPLOYEE_TYPES.includes(employeeType)) return "staff";
   if (employeeType === "Volunteer") return "volunteer";
-  // Unknown type - include as volunteer
-  return "volunteer";
+  return "volunteer"; // Unknown type defaults to volunteer
 }
 
 /**
- * Parse roles from extensionAttribute3 and determine simplified display roles
- * Also checks extensionAttribute2 for Apparatus Operator certification
+ * Parse roles from extension attributes
  */
 function determineRoles(extAttrs) {
   const roles = [];
   const rawRoles = extAttrs.extensionAttribute3 || "";
   const aoExpiration = extAttrs.extensionAttribute2 || "";
 
-  // Parse comma-separated roles
   const roleList = rawRoles.split(",").map(r => r.trim().toLowerCase());
 
   // Marine Crew (Mate or Pilot)
@@ -153,12 +123,12 @@ function determineRoles(extAttrs) {
     roles.push("Firefighter");
   }
 
-  // Wildland Firefighter (only if not already a Firefighter to avoid redundancy)
+  // Wildland Firefighter (only if not already a Firefighter)
   if (roleList.includes("wildland firefighter") && !roles.includes("Firefighter")) {
     roles.push("Wildland Firefighter");
   }
 
-  // Support (only if not a Firefighter - firefighters implicitly support)
+  // Support (only if not a Firefighter)
   if (roleList.includes("support") && !roles.includes("Firefighter")) {
     roles.push("Support");
   }
@@ -181,90 +151,51 @@ function determineRoles(extAttrs) {
 }
 
 /**
- * Generate MDX frontmatter for personnel
+ * Sort personnel: staff first (by rank, then name), volunteers (by rank, then name)
  */
-function generateMDX(personnel) {
-  const yaml = [
-    "---",
-    "permalink: false",
-    "tags: content-include",
-    "contentFor: our-team",
-    "title: Our Team",
-    "intro: Our department is made up of dedicated career staff and volunteers who live and work in our island community.",
-    "personnel:",
-  ];
-
-  for (const person of personnel) {
-    yaml.push(`  - first_name: ${person.first_name}`);
-    yaml.push(`    last_name: ${person.last_name}`);
-
-    if (person.title) {
-      yaml.push(`    title: ${person.title}`);
-    }
-    if (person.rank) {
-      yaml.push(`    rank: ${person.rank}`);
+function sortPersonnel(personnel) {
+  return [...personnel].sort((a, b) => {
+    // Staff before volunteers
+    if (a.employee_type !== b.employee_type) {
+      return a.employee_type === "staff" ? -1 : 1;
     }
 
-    yaml.push(`    employee_type: ${person.employee_type}`);
-    yaml.push(`    staff_type: ${person.staff_type}`);
+    // Sort by rank (Chiefs first, then people without rank)
+    const aRankIdx = a.rank ? RANKS.indexOf(a.rank) : 999;
+    const bRankIdx = b.rank ? RANKS.indexOf(b.rank) : 999;
+    if (aRankIdx !== bRankIdx) return aRankIdx - bRankIdx;
 
-    if (person.roles.length > 0) {
-      yaml.push("    roles:");
-      for (const role of [...person.roles].sort()) {
-        yaml.push(`      - ${role}`);
-      }
-    }
-
-    if (person.photo) {
-      yaml.push(`    photo: ${person.photo}`);
-    }
-  }
-
-  yaml.push("---");
-  yaml.push("");
-
-  return yaml.join("\n");
+    // Then by first name
+    return a.first_name.localeCompare(b.first_name);
+  });
 }
 
-/**
- * Main execution
- */
-async function main() {
-  const args = parseArgs();
+// ============================================================================
+// Photo Hash Management
+// ============================================================================
 
-  console.log("Personnel Sync from Microsoft 365 (Entra ID)");
-  console.log("=============================================");
-
-  // Validate environment
-  const tenantId = process.env.MS_GRAPH_TENANT_ID;
-  const clientId = process.env.MS_GRAPH_CLIENT_ID;
-  const clientSecret = process.env.MS_GRAPH_CLIENT_SECRET;
-
-  if (!tenantId || !clientId || !clientSecret) {
-    console.error("Missing required environment variables:");
-    if (!tenantId) console.error("  - MS_GRAPH_TENANT_ID");
-    if (!clientId) console.error("  - MS_GRAPH_CLIENT_ID");
-    if (!clientSecret) console.error("  - MS_GRAPH_CLIENT_SECRET");
-    process.exit(1);
+async function loadPhotoHashes() {
+  try {
+    const data = await readFile(PHOTO_HASHES_PATH, "utf-8");
+    return JSON.parse(data);
+  } catch {
+    return {};
   }
+}
 
-  console.log(`Force refresh photos: ${args.forceRefresh}`);
-  console.log(`Hash threshold: ${args.hashThreshold} bits`);
+async function savePhotoHashes(hashes) {
+  const sorted = Object.keys(hashes).sort().reduce((obj, key) => {
+    obj[key] = hashes[key];
+    return obj;
+  }, {});
+  await writeFile(PHOTO_HASHES_PATH, JSON.stringify(sorted, null, 2) + "\n");
+}
 
-  // Check Cloudinary config
-  const cloudinaryConfig = getCloudinaryConfig();
-  if (!cloudinaryConfig) {
-    console.warn("\nWarning: CLOUDINARY_API_KEY/SECRET not set - photos will be saved without optimization");
-  } else {
-    console.log(`Cloudinary transform: ${PHOTO_TRANSFORM}`);
-  }
+// ============================================================================
+// Microsoft Graph API
+// ============================================================================
 
-  // Initialize client
-  const client = new MSGraphClient({ tenantId, clientId, clientSecret });
-
-  // Fetch users with Entra ID attributes
-  console.log("\nFetching users from Microsoft 365...");
-
+async function fetchUsersFromGraph(client) {
   const selectFields = [
     "id",
     "givenName",
@@ -281,245 +212,193 @@ async function main() {
     select: selectFields,
   });
 
-  const users = response.value || [];
-  console.log(`Found ${users.length} users`);
+  return response.value || [];
+}
 
-  // Ensure photos directory exists
-  await mkdir(PHOTOS_DIR, { recursive: true });
+// ============================================================================
+// Photo Processing
+// ============================================================================
 
-  // Load existing photo hashes
-  const photoHashes = await loadPhotoHashes();
-  const newPhotoHashes = {};
-
-  // Photo sync stats
-  const photoStats = {
-    downloaded: 0,
-    skippedUnchanged: 0,
-    skippedNoPhoto: 0,
-    updated: 0,
+async function processUserPhoto(client, user, filename, photoPath, existingHash, args) {
+  const result = {
+    photo: null,
+    hash: null,
+    status: null,
   };
 
-  // Process each user
-  const personnel = [];
-  const usersWithoutEmployeeType = [];
+  const photoExists = existsSync(photoPath);
 
-  for (const user of users) {
-    // Skip users without names
-    if (!user.givenName || !user.surname) {
-      console.log(`  Skipping ${user.displayName || user.id} (missing name)`);
-      continue;
-    }
-
-    // Determine staff type from employeeType
-    const staffType = determineStaffType(user.employeeType);
-
-    // Skip users without employeeType
-    if (!staffType) {
-      usersWithoutEmployeeType.push({
-        name: `${user.givenName} ${user.surname}`,
-        email: user.userPrincipalName,
-        jobTitle: user.jobTitle || "(none)",
-      });
-      continue;
-    }
-
-    // Get extension attributes
-    const extAttrs = user.onPremisesExtensionAttributes || {};
-
-    // Skip users without positions (extensionAttribute3)
-    const rawPositions = extAttrs.extensionAttribute3 || "";
-    if (!rawPositions.trim()) {
-      console.log(`  Skipping ${user.givenName} ${user.surname} (no positions)`);
-      continue;
-    }
-
-    console.log(`  Processing ${user.givenName} ${user.surname} (${user.employeeType})...`);
-
-    // Get rank from extensionAttribute1
-    const rank = extAttrs.extensionAttribute1 || null;
-
-    // Get title from jobTitle
-    const title = user.jobTitle || null;
-
-    // Determine roles from extension attributes
-    const roles = determineRoles(extAttrs);
-
-    // Build person object
-    const person = {
-      first_name: user.givenName,
-      last_name: user.surname,
-      rank,
-      title,
-      employee_type: staffType,        // staff | volunteer
-      staff_type: user.employeeType,   // FT Line Staff, PT Line Staff, Day Staff, Administrative, Volunteer
-      roles,
-      photo: null,
-    };
-
-    // Download photo
-    const filename = `${normalizeFilename(user.givenName, user.surname)}.jpg`;
-    const photoPath = join(PHOTOS_DIR, filename);
-    const photoUrl = `/assets/media/personnel_imgs/${filename}`;
-    const existingHash = photoHashes[filename];
-    const photoExists = await fileExists(photoPath);
-
-    try {
-      const photoData = await client.getUserPhoto(user.id);
-      if (photoData) {
-        // Convert Blob to Buffer if needed (newer Graph SDK returns Blob)
-        let rawBuffer;
-        if (typeof photoData.arrayBuffer === "function") {
-          const arrayBuffer = await photoData.arrayBuffer();
-          rawBuffer = Buffer.from(arrayBuffer);
-        } else {
-          rawBuffer = Buffer.from(photoData);
-        }
-        const optimized = await optimizeImageBuffer(rawBuffer, { transform: PHOTO_TRANSFORM });
-
-        const finalBuffer = optimized.buffer;
-        const newHash = hashJpegBuffer(finalBuffer);
-
-        // Check if we should save the photo
-        let shouldSave = false;
-        let reason = "";
-
-        if (args.forceRefresh) {
-          shouldSave = true;
-          reason = "force refresh";
-        } else if (!photoExists) {
-          shouldSave = true;
-          reason = "new photo";
-          photoStats.downloaded++;
-        } else if (!existingHash) {
-          // No stored hash, compute from existing file and compare
-          try {
-            const existingData = await readFile(photoPath);
-            const existingFileHash = hashJpegBuffer(existingData);
-            const distance = hammingDistance(newHash, existingFileHash);
-
-            if (distance > args.hashThreshold) {
-              shouldSave = true;
-              reason = `changed (distance: ${distance})`;
-              photoStats.updated++;
-            } else {
-              reason = `unchanged (distance: ${distance})`;
-              photoStats.skippedUnchanged++;
-            }
-          } catch {
-            shouldSave = true;
-            reason = "could not read existing";
-          }
-        } else {
-          // Compare with stored hash
-          const distance = hammingDistance(newHash, existingHash);
-          if (distance > args.hashThreshold) {
-            shouldSave = true;
-            reason = `changed (distance: ${distance})`;
-            photoStats.updated++;
-          } else {
-            reason = `unchanged (distance: ${distance})`;
-            photoStats.skippedUnchanged++;
-          }
-        }
-
-        if (shouldSave) {
-          await writeFile(photoPath, finalBuffer);
-          const sizeKB = Math.round(finalBuffer.length / 1024);
-          const optStatus = optimized.optimized ? "cloudinary" : optimized.reason;
-          console.log(`    Photo saved: ${reason} (${sizeKB}KB, ${optStatus})`);
-        } else {
-          console.log(`    Photo skipped: ${reason}`);
-        }
-
-        // Store the new hash
-        newPhotoHashes[filename] = newHash;
-        person.photo = photoUrl;
-      } else {
-        photoStats.skippedNoPhoto++;
-        console.log("    No photo in M365");
-
-        // Keep existing photo if we have one
-        if (photoExists) {
-          person.photo = photoUrl;
-          // Preserve the existing hash
-          if (existingHash) {
-            newPhotoHashes[filename] = existingHash;
-          }
-        }
-      }
-    } catch (error) {
-      photoStats.skippedNoPhoto++;
-      console.log(`    No photo available: ${error.message}`);
-
+  try {
+    const photoData = await client.getUserPhoto(user.id);
+    if (!photoData) {
+      result.status = "no-photo";
       // Keep existing photo if we have one
       if (photoExists) {
-        person.photo = photoUrl;
-        if (existingHash) {
-          newPhotoHashes[filename] = existingHash;
+        result.photo = `/assets/media/personnel_imgs/${filename}`;
+        result.hash = existingHash;
+      }
+      return result;
+    }
+
+    // Convert Blob to Buffer if needed
+    let rawBuffer;
+    if (typeof photoData.arrayBuffer === "function") {
+      const arrayBuffer = await photoData.arrayBuffer();
+      rawBuffer = Buffer.from(arrayBuffer);
+    } else {
+      rawBuffer = Buffer.from(photoData);
+    }
+
+    const optimized = await optimizeImageBuffer(rawBuffer, { transform: PHOTO_TRANSFORM });
+    const finalBuffer = optimized.buffer;
+    const newHash = hashJpegBuffer(finalBuffer);
+
+    // Determine if we should save
+    let shouldSave = false;
+    let reason = "";
+
+    if (args.forceRefresh) {
+      shouldSave = true;
+      reason = "force refresh";
+    } else if (!photoExists) {
+      shouldSave = true;
+      reason = "new";
+    } else if (!existingHash) {
+      // No stored hash, compare with existing file
+      try {
+        const existingData = await readFile(photoPath);
+        const existingFileHash = hashJpegBuffer(existingData);
+        const distance = hammingDistance(newHash, existingFileHash);
+        if (distance > args.hashThreshold) {
+          shouldSave = true;
+          reason = `changed (d=${distance})`;
+        } else {
+          reason = `unchanged (d=${distance})`;
         }
+      } catch {
+        shouldSave = true;
+        reason = "read error";
+      }
+    } else {
+      const distance = hammingDistance(newHash, existingHash);
+      if (distance > args.hashThreshold) {
+        shouldSave = true;
+        reason = `changed (d=${distance})`;
+      } else {
+        reason = `unchanged (d=${distance})`;
       }
     }
 
-    personnel.push(person);
+    if (shouldSave) {
+      await writeFile(photoPath, finalBuffer);
+      const sizeKB = Math.round(finalBuffer.length / 1024);
+      const optStatus = optimized.optimized ? "cloudinary" : optimized.reason;
+      result.status = { saved: true, reason, sizeKB, optStatus };
+    } else {
+      result.status = { saved: false, reason };
+    }
+
+    result.photo = `/assets/media/personnel_imgs/${filename}`;
+    result.hash = newHash;
+  } catch (error) {
+    result.status = { error: error.message };
+    // Keep existing photo if we have one
+    if (photoExists) {
+      result.photo = `/assets/media/personnel_imgs/${filename}`;
+      result.hash = existingHash;
+    }
   }
 
-  // Save updated photo hashes
-  await savePhotoHashes(newPhotoHashes);
+  return result;
+}
 
-  // Clean up photos for removed personnel
+// ============================================================================
+// Photo Cleanup
+// ============================================================================
+
+async function cleanupOrphanedPhotos(currentPhotoFiles) {
   const existingPhotos = await readdir(PHOTOS_DIR);
-  const currentPhotoFiles = new Set(Object.keys(newPhotoHashes));
-  const removedPhotos = [];
+  const removed = [];
 
   for (const file of existingPhotos) {
-    // Skip non-jpg files
-    if (!file.endsWith(".jpg")) continue;
-
-    // Skip placeholder images (personnel photos have firstname_lastname.jpg format)
-    if (!file.includes("_")) continue;
+    // Skip non-jpg and placeholder images
+    if (!file.endsWith(".jpg") || !file.includes("_")) continue;
 
     if (!currentPhotoFiles.has(file)) {
-      const photoPath = join(PHOTOS_DIR, file);
-      await unlink(photoPath);
-      removedPhotos.push(file);
+      await unlink(join(PHOTOS_DIR, file));
+      removed.push(file);
     }
   }
 
-  if (removedPhotos.length > 0) {
-    console.log(`\nRemoved ${removedPhotos.length} photo(s) for deleted personnel:`);
-    for (const file of removedPhotos) {
-      console.log(`  - ${file}`);
-    }
-  }
+  return removed;
+}
 
-  // Sort: staff first (by rank, then first name), then volunteers (by rank, then first name)
-  personnel.sort((a, b) => {
-    // Staff before volunteers
-    if (a.employee_type !== b.employee_type) {
-      return a.employee_type === "staff" ? -1 : 1;
-    }
+// ============================================================================
+// Output Generation
+// ============================================================================
 
-    // Sort by rank (Chiefs first, then people without rank)
-    const aRankIdx = a.rank ? RANKS.indexOf(a.rank) : 999;
-    const bRankIdx = b.rank ? RANKS.indexOf(b.rank) : 999;
-    if (aRankIdx !== bRankIdx) return aRankIdx - bRankIdx;
+/**
+ * Compute personnel counts for the key-information page
+ */
+function computeCounts(personnel) {
+  const staff = personnel.filter(p => p.employee_type === "staff");
+  const volunteers = personnel.filter(p => p.employee_type === "volunteer");
 
-    // Then by first name
-    return a.first_name.localeCompare(b.first_name);
-  });
+  const hasFirefighterRole = (p) =>
+    p.roles?.includes("Firefighter") || p.roles?.includes("Apparatus Operator");
 
-  // Generate output
-  console.log("\nGenerating personnel data file...");
-  const mdxContent = generateMDX(personnel);
-  await writeFile(OUTPUT_PATH, mdxContent);
+  // Full-time: FT Line Staff, Day Staff, or Administrative with FF/AO role
+  const fullTimeTypes = ["FT Line Staff", "Day Staff", "Administrative"];
+  const fullTimeFirefighters = staff.filter(
+    p => fullTimeTypes.includes(p.staff_type) && hasFirefighterRole(p)
+  ).length;
 
+  // Part-time: PT Line Staff with FF/AO role
+  const partTimeFirefighters = staff.filter(
+    p => p.staff_type === "PT Line Staff" && hasFirefighterRole(p)
+  ).length;
+
+  // Administrative: staff without FF/AO role
+  const administrativeStaff = staff.filter(p => !hasFirefighterRole(p)).length;
+
+  // Volunteer firefighters: Firefighter or Wildland Firefighter role
+  const volunteerFirefighters = volunteers.filter(
+    p => p.roles?.includes("Firefighter") || p.roles?.includes("Wildland Firefighter")
+  ).length;
+
+  // Volunteer support: Support role but not a firefighter
+  const volunteerSupport = volunteers.filter(
+    p => p.roles?.includes("Support") && !p.roles?.includes("Firefighter")
+  ).length;
+
+  return {
+    fullTimeFirefighters,
+    partTimeFirefighters,
+    administrativeStaff,
+    volunteerFirefighters,
+    volunteerSupport,
+  };
+}
+
+async function writePersonnelJson(personnel) {
+  const counts = computeCounts(personnel);
+  const output = {
+    generated: new Date().toISOString(),
+    count: personnel.length,
+    counts,
+    personnel: personnel,
+  };
+  await writeFile(OUTPUT_PATH, JSON.stringify(output, null, 2) + "\n");
+}
+
+function printSummary(personnel, photoStats, usersWithoutEmployeeType) {
   console.log("\nSummary:");
   console.log(`  Total personnel: ${personnel.length}`);
   console.log(`  Staff: ${personnel.filter(p => p.employee_type === "staff").length}`);
   console.log(`  Volunteers: ${personnel.filter(p => p.employee_type === "volunteer").length}`);
   console.log(`  With photos: ${personnel.filter(p => p.photo).length}`);
 
-  // Show role distribution
+  // Role distribution
   const roleCounts = {};
   for (const p of personnel) {
     for (const r of p.roles) {
@@ -531,7 +410,7 @@ async function main() {
     console.log(`  ${role}: ${count}`);
   }
 
-  // List users who don't have an employeeType set
+  // Users without employeeType
   if (usersWithoutEmployeeType.length > 0) {
     console.log(`\nUsers without employeeType (not included) (${usersWithoutEmployeeType.length}):`);
     for (const user of usersWithoutEmployeeType.slice(0, 10)) {
@@ -542,6 +421,7 @@ async function main() {
     }
   }
 
+  // Photo stats
   console.log("\nPhoto sync:");
   console.log(`  New photos downloaded: ${photoStats.downloaded}`);
   console.log(`  Photos updated (changed): ${photoStats.updated}`);
@@ -550,6 +430,132 @@ async function main() {
 
   console.log(`\nOutput written to ${OUTPUT_PATH}`);
   console.log("Done!");
+}
+
+// ============================================================================
+// Main
+// ============================================================================
+
+async function main() {
+  const args = getCliArgs();
+
+  console.log("Personnel Sync from Microsoft 365 (Entra ID)");
+  console.log("=============================================");
+
+  // Validate environment
+  const { MS_GRAPH_TENANT_ID, MS_GRAPH_CLIENT_ID, MS_GRAPH_CLIENT_SECRET } = process.env;
+  if (!MS_GRAPH_TENANT_ID || !MS_GRAPH_CLIENT_ID || !MS_GRAPH_CLIENT_SECRET) {
+    console.error("Missing required environment variables:");
+    if (!MS_GRAPH_TENANT_ID) console.error("  - MS_GRAPH_TENANT_ID");
+    if (!MS_GRAPH_CLIENT_ID) console.error("  - MS_GRAPH_CLIENT_ID");
+    if (!MS_GRAPH_CLIENT_SECRET) console.error("  - MS_GRAPH_CLIENT_SECRET");
+    process.exit(1);
+  }
+
+  console.log(`Force refresh photos: ${args.forceRefresh}`);
+  console.log(`Hash threshold: ${args.hashThreshold} bits`);
+
+  const cloudinaryConfig = getCloudinaryConfig();
+  if (!cloudinaryConfig) {
+    console.warn("\nWarning: CLOUDINARY_API_KEY/SECRET not set - photos saved without optimization");
+  }
+
+  // Initialize Graph client and fetch users
+  const client = new MSGraphClient({
+    tenantId: MS_GRAPH_TENANT_ID,
+    clientId: MS_GRAPH_CLIENT_ID,
+    clientSecret: MS_GRAPH_CLIENT_SECRET,
+  });
+
+  console.log("\nFetching users from Microsoft 365...");
+  const users = await fetchUsersFromGraph(client);
+  console.log(`Found ${users.length} users`);
+
+  // Ensure directories exist
+  await mkdir(PHOTOS_DIR, { recursive: true });
+
+  // Load existing photo hashes
+  const photoHashes = await loadPhotoHashes();
+  const newPhotoHashes = {};
+
+  const photoStats = { downloaded: 0, skippedUnchanged: 0, skippedNoPhoto: 0, updated: 0 };
+  const personnel = [];
+  const usersWithoutEmployeeType = [];
+
+  // Process each user
+  for (const user of users) {
+    if (!user.givenName || !user.surname) continue;
+
+    const employeeType = determineEmployeeType(user.employeeType);
+    if (!employeeType) {
+      usersWithoutEmployeeType.push({
+        name: `${user.givenName} ${user.surname}`,
+        email: user.userPrincipalName,
+      });
+      continue;
+    }
+
+    const extAttrs = user.onPremisesExtensionAttributes || {};
+    if (!extAttrs.extensionAttribute3?.trim()) {
+      console.log(`  Skipping ${user.givenName} ${user.surname} (no positions)`);
+      continue;
+    }
+
+    console.log(`  Processing ${user.givenName} ${user.surname} (${user.employeeType})...`);
+
+    // Process photo
+    const filename = `${normalizeFilename(user.givenName, user.surname)}.jpg`;
+    const photoPath = join(PHOTOS_DIR, filename);
+    const photoResult = await processUserPhoto(
+      client, user, filename, photoPath, photoHashes[filename], args
+    );
+
+    // Update stats
+    if (photoResult.status === "no-photo") {
+      photoStats.skippedNoPhoto++;
+      console.log("    No photo in M365");
+    } else if (photoResult.status?.error) {
+      photoStats.skippedNoPhoto++;
+      console.log(`    No photo available: ${photoResult.status.error}`);
+    } else if (photoResult.status?.saved) {
+      if (photoResult.status.reason === "new") photoStats.downloaded++;
+      else photoStats.updated++;
+      console.log(`    Photo saved: ${photoResult.status.reason} (${photoResult.status.sizeKB}KB, ${photoResult.status.optStatus})`);
+    } else {
+      photoStats.skippedUnchanged++;
+      console.log(`    Photo skipped: ${photoResult.status?.reason}`);
+    }
+
+    if (photoResult.hash) {
+      newPhotoHashes[filename] = photoResult.hash;
+    }
+
+    // Build person object
+    personnel.push({
+      first_name: user.givenName,
+      last_name: user.surname,
+      rank: extAttrs.extensionAttribute1 || null,
+      title: user.jobTitle || null,
+      employee_type: employeeType,
+      staff_type: user.employeeType,
+      roles: determineRoles(extAttrs).sort(),
+      photo: photoResult.photo,
+    });
+  }
+
+  // Save photo hashes and cleanup orphans
+  await savePhotoHashes(newPhotoHashes);
+  const removedPhotos = await cleanupOrphanedPhotos(new Set(Object.keys(newPhotoHashes)));
+  if (removedPhotos.length > 0) {
+    console.log(`\nRemoved ${removedPhotos.length} photo(s) for deleted personnel:`);
+    removedPhotos.forEach(f => console.log(`  - ${f}`));
+  }
+
+  // Sort and write output
+  const sortedPersonnel = sortPersonnel(personnel);
+  await writePersonnelJson(sortedPersonnel);
+
+  printSummary(sortedPersonnel, photoStats, usersWithoutEmployeeType);
 }
 
 main().catch(err => {

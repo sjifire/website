@@ -98,74 +98,18 @@ See [County Assessor](https://www.sanjuancountywa.gov/164/Detail---Tax-Distribut
 
 ## Staff & Volunteer Responders
 
-{% comment %}Pull personnel data from the MDX content-include file{% endcomment %}
-{%- assign personnelData = nil -%}
-{% for item in collections.contentIncludes %}
-  {% if item.data.contentFor == "our-team" %}
-    {%- assign personnelData = item.data.personnel -%}
-  {% endif %}
-{% endfor %}
+{% if personnel.counts %}
+* **Full-Time Firefighters:** {{ personnel.counts.fullTimeFirefighters }}
 
-{% if personnelData %}
-{%- comment %}Full-time FF = staff with Firefighter or Apparatus Operator roles{% endcomment -%}
-{%- assign staffOnly = personnelData | pluckByValue: 'staff', 'employee_type' -%}
-{%- assign ftLineStaff = staffOnly | pluckByValue: 'FT Line Staff', 'staff_type' -%}
-{%- assign dayStaff = staffOnly | pluckByValue: 'Day Staff', 'staff_type' -%}
-{%- assign adminStaff = staffOnly | pluckByValue: 'Administrative', 'staff_type' -%}
-{%- assign fullTimeCount = 0 -%}
-{%- for person in ftLineStaff -%}
-  {%- if person.roles contains 'Firefighter' or person.roles contains 'Apparatus Operator' -%}
-    {%- assign fullTimeCount = fullTimeCount | plus: 1 -%}
-  {%- endif -%}
-{%- endfor -%}
-{%- for person in dayStaff -%}
-  {%- if person.roles contains 'Firefighter' or person.roles contains 'Apparatus Operator' -%}
-    {%- assign fullTimeCount = fullTimeCount | plus: 1 -%}
-  {%- endif -%}
-{%- endfor -%}
-{%- for person in adminStaff -%}
-  {%- if person.roles contains 'Firefighter' or person.roles contains 'Apparatus Operator' -%}
-    {%- assign fullTimeCount = fullTimeCount | plus: 1 -%}
-  {%- endif -%}
-{%- endfor -%}
-{%- assign ptLineStaff = personnelData | pluckByValue: 'PT Line Staff', 'staff_type' -%}
-{%- assign partTimeCount = 0 -%}
-{%- for person in ptLineStaff -%}
-  {%- if person.roles contains 'Firefighter' or person.roles contains 'Apparatus Operator' -%}
-    {%- assign partTimeCount = partTimeCount | plus: 1 -%}
-  {%- endif -%}
-{%- endfor -%}
-{%- assign volunteers = personnelData | pluckByValue: 'volunteer', 'employee_type' -%}
-{%- assign volunteerFFighters = volunteers | pluckByArrayIncludes: 'Firefighter', 'roles' -%}
-{%- assign volunteerWildland = volunteers | pluckByArrayIncludes: 'Wildland Firefighter', 'roles' -%}
-{%- assign volunteerFirefighters = volunteerFFighters.size | plus: volunteerWildland.size -%}
-{%- assign volunteerSupport = volunteers | pluckByArrayIncludes: 'Support', 'roles' -%}
-{%- comment %}Remove firefighters from support count to avoid double-counting{% endcomment -%}
-{%- assign supportOnlyCount = 0 -%}
-{%- for person in volunteerSupport -%}
-  {%- unless person.roles contains 'Firefighter' -%}
-    {%- assign supportOnlyCount = supportOnlyCount | plus: 1 -%}
-  {%- endunless -%}
-{%- endfor -%}
-{%- comment %}Administrative staff = staff without FF/AO roles{% endcomment -%}
-{%- assign adminCount = 0 -%}
-{%- for person in staffOnly -%}
-  {%- unless person.roles contains 'Firefighter' or person.roles contains 'Apparatus Operator' -%}
-    {%- assign adminCount = adminCount | plus: 1 -%}
-  {%- endunless -%}
-{%- endfor -%}
+* **Part-Time Firefighters:** {{ personnel.counts.partTimeFirefighters }}
 
-* **Full-Time Firefighters:** {{ fullTimeCount }}
+* **Administrative Staff:** {{ personnel.counts.administrativeStaff }}
 
-* **Part-Time Firefighters:** {{ partTimeCount }}
+* **Volunteer Firefighters:** {{ personnel.counts.volunteerFirefighters }}
 
-* **Administrative Staff:** {{ adminCount }}
+* **Volunteer Support Personnel:** {{ personnel.counts.volunteerSupport }}
 
-* **Volunteer Firefighters:** {{ volunteerFirefighters }}
-
-* **Volunteer Support Personnel:** {{ supportOnlyCount }}
-
-* **Total Active Members:** {{ personnelData.size }}
+* **Total Active Members:** {{ personnel.count }}
 {% else %}
 * **Full-Time Firefighters:** --
 

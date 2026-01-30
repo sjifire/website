@@ -117,7 +117,7 @@ Personnel data and photos are synced daily from Microsoft 365 via Microsoft Grap
 
 **Files:**
 - `scripts/msgraph-client.mjs` - Microsoft Graph API client (uses official @microsoft/microsoft-graph-client SDK)
-- `scripts/sync-personnel.mjs` - Syncs users/photos to `our-team-data.mdx`
+- `scripts/sync-personnel.mjs` - Syncs users/photos to `src/_data/personnel.json`
 - `scripts/image-hash.mjs` - Perceptual hashing for photo change detection
 - `.github/workflows/sync-personnel.yml` - Daily scheduled workflow (7 AM UTC)
 
