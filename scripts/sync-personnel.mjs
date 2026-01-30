@@ -492,19 +492,21 @@ async function main() {
     }
   }
 
-  // Sort: staff first (by rank, then name), then volunteers (by rank, then name)
+  // Sort: staff first (by rank, then name), then volunteers (by last name only)
   personnel.sort((a, b) => {
     // Staff before volunteers
     if (a.employee_type !== b.employee_type) {
       return a.employee_type === "staff" ? -1 : 1;
     }
 
-    // Sort by rank (Chiefs first)
-    const aRankIdx = a.rank ? RANKS.indexOf(a.rank) : 999;
-    const bRankIdx = b.rank ? RANKS.indexOf(b.rank) : 999;
-    if (aRankIdx !== bRankIdx) return aRankIdx - bRankIdx;
+    // For staff: sort by rank (Chiefs first), then by last name
+    if (a.employee_type === "staff") {
+      const aRankIdx = a.rank ? RANKS.indexOf(a.rank) : 999;
+      const bRankIdx = b.rank ? RANKS.indexOf(b.rank) : 999;
+      if (aRankIdx !== bRankIdx) return aRankIdx - bRankIdx;
+    }
 
-    // Then by last name, first name as tiebreaker
+    // For everyone: sort by last name, first name as tiebreaker
     const lastNameCmp = a.last_name.localeCompare(b.last_name);
     if (lastNameCmp !== 0) return lastNameCmp;
     return a.first_name.localeCompare(b.first_name);

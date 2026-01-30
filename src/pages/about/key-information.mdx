@@ -29,14 +29,6 @@ sidebar_blocks:
     new_tab: false
 ---
 
-{% comment %}Pull personnel data from the MDX content-include file{% endcomment %}
-{%- assign personnelData = nil -%}
-{% for item in collections.contentIncludes %}
-  {% if item.data.contentFor == "our-team" %}
-    {%- assign personnelData = item.data.personnel -%}
-  {% endif %}
-{% endfor %}
-
 See [Who We Are](/about/who-we-are/) for our mission and values, or [Our Team](/about/our-team/) to meet our staff and volunteers.
 
 ## Our History
@@ -105,6 +97,14 @@ See [Fire Insurance](/services/fire-insurance/) for station locations, equipment
 See [County Assessor](https://www.sanjuancountywa.gov/164/Detail---Tax-Distribution-by-Taxing-Dist) and [Governance page](/about/governance/) for budgets and financial details.
 
 ## Staff & Volunteer Responders
+
+{% comment %}Pull personnel data from the MDX content-include file{% endcomment %}
+{%- assign personnelData = nil -%}
+{% for item in collections.contentIncludes %}
+  {% if item.data.contentFor == "our-team" %}
+    {%- assign personnelData = item.data.personnel -%}
+  {% endif %}
+{% endfor %}
 
 {% if personnelData %}
 {%- assign ftLineStaff = personnelData | pluckByValue: 'FT Line Staff', 'staff_type' -%}
