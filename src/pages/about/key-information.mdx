@@ -107,7 +107,17 @@ See [County Assessor](https://www.sanjuancountywa.gov/164/Detail---Tax-Distribut
 {% endfor %}
 
 {% if personnelData %}
+{%- comment %}Full-time = FT Line Staff + Day Staff + Admin with Firefighter/AO roles{% endcomment -%}
 {%- assign ftLineStaff = personnelData | pluckByValue: 'FT Line Staff', 'staff_type' -%}
+{%- assign dayStaff = personnelData | pluckByValue: 'Day Staff', 'staff_type' -%}
+{%- assign adminStaff = personnelData | pluckByValue: 'Administrative', 'staff_type' -%}
+{%- assign adminFFCount = 0 -%}
+{%- for person in adminStaff -%}
+  {%- if person.roles contains 'Firefighter' or person.roles contains 'Apparatus Operator' -%}
+    {%- assign adminFFCount = adminFFCount | plus: 1 -%}
+  {%- endif -%}
+{%- endfor -%}
+{%- assign fullTimeCount = ftLineStaff.size | plus: dayStaff.size | plus: adminFFCount -%}
 {%- assign ptLineStaff = personnelData | pluckByValue: 'PT Line Staff', 'staff_type' -%}
 {%- assign volunteers = personnelData | pluckByValue: 'volunteer', 'employee_type' -%}
 {%- assign volunteerFFighters = volunteers | pluckByArrayIncludes: 'Firefighter', 'roles' -%}
@@ -122,7 +132,7 @@ See [County Assessor](https://www.sanjuancountywa.gov/164/Detail---Tax-Distribut
   {%- endunless -%}
 {%- endfor -%}
 
-* **Full-Time Firefighters:** {{ ftLineStaff.size }}
+* **Full-Time Firefighters:** {{ fullTimeCount }}
 
 * **Part-Time Firefighters:** {{ ptLineStaff.size }}
 
