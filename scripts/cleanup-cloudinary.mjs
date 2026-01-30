@@ -1,8 +1,11 @@
 #!/usr/bin/env node
 /**
- * Clean up old Cloudinary fetched assets
+ * Clean up old Cloudinary assets
  *
- * Removes derived/fetched resources that haven't been accessed in 30 days.
+ * Removes resources that haven't been accessed in 30 days:
+ * - Fetch resources: CDN-cached images from the site
+ * - Upload resources: Temporary uploads from image optimization
+ *
  * Uses the Cloudinary Admin API to list and delete stale resources.
  *
  * Usage:
@@ -89,9 +92,11 @@ async function cloudinaryRequest(config, endpoint, method = "GET", body = null) 
   return response.json();
 }
 
-async function listFetchedResources(config, nextCursor = null) {
-  // List resources of type "fetch" which are the cached CDN resources
-  let endpoint = "/resources/image/fetch?max_results=500";
+// Resource types to clean up
+const RESOURCE_TYPES = ["fetch", "upload"];
+
+async function listResources(config, type, nextCursor = null) {
+  let endpoint = `/resources/image/${type}?max_results=500`;
   if (nextCursor) {
     endpoint += `&next_cursor=${encodeURIComponent(nextCursor)}`;
   }
@@ -99,11 +104,10 @@ async function listFetchedResources(config, nextCursor = null) {
   return cloudinaryRequest(config, endpoint);
 }
 
-async function deleteResource(config, publicId) {
-  // Delete a specific resource by public_id
-  return cloudinaryRequest(config, "/resources/image/upload", "DELETE", {
+async function deleteResource(config, publicId, type) {
+  // Delete a specific resource by public_id and type
+  return cloudinaryRequest(config, `/resources/image/${type}`, "DELETE", {
     public_ids: [publicId],
-    type: "fetch",
   });
 }
 
@@ -143,49 +147,57 @@ async function main() {
   console.log(`Cloudinary Cleanup - ${CLOUD_NAME}`);
   console.log(`Mode: ${dryRun ? "DRY RUN" : "LIVE"}`);
   console.log(`Max age: ${maxAgeDays} days`);
+  console.log(`Resource types: ${RESOURCE_TYPES.join(", ")}`);
   console.log("=".repeat(50));
 
   let totalResources = 0;
   let staleResources = 0;
   let totalBytes = 0;
   let deletedCount = 0;
-  let nextCursor = null;
   const staleList = [];
 
-  // Iterate through all fetched resources
-  do {
-    console.log(`\nFetching resources${nextCursor ? " (next page)" : ""}...`);
+  // Iterate through all resource types
+  for (const resourceType of RESOURCE_TYPES) {
+    let nextCursor = null;
+    let typeCount = 0;
 
-    const result = await listFetchedResources(config, nextCursor);
-    const resources = result.resources || [];
-    nextCursor = result.next_cursor;
+    console.log(`\n[${resourceType.toUpperCase()}] Scanning...`);
 
-    totalResources += resources.length;
-    console.log(`Found ${resources.length} resources in this batch`);
+    do {
+      const result = await listResources(config, resourceType, nextCursor);
+      const resources = result.resources || [];
+      nextCursor = result.next_cursor;
 
-    // Rate limit between pagination requests
-    if (nextCursor) {
-      await setTimeout(RATE_LIMIT_DELAY_MS);
-    }
+      typeCount += resources.length;
+      totalResources += resources.length;
 
-    for (const resource of resources) {
-      // Use created_at as proxy for last access if last_access not available
-      // Cloudinary's fetch resources are recreated on access, so created_at
-      // effectively represents last access for fetch-type resources
-      const lastAccess = resource.last_access || resource.created_at;
-
-      if (isOlderThan(lastAccess, maxAgeDays)) {
-        staleResources++;
-        totalBytes += resource.bytes || 0;
-        staleList.push({
-          publicId: resource.public_id,
-          lastAccess: formatDate(lastAccess),
-          bytes: resource.bytes || 0,
-          derivedIds: (resource.derived || []).map((d) => d.id),
-        });
+      // Rate limit between pagination requests
+      if (nextCursor) {
+        await setTimeout(RATE_LIMIT_DELAY_MS);
       }
-    }
-  } while (nextCursor);
+
+      for (const resource of resources) {
+        // Use created_at as proxy for last access if last_access not available
+        // Cloudinary's fetch resources are recreated on access, so created_at
+        // effectively represents last access for fetch-type resources
+        const lastAccess = resource.last_access || resource.created_at;
+
+        if (isOlderThan(lastAccess, maxAgeDays)) {
+          staleResources++;
+          totalBytes += resource.bytes || 0;
+          staleList.push({
+            publicId: resource.public_id,
+            type: resourceType,
+            lastAccess: formatDate(lastAccess),
+            bytes: resource.bytes || 0,
+            derivedIds: (resource.derived || []).map((d) => d.id),
+          });
+        }
+      }
+    } while (nextCursor);
+
+    console.log(`  Found ${typeCount} resources`);
+  }
 
   console.log("\n" + "=".repeat(50));
   console.log(`Total resources scanned: ${totalResources}`);
@@ -223,7 +235,7 @@ async function main() {
       }
 
       // Then delete the main resource
-      await deleteResource(config, item.publicId);
+      await deleteResource(config, item.publicId, item.type);
       deletedCount++;
 
       // Rate limit to stay within free plan API limits
