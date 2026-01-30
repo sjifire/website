@@ -322,10 +322,17 @@ async function main() {
       continue;
     }
 
-    console.log(`  Processing ${user.givenName} ${user.surname} (${user.employeeType})...`);
-
     // Get extension attributes
     const extAttrs = user.onPremisesExtensionAttributes || {};
+
+    // Skip users without positions (extensionAttribute3)
+    const rawPositions = extAttrs.extensionAttribute3 || "";
+    if (!rawPositions.trim()) {
+      console.log(`  Skipping ${user.givenName} ${user.surname} (no positions)`);
+      continue;
+    }
+
+    console.log(`  Processing ${user.givenName} ${user.surname} (${user.employeeType})...`);
 
     // Get rank from extensionAttribute1
     const rank = extAttrs.extensionAttribute1 || null;
