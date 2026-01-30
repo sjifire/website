@@ -1,0 +1,738 @@
+{
+  "generated": "2026-01-30T16:08:26.643Z",
+  "count": 58,
+  "counts": {
+    "fullTimeFirefighters": 9,
+    "partTimeFirefighters": 4,
+    "administrativeStaff": 2,
+    "volunteerFirefighters": 31,
+    "volunteerSupport": 8
+  },
+  "personnel": [
+    {
+      "first_name": "Noel",
+      "last_name": "Monin",
+      "rank": "Chief",
+      "title": null,
+      "employee_type": "staff",
+      "staff_type": "Administrative",
+      "roles": [
+        "Apparatus Operator",
+        "Firefighter"
+      ],
+      "photo": "/assets/media/personnel_imgs/noel_monin.jpg"
+    },
+    {
+      "first_name": "Michael",
+      "last_name": "Hartzell",
+      "rank": "Battalion Chief",
+      "title": null,
+      "employee_type": "staff",
+      "staff_type": "Day Staff",
+      "roles": [
+        "Apparatus Operator",
+        "Firefighter",
+        "Marine Crew"
+      ],
+      "photo": "/assets/media/personnel_imgs/michael_hartzell.jpg"
+    },
+    {
+      "first_name": "Karl",
+      "last_name": "Kuetzing",
+      "rank": "Captain",
+      "title": "Training Officer",
+      "employee_type": "staff",
+      "staff_type": "Day Staff",
+      "roles": [
+        "Apparatus Operator"
+      ],
+      "photo": "/assets/media/personnel_imgs/karl_kuetzing.jpg"
+    },
+    {
+      "first_name": "Kyle",
+      "last_name": "Dodd",
+      "rank": "Captain",
+      "title": "Station Captain",
+      "employee_type": "staff",
+      "staff_type": "FT Line Staff",
+      "roles": [
+        "Apparatus Operator",
+        "Firefighter",
+        "Marine Crew"
+      ],
+      "photo": "/assets/media/personnel_imgs/kyle_dodd.jpg"
+    },
+    {
+      "first_name": "Tad",
+      "last_name": "Lean",
+      "rank": "Captain",
+      "title": "Fleet Maintenance Officer",
+      "employee_type": "staff",
+      "staff_type": "Day Staff",
+      "roles": [
+        "Apparatus Operator",
+        "Firefighter"
+      ],
+      "photo": "/assets/media/personnel_imgs/tad_lean.jpg"
+    },
+    {
+      "first_name": "Izaac",
+      "last_name": "Newell",
+      "rank": "Lieutenant",
+      "title": null,
+      "employee_type": "staff",
+      "staff_type": "FT Line Staff",
+      "roles": [
+        "Apparatus Operator",
+        "Firefighter"
+      ],
+      "photo": null
+    },
+    {
+      "first_name": "Kati",
+      "last_name": "English",
+      "rank": "Lieutenant",
+      "title": "Fire Prevention Coordinator",
+      "employee_type": "staff",
+      "staff_type": "PT Line Staff",
+      "roles": [
+        "Apparatus Operator",
+        "Firefighter"
+      ],
+      "photo": "/assets/media/personnel_imgs/kati_english.jpg"
+    },
+    {
+      "first_name": "Monico",
+      "last_name": "Mackinnon",
+      "rank": "Lieutenant",
+      "title": null,
+      "employee_type": "staff",
+      "staff_type": "FT Line Staff",
+      "roles": [
+        "Firefighter"
+      ],
+      "photo": null
+    },
+    {
+      "first_name": "Stephen",
+      "last_name": "Chadwick",
+      "rank": "Lieutenant",
+      "title": null,
+      "employee_type": "staff",
+      "staff_type": "FT Line Staff",
+      "roles": [
+        "Apparatus Operator",
+        "Firefighter"
+      ],
+      "photo": null
+    },
+    {
+      "first_name": "Amy",
+      "last_name": "Taylor",
+      "rank": null,
+      "title": "Administrative Assistant",
+      "employee_type": "staff",
+      "staff_type": "Day Staff",
+      "roles": [],
+      "photo": null
+    },
+    {
+      "first_name": "Brad",
+      "last_name": "Smith",
+      "rank": null,
+      "title": null,
+      "employee_type": "staff",
+      "staff_type": "PT Line Staff",
+      "roles": [
+        "Apparatus Operator",
+        "Firefighter"
+      ],
+      "photo": "/assets/media/personnel_imgs/brad_smith.jpg"
+    },
+    {
+      "first_name": "Cooper",
+      "last_name": "Arno",
+      "rank": null,
+      "title": null,
+      "employee_type": "staff",
+      "staff_type": "PT Line Staff",
+      "roles": [
+        "Firefighter"
+      ],
+      "photo": null
+    },
+    {
+      "first_name": "Craig",
+      "last_name": "McConnell",
+      "rank": null,
+      "title": null,
+      "employee_type": "staff",
+      "staff_type": "FT Line Staff",
+      "roles": [
+        "Apparatus Operator",
+        "Firefighter"
+      ],
+      "photo": "/assets/media/personnel_imgs/craig_mcconnell.jpg"
+    },
+    {
+      "first_name": "Dylan",
+      "last_name": "Roberson",
+      "rank": null,
+      "title": null,
+      "employee_type": "staff",
+      "staff_type": "PT Line Staff",
+      "roles": [
+        "Apparatus Operator",
+        "Firefighter"
+      ],
+      "photo": null
+    },
+    {
+      "first_name": "Robin",
+      "last_name": "Garcia",
+      "rank": null,
+      "title": "Executive Assistant, Finance",
+      "employee_type": "staff",
+      "staff_type": "Administrative",
+      "roles": [],
+      "photo": "/assets/media/personnel_imgs/robin_garcia.jpg"
+    },
+    {
+      "first_name": "Jordan",
+      "last_name": "Pollack",
+      "rank": "Division Chief",
+      "title": null,
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [],
+      "photo": null
+    },
+    {
+      "first_name": "Erin",
+      "last_name": "Graham",
+      "rank": "Captain",
+      "title": null,
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [
+        "Apparatus Operator",
+        "Firefighter",
+        "Marine Crew"
+      ],
+      "photo": "/assets/media/personnel_imgs/erin_graham.jpg"
+    },
+    {
+      "first_name": "Harry",
+      "last_name": "See",
+      "rank": "Lieutenant",
+      "title": null,
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [
+        "Apparatus Operator"
+      ],
+      "photo": "/assets/media/personnel_imgs/harry_see.jpg"
+    },
+    {
+      "first_name": "John",
+      "last_name": "Salinas",
+      "rank": "Lieutenant",
+      "title": "Marine Coordinator",
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [
+        "Apparatus Operator",
+        "Firefighter",
+        "Marine Crew"
+      ],
+      "photo": "/assets/media/personnel_imgs/john_salinas.jpg"
+    },
+    {
+      "first_name": "Adam",
+      "last_name": "Greene",
+      "rank": null,
+      "title": null,
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [
+        "Apparatus Operator",
+        "Firefighter"
+      ],
+      "photo": "/assets/media/personnel_imgs/adam_greene.jpg"
+    },
+    {
+      "first_name": "Alexa",
+      "last_name": "Rust",
+      "rank": null,
+      "title": null,
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [
+        "Apparatus Operator",
+        "Firefighter",
+        "Marine Crew"
+      ],
+      "photo": "/assets/media/personnel_imgs/alexa_rust.jpg"
+    },
+    {
+      "first_name": "Asta",
+      "last_name": "Roseway",
+      "rank": null,
+      "title": null,
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [
+        "Support"
+      ],
+      "photo": null
+    },
+    {
+      "first_name": "Ben",
+      "last_name": "Duncan",
+      "rank": null,
+      "title": null,
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [
+        "Apparatus Operator",
+        "Firefighter"
+      ],
+      "photo": null
+    },
+    {
+      "first_name": "Bonnie",
+      "last_name": "Stanger",
+      "rank": null,
+      "title": null,
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [
+        "Support"
+      ],
+      "photo": "/assets/media/personnel_imgs/bonnie_stanger.jpg"
+    },
+    {
+      "first_name": "Brian",
+      "last_name": "Krembs",
+      "rank": null,
+      "title": null,
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [
+        "Apparatus Operator",
+        "Firefighter"
+      ],
+      "photo": null
+    },
+    {
+      "first_name": "Chad",
+      "last_name": "Warmenhoven",
+      "rank": null,
+      "title": null,
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [
+        "Firefighter"
+      ],
+      "photo": "/assets/media/personnel_imgs/chad_warmenhoven.jpg"
+    },
+    {
+      "first_name": "Charles",
+      "last_name": "Genther",
+      "rank": null,
+      "title": null,
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [
+        "Apparatus Operator",
+        "Support"
+      ],
+      "photo": "/assets/media/personnel_imgs/charles_genther.jpg"
+    },
+    {
+      "first_name": "Claire",
+      "last_name": "Crawbuck",
+      "rank": null,
+      "title": null,
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [
+        "Wildland Firefighter"
+      ],
+      "photo": null
+    },
+    {
+      "first_name": "David",
+      "last_name": "Howitt",
+      "rank": null,
+      "title": null,
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [
+        "Apparatus Operator",
+        "Firefighter",
+        "Marine Crew"
+      ],
+      "photo": "/assets/media/personnel_imgs/david_howitt.jpg"
+    },
+    {
+      "first_name": "Dominic",
+      "last_name": "Tarantelli",
+      "rank": null,
+      "title": null,
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [
+        "Apparatus Operator",
+        "Wildland Firefighter"
+      ],
+      "photo": null
+    },
+    {
+      "first_name": "Drew",
+      "last_name": "Loura",
+      "rank": null,
+      "title": null,
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [
+        "Firefighter"
+      ],
+      "photo": null
+    },
+    {
+      "first_name": "Emilio",
+      "last_name": "Santiago",
+      "rank": null,
+      "title": null,
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [
+        "Wildland Firefighter"
+      ],
+      "photo": null
+    },
+    {
+      "first_name": "Eric",
+      "last_name": "Rezabek",
+      "rank": null,
+      "title": null,
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [
+        "Apparatus Operator",
+        "Firefighter",
+        "Marine Crew"
+      ],
+      "photo": "/assets/media/personnel_imgs/eric_rezabek.jpg"
+    },
+    {
+      "first_name": "Eric",
+      "last_name": "Eisenhardt",
+      "rank": null,
+      "title": null,
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [
+        "Firefighter",
+        "Marine Crew"
+      ],
+      "photo": "/assets/media/personnel_imgs/eric_eisenhardt.jpg"
+    },
+    {
+      "first_name": "Gilbert",
+      "last_name": "Venegas",
+      "rank": null,
+      "title": null,
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [
+        "Apparatus Operator",
+        "Firefighter"
+      ],
+      "photo": "/assets/media/personnel_imgs/gilbert_venegas.jpg"
+    },
+    {
+      "first_name": "Hella",
+      "last_name": "Cascorbi",
+      "rank": null,
+      "title": null,
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [
+        "Support"
+      ],
+      "photo": "/assets/media/personnel_imgs/hella_cascorbi.jpg"
+    },
+    {
+      "first_name": "Irene",
+      "last_name": "Voskamp",
+      "rank": null,
+      "title": null,
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [
+        "Firefighter"
+      ],
+      "photo": null
+    },
+    {
+      "first_name": "Jacob",
+      "last_name": "Wagner",
+      "rank": null,
+      "title": null,
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [
+        "Wildland Firefighter"
+      ],
+      "photo": null
+    },
+    {
+      "first_name": "Jaden",
+      "last_name": "Jones",
+      "rank": null,
+      "title": null,
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [
+        "Apparatus Operator",
+        "Firefighter"
+      ],
+      "photo": null
+    },
+    {
+      "first_name": "Jenny",
+      "last_name": "Shrum",
+      "rank": null,
+      "title": null,
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [
+        "Support"
+      ],
+      "photo": null
+    },
+    {
+      "first_name": "John",
+      "last_name": "McDowell",
+      "rank": null,
+      "title": "SCBA Specialist",
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [
+        "Support"
+      ],
+      "photo": null
+    },
+    {
+      "first_name": "Joran",
+      "last_name": "Bouwman",
+      "rank": null,
+      "title": null,
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [
+        "Firefighter"
+      ],
+      "photo": "/assets/media/personnel_imgs/joran_bouwman.jpg"
+    },
+    {
+      "first_name": "Karen",
+      "last_name": "Gentry",
+      "rank": null,
+      "title": null,
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [
+        "Support"
+      ],
+      "photo": "/assets/media/personnel_imgs/karen_gentry.jpg"
+    },
+    {
+      "first_name": "Kathleen",
+      "last_name": "Salinas",
+      "rank": null,
+      "title": "Firewise Coordinator",
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [
+        "Apparatus Operator",
+        "Marine Crew"
+      ],
+      "photo": "/assets/media/personnel_imgs/kathleen_salinas.jpg"
+    },
+    {
+      "first_name": "Katie",
+      "last_name": "Hilding",
+      "rank": null,
+      "title": null,
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [
+        "Firefighter"
+      ],
+      "photo": null
+    },
+    {
+      "first_name": "Lucas",
+      "last_name": "Ramey",
+      "rank": null,
+      "title": null,
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [
+        "Firefighter"
+      ],
+      "photo": null
+    },
+    {
+      "first_name": "Mason",
+      "last_name": "Clark",
+      "rank": null,
+      "title": null,
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [
+        "Firefighter"
+      ],
+      "photo": null
+    },
+    {
+      "first_name": "Mason",
+      "last_name": "Smith",
+      "rank": null,
+      "title": null,
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [
+        "Firefighter"
+      ],
+      "photo": null
+    },
+    {
+      "first_name": "Matthew",
+      "last_name": "Wickey",
+      "rank": null,
+      "title": null,
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [
+        "Apparatus Operator",
+        "Firefighter",
+        "Marine Crew"
+      ],
+      "photo": "/assets/media/personnel_imgs/matthew_wickey.jpg"
+    },
+    {
+      "first_name": "Maxwell",
+      "last_name": "Field",
+      "rank": null,
+      "title": null,
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [
+        "Firefighter"
+      ],
+      "photo": null
+    },
+    {
+      "first_name": "Michelangelo",
+      "last_name": "von Dassow",
+      "rank": null,
+      "title": null,
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [
+        "Firefighter"
+      ],
+      "photo": null
+    },
+    {
+      "first_name": "Mike",
+      "last_name": "Coryell",
+      "rank": null,
+      "title": null,
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [
+        "Firefighter"
+      ],
+      "photo": null
+    },
+    {
+      "first_name": "Ricardo",
+      "last_name": "Venegas",
+      "rank": null,
+      "title": null,
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [
+        "Apparatus Operator",
+        "Firefighter"
+      ],
+      "photo": null
+    },
+    {
+      "first_name": "Rob",
+      "last_name": "Stewart",
+      "rank": null,
+      "title": null,
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [
+        "Firefighter"
+      ],
+      "photo": null
+    },
+    {
+      "first_name": "Robin",
+      "last_name": "Dyer",
+      "rank": null,
+      "title": null,
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [
+        "Apparatus Operator",
+        "Firefighter"
+      ],
+      "photo": null
+    },
+    {
+      "first_name": "Ron",
+      "last_name": "Stanger",
+      "rank": null,
+      "title": null,
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [
+        "Apparatus Operator"
+      ],
+      "photo": "/assets/media/personnel_imgs/ron_stanger.jpg"
+    },
+    {
+      "first_name": "Shane",
+      "last_name": "Merritt",
+      "rank": null,
+      "title": null,
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [
+        "Firefighter"
+      ],
+      "photo": null
+    },
+    {
+      "first_name": "Sue Ann",
+      "last_name": "Stabley",
+      "rank": null,
+      "title": "Support Coordinator",
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [
+        "Support"
+      ],
+      "photo": "/assets/media/personnel_imgs/sue_ann_stabley.jpg"
+    }
+  ]
+}

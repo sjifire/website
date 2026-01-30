@@ -348,7 +348,7 @@ export default defineConfig({
         path: "src/pages",
         format: "mdx",
         match: {
-          exclude: "{about/our-team-data,homepage}",
+          exclude: "homepage",
         },
         fields: [
           {
@@ -574,33 +574,51 @@ export default defineConfig({
       },
       {
         name: "configOurTeam",
-        label: "Our Team",
-        path: "src/pages/about",
-        format: "mdx",
+        label: "Our Team Page",
+        path: "src/_data",
+        format: "json",
         match: {
-          include: "our-team-data",
+          include: "ourTeamPage",
         },
         ui: {
           allowedActions: {
             create: false,
             delete: false,
           },
-          description: "Personnel list is automatically synced from Microsoft 365. To update staff or volunteer information, make changes in M365 and the website will update daily.",
         },
         fields: [
           {
             type: "string",
             name: "title",
-            label: "Title",
-            isTitle: true,
+            label: "Page Title",
             required: true,
           },
           {
-            type: "rich-text",
-            name: "body",
-            label: "Body",
-            description: "Introduction text shown above the team directory. Personnel list is managed automatically.",
-            isBody: true,
+            type: "number",
+            name: "nav_order",
+            label: "Navigation Order",
+            description: "Order in navigation menu (lower numbers appear first)",
+          },
+          {
+            type: "string",
+            name: "nav_title",
+            label: "Navigation Title",
+            description: "Override title shown in navigation (optional)",
+          },
+          {
+            type: "boolean",
+            name: "nav_hidden",
+            label: "Hide from Navigation",
+            description: "Page will still be accessible but won't appear in menu",
+          },
+          {
+            type: "string",
+            name: "intro",
+            label: "Introduction",
+            description: "Introduction text shown above the team directory.",
+            ui: {
+              component: "textarea",
+            },
           },
         ],
       },

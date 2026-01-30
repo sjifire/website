@@ -14,7 +14,7 @@ module.exports = {
 	},
 	eleventyComputed: {
 		layout: function (data) {
-			// No layout for content-include files or explicit layout: false
+			// No layout for files with permalink: false or explicit layout: false
 			if (data.permalink === false || data.layout === false) {
 				return false;
 			}

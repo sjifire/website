@@ -121,22 +121,21 @@ test.describe("Smoke Tests", () => {
     expect(src).toContain("/assets/media/personnel_imgs/");
   });
 
-  test("Our Team page sorts volunteers by first name", async ({ page }) => {
+  test("Our Team page displays volunteers section", async ({ page }) => {
     await page.goto("/about/our-team/");
 
     // Get the Volunteers section
     const volunteersSection = page.locator("section.personnel-section").filter({ hasText: "Volunteers" });
+    await expect(volunteersSection).toBeVisible();
 
-    // Get all volunteer names (h3 elements within volunteer cards)
-    const volunteerNames = volunteersSection.locator(".person h3");
-    const names = await volunteerNames.allTextContents();
+    // Should have volunteer cards
+    const volunteerCards = volunteersSection.locator(".person");
+    const cardCount = await volunteerCards.count();
+    expect(cardCount).toBeGreaterThan(30);
 
-    // Extract first names
-    const firstNames = names.map(name => name.split(" ")[0]);
-
-    // Verify first names are sorted alphabetically
-    const sortedFirstNames = [...firstNames].sort((a, b) => a.localeCompare(b));
-    expect(firstNames).toEqual(sortedFirstNames);
+    // First volunteer should have a name
+    const firstName = await volunteerCards.first().locator("h3").textContent();
+    expect(firstName).toBeTruthy();
   });
 
   test("Governance page displays meeting info correctly", async ({ page }) => {

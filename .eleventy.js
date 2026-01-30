@@ -49,10 +49,6 @@ module.exports = function(eleventyConfig) {
     key: "md",  // Treat MDX as markdown
   });
 
-  // Collection for content includes (MDX files that feed into Liquid templates)
-  eleventyConfig.addCollection("contentIncludes", function(collectionApi) {
-    return collectionApi.getFilteredByTag("content-include");
-  });
 
   // ===============================
   // Date filters (from date-utils.js)

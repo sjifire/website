@@ -1,6 +1,7 @@
 ---
 title: "Key Information"
 nav_order: 6
+layout: page
 sidebar_blocks:
   - _template: richText
     heading: "Contact"
@@ -95,17 +96,33 @@ See [Fire Insurance](/services/fire-insurance/) for station locations, equipment
 
 See [County Assessor](https://www.sanjuancountywa.gov/164/Detail---Tax-Distribution-by-Taxing-Dist) and [Governance page](/about/governance/) for budgets and financial details.
 
-## Staff & Volunteer Responders (Dec 2025)
+## Staff & Volunteer Responders
 
-* **Full-Time Firefighters:** 6
+{% if personnel.counts %}
+* **Full-Time Firefighters:** {{ personnel.counts.fullTimeFirefighters }}
 
-* **Part-Time Firefighters:** 6
+* **Part-Time Firefighters:** {{ personnel.counts.partTimeFirefighters }}
 
-* **Volunteer Firefighters:** 42
+* **Administrative Staff:** {{ personnel.counts.administrativeStaff }}
 
-* **Volunteer Support Personnel:** 4
+* **Volunteer Firefighters:** {{ personnel.counts.volunteerFirefighters }}
 
-* **Total Active Members:** 58
+* **Volunteer Support Personnel:** {{ personnel.counts.volunteerSupport }}
+
+* **Total Active Members:** {{ personnel.count }}
+{% else %}
+* **Full-Time Firefighters:** --
+
+* **Part-Time Firefighters:** --
+
+* **Administrative Staff:** --
+
+* **Volunteer Firefighters:** --
+
+* **Volunteer Support Personnel:** --
+
+* **Total Active Members:** --
+{% endif %}
 
 Interested in joining? See our [Join Us](/join/) page.
 
