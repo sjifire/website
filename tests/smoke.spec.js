@@ -121,32 +121,38 @@ test.describe("Smoke Tests", () => {
     expect(src).toContain("/assets/media/personnel_imgs/");
   });
 
-  test("Our Team page sorts volunteers by last name", async ({ page }) => {
+  test("Our Team page sorts volunteers by rank then first name", async ({ page }) => {
     await page.goto("/about/our-team/");
 
     // Get the Volunteers section
     const volunteersSection = page.locator("section.personnel-section").filter({ hasText: "Volunteers" });
 
-    // Get all volunteer names (h3 elements within volunteer cards)
-    const volunteerNames = volunteersSection.locator(".person h3");
-    const names = await volunteerNames.allTextContents();
+    // Get all volunteer cards
+    const volunteerCards = volunteersSection.locator(".person");
+    const cardCount = await volunteerCards.count();
 
-    // Extract last names for sorting check
-    // Note: This extraction assumes single-word last names. Multi-word last names
-    // like "von Dassow" will sort by full last name in the actual data, which may
-    // not match the extracted single word. We filter these edge cases.
-    const lastNames = names.map(name => {
-      const parts = name.split(" ");
-      return parts[parts.length - 1];
-    }).filter(name => {
-      // Filter out multi-word last name edge cases where extracted name != sort key
-      // e.g., "von Dassow" sorts as "von Dassow" but we extract "Dassow"
-      return !["Dassow"].includes(name);
-    });
+    // Extract first names and whether they have a rank (h4 element)
+    const volunteers = [];
+    for (let i = 0; i < cardCount; i++) {
+      const card = volunteerCards.nth(i);
+      const name = await card.locator("h3").textContent();
+      const firstName = name.split(" ")[0];
+      const hasRank = await card.locator("h4").count() > 0;
+      volunteers.push({ firstName, hasRank });
+    }
 
-    // Verify last names are sorted alphabetically
-    const sortedLastNames = [...lastNames].sort((a, b) => a.localeCompare(b));
-    expect(lastNames).toEqual(sortedLastNames);
+    // Verify ranked volunteers come first, then unranked
+    const rankedIndices = volunteers.map((v, i) => v.hasRank ? i : -1).filter(i => i >= 0);
+    const unrankedIndices = volunteers.map((v, i) => !v.hasRank ? i : -1).filter(i => i >= 0);
+    if (rankedIndices.length > 0 && unrankedIndices.length > 0) {
+      expect(Math.max(...rankedIndices)).toBeLessThan(Math.min(...unrankedIndices));
+    }
+
+    // Within the unranked group, first names should be sorted alphabetically
+    // (Ranked volunteers are sorted by rank hierarchy, then first name within each rank)
+    const unranked = volunteers.filter(v => !v.hasRank).map(v => v.firstName);
+    const sortedUnranked = [...unranked].sort((a, b) => a.localeCompare(b));
+    expect(unranked).toEqual(sortedUnranked);
   });
 
   test("Governance page displays meeting info correctly", async ({ page }) => {
