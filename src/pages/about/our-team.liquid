@@ -1,6 +1,4 @@
 ---
-title: "Our Team"
-nav_order: 2
 layout: page
 ---
 {%- assign cloudinaryDefaults = "f_auto,q_auto:good,g_faces,c_fill,w_315,h_328" -%}
@@ -9,7 +7,9 @@ layout: page
 {% comment %}Personnel data from JSON file in _data folder{% endcomment %}
 {%- assign personnelData = personnel.personnel -%}
 
-<div class="lead">Our department is made up of dedicated career staff and volunteers who live and work in our island community.</div>
+{% if ourTeamPage.intro %}
+<div class="lead">{{ ourTeamPage.intro }}</div>
+{% endif %}
 
 {% if personnelData %}
 {%- assign staffOnly = personnelData | pluckByValue: 'staff', 'employee_type' -%}

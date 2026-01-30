@@ -573,6 +573,44 @@ export default defineConfig({
         ],
       },
       {
+        name: "configOurTeam",
+        label: "Our Team Page",
+        path: "src/_data",
+        format: "json",
+        match: {
+          include: "ourTeamPage",
+        },
+        ui: {
+          allowedActions: {
+            create: false,
+            delete: false,
+          },
+        },
+        fields: [
+          {
+            type: "string",
+            name: "title",
+            label: "Page Title",
+            required: true,
+          },
+          {
+            type: "number",
+            name: "nav_order",
+            label: "Navigation Order",
+            description: "Order in navigation menu (lower numbers appear first)",
+          },
+          {
+            type: "string",
+            name: "intro",
+            label: "Introduction",
+            description: "Introduction text shown above the team directory.",
+            ui: {
+              component: "textarea",
+            },
+          },
+        ],
+      },
+      {
         name: "configSite",
         label: "Site Identity",
         path: "src/_data",
