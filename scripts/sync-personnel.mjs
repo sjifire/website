@@ -205,6 +205,7 @@ function generateMDX(personnel) {
       yaml.push(`    rank: ${person.rank}`);
     }
 
+    yaml.push(`    employee_type: ${person.employee_type}`);
     yaml.push(`    staff_type: ${person.staff_type}`);
 
     if (person.roles.length > 0) {
@@ -349,7 +350,8 @@ async function main() {
       last_name: user.surname,
       rank,
       title,
-      staff_type: staffType,
+      employee_type: staffType,        // staff | volunteer
+      staff_type: user.employeeType,   // FT Line Staff, PT Line Staff, Day Staff, Administrative, Volunteer
       roles,
       photo: null,
     };
@@ -493,8 +495,8 @@ async function main() {
   // Sort: staff first (by rank, then name), then volunteers (by rank, then name)
   personnel.sort((a, b) => {
     // Staff before volunteers
-    if (a.staff_type !== b.staff_type) {
-      return a.staff_type === "staff" ? -1 : 1;
+    if (a.employee_type !== b.employee_type) {
+      return a.employee_type === "staff" ? -1 : 1;
     }
 
     // Sort by rank (Chiefs first)
@@ -515,8 +517,8 @@ async function main() {
 
   console.log("\nSummary:");
   console.log(`  Total personnel: ${personnel.length}`);
-  console.log(`  Staff: ${personnel.filter(p => p.staff_type === "staff").length}`);
-  console.log(`  Volunteers: ${personnel.filter(p => p.staff_type === "volunteer").length}`);
+  console.log(`  Staff: ${personnel.filter(p => p.employee_type === "staff").length}`);
+  console.log(`  Volunteers: ${personnel.filter(p => p.employee_type === "volunteer").length}`);
   console.log(`  With photos: ${personnel.filter(p => p.photo).length}`);
 
   // Show role distribution
