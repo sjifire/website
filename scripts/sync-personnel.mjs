@@ -158,8 +158,8 @@ function determineRoles(extAttrs) {
     roles.push("Wildland Firefighter");
   }
 
-  // Support
-  if (roleList.includes("support")) {
+  // Support (only if not a Firefighter - firefighters implicitly support)
+  if (roleList.includes("support") && !roles.includes("Firefighter")) {
     roles.push("Support");
   }
 

@@ -107,18 +107,34 @@ See [County Assessor](https://www.sanjuancountywa.gov/164/Detail---Tax-Distribut
 {% endfor %}
 
 {% if personnelData %}
-{%- comment %}Full-time = FT Line Staff + Day Staff + Admin with Firefighter/AO roles{% endcomment -%}
-{%- assign ftLineStaff = personnelData | pluckByValue: 'FT Line Staff', 'staff_type' -%}
-{%- assign dayStaff = personnelData | pluckByValue: 'Day Staff', 'staff_type' -%}
-{%- assign adminStaff = personnelData | pluckByValue: 'Administrative', 'staff_type' -%}
-{%- assign adminFFCount = 0 -%}
-{%- for person in adminStaff -%}
+{%- comment %}Full-time FF = staff with Firefighter or Apparatus Operator roles{% endcomment -%}
+{%- assign staffOnly = personnelData | pluckByValue: 'staff', 'employee_type' -%}
+{%- assign ftLineStaff = staffOnly | pluckByValue: 'FT Line Staff', 'staff_type' -%}
+{%- assign dayStaff = staffOnly | pluckByValue: 'Day Staff', 'staff_type' -%}
+{%- assign adminStaff = staffOnly | pluckByValue: 'Administrative', 'staff_type' -%}
+{%- assign fullTimeCount = 0 -%}
+{%- for person in ftLineStaff -%}
   {%- if person.roles contains 'Firefighter' or person.roles contains 'Apparatus Operator' -%}
-    {%- assign adminFFCount = adminFFCount | plus: 1 -%}
+    {%- assign fullTimeCount = fullTimeCount | plus: 1 -%}
   {%- endif -%}
 {%- endfor -%}
-{%- assign fullTimeCount = ftLineStaff.size | plus: dayStaff.size | plus: adminFFCount -%}
+{%- for person in dayStaff -%}
+  {%- if person.roles contains 'Firefighter' or person.roles contains 'Apparatus Operator' -%}
+    {%- assign fullTimeCount = fullTimeCount | plus: 1 -%}
+  {%- endif -%}
+{%- endfor -%}
+{%- for person in adminStaff -%}
+  {%- if person.roles contains 'Firefighter' or person.roles contains 'Apparatus Operator' -%}
+    {%- assign fullTimeCount = fullTimeCount | plus: 1 -%}
+  {%- endif -%}
+{%- endfor -%}
 {%- assign ptLineStaff = personnelData | pluckByValue: 'PT Line Staff', 'staff_type' -%}
+{%- assign partTimeCount = 0 -%}
+{%- for person in ptLineStaff -%}
+  {%- if person.roles contains 'Firefighter' or person.roles contains 'Apparatus Operator' -%}
+    {%- assign partTimeCount = partTimeCount | plus: 1 -%}
+  {%- endif -%}
+{%- endfor -%}
 {%- assign volunteers = personnelData | pluckByValue: 'volunteer', 'employee_type' -%}
 {%- assign volunteerFFighters = volunteers | pluckByArrayIncludes: 'Firefighter', 'roles' -%}
 {%- assign volunteerWildland = volunteers | pluckByArrayIncludes: 'Wildland Firefighter', 'roles' -%}
@@ -134,7 +150,7 @@ See [County Assessor](https://www.sanjuancountywa.gov/164/Detail---Tax-Distribut
 
 * **Full-Time Firefighters:** {{ fullTimeCount }}
 
-* **Part-Time Firefighters:** {{ ptLineStaff.size }}
+* **Part-Time Firefighters:** {{ partTimeCount }}
 
 * **Volunteer Firefighters:** {{ volunteerFirefighters }}
 
