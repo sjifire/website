@@ -21,7 +21,7 @@
  */
 
 import "dotenv/config";
-import { writeFile, readFile, mkdir, access } from "node:fs/promises";
+import { writeFile, readFile, mkdir, access, readdir, unlink } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { MSGraphClient } from "./msgraph-client.mjs";
@@ -463,6 +463,29 @@ async function main() {
 
   // Save updated photo hashes
   await savePhotoHashes(newPhotoHashes);
+
+  // Clean up photos for removed personnel
+  const existingPhotos = await readdir(PHOTOS_DIR);
+  const currentPhotoFiles = new Set(Object.keys(newPhotoHashes));
+  const removedPhotos = [];
+
+  for (const file of existingPhotos) {
+    // Skip non-jpg files and the hashes file
+    if (!file.endsWith(".jpg")) continue;
+
+    if (!currentPhotoFiles.has(file)) {
+      const photoPath = join(PHOTOS_DIR, file);
+      await unlink(photoPath);
+      removedPhotos.push(file);
+    }
+  }
+
+  if (removedPhotos.length > 0) {
+    console.log(`\nRemoved ${removedPhotos.length} photo(s) for deleted personnel:`);
+    for (const file of removedPhotos) {
+      console.log(`  - ${file}`);
+    }
+  }
 
   // Sort: staff first (by rank, then name), then volunteers (by rank, then name)
   personnel.sort((a, b) => {
