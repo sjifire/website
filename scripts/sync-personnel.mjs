@@ -366,7 +366,7 @@ async function main() {
       if (photoData) {
         // Convert Blob to Buffer if needed (newer Graph SDK returns Blob)
         let rawBuffer;
-        if (photoData instanceof Blob) {
+        if (typeof photoData.arrayBuffer === "function") {
           const arrayBuffer = await photoData.arrayBuffer();
           rawBuffer = Buffer.from(arrayBuffer);
         } else {
