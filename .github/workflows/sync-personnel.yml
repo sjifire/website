@@ -48,6 +48,12 @@ jobs:
             echo "MS_GRAPH_CLIENT_SECRET=$(az keyvault secret show --vault-name gh-website-utilities --name MS-GRAPH-CLIENT-SECRET --query value -o tsv)" >> $GITHUB_ENV
             echo "CLOUDINARY_API_KEY=$(az keyvault secret show --vault-name gh-website-utilities --name CLOUDINARY-API-KEY --query value -o tsv)" >> $GITHUB_ENV
             echo "CLOUDINARY_API_SECRET=$(az keyvault secret show --vault-name gh-website-utilities --name CLOUDINARY-API-SECRET --query value -o tsv)" >> $GITHUB_ENV
+            # Fetch deploy key and mask it in logs
+            DEPLOY_KEY=$(az keyvault secret show --vault-name gh-website-utilities --name DEPLOY-KEY --query value -o tsv)
+            echo "::add-mask::$DEPLOY_KEY"
+            echo "DEPLOY_KEY<<EOF" >> $GITHUB_ENV
+            echo "$DEPLOY_KEY" >> $GITHUB_ENV
+            echo "EOF" >> $GITHUB_ENV
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -83,7 +89,7 @@ jobs:
         if: steps.changes.outputs.changed == 'true'
         uses: webfactory/ssh-agent@v0.9.0
         with:
-          ssh-private-key: ${{ secrets.DEPLOY_KEY }}
+          ssh-private-key: ${{ env.DEPLOY_KEY }}
 
       - name: Commit and push changes
         if: steps.changes.outputs.changed == 'true'
