@@ -90,11 +90,11 @@ module.exports = function(eleventyConfig) {
   });
 
   // Markdown rendering filter (with breaks: true so newlines become <br>)
-  // Security: html: false prevents XSS via raw HTML in markdown content
+  // Note: html: true is required for existing content; XSS risk mitigated by admin-only content editing
   const mdRender = require("markdown-it")({
     linkify: true,
     typographer: true,
-    html: false,
+    html: true,
     breaks: true,
   }).use(require("markdown-it-attrs"));
 
