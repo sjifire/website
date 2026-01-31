@@ -36,6 +36,12 @@ export class MSGraphClient {
    * @returns {Object|null} Service principal or null if not found
    */
   async getServicePrincipal(appId, select = ["appRoleAssignmentRequired"]) {
+    // Validate appId is a valid GUID format to prevent OData injection
+    const guidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    if (!appId || !guidRegex.test(appId)) {
+      throw new Error("Invalid appId format: must be a valid GUID");
+    }
+
     try {
       const response = await this.#client
         .api("/servicePrincipals")

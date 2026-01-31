@@ -31,6 +31,9 @@ jobs:
       (github.event_name == 'pull_request' && github.event.action != 'closed')
     runs-on: ubuntu-latest
     name: Build and Deploy Job
+    # Use 'staging' environment for PR previews (can be configured in repo settings to require approval)
+    # Use 'production' environment for main branch deployments
+    environment: ${{ github.event_name == 'pull_request' && 'staging' || 'production' }}
     permissions:
       id-token: write
       contents: read

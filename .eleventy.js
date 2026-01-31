@@ -90,10 +90,11 @@ module.exports = function(eleventyConfig) {
   });
 
   // Markdown rendering filter (with breaks: true so newlines become <br>)
+  // Security: html: false prevents XSS via raw HTML in markdown content
   const mdRender = require("markdown-it")({
     linkify: true,
     typographer: true,
-    html: true,
+    html: false,
     breaks: true,
   }).use(require("markdown-it-attrs"));
 
@@ -102,18 +103,41 @@ module.exports = function(eleventyConfig) {
     return mdRender.render(rawString);
   });
 
+  // HTML escape utility for preventing XSS
+  const escapeHtml = (str) => {
+    if (!str) return "";
+    return str
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  };
+
   // Process TinaCMS styled-image components
+  // Security: Validates size/align values and escapes alt text to prevent XSS
   eleventyConfig.addFilter("processStyledImages", function (content) {
     if (!content) return content;
+    const ALLOWED_SIZES = ["small", "medium", "full"];
+    const ALLOWED_ALIGNS = ["left", "center", "right"];
+
     const regex = /<(?:styled-image|StyledImage)\s+([^>]*)(?:\/>|><\/(?:styled-image|StyledImage)>)/g;
     return content.replace(regex, (match, attrs) => {
       const src = attrs.match(/src=["']([^"']+)["']/)?.[1] || "";
       const alt = attrs.match(/alt=["']([^"']+)["']/)?.[1] || "";
-      const size = attrs.match(/size=["']([^"']+)["']/)?.[1] || "full";
-      const align = attrs.match(/align=["']([^"']+)["']/)?.[1] || "center";
+      let size = attrs.match(/size=["']([^"']+)["']/)?.[1] || "full";
+      let align = attrs.match(/align=["']([^"']+)["']/)?.[1] || "center";
+
+      // Validate size and align against whitelist
+      size = ALLOWED_SIZES.includes(size) ? size : "full";
+      align = ALLOWED_ALIGNS.includes(align) ? align : "center";
+
+      // Escape alt text to prevent XSS
+      const safeAlt = escapeHtml(alt);
+
       const classes = `styled-image styled-image--${size} styled-image--${align}`;
       const optimizedSrc = cloudinary.imgPath(src, "f_auto,q_auto:good");
-      return `<figure class="${classes}"><img src="${optimizedSrc}" alt="${alt}" /><figcaption>${alt}</figcaption></figure>`;
+      return `<figure class="${classes}"><img src="${optimizedSrc}" alt="${safeAlt}" /><figcaption>${safeAlt}</figcaption></figure>`;
     });
   });
 
@@ -158,6 +182,48 @@ module.exports = function(eleventyConfig) {
       return Math.floor(num * factor) / factor;
     }
     return Math.round(num * factor) / factor;
+  });
+
+  // Safe URL filter - blocks javascript: and data: protocols
+  eleventyConfig.addFilter("safeUrl", function(url) {
+    if (!url || typeof url !== "string") return "#";
+    const trimmed = url.trim().toLowerCase();
+    if (trimmed.startsWith("javascript:") || trimmed.startsWith("data:") || trimmed.startsWith("vbscript:")) {
+      return "#";
+    }
+    return url;
+  });
+
+  // Safe embed URL filter - only allows trusted embed domains
+  eleventyConfig.addFilter("safeEmbedUrl", function(url) {
+    if (!url || typeof url !== "string") return "";
+    const ALLOWED_EMBED_DOMAINS = [
+      "youtube.com",
+      "www.youtube.com",
+      "youtube-nocookie.com",
+      "www.youtube-nocookie.com",
+      "youtu.be",
+      "vimeo.com",
+      "player.vimeo.com",
+      "google.com",
+      "www.google.com",
+      "maps.google.com",
+      "calendar.google.com",
+    ];
+    try {
+      const parsed = new URL(url);
+      if (!["https:", "http:"].includes(parsed.protocol)) {
+        return "";
+      }
+      const hostname = parsed.hostname.toLowerCase();
+      if (!ALLOWED_EMBED_DOMAINS.some(domain => hostname === domain || hostname.endsWith("." + domain))) {
+        console.warn(`Blocked embed URL from untrusted domain: ${hostname}`);
+        return "";
+      }
+      return url;
+    } catch {
+      return "";
+    }
   });
 
   // Slugify string (URL-safe lowercase)

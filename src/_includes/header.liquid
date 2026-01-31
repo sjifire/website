@@ -14,13 +14,13 @@
           <a tabindex="0">{{ item.label }}</a>
           <ul class="submenu">
             {% for child in item.children %}
-              <li class="subitem"><a href="{{ child.url }}">{% if child.nav_title %}{{ child.nav_title }}{% else %}{{ child.label }}{% endif %}</a></li>
+              <li class="subitem"><a href="{{ child.url | safeUrl }}">{% if child.nav_title %}{{ child.nav_title }}{% else %}{{ child.label }}{% endif %}</a></li>
             {% endfor %}
           </ul>
         </li>
       {% elsif item.url %}
         <li class="item{% if page.url contains item.url %} active{% endif %}">
-          <a href="{{ item.url }}">{{ item.label }}</a>
+          <a href="{{ item.url | safeUrl }}">{{ item.label }}</a>
         </li>
       {% endif %}
     {% endfor %}
@@ -29,7 +29,7 @@
     </li>
     {% if nav.headerHighlight %}
     <li class="item item--highlight">
-      <a href="{{ nav.headerHighlight.url }}">{{ nav.headerHighlight.nav_title }}</a>
+      <a href="{{ nav.headerHighlight.url | safeUrl }}">{{ nav.headerHighlight.nav_title }}</a>
     </li>
     {% endif %}
 

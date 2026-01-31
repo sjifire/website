@@ -111,14 +111,13 @@ app.http("tina", {
       try {
         return await handleTinaRequest(request, path);
       } catch (error) {
+        // Log full error details server-side for debugging
         console.error("TinaCMS error:", error.message, error.stack);
-        // Include error details for debugging (remove in production once stable)
+        // Return generic error to client - don't expose internal details
         return {
           status: 500,
           jsonBody: {
             error: "Internal server error",
-            message: error.message,
-            stack: error.stack?.split("\n").slice(0, 5),
           }
         };
       }
