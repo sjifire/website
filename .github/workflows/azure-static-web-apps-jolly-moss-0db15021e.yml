@@ -53,9 +53,17 @@ jobs:
         with:
           azcliversion: latest
           inlineScript: |
-            echo "COSMOS_DB_CONNECTION_STRING=$(az keyvault secret show --vault-name gh-website-utilities --name COSMOS-DB-CONNECTION-STRING --query value -o tsv)" >> $GITHUB_ENV
-            echo "COSMOS_DB_NAME=$(az keyvault secret show --vault-name gh-website-utilities --name COSMOS-DB-NAME --query value -o tsv)" >> $GITHUB_ENV
-            echo "AZURE_STATIC_WEB_APPS_API_TOKEN=$(az keyvault secret show --vault-name gh-website-utilities --name AZURE-STATIC-WEB-APPS-API-TOKEN --query value -o tsv)" >> $GITHUB_ENV
+            COSMOS_DB_CONNECTION_STRING=$(az keyvault secret show --vault-name gh-website-utilities --name COSMOS-DB-CONNECTION-STRING --query value -o tsv)
+            echo "::add-mask::$COSMOS_DB_CONNECTION_STRING"
+            echo "COSMOS_DB_CONNECTION_STRING=$COSMOS_DB_CONNECTION_STRING" >> $GITHUB_ENV
+
+            COSMOS_DB_NAME=$(az keyvault secret show --vault-name gh-website-utilities --name COSMOS-DB-NAME --query value -o tsv)
+            echo "::add-mask::$COSMOS_DB_NAME"
+            echo "COSMOS_DB_NAME=$COSMOS_DB_NAME" >> $GITHUB_ENV
+
+            AZURE_STATIC_WEB_APPS_API_TOKEN=$(az keyvault secret show --vault-name gh-website-utilities --name AZURE-STATIC-WEB-APPS-API-TOKEN --query value -o tsv)
+            echo "::add-mask::$AZURE_STATIC_WEB_APPS_API_TOKEN"
+            echo "AZURE_STATIC_WEB_APPS_API_TOKEN=$AZURE_STATIC_WEB_APPS_API_TOKEN" >> $GITHUB_ENV
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -162,7 +170,9 @@ jobs:
         with:
           azcliversion: latest
           inlineScript: |
-            echo "AZURE_STATIC_WEB_APPS_API_TOKEN=$(az keyvault secret show --vault-name gh-website-utilities --name AZURE-STATIC-WEB-APPS-API-TOKEN --query value -o tsv)" >> $GITHUB_ENV
+            AZURE_STATIC_WEB_APPS_API_TOKEN=$(az keyvault secret show --vault-name gh-website-utilities --name AZURE-STATIC-WEB-APPS-API-TOKEN --query value -o tsv)
+            echo "::add-mask::$AZURE_STATIC_WEB_APPS_API_TOKEN"
+            echo "AZURE_STATIC_WEB_APPS_API_TOKEN=$AZURE_STATIC_WEB_APPS_API_TOKEN" >> $GITHUB_ENV
 
       - name: Install OIDC Client from Core Package
         run: npm install @actions/core@1.6.0 @actions/http-client

@@ -48,8 +48,13 @@ jobs:
         with:
           azcliversion: latest
           inlineScript: |
-            echo "CLOUDINARY_API_KEY=$(az keyvault secret show --vault-name gh-website-utilities --name CLOUDINARY-API-KEY --query value -o tsv)" >> $GITHUB_ENV
-            echo "CLOUDINARY_API_SECRET=$(az keyvault secret show --vault-name gh-website-utilities --name CLOUDINARY-API-SECRET --query value -o tsv)" >> $GITHUB_ENV
+            CLOUDINARY_API_KEY=$(az keyvault secret show --vault-name gh-website-utilities --name CLOUDINARY-API-KEY --query value -o tsv)
+            echo "::add-mask::$CLOUDINARY_API_KEY"
+            echo "CLOUDINARY_API_KEY=$CLOUDINARY_API_KEY" >> $GITHUB_ENV
+
+            CLOUDINARY_API_SECRET=$(az keyvault secret show --vault-name gh-website-utilities --name CLOUDINARY-API-SECRET --query value -o tsv)
+            echo "::add-mask::$CLOUDINARY_API_SECRET"
+            echo "CLOUDINARY_API_SECRET=$CLOUDINARY_API_SECRET" >> $GITHUB_ENV
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
