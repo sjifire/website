@@ -41,6 +41,30 @@ jobs:
           submodules: true
           fetch-depth: 1
 
+      - name: Azure login with OIDC
+        uses: azure/login@v2
+        with:
+          client-id: 7d94bc11-9bdf-445b-96c8-fca2560cd441
+          tenant-id: 4122848f-c317-4267-9c07-7c504150d1bd
+          allow-no-subscriptions: true
+
+      - name: Get secrets from Key Vault
+        uses: azure/cli@v2
+        with:
+          azcliversion: latest
+          inlineScript: |
+            COSMOS_DB_CONNECTION_STRING=$(az keyvault secret show --vault-name gh-website-utilities --name COSMOS-DB-CONNECTION-STRING --query value -o tsv)
+            echo "::add-mask::$COSMOS_DB_CONNECTION_STRING"
+            echo "COSMOS_DB_CONNECTION_STRING=$COSMOS_DB_CONNECTION_STRING" >> $GITHUB_ENV
+
+            COSMOS_DB_NAME=$(az keyvault secret show --vault-name gh-website-utilities --name COSMOS-DB-NAME --query value -o tsv)
+            echo "::add-mask::$COSMOS_DB_NAME"
+            echo "COSMOS_DB_NAME=$COSMOS_DB_NAME" >> $GITHUB_ENV
+
+            AZURE_STATIC_WEB_APPS_API_TOKEN=$(az keyvault secret show --vault-name gh-website-utilities --name AZURE-STATIC-WEB-APPS-API-TOKEN --query value -o tsv)
+            echo "::add-mask::$AZURE_STATIC_WEB_APPS_API_TOKEN"
+            echo "AZURE_STATIC_WEB_APPS_API_TOKEN=$AZURE_STATIC_WEB_APPS_API_TOKEN" >> $GITHUB_ENV
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -67,8 +91,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_OWNER: ${{ github.repository_owner }}
           GITHUB_REPO: ${{ github.event.repository.name }}
-          COSMOS_DB_CONNECTION_STRING: ${{ secrets.COSMOS_DB_CONNECTION_STRING }}
-          COSMOS_DB_NAME: ${{ secrets.COSMOS_DB_NAME }}
 
       - name: Build 11ty site
         run: npm run build
@@ -90,7 +112,7 @@ jobs:
         continue-on-error: true
         uses: Azure/static-web-apps-deploy@v1
         with:
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_JOLLY_MOSS_0DB15021E }}
+          azure_static_web_apps_api_token: ${{ env.AZURE_STATIC_WEB_APPS_API_TOKEN }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
           app_location: "_site"
@@ -102,8 +124,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_OWNER: ${{ github.repository_owner }}
           GITHUB_REPO: ${{ github.event.repository.name }}
-          COSMOS_DB_CONNECTION_STRING: ${{ secrets.COSMOS_DB_CONNECTION_STRING }}
-          COSMOS_DB_NAME: ${{ secrets.COSMOS_DB_NAME }}
           TINA_PUBLIC_IS_LOCAL: "false"
 
       - name: Wait before retry
@@ -115,7 +135,7 @@ jobs:
         if: steps.builddeploy.outcome == 'failure'
         uses: Azure/static-web-apps-deploy@v1
         with:
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_JOLLY_MOSS_0DB15021E }}
+          azure_static_web_apps_api_token: ${{ env.AZURE_STATIC_WEB_APPS_API_TOKEN }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
           app_location: "_site"
@@ -127,8 +147,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_OWNER: ${{ github.repository_owner }}
           GITHUB_REPO: ${{ github.event.repository.name }}
-          COSMOS_DB_CONNECTION_STRING: ${{ secrets.COSMOS_DB_CONNECTION_STRING }}
-          COSMOS_DB_NAME: ${{ secrets.COSMOS_DB_NAME }}
           TINA_PUBLIC_IS_LOCAL: "false"
 
   close_pull_request_job:
@@ -140,6 +158,22 @@ jobs:
       contents: read
       pull-requests: write
     steps:
+      - name: Azure login with OIDC
+        uses: azure/login@v2
+        with:
+          client-id: 7d94bc11-9bdf-445b-96c8-fca2560cd441
+          tenant-id: 4122848f-c317-4267-9c07-7c504150d1bd
+          allow-no-subscriptions: true
+
+      - name: Get secrets from Key Vault
+        uses: azure/cli@v2
+        with:
+          azcliversion: latest
+          inlineScript: |
+            AZURE_STATIC_WEB_APPS_API_TOKEN=$(az keyvault secret show --vault-name gh-website-utilities --name AZURE-STATIC-WEB-APPS-API-TOKEN --query value -o tsv)
+            echo "::add-mask::$AZURE_STATIC_WEB_APPS_API_TOKEN"
+            echo "AZURE_STATIC_WEB_APPS_API_TOKEN=$AZURE_STATIC_WEB_APPS_API_TOKEN" >> $GITHUB_ENV
+
       - name: Install OIDC Client from Core Package
         run: npm install @actions/core@1.6.0 @actions/http-client
 
@@ -156,7 +190,7 @@ jobs:
         id: closepullrequest
         uses: Azure/static-web-apps-deploy@v1
         with:
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_JOLLY_MOSS_0DB15021E }}
+          azure_static_web_apps_api_token: ${{ env.AZURE_STATIC_WEB_APPS_API_TOKEN }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "close"
           github_id_token: ${{ steps.idtoken.outputs.result }}

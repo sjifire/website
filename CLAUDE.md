@@ -121,17 +121,32 @@ Personnel data and photos are synced daily from Microsoft 365 via Microsoft Grap
 - `scripts/image-hash.mjs` - Perceptual hashing for photo change detection
 - `.github/workflows/sync-personnel.yml` - Daily scheduled workflow (7 AM UTC)
 
-**Required GitHub Secrets:**
-- `MS_GRAPH_TENANT_ID` - Azure AD tenant ID
-- `MS_GRAPH_CLIENT_ID` - App registration client ID
-- `MS_GRAPH_CLIENT_SECRET` - App registration client secret
-- `CLOUDINARY_API_KEY` - Cloudinary API key (for photo optimization)
-- `CLOUDINARY_API_SECRET` - Cloudinary API secret
+**Secrets (from Key Vault):**
+- `MS-GRAPH-TENANT-ID`, `MS-GRAPH-CLIENT-ID`, `MS-GRAPH-CLIENT-SECRET`
+- `CLOUDINARY-API-KEY`, `CLOUDINARY-API-SECRET`
+- `DEPLOY-KEY` (SSH key for pushing changes)
 
 **Local Testing:**
 ```bash
-export MS_GRAPH_TENANT_ID="your-tenant-id"
-export MS_GRAPH_CLIENT_ID="your-client-id"
-export MS_GRAPH_CLIENT_SECRET="your-client-secret"
+./scripts/pull-secrets.sh    # Populate .env from Key Vault
 npm run sync-personnel
 ```
+
+## Azure Key Vault
+
+All secrets are centralized in Azure Key Vault `gh-website-utilities`. GitHub Actions use OIDC to authenticate and fetch secrets at runtime - no secrets are stored in GitHub.
+
+### Pull secrets locally
+```bash
+./scripts/pull-secrets.sh           # Pull all secrets to .env
+./scripts/pull-secrets.sh --list    # List available secrets
+```
+
+Requires Azure CLI login (`az login`).
+
+### OIDC app registration
+- App: `website-admin` (client ID in workflow files)
+- Federated credentials:
+  - `repo:sjifire/website:environment:production` (scheduled workflows)
+  - `repo:sjifire/website:pull_request` (PR preview builds)
+  - `repo:sjifire/website:ref:refs/heads/main` (manual triggers)

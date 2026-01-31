@@ -70,6 +70,8 @@ Grant admin consent after adding permissions.
 
 ## Environment Variables
 
+### Azure Static Web App
+
 Set these in Azure Static Web App > Settings > Environment variables:
 
 | Variable | Description |
@@ -89,6 +91,18 @@ Set these in Azure Static Web App > Settings > Environment variables:
 | `MS_GRAPH_CLIENT_SECRET` | MS Graph app client secret |
 | `CLOUDINARY_API_KEY` | Cloudinary API key |
 | `CLOUDINARY_API_SECRET` | Cloudinary API secret |
+
+### Azure Key Vault (for GitHub Actions)
+
+GitHub Actions fetch secrets from Azure Key Vault `gh-website-utilities` using OIDC authentication. No secrets are stored in GitHub.
+
+**Pull secrets for local development:**
+```bash
+./scripts/pull-secrets.sh           # Pull all secrets to .env
+./scripts/pull-secrets.sh --list    # List available secrets
+```
+
+Requires Azure CLI login (`az login`).
 
 ## Authentication Configuration
 
