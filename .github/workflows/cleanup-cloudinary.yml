@@ -22,17 +22,34 @@ on:
         type: string
 
 permissions:
+  id-token: write
   contents: read
 
 jobs:
   cleanup:
     runs-on: ubuntu-latest
+    environment: production
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 1
+
+      - name: Azure login with OIDC
+        uses: azure/login@v2
+        with:
+          client-id: 7d94bc11-9bdf-445b-96c8-fca2560cd441
+          tenant-id: 4122848f-c317-4267-9c07-7c504150d1bd
+          allow-no-subscriptions: true
+
+      - name: Get secrets from Key Vault
+        uses: azure/cli@v2
+        with:
+          azcliversion: latest
+          inlineScript: |
+            echo "CLOUDINARY_API_KEY=$(az keyvault secret show --vault-name gh-website-utilities --name CLOUDINARY-API-KEY --query value -o tsv)" >> $GITHUB_ENV
+            echo "CLOUDINARY_API_SECRET=$(az keyvault secret show --vault-name gh-website-utilities --name CLOUDINARY-API-SECRET --query value -o tsv)" >> $GITHUB_ENV
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -44,9 +61,6 @@ jobs:
         run: npm ci
 
       - name: Run Cloudinary cleanup
-        env:
-          CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
-          CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
         run: |
           ARGS=""
           if [ "${{ inputs.dry_run }}" = "true" ]; then
