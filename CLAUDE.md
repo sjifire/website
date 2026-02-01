@@ -112,7 +112,7 @@ Personnel data and photos are synced daily from Microsoft 365 via Microsoft Grap
   - Users without employeeType are excluded
 - `extensionAttribute1` - Rank (Chief, Battalion Chief, Captain, Lieutenant, etc.)
 - `extensionAttribute2` - Apparatus Operator certification expiration date (if future date, adds "Apparatus Operator" role)
-- `extensionAttribute3` - Comma-separated roles, simplified to: Marine (Mate/Pilot), Firefighter, Wildland Firefighter, Support
+- `extensionAttribute3` - Comma-separated roles, simplified to: Marine Crew (Marine: Mate/Pilot/Deckhand), Firefighter, Wildland Firefighter, Support
 - `jobTitle` - Display title
 
 **Files:**
