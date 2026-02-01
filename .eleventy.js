@@ -1,5 +1,6 @@
 const yaml = require("js-yaml");
 const { Liquid } = require("liquidjs");
+const escapeHtml = require("escape-html");
 const createCloudinary = require("./src/_lib/cloudinary");
 const { dateFilters, getNextMeeting, formatMeetingSchedule } = require("./src/_lib/date-utils");
 
@@ -102,17 +103,6 @@ module.exports = function(eleventyConfig) {
     if(!rawString) return;
     return mdRender.render(rawString);
   });
-
-  // HTML escape utility for preventing XSS
-  const escapeHtml = (str) => {
-    if (!str) return "";
-    return str
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#39;");
-  };
 
   // Process TinaCMS styled-image components
   // Security: Validates size/align values and escapes alt text to prevent XSS
