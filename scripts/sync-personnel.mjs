@@ -113,8 +113,8 @@ function determineRoles(extAttrs) {
 
   const roleList = rawRoles.split(",").map(r => r.trim().toLowerCase());
 
-  // Marine Crew (Mate or Pilot)
-  if (roleList.includes("mate") || roleList.includes("pilot")) {
+  // Marine Crew (Mate, Pilot, or Deckhand)
+  if (roleList.some(r => r.includes("mate") || r.includes("pilot") || r.includes("deckhand"))) {
     roles.push("Marine Crew");
   }
 
