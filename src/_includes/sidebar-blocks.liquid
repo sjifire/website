@@ -34,12 +34,9 @@
         {% if block.heading %}
           <h3 class="sidebar__heading">{{ block.heading }}</h3>
         {% endif %}
-        {% assign safe_embed_url = block.embed_url | safeEmbedUrl %}
-        {% if safe_embed_url != "" %}
-          <figure class="embed-responsive embed-responsive-16by9">
-            <iframe title="{{ block.title | escape }}" src="{{ safe_embed_url }}" loading="lazy"></iframe>
-          </figure>
-        {% endif %}
+        <figure class="embed-responsive embed-responsive-16by9">
+          <iframe title="{{ block.title | escape }}" src="{{ block.embed_url | safeUrl }}" loading="lazy"></iframe>
+        </figure>
 
       {% when "image" %}
         <styled-image src="{{ block.src }}" alt="{{ block.alt }}" size="full" />

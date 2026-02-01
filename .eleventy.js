@@ -183,38 +183,6 @@ module.exports = function(eleventyConfig) {
     return sanitized === "about:blank" ? "#" : sanitized;
   });
 
-  // Safe embed URL filter - only allows trusted embed domains
-  eleventyConfig.addFilter("safeEmbedUrl", function(url) {
-    if (!url || typeof url !== "string") return "";
-    const ALLOWED_EMBED_DOMAINS = [
-      "youtube.com",
-      "www.youtube.com",
-      "youtube-nocookie.com",
-      "www.youtube-nocookie.com",
-      "youtu.be",
-      "vimeo.com",
-      "player.vimeo.com",
-      "google.com",
-      "www.google.com",
-      "maps.google.com",
-      "calendar.google.com",
-    ];
-    try {
-      const parsed = new URL(url);
-      if (!["https:", "http:"].includes(parsed.protocol)) {
-        return "";
-      }
-      const hostname = parsed.hostname.toLowerCase();
-      if (!ALLOWED_EMBED_DOMAINS.some(domain => hostname === domain || hostname.endsWith("." + domain))) {
-        console.warn(`Blocked embed URL from untrusted domain: ${hostname}`);
-        return "";
-      }
-      return url;
-    } catch {
-      return "";
-    }
-  });
-
   // Slugify string (URL-safe lowercase)
   eleventyConfig.addFilter("slugify", function(str) {
     if (!str) return "";
