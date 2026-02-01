@@ -71,8 +71,14 @@ jobs:
           if [ "${{ inputs.dry_run }}" = "true" ]; then
             ARGS="$ARGS --dry-run"
           fi
-          if [ -n "${{ inputs.max_age_days }}" ] && [ "${{ inputs.max_age_days }}" != "30" ]; then
-            ARGS="$ARGS --days=${{ inputs.max_age_days }}"
+          # Validate max_age_days is a positive integer to prevent command injection
+          MAX_AGE="${{ inputs.max_age_days }}"
+          if [ -n "$MAX_AGE" ] && [ "$MAX_AGE" != "30" ]; then
+            if ! echo "$MAX_AGE" | grep -qE '^[0-9]+$'; then
+              echo "Error: max_age_days must be a positive integer"
+              exit 1
+            fi
+            ARGS="$ARGS --days=$MAX_AGE"
           fi
           node scripts/cleanup-cloudinary.mjs $ARGS
 

@@ -1,5 +1,7 @@
 const yaml = require("js-yaml");
 const { Liquid } = require("liquidjs");
+const escapeHtml = require("escape-html");
+const { sanitizeUrl } = require("@braintree/sanitize-url");
 const createCloudinary = require("./src/_lib/cloudinary");
 const { dateFilters, getNextMeeting, formatMeetingSchedule } = require("./src/_lib/date-utils");
 
@@ -90,6 +92,7 @@ module.exports = function(eleventyConfig) {
   });
 
   // Markdown rendering filter (with breaks: true so newlines become <br>)
+  // Note: html: true is required for existing content; XSS risk mitigated by admin-only content editing
   const mdRender = require("markdown-it")({
     linkify: true,
     typographer: true,
@@ -103,17 +106,29 @@ module.exports = function(eleventyConfig) {
   });
 
   // Process TinaCMS styled-image components
+  // Security: Validates size/align values and escapes alt text to prevent XSS
   eleventyConfig.addFilter("processStyledImages", function (content) {
     if (!content) return content;
+    const ALLOWED_SIZES = ["small", "medium", "full"];
+    const ALLOWED_ALIGNS = ["left", "center", "right"];
+
     const regex = /<(?:styled-image|StyledImage)\s+([^>]*)(?:\/>|><\/(?:styled-image|StyledImage)>)/g;
     return content.replace(regex, (match, attrs) => {
       const src = attrs.match(/src=["']([^"']+)["']/)?.[1] || "";
       const alt = attrs.match(/alt=["']([^"']+)["']/)?.[1] || "";
-      const size = attrs.match(/size=["']([^"']+)["']/)?.[1] || "full";
-      const align = attrs.match(/align=["']([^"']+)["']/)?.[1] || "center";
+      let size = attrs.match(/size=["']([^"']+)["']/)?.[1] || "full";
+      let align = attrs.match(/align=["']([^"']+)["']/)?.[1] || "center";
+
+      // Validate size and align against whitelist
+      size = ALLOWED_SIZES.includes(size) ? size : "full";
+      align = ALLOWED_ALIGNS.includes(align) ? align : "center";
+
+      // Escape alt text to prevent XSS
+      const safeAlt = escapeHtml(alt);
+
       const classes = `styled-image styled-image--${size} styled-image--${align}`;
       const optimizedSrc = cloudinary.imgPath(src, "f_auto,q_auto:good");
-      return `<figure class="${classes}"><img src="${optimizedSrc}" alt="${alt}" /><figcaption>${alt}</figcaption></figure>`;
+      return `<figure class="${classes}"><img src="${optimizedSrc}" alt="${safeAlt}" /><figcaption>${safeAlt}</figcaption></figure>`;
     });
   });
 
@@ -158,6 +173,14 @@ module.exports = function(eleventyConfig) {
       return Math.floor(num * factor) / factor;
     }
     return Math.round(num * factor) / factor;
+  });
+
+  // Safe URL filter - sanitizes URLs to prevent XSS (uses @braintree/sanitize-url)
+  eleventyConfig.addFilter("safeUrl", function(url) {
+    if (!url || typeof url !== "string") return "#";
+    const sanitized = sanitizeUrl(url);
+    // sanitizeUrl returns "about:blank" for dangerous URLs
+    return sanitized === "about:blank" ? "#" : sanitized;
   });
 
   // Slugify string (URL-safe lowercase)

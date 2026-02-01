@@ -15,7 +15,7 @@
 
       {% when "richText" %}
         {% if block.heading %}
-          <h3 class="sidebar__heading">{{ block.heading }}</h3>
+          <h3 class="sidebar__heading">{{ block.heading | escape }}</h3>
         {% endif %}
         {% if block.content %}
           {{ block.content | markdownify }}
@@ -23,19 +23,19 @@
 
       {% when "button" %}
         {% if block.heading %}
-          <h3 class="sidebar__heading">{{ block.heading }}</h3>
+          <h3 class="sidebar__heading">{{ block.heading | escape }}</h3>
         {% endif %}
         {% if block.description %}
-          <p>{{ block.description }}</p>
+          <p>{{ block.description | escape }}</p>
         {% endif %}
-        <a class="btn btn-primary" href="{{ block.button_url }}"{% if block.new_tab %} target="_blank" rel="noopener"{% endif %}>{{ block.button_text }}</a>
+        <a class="btn btn-primary" href="{{ block.button_url | safeUrl }}"{% if block.new_tab %} target="_blank" rel="noopener"{% endif %}>{{ block.button_text | escape }}</a>
 
       {% when "embed" %}
         {% if block.heading %}
           <h3 class="sidebar__heading">{{ block.heading }}</h3>
         {% endif %}
         <figure class="embed-responsive embed-responsive-16by9">
-          <iframe title="{{ block.title }}" src="{{ block.embed_url }}" loading="lazy"></iframe>
+          <iframe title="{{ block.title | escape }}" src="{{ block.embed_url | safeUrl }}" loading="lazy"></iframe>
         </figure>
 
       {% when "image" %}

@@ -164,6 +164,7 @@
   <script defer>
     {{ js }}
   </script>
+  {% comment %}Security: scripts variable is only set via page frontmatter for internal JS files{% endcomment %}
   {% if scripts %}{{ scripts }}{% endif %}
 </body>
 </html>

@@ -6,6 +6,7 @@
 import { Client } from "@microsoft/microsoft-graph-client";
 import { ClientSecretCredential } from "@azure/identity";
 import { TokenCredentialAuthenticationProvider } from "@microsoft/microsoft-graph-client/authProviders/azureTokenCredentials/index.js";
+import { validate as uuidValidate } from "uuid";
 
 export class MSGraphClient {
   #client;
@@ -36,6 +37,11 @@ export class MSGraphClient {
    * @returns {Object|null} Service principal or null if not found
    */
   async getServicePrincipal(appId, select = ["appRoleAssignmentRequired"]) {
+    // Validate appId is a valid UUID format to prevent OData injection
+    if (!appId || !uuidValidate(appId)) {
+      throw new Error("Invalid appId format: must be a valid UUID");
+    }
+
     try {
       const response = await this.#client
         .api("/servicePrincipals")
