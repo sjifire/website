@@ -1,6 +1,7 @@
 const yaml = require("js-yaml");
 const { Liquid } = require("liquidjs");
 const escapeHtml = require("escape-html");
+const { sanitizeUrl } = require("@braintree/sanitize-url");
 const createCloudinary = require("./src/_lib/cloudinary");
 const { dateFilters, getNextMeeting, formatMeetingSchedule } = require("./src/_lib/date-utils");
 
@@ -174,14 +175,12 @@ module.exports = function(eleventyConfig) {
     return Math.round(num * factor) / factor;
   });
 
-  // Safe URL filter - blocks javascript: and data: protocols
+  // Safe URL filter - sanitizes URLs to prevent XSS (uses @braintree/sanitize-url)
   eleventyConfig.addFilter("safeUrl", function(url) {
     if (!url || typeof url !== "string") return "#";
-    const trimmed = url.trim().toLowerCase();
-    if (trimmed.startsWith("javascript:") || trimmed.startsWith("data:") || trimmed.startsWith("vbscript:")) {
-      return "#";
-    }
-    return url;
+    const sanitized = sanitizeUrl(url);
+    // sanitizeUrl returns "about:blank" for dangerous URLs
+    return sanitized === "about:blank" ? "#" : sanitized;
   });
 
   // Safe embed URL filter - only allows trusted embed domains
