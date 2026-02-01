@@ -16,7 +16,6 @@ import { chromium } from "@playwright/test";
 const BASE_URL = process.argv[2] || "https://www.sjifire.org";
 const visited = new Set();
 const missingAssets = new Map(); // asset URL -> array of pages where it's referenced
-const checkedAssets = new Set();
 const pagesToVisit = ["/"];
 
 async function scanPage(page, path) {
