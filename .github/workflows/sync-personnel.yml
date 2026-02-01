@@ -65,12 +65,37 @@ jobs:
             echo "::add-mask::$CLOUDINARY_API_SECRET"
             echo "CLOUDINARY_API_SECRET=$CLOUDINARY_API_SECRET" >> $GITHUB_ENV
 
-            # Deploy key (multiline)
-            DEPLOY_KEY=$(az keyvault secret show --vault-name gh-website-utilities --name DEPLOY-KEY --query value -o tsv)
-            echo "::add-mask::$DEPLOY_KEY"
-            echo "DEPLOY_KEY<<EOF" >> $GITHUB_ENV
-            echo "$DEPLOY_KEY" >> $GITHUB_ENV
-            echo "EOF" >> $GITHUB_ENV
+            # GitHub App secrets (for pushing changes)
+            GH_APP_ID=$(az keyvault secret show --vault-name gh-website-utilities --name GITHUB-APP-ID --query value -o tsv)
+            echo "::add-mask::$GH_APP_ID"
+            echo "GH_APP_ID=$GH_APP_ID" >> $GITHUB_ENV
+
+            # Private key is stored base64-encoded in Key Vault
+            # Mask the base64 version (single-line, works with add-mask)
+            GH_APP_PRIVATE_KEY_B64=$(az keyvault secret show --vault-name gh-website-utilities --name GITHUB-APP-PRIVATE-KEY --query value -o tsv)
+            echo "::add-mask::$GH_APP_PRIVATE_KEY_B64"
+            # Decode and write directly to env file without echoing to logs
+            {
+              echo "GH_APP_PRIVATE_KEY<<EOF"
+              echo "$GH_APP_PRIVATE_KEY_B64" | base64 -d
+              echo "EOF"
+            } >> $GITHUB_ENV
+
+      - name: Validate required secrets
+        run: |
+          missing=""
+          [ -z "$MS_GRAPH_TENANT_ID" ] && missing="$missing MS-GRAPH-TENANT-ID"
+          [ -z "$MS_GRAPH_CLIENT_ID" ] && missing="$missing MS-GRAPH-CLIENT-ID"
+          [ -z "$MS_GRAPH_CLIENT_SECRET" ] && missing="$missing MS-GRAPH-CLIENT-SECRET"
+          [ -z "$CLOUDINARY_API_KEY" ] && missing="$missing CLOUDINARY-API-KEY"
+          [ -z "$CLOUDINARY_API_SECRET" ] && missing="$missing CLOUDINARY-API-SECRET"
+          [ -z "$GH_APP_ID" ] && missing="$missing GITHUB-APP-ID"
+          [ -z "$GH_APP_PRIVATE_KEY" ] && missing="$missing GITHUB-APP-PRIVATE-KEY"
+          if [ -n "$missing" ]; then
+            echo "::error::Missing or empty secrets in Key Vault:$missing"
+            exit 1
+          fi
+          echo "All required secrets are present"
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -102,18 +127,20 @@ jobs:
             git diff --cached --name-only >> $GITHUB_STEP_SUMMARY
           fi
 
-      - name: Setup SSH deploy key
+      - name: Generate GitHub App token
+        id: app-token
         if: steps.changes.outputs.changed == 'true'
-        uses: webfactory/ssh-agent@v0.9.0
+        uses: actions/create-github-app-token@v1
         with:
-          ssh-private-key: ${{ env.DEPLOY_KEY }}
+          app-id: ${{ env.GH_APP_ID }}
+          private-key: ${{ env.GH_APP_PRIVATE_KEY }}
 
       - name: Commit and push changes
         if: steps.changes.outputs.changed == 'true'
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git remote set-url origin git@github.com:${{ github.repository }}.git
+          git config user.name "sjifire-bot[bot]"
+          git config user.email "${{ env.GH_APP_ID }}+sjifire-bot[bot]@users.noreply.github.com"
+          git remote set-url origin "https://x-access-token:${{ steps.app-token.outputs.token }}@github.com/${{ github.repository }}.git"
           git commit -m "chore: sync personnel data from Microsoft 365
 
           Auto-generated daily update of personnel information.

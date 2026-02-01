@@ -1,12 +1,12 @@
 {
-  "generated": "2026-01-31T20:52:18.897Z",
+  "generated": "2026-02-01T04:50:39.394Z",
   "count": 58,
   "counts": {
     "fullTimeFirefighters": 9,
     "partTimeFirefighters": 4,
     "administrativeStaff": 2,
-    "volunteerFirefighters": 36,
-    "volunteerSupport": 7
+    "volunteerFirefighters": 37,
+    "volunteerSupport": 6
   },
   "personnel": [
     {
@@ -31,8 +31,7 @@
       "staff_type": "Day Staff",
       "roles": [
         "Apparatus Operator",
-        "Firefighter",
-        "Marine Crew"
+        "Firefighter"
       ],
       "photo": "/assets/media/personnel_imgs/michael_hartzell.jpg"
     },
@@ -219,8 +218,7 @@
       "staff_type": "Volunteer",
       "roles": [
         "Apparatus Operator",
-        "Firefighter",
-        "Marine Crew"
+        "Firefighter"
       ],
       "photo": "/assets/media/personnel_imgs/erin_graham.jpg"
     },
@@ -463,6 +461,7 @@
       "employee_type": "volunteer",
       "staff_type": "Volunteer",
       "roles": [
+        "Marine Crew",
         "Support"
       ],
       "photo": "/assets/media/personnel_imgs/hella_cascorbi.jpg"
@@ -487,6 +486,7 @@
       "employee_type": "volunteer",
       "staff_type": "Volunteer",
       "roles": [
+        "Marine Crew",
         "Wildland Firefighter"
       ],
       "photo": null
@@ -697,7 +697,8 @@
       "staff_type": "Volunteer",
       "roles": [
         "Apparatus Operator",
-        "Firefighter"
+        "Firefighter",
+        "Marine Crew"
       ],
       "photo": null
     },
