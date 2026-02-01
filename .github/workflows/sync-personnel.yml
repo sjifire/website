@@ -72,6 +72,21 @@ jobs:
             echo "$DEPLOY_KEY" >> $GITHUB_ENV
             echo "EOF" >> $GITHUB_ENV
 
+      - name: Validate required secrets
+        run: |
+          missing=""
+          [ -z "$MS_GRAPH_TENANT_ID" ] && missing="$missing MS-GRAPH-TENANT-ID"
+          [ -z "$MS_GRAPH_CLIENT_ID" ] && missing="$missing MS-GRAPH-CLIENT-ID"
+          [ -z "$MS_GRAPH_CLIENT_SECRET" ] && missing="$missing MS-GRAPH-CLIENT-SECRET"
+          [ -z "$CLOUDINARY_API_KEY" ] && missing="$missing CLOUDINARY-API-KEY"
+          [ -z "$CLOUDINARY_API_SECRET" ] && missing="$missing CLOUDINARY-API-SECRET"
+          [ -z "$DEPLOY_KEY" ] && missing="$missing DEPLOY-KEY"
+          if [ -n "$missing" ]; then
+            echo "::error::Missing or empty secrets in Key Vault:$missing"
+            exit 1
+          fi
+          echo "All required secrets are present"
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
