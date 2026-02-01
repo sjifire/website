@@ -71,12 +71,15 @@ jobs:
             echo "GH_APP_ID=$GH_APP_ID" >> $GITHUB_ENV
 
             # Private key is stored base64-encoded in Key Vault
+            # Mask the base64 version (single-line, works with add-mask)
             GH_APP_PRIVATE_KEY_B64=$(az keyvault secret show --vault-name gh-website-utilities --name GITHUB-APP-PRIVATE-KEY --query value -o tsv)
-            GH_APP_PRIVATE_KEY=$(echo "$GH_APP_PRIVATE_KEY_B64" | base64 -d)
-            echo "::add-mask::$GH_APP_PRIVATE_KEY"
-            echo "GH_APP_PRIVATE_KEY<<EOF" >> $GITHUB_ENV
-            echo "$GH_APP_PRIVATE_KEY" >> $GITHUB_ENV
-            echo "EOF" >> $GITHUB_ENV
+            echo "::add-mask::$GH_APP_PRIVATE_KEY_B64"
+            # Decode and write directly to env file without echoing to logs
+            {
+              echo "GH_APP_PRIVATE_KEY<<EOF"
+              echo "$GH_APP_PRIVATE_KEY_B64" | base64 -d
+              echo "EOF"
+            } >> $GITHUB_ENV
 
       - name: Validate required secrets
         run: |
