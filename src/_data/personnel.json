@@ -1,12 +1,12 @@
 {
-  "generated": "2026-02-01T04:50:39.394Z",
+  "generated": "2026-02-03T15:33:40.689Z",
   "count": 58,
   "counts": {
     "fullTimeFirefighters": 9,
     "partTimeFirefighters": 4,
     "administrativeStaff": 2,
-    "volunteerFirefighters": 37,
-    "volunteerSupport": 6
+    "volunteerFirefighters": 36,
+    "volunteerSupport": 7
   },
   "personnel": [
     {
@@ -207,7 +207,7 @@
       "roles": [
         "Firefighter"
       ],
-      "photo": null
+      "photo": "/assets/media/personnel_imgs/jordan_pollack.jpg"
     },
     {
       "first_name": "Erin",
@@ -345,7 +345,6 @@
       "employee_type": "volunteer",
       "staff_type": "Volunteer",
       "roles": [
-        "Apparatus Operator",
         "Support"
       ],
       "photo": "/assets/media/personnel_imgs/charles_genther.jpg"
