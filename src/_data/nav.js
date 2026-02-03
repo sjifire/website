@@ -118,7 +118,11 @@ const items = navigationConfig.map((item) => {
 // Build highlight info
 const headerHighlight = headerHighlightUrl ? getPageInfo(headerHighlightUrl) : null;
 
+// Footer-only links
+const footerLinks = navigationJson.footer_links || [];
+
 module.exports = {
   items,
   headerHighlight,
+  footerLinks,
 };

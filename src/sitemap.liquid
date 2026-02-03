@@ -28,10 +28,28 @@ eleventyExcludeFromCollections: true
   </url>
     {%- endif %}
   {%- endfor %}
-  {%- comment %}Footer-only pages{% endcomment %}
+  {%- comment %}News posts{% endcomment %}
+  {%- for post in posts reversed %}
   <url>
-    <loc>{{ site.prodUrl }}/disclaimer/</loc>
+    <loc>{{ site.prodUrl }}{{ post.url }}/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  {%- endfor %}
+  {%- comment %}Media releases (PDFs){% endcomment %}
+  {%- for release in media_releases %}
+  <url>
+    <loc>{{ site.prodUrl }}{{ release.document }}</loc>
+    <changefreq>never</changefreq>
+    <priority>0.4</priority>
+  </url>
+  {%- endfor %}
+  {%- comment %}Footer-only pages{% endcomment %}
+  {%- for link in nav.footerLinks %}
+  <url>
+    <loc>{{ site.prodUrl }}{{ link.url }}</loc>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
+  {%- endfor %}
 </urlset>

@@ -1,5 +1,11 @@
 {
   "header_highlight_url": "/join/",
+  "footer_links": [
+    {
+      "label": "Disclaimer",
+      "url": "/disclaimer/"
+    }
+  ],
   "items": [
     {
       "label": "About",
