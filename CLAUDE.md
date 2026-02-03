@@ -121,10 +121,9 @@ Personnel data and photos are synced daily from Microsoft 365 via Microsoft Grap
 - `scripts/image-hash.mjs` - Perceptual hashing for photo change detection
 - `.github/workflows/sync-personnel.yml` - Daily scheduled workflow (7 AM UTC)
 
-**Secrets (from Key Vault):**
-- `MS-GRAPH-TENANT-ID`, `MS-GRAPH-CLIENT-ID`, `MS-GRAPH-CLIENT-SECRET`
-- `CLOUDINARY-API-KEY`, `CLOUDINARY-API-SECRET`
-- `DEPLOY-KEY` (SSH key for pushing changes)
+**Secrets:**
+- From Key Vault: `MS-GRAPH-TENANT-ID`, `MS-GRAPH-CLIENT-ID`, `MS-GRAPH-CLIENT-SECRET`, `CLOUDINARY-API-KEY`, `CLOUDINARY-API-SECRET`
+- From GitHub Secrets: `DEPLOY_KEY` (SSH deploy key for pushing changes)
 
 **Local Testing:**
 ```bash
@@ -134,7 +133,7 @@ npm run sync-personnel
 
 ## Azure Key Vault
 
-All secrets are centralized in Azure Key Vault `gh-website-utilities`. GitHub Actions use OIDC to authenticate and fetch secrets at runtime - no secrets are stored in GitHub.
+Most secrets are centralized in Azure Key Vault `gh-website-utilities`. GitHub Actions use OIDC to authenticate and fetch secrets at runtime. GitHub-specific secrets (like deploy keys) are stored in GitHub Secrets instead.
 
 ### Pull secrets locally
 ```bash
