@@ -385,7 +385,6 @@ function computeCounts(personnel) {
 async function writePersonnelJson(personnel) {
   const counts = computeCounts(personnel);
   const output = {
-    generated: new Date().toISOString(),
     count: personnel.length,
     counts,
     personnel: personnel,
