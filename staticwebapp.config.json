@@ -74,7 +74,7 @@
     },
     {
       "route": "/about/staff",
-      "redirect": "/about/key-information/",
+      "redirect": "/about/our-team/",
       "statusCode": 301
     },
     {
@@ -105,6 +105,11 @@
     {
       "route": "/news/2022-01-18-sjifandr-is-an-ems-agency",
       "redirect": "/news/2022-01-18-we-are-an-ems-agency/",
+      "statusCode": 301
+    },
+    {
+      "route": "/assets/docs/*",
+      "redirect": "https://sjifires.sharepoint.com/:f:/s/SJIFirePublicRecords/IgBbJPhsXp0iTLx2WataGf3dARGo93hz2540LD3Gmcu4LRk",
       "statusCode": 301
     }
   ],
