@@ -389,10 +389,23 @@ async function writePersonnelJson(personnel) {
     counts,
     personnel: personnel,
   };
-  await writeFile(OUTPUT_PATH, JSON.stringify(output, null, 2) + "\n");
+  const newContent = JSON.stringify(output, null, 2) + "\n";
+
+  // Skip write if content hasn't changed
+  try {
+    const existing = await readFile(OUTPUT_PATH, "utf-8");
+    if (existing === newContent) {
+      return false;
+    }
+  } catch {
+    // File doesn't exist yet, proceed with write
+  }
+
+  await writeFile(OUTPUT_PATH, newContent);
+  return true;
 }
 
-function printSummary(personnel, photoStats, usersWithoutEmployeeType) {
+function printSummary(personnel, photoStats, usersWithoutEmployeeType, personnelWritten) {
   console.log("\nSummary:");
   console.log(`  Total personnel: ${personnel.length}`);
   console.log(`  Staff: ${personnel.filter(p => p.employee_type === "staff").length}`);
@@ -429,7 +442,11 @@ function printSummary(personnel, photoStats, usersWithoutEmployeeType) {
   console.log(`  Photos skipped (unchanged): ${photoStats.skippedUnchanged}`);
   console.log(`  No photo in M365: ${photoStats.skippedNoPhoto}`);
 
-  console.log(`\nOutput written to ${OUTPUT_PATH}`);
+  if (personnelWritten) {
+    console.log(`\nOutput written to ${OUTPUT_PATH}`);
+  } else {
+    console.log("\nNo changes to personnel data, skipping write.");
+  }
   console.log("Done!");
 }
 
@@ -554,9 +571,9 @@ async function main() {
 
   // Sort and write output
   const sortedPersonnel = sortPersonnel(personnel);
-  await writePersonnelJson(sortedPersonnel);
+  const personnelWritten = await writePersonnelJson(sortedPersonnel);
 
-  printSummary(sortedPersonnel, photoStats, usersWithoutEmployeeType);
+  printSummary(sortedPersonnel, photoStats, usersWithoutEmployeeType, personnelWritten);
 }
 
 main().catch(err => {
