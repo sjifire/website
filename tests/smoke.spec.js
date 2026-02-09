@@ -92,7 +92,7 @@ test.describe("Smoke Tests", () => {
 
     // Navigate to contact and verify it loads
     await page.goto("/contact/");
-    await expect(page.locator("h1").first()).toContainText("Questions");
+    await expect(page.locator("h1").first()).toContainText("Contact");
   });
 
   test("Our Team page displays staff and volunteers with images", async ({ page }) => {
