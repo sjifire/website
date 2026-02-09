@@ -2,9 +2,9 @@
   "count": 58,
   "counts": {
     "fullTimeFirefighters": 9,
-    "partTimeFirefighters": 4,
+    "partTimeFirefighters": 6,
     "administrativeStaff": 2,
-    "volunteerFirefighters": 36,
+    "volunteerFirefighters": 34,
     "volunteerSupport": 7
   },
   "personnel": [
@@ -176,6 +176,32 @@
     {
       "first_name": "Dylan",
       "last_name": "Roberson",
+      "rank": null,
+      "title": null,
+      "employee_type": "staff",
+      "staff_type": "PT Line Staff",
+      "roles": [
+        "Apparatus Operator",
+        "Firefighter"
+      ],
+      "photo": null
+    },
+    {
+      "first_name": "Jaden",
+      "last_name": "Jones",
+      "rank": null,
+      "title": null,
+      "employee_type": "staff",
+      "staff_type": "PT Line Staff",
+      "roles": [
+        "Apparatus Operator",
+        "Firefighter"
+      ],
+      "photo": null
+    },
+    {
+      "first_name": "Ricardo",
+      "last_name": "Venegas",
       "rank": null,
       "title": null,
       "employee_type": "staff",
@@ -490,19 +516,6 @@
       "photo": null
     },
     {
-      "first_name": "Jaden",
-      "last_name": "Jones",
-      "rank": null,
-      "title": null,
-      "employee_type": "volunteer",
-      "staff_type": "Volunteer",
-      "roles": [
-        "Apparatus Operator",
-        "Firefighter"
-      ],
-      "photo": null
-    },
-    {
       "first_name": "Jenny",
       "last_name": "Shrum",
       "rank": null,
@@ -657,19 +670,6 @@
       "employee_type": "volunteer",
       "staff_type": "Volunteer",
       "roles": [
-        "Firefighter"
-      ],
-      "photo": null
-    },
-    {
-      "first_name": "Ricardo",
-      "last_name": "Venegas",
-      "rank": null,
-      "title": null,
-      "employee_type": "volunteer",
-      "staff_type": "Volunteer",
-      "roles": [
-        "Apparatus Operator",
         "Firefighter"
       ],
       "photo": null
