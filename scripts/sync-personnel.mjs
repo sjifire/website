@@ -54,8 +54,8 @@ const STAFF_EMPLOYEE_TYPES = [
 const RANKS = [
   "Chief",
   "Assistant Chief",
-  "Battalion Chief",
   "Division Chief",
+  "Battalion Chief",
   "Captain",
   "Lieutenant",
 ];

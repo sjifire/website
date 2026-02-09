@@ -669,11 +669,6 @@ body {
   font: 0.75rem / 1.2 var(--ff-mono);
 }
 
-.person h5 {
-  font-variant: small-caps;
-  text-transform: lowercase;
-}
-
 .person ul {
   padding-inline-start: 0;
 }
