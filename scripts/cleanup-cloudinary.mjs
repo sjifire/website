@@ -128,38 +128,44 @@ async function main() {
 
     console.log(`\n[${resourceType.toUpperCase()}] Scanning...`);
 
-    do {
-      const result = await listResources(resourceType, nextCursor);
-      const resources = result.resources || [];
-      nextCursor = result.next_cursor;
+    try {
+      do {
+        const result = await listResources(resourceType, nextCursor);
+        const resources = result.resources || [];
+        nextCursor = result.next_cursor;
 
-      typeCount += resources.length;
-      totalResources += resources.length;
+        typeCount += resources.length;
+        totalResources += resources.length;
 
-      // Rate limit between pagination requests
-      if (nextCursor) {
-        await setTimeout(RATE_LIMIT_DELAY_MS);
-      }
-
-      for (const resource of resources) {
-        // Use created_at as proxy for last access if last_access not available
-        const lastAccess = resource.last_access || resource.created_at;
-
-        if (isOlderThan(lastAccess, maxAgeDays)) {
-          staleResources++;
-          totalBytes += resource.bytes || 0;
-          staleList.push({
-            publicId: resource.public_id,
-            type: resourceType,
-            lastAccess: formatDate(lastAccess),
-            bytes: resource.bytes || 0,
-            derivedIds: (resource.derived || []).map((d) => d.id),
-          });
+        // Rate limit between pagination requests
+        if (nextCursor) {
+          await setTimeout(RATE_LIMIT_DELAY_MS);
         }
-      }
-    } while (nextCursor);
 
-    console.log(`  Found ${typeCount} resources`);
+        for (const resource of resources) {
+          // Use created_at as proxy for last access if last_access not available
+          const lastAccess = resource.last_access || resource.created_at;
+
+          if (isOlderThan(lastAccess, maxAgeDays)) {
+            staleResources++;
+            totalBytes += resource.bytes || 0;
+            staleList.push({
+              publicId: resource.public_id,
+              type: resourceType,
+              lastAccess: formatDate(lastAccess),
+              bytes: resource.bytes || 0,
+              derivedIds: (resource.derived || []).map((d) => d.id),
+            });
+          }
+        }
+      } while (nextCursor);
+
+      console.log(`  Found ${typeCount} resources`);
+    } catch (error) {
+      const errorMsg = error.message || error.error?.message || JSON.stringify(error);
+      console.error(`  Error scanning ${resourceType} resources: ${errorMsg}`);
+      console.log(`  Skipping ${resourceType}, continuing with other types...`);
+    }
   }
 
   console.log("\n" + "=".repeat(50));
@@ -208,9 +214,10 @@ async function main() {
         console.log(`  Deleted ${deletedCount}/${staleList.length}...`);
       }
     } catch (error) {
-      console.error(`  Failed to delete ${item.publicId}: ${error.message}`);
+      const errorMsg = error.message || String(error);
+      console.error(`  Failed to delete ${item.publicId}: ${errorMsg}`);
       // On rate limit errors, wait longer before continuing
-      if (error.message.includes("420") || error.message.includes("Rate")) {
+      if (errorMsg.includes("420") || errorMsg.includes("Rate")) {
         console.log("  Rate limited, waiting 60 seconds...");
         await setTimeout(60000);
       }
@@ -227,7 +234,7 @@ async function main() {
 const isMain = import.meta.url === `file://${process.argv[1]}`;
 if (isMain) {
   main().catch((err) => {
-    console.error("Error:", err.message);
+    console.error("Error:", err.message || err.error?.message || JSON.stringify(err));
     process.exit(1);
   });
 }
