@@ -208,9 +208,10 @@ async function main() {
         console.log(`  Deleted ${deletedCount}/${staleList.length}...`);
       }
     } catch (error) {
-      console.error(`  Failed to delete ${item.publicId}: ${error.message}`);
+      const errorMsg = error.message || String(error);
+      console.error(`  Failed to delete ${item.publicId}: ${errorMsg}`);
       // On rate limit errors, wait longer before continuing
-      if (error.message.includes("420") || error.message.includes("Rate")) {
+      if (errorMsg.includes("420") || errorMsg.includes("Rate")) {
         console.log("  Rate limited, waiting 60 seconds...");
         await setTimeout(60000);
       }
