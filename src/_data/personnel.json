@@ -216,7 +216,7 @@
       "first_name": "Robin",
       "last_name": "Garcia",
       "rank": null,
-      "title": "Executive Assistant, Finance",
+      "title": "Executive Assistant, Finance Officer",
       "employee_type": "staff",
       "staff_type": "Administrative",
       "roles": [],
@@ -251,7 +251,7 @@
       "first_name": "Harry",
       "last_name": "See",
       "rank": "Lieutenant",
-      "title": null,
+      "title": "Tender Group Supervisor",
       "employee_type": "volunteer",
       "staff_type": "Volunteer",
       "roles": [
