@@ -75,19 +75,6 @@
       "photo": "/assets/media/personnel_imgs/tad_lean.jpg"
     },
     {
-      "first_name": "Izaac",
-      "last_name": "Newell",
-      "rank": "Lieutenant",
-      "title": null,
-      "employee_type": "staff",
-      "staff_type": "FT Line Staff",
-      "roles": [
-        "Apparatus Operator",
-        "Firefighter"
-      ],
-      "photo": null
-    },
-    {
       "first_name": "Kati",
       "last_name": "English",
       "rank": "Lieutenant",
@@ -99,6 +86,19 @@
         "Firefighter"
       ],
       "photo": "/assets/media/personnel_imgs/kati_english.jpg"
+    },
+    {
+      "first_name": "Izaac",
+      "last_name": "Newell",
+      "rank": "Lieutenant",
+      "title": null,
+      "employee_type": "staff",
+      "staff_type": "FT Line Staff",
+      "roles": [
+        "Apparatus Operator",
+        "Firefighter"
+      ],
+      "photo": null
     },
     {
       "first_name": "Monico",
@@ -134,6 +134,16 @@
       "staff_type": "Day Staff",
       "roles": [],
       "photo": null
+    },
+    {
+      "first_name": "Robin",
+      "last_name": "Garcia",
+      "rank": null,
+      "title": "Executive Assistant, Finance Officer",
+      "employee_type": "staff",
+      "staff_type": "Administrative",
+      "roles": [],
+      "photo": "/assets/media/personnel_imgs/robin_garcia.jpg"
     },
     {
       "first_name": "Brad",
@@ -213,16 +223,6 @@
       "photo": null
     },
     {
-      "first_name": "Robin",
-      "last_name": "Garcia",
-      "rank": null,
-      "title": "Executive Assistant, Finance Officer",
-      "employee_type": "staff",
-      "staff_type": "Administrative",
-      "roles": [],
-      "photo": "/assets/media/personnel_imgs/robin_garcia.jpg"
-    },
-    {
       "first_name": "Jordan",
       "last_name": "Pollack",
       "rank": "Division Chief",
@@ -272,6 +272,55 @@
         "Marine Crew"
       ],
       "photo": "/assets/media/personnel_imgs/john_salinas.jpg"
+    },
+    {
+      "first_name": "Irene",
+      "last_name": "Voskamp",
+      "rank": null,
+      "title": "Director of IT",
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [
+        "Firefighter"
+      ],
+      "photo": null
+    },
+    {
+      "first_name": "John",
+      "last_name": "McDowell",
+      "rank": null,
+      "title": "SCBA Specialist",
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [
+        "Support"
+      ],
+      "photo": null
+    },
+    {
+      "first_name": "Kathleen",
+      "last_name": "Salinas",
+      "rank": null,
+      "title": "Firewise Regional Coordinator",
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [
+        "Apparatus Operator",
+        "Marine Crew"
+      ],
+      "photo": "/assets/media/personnel_imgs/kathleen_salinas.jpg"
+    },
+    {
+      "first_name": "Sue Ann",
+      "last_name": "Stabley",
+      "rank": null,
+      "title": "Support Coordinator",
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [
+        "Support"
+      ],
+      "photo": "/assets/media/personnel_imgs/sue_ann_stabley.jpg"
     },
     {
       "first_name": "Adam",
@@ -491,18 +540,6 @@
       "photo": "/assets/media/personnel_imgs/hella_cascorbi.jpg"
     },
     {
-      "first_name": "Irene",
-      "last_name": "Voskamp",
-      "rank": null,
-      "title": null,
-      "employee_type": "volunteer",
-      "staff_type": "Volunteer",
-      "roles": [
-        "Firefighter"
-      ],
-      "photo": null
-    },
-    {
       "first_name": "Jacob",
       "last_name": "Wagner",
       "rank": null,
@@ -520,18 +557,6 @@
       "last_name": "Shrum",
       "rank": null,
       "title": null,
-      "employee_type": "volunteer",
-      "staff_type": "Volunteer",
-      "roles": [
-        "Support"
-      ],
-      "photo": null
-    },
-    {
-      "first_name": "John",
-      "last_name": "McDowell",
-      "rank": null,
-      "title": "SCBA Specialist",
       "employee_type": "volunteer",
       "staff_type": "Volunteer",
       "roles": [
@@ -562,19 +587,6 @@
         "Support"
       ],
       "photo": "/assets/media/personnel_imgs/karen_gentry.jpg"
-    },
-    {
-      "first_name": "Kathleen",
-      "last_name": "Salinas",
-      "rank": null,
-      "title": "Firewise Regional Coordinator",
-      "employee_type": "volunteer",
-      "staff_type": "Volunteer",
-      "roles": [
-        "Apparatus Operator",
-        "Marine Crew"
-      ],
-      "photo": "/assets/media/personnel_imgs/kathleen_salinas.jpg"
     },
     {
       "first_name": "Katie",
@@ -723,18 +735,6 @@
         "Firefighter"
       ],
       "photo": null
-    },
-    {
-      "first_name": "Sue Ann",
-      "last_name": "Stabley",
-      "rank": null,
-      "title": "Support Coordinator",
-      "employee_type": "volunteer",
-      "staff_type": "Volunteer",
-      "roles": [
-        "Support"
-      ],
-      "photo": "/assets/media/personnel_imgs/sue_ann_stabley.jpg"
     }
   ]
 }
