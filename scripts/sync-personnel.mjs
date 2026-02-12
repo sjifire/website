@@ -151,7 +151,7 @@ function determineRoles(extAttrs) {
 }
 
 /**
- * Sort personnel: staff first (by rank, then name), volunteers (by rank, then name)
+ * Sort personnel: staff first (by rank, then title presence, then name), volunteers (by rank, then title presence, then name)
  */
 function sortPersonnel(personnel) {
   return [...personnel].sort((a, b) => {
@@ -164,6 +164,11 @@ function sortPersonnel(personnel) {
     const aRankIdx = a.rank ? RANKS.indexOf(a.rank) : 999;
     const bRankIdx = b.rank ? RANKS.indexOf(b.rank) : 999;
     if (aRankIdx !== bRankIdx) return aRankIdx - bRankIdx;
+
+    // Sort by title presence (people with titles before people without)
+    const aHasTitle = a.title ? 0 : 1;
+    const bHasTitle = b.title ? 0 : 1;
+    if (aHasTitle !== bHasTitle) return aHasTitle - bHasTitle;
 
     // Then by first name
     return a.first_name.localeCompare(b.first_name);
