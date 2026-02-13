@@ -20,6 +20,10 @@
       "allowedRoles": ["anonymous", "authenticated"]
     },
     {
+      "route": "/members/*",
+      "allowedRoles": ["authenticated"]
+    },
+    {
       "route": "/admin/*",
       "allowedRoles": ["admin"]
     },
