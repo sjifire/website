@@ -1174,13 +1174,9 @@ body {
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-a.card--link:hover {
+.card--link:hover {
   transform: translateY(-4px);
   box-shadow: 0 4px 16px rgb(0, 0, 0, 0.2);
-}
-
-div.card--link {
-  border-left: 4px solid var(--red);
 }
 
 .card--link h3 {
