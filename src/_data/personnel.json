@@ -108,9 +108,10 @@
       "employee_type": "staff",
       "staff_type": "FT Line Staff",
       "roles": [
+        "Apparatus Operator",
         "Firefighter"
       ],
-      "photo": null
+      "photo": "/assets/media/personnel_imgs/monico_mackinnon.jpg"
     },
     {
       "first_name": "Stephen",
@@ -166,6 +167,7 @@
       "employee_type": "staff",
       "staff_type": "PT Line Staff",
       "roles": [
+        "Apparatus Operator",
         "Firefighter"
       ],
       "photo": null
