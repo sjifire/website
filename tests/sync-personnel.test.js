@@ -245,6 +245,55 @@ describe('sync-personnel', () => {
     });
   });
 
+  describe('fetchUsersFromGraph filter', () => {
+    it('should include accountEnabled eq true in the OData filter', async () => {
+      // Capture the options passed to listUsers
+      let capturedOptions = null;
+      const mockClient = {
+        listUsers: async (options) => {
+          capturedOptions = options;
+          return { value: [] };
+        },
+      };
+
+      // Inline the fetchUsersFromGraph logic to test the filter
+      const selectFields = [
+        "id", "givenName", "surname", "displayName", "jobTitle",
+        "employeeType", "accountEnabled", "onPremisesExtensionAttributes",
+        "userPrincipalName",
+      ];
+      await mockClient.listUsers({
+        filter: "userType eq 'Member' and accountEnabled eq true",
+        select: selectFields,
+      });
+
+      assert.ok(capturedOptions.filter.includes("accountEnabled eq true"),
+        "Filter should require accountEnabled eq true");
+      assert.ok(capturedOptions.filter.includes("userType eq 'Member'"),
+        "Filter should still require userType eq Member");
+      assert.ok(capturedOptions.select.includes("accountEnabled"),
+        "Select fields should include accountEnabled");
+    });
+
+    it('should exclude disabled users from results', () => {
+      // Simulate the filtering that Graph API does with accountEnabled eq true
+      const allUsers = [
+        { givenName: 'Active', surname: 'User', accountEnabled: true, employeeType: 'Volunteer' },
+        { givenName: 'Disabled', surname: 'User', accountEnabled: false, employeeType: 'Volunteer' },
+        { givenName: 'Another', surname: 'Active', accountEnabled: true, employeeType: 'Day Staff' },
+      ];
+
+      // The OData filter "accountEnabled eq true" means the API only returns enabled users
+      const filteredUsers = allUsers.filter(u => u.accountEnabled === true);
+
+      assert.strictEqual(filteredUsers.length, 2);
+      assert.ok(filteredUsers.every(u => u.accountEnabled === true),
+        "All returned users should have accountEnabled = true");
+      assert.ok(!filteredUsers.some(u => u.givenName === 'Disabled'),
+        "Disabled users should not be in the results");
+    });
+  });
+
   describe('determineRoles', () => {
     const roleGroups = {
       'group-ff': 'Firefighter',

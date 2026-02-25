@@ -1,11 +1,11 @@
 {
-  "count": 58,
+  "count": 61,
   "counts": {
     "fullTimeFirefighters": 9,
     "partTimeFirefighters": 6,
     "administrativeStaff": 2,
-    "volunteerFirefighters": 34,
-    "volunteerSupport": 7
+    "volunteerFirefighters": 33,
+    "volunteerSupport": 11
   },
   "personnel": [
     {
@@ -108,9 +108,10 @@
       "employee_type": "staff",
       "staff_type": "FT Line Staff",
       "roles": [
+        "Apparatus Operator",
         "Firefighter"
       ],
-      "photo": null
+      "photo": "/assets/media/personnel_imgs/monico_mackinnon.jpg"
     },
     {
       "first_name": "Stephen",
@@ -166,6 +167,7 @@
       "employee_type": "staff",
       "staff_type": "PT Line Staff",
       "roles": [
+        "Apparatus Operator",
         "Firefighter"
       ],
       "photo": null
@@ -362,19 +364,6 @@
       "photo": null
     },
     {
-      "first_name": "Ben",
-      "last_name": "Duncan",
-      "rank": null,
-      "title": null,
-      "employee_type": "volunteer",
-      "staff_type": "Volunteer",
-      "roles": [
-        "Apparatus Operator",
-        "Firefighter"
-      ],
-      "photo": null
-    },
-    {
       "first_name": "Bonnie",
       "last_name": "Stanger",
       "rank": null,
@@ -396,6 +385,18 @@
       "roles": [
         "Apparatus Operator",
         "Firefighter"
+      ],
+      "photo": null
+    },
+    {
+      "first_name": "Bryan",
+      "last_name": "Stahl",
+      "rank": null,
+      "title": null,
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [
+        "Support"
       ],
       "photo": null
     },
@@ -514,6 +515,18 @@
       "photo": "/assets/media/personnel_imgs/eric_eisenhardt.jpg"
     },
     {
+      "first_name": "Friday",
+      "last_name": "Uth",
+      "rank": null,
+      "title": null,
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [
+        "Support"
+      ],
+      "photo": null
+    },
+    {
       "first_name": "Gilbert",
       "last_name": "Venegas",
       "rank": null,
@@ -575,6 +588,18 @@
         "Firefighter"
       ],
       "photo": "/assets/media/personnel_imgs/joran_bouwman.jpg"
+    },
+    {
+      "first_name": "Joshua",
+      "last_name": "Wolf",
+      "rank": null,
+      "title": null,
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [
+        "Support"
+      ],
+      "photo": null
     },
     {
       "first_name": "Karen",
@@ -683,6 +708,18 @@
       "staff_type": "Volunteer",
       "roles": [
         "Firefighter"
+      ],
+      "photo": null
+    },
+    {
+      "first_name": "Olivia",
+      "last_name": "Monin",
+      "rank": null,
+      "title": null,
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [
+        "Support"
       ],
       "photo": null
     },
