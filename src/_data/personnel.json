@@ -1,10 +1,10 @@
 {
-  "count": 62,
+  "count": 61,
   "counts": {
     "fullTimeFirefighters": 9,
     "partTimeFirefighters": 6,
     "administrativeStaff": 2,
-    "volunteerFirefighters": 34,
+    "volunteerFirefighters": 33,
     "volunteerSupport": 11
   },
   "personnel": [
@@ -360,19 +360,6 @@
       "staff_type": "Volunteer",
       "roles": [
         "Support"
-      ],
-      "photo": null
-    },
-    {
-      "first_name": "Ben",
-      "last_name": "Duncan",
-      "rank": null,
-      "title": null,
-      "employee_type": "volunteer",
-      "staff_type": "Volunteer",
-      "roles": [
-        "Apparatus Operator",
-        "Firefighter"
       ],
       "photo": null
     },

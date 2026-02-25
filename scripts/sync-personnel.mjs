@@ -208,12 +208,13 @@ async function fetchUsersFromGraph(client) {
     "displayName",
     "jobTitle",
     "employeeType",
+    "accountEnabled",
     "onPremisesExtensionAttributes",
     "userPrincipalName",
   ];
 
   const response = await client.listUsers({
-    filter: "userType eq 'Member'",
+    filter: "userType eq 'Member' and accountEnabled eq true",
     select: selectFields,
   });
 
