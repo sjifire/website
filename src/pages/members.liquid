@@ -4,21 +4,58 @@ layout: page
 nav_hidden: true
 ---
 
+<style>
+  .portal-list { list-style: none; padding: 0; margin: 0 0 1.5rem; }
+  .portal-list li { margin-bottom: 1rem; }
+  .portal-list .service { font-weight: 600; }
+  .portal-list .links { margin-left: 0.25rem; }
+  .portal-list .links .sep { color: #999; }
+  .portal-list .desc { display: block; font-size: 0.9rem; color: #666; margin-top: 0.15rem; }
+</style>
+
 <h2><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align: -4px; margin-right: 6px;"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Incident Management</h2>
-<ul>
-  <li><a href="https://mcp.sjifire.org/dashboard" target="_blank" rel="noopener">Incident Dashboard</a></li>
-  <li>Incident Reports &mdash; <a href="https://ops.sjifire.org/dashboard#reports" target="_blank" rel="noopener">Internal</a> | <a href="https://neris.fsri.org/signin" target="_blank" rel="noopener">NERIS</a> (requires additional permissions)</li>
+<ul class="portal-list">
+  <li>
+    <span class="service">Incident Dashboard</span> &mdash;
+    <span class="links"><a href="https://mcp.sjifire.org/dashboard" target="_blank" rel="noopener">View</a></span>
+    <span class="desc">Real-time incident data</span>
+  </li>
+  <li>
+    <span class="service">Incident Reports</span> &mdash;
+    <span class="links"><a href="https://ops.sjifire.org/dashboard#reports" target="_blank" rel="noopener">Internal</a> <span class="sep">|</span> <a href="https://neris.fsri.org/signin" target="_blank" rel="noopener">NERIS</a></span>
+    <span class="desc">Requires additional permissions</span>
+  </li>
 </ul>
 
 <h2><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align: -4px; margin-right: 6px;"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>Communication</h2>
-<ul>
-  <li>Office 365 &mdash; <a href="https://outlook.office.com" target="_blank" rel="noopener">Outlook</a> | <a href="https://teams.microsoft.com" target="_blank" rel="noopener">Teams</a> | <a href="https://sjifires.sharepoint.com" target="_blank" rel="noopener">SharePoint</a></li>
-  <li>Aladtec &mdash; <a href="https://secure17.aladtec.com/sjifire/index.php?action=manage_schedule_my_schedule" target="_blank" rel="noopener">Schedule</a> | <a href="https://secure17.aladtec.com/sjifire/index.php?action=manage_members_view_member_information" target="_blank" rel="noopener">My Info</a></li>
-  <li><a href="https://sjf3.ispyfire.com/me.html" target="_blank" rel="noopener">iSpyFire</a> &mdash; Dispatch alerting</li>
+<ul class="portal-list">
+  <li>
+    <span class="service">Office 365</span> &mdash;
+    <span class="links"><a href="https://outlook.office.com" target="_blank" rel="noopener">Outlook</a> <span class="sep">|</span> <a href="https://teams.microsoft.com" target="_blank" rel="noopener">Teams</a> <span class="sep">|</span> <a href="https://sjifires.sharepoint.com" target="_blank" rel="noopener">SharePoint</a></span>
+    <span class="desc">Email, calendar, and files</span>
+  </li>
+  <li>
+    <span class="service">Aladtec</span> &mdash;
+    <span class="links"><a href="https://secure17.aladtec.com/sjifire/index.php?action=manage_schedule_my_schedule" target="_blank" rel="noopener">Schedule</a> <span class="sep">|</span> <a href="https://secure17.aladtec.com/sjifire/index.php?action=manage_members_view_member_information" target="_blank" rel="noopener">My Info</a></span>
+    <span class="desc">Scheduling and shift management</span>
+  </li>
+  <li>
+    <span class="service">iSpyFire</span> &mdash;
+    <span class="links"><a href="https://sjf3.ispyfire.com/me.html" target="_blank" rel="noopener">Open</a></span>
+    <span class="desc">Mobile dispatch alerting</span>
+  </li>
 </ul>
 
 <h2><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align: -4px; margin-right: 6px;"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Misc</h2>
-<ul>
-  <li><a href="https://app.lexipol.com/dashboard" target="_blank" rel="noopener">Lexipol</a> &mdash; Policies &amp; daily training</li>
-  <li><a href="/admin/" target="_blank" rel="noopener">Website Admin</a> &mdash; Requires additional permissions</li>
+<ul class="portal-list">
+  <li>
+    <span class="service">Lexipol</span> &mdash;
+    <span class="links"><a href="https://app.lexipol.com/dashboard" target="_blank" rel="noopener">Dashboard</a></span>
+    <span class="desc">Policies and daily training</span>
+  </li>
+  <li>
+    <span class="service">Website Admin</span> &mdash;
+    <span class="links"><a href="/admin/" target="_blank" rel="noopener">Open</a></span>
+    <span class="desc">Content management; requires additional permissions</span>
+  </li>
 </ul>
