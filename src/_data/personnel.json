@@ -1,11 +1,11 @@
 {
-  "count": 61,
+  "count": 63,
   "counts": {
     "fullTimeFirefighters": 9,
     "partTimeFirefighters": 6,
     "administrativeStaff": 2,
     "volunteerFirefighters": 33,
-    "volunteerSupport": 11
+    "volunteerSupport": 13
   },
   "personnel": [
     {
@@ -385,6 +385,18 @@
       "roles": [
         "Apparatus Operator",
         "Firefighter"
+      ],
+      "photo": null
+    },
+    {
+      "first_name": "Bruce",
+      "last_name": "Becker",
+      "rank": null,
+      "title": null,
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [
+        "Support"
       ],
       "photo": null
     },
@@ -770,6 +782,18 @@
       "staff_type": "Volunteer",
       "roles": [
         "Firefighter"
+      ],
+      "photo": null
+    },
+    {
+      "first_name": "Ted",
+      "last_name": "Stonebridge",
+      "rank": null,
+      "title": null,
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [
+        "Support"
       ],
       "photo": null
     }
