@@ -167,6 +167,18 @@ For manual optimization:
 node scripts/optimize-image.mjs src/assets/media/gallery/
 ```
 
+### Photo Credit Watermarks
+
+To bake a photographer credit into image files:
+
+```bash
+node scripts/watermark-image.mjs --credit "Photographer Name" image1.jpg [image2.jpg ...]
+```
+
+Renders "© Name" in the lower-left corner using Cloudinary text overlay. Requires Cloudinary credentials in `.env`.
+
+**Note:** Always run on the original un-watermarked image. The watermark is permanent — if you need to redo it, restore the original from git first.
+
 ## Personnel Sync
 
 Personnel data syncs daily from Microsoft 365 via GitHub Actions.

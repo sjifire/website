@@ -63,6 +63,13 @@ The script automatically:
 
 Typically reduces file sizes by 80-90%. Requires Cloudinary credentials in `.env` (`CLOUDINARY_API_KEY` and `CLOUDINARY_API_SECRET`).
 
+**Adding photo credits / watermarks:**
+```bash
+# Watermark images with photographer credit (baked into the file)
+node scripts/watermark-image.mjs --credit "Photographer Name" image1.jpg [image2.jpg ...]
+```
+Always watermark on fresh (un-watermarked) images — the text is baked in permanently. If you need to redo a watermark, restore the original from git first (`git show <commit>:path/to/file > path/to/file`).
+
 **Image naming conventions:**
 - Use lowercase with underscores: `brigade_water_rescue_training.jpg`
 - Use descriptive names that indicate content
