@@ -69,7 +69,6 @@ scripts: '<script src="/js/carousel.js" defer></script>'
           {% for img in gallery.carouselImages %}
             <div id="carousel-slide-{{ forloop.index }}" class="carousel__slide{% if forloop.first %} active{% endif %}" role="group" aria-roledescription="slide" aria-label="Slide {{ forloop.index }} of {{ gallery.carouselImages.size }}">
               <img class="carousel__image leave-alone" src="{% imgPath img.src, 'f_auto,q_auto:good,c_fill,g_auto,w_1000,h_800' %}" alt="{{ img.alt }}" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}">
-              {% if img.credit %}<span class="photo-credit">&copy; {{ img.credit }}</span>{% endif %}
             </div>
           {% endfor %}
         </div>

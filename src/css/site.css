@@ -1901,13 +1901,6 @@ select.form-control:focus::-ms-value {
   pointer-events: auto;
 }
 
-.gallery-lightbox__image-wrap {
-  position: relative;
-  display: inline-block;
-  max-width: 100%;
-  max-height: 75vh;
-}
-
 .gallery-lightbox__image {
   max-width: 100%;
   max-height: 75vh;
@@ -2030,19 +2023,4 @@ select.form-control:focus::-ms-value {
     width: 20px;
     height: 20px;
   }
-}
-
-/* Photo credit overlay */
-.photo-credit {
-  position: absolute;
-  bottom: 8px;
-  left: 8px;
-  z-index: 2;
-  padding: 2px 8px;
-  background-color: rgba(0, 0, 0, 0.55);
-  color: rgba(255, 255, 255, 0.9);
-  font-size: 0.75rem;
-  line-height: 1.4;
-  border-radius: 3px;
-  pointer-events: none;
 }
