@@ -70,7 +70,7 @@ function buildWatermarkUrl(secureUrl, creditText) {
   // Chained transformations: 1) resize/optimize, 2) text overlay
   const transform = [
     TRANSFORM,
-    `l_text:arial_16_bold:${encoded},co_rgb:FFFFFF,g_south_west,x_12,y_12`,
+    `l_text:arial_72_bold:${encoded},co_rgb:E0E0E0,g_south_west,x_20,y_20`,
   ].join("/");
 
   // Insert transform into the Cloudinary URL path after 'upload/'
