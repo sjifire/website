@@ -18,6 +18,12 @@ const webPath = "/" + folderPath.replace(/^src\//, "");
 // Supported image extensions
 const imageExtensions = [".jpg", ".jpeg", ".png", ".gif", ".webp"];
 
+// Per-image photo credits (keyed by filename)
+const photoCredits = {
+  "training_at_s31.jpg": "Monico Mackinnon",
+  "lt_salinas_photo_bombing_during_training.jpg": "Monico Mackinnon",
+};
+
 // Convert filename to readable alt text with Title Case
 function filenameToAlt(filename) {
   const name = path.basename(filename, path.extname(filename));
@@ -57,6 +63,7 @@ if (fs.existsSync(galleryFolder)) {
     .map((name) => ({
       src: `${webPath}/${name}`,
       alt: filenameToAlt(name),
+      credit: photoCredits[name] || null,
     }));
 }
 

@@ -36,12 +36,15 @@ scripts: '<script src="/js/gallery.js" defer></script>'
     <div class="gallery-lightbox__slides">
       {% for img in gallery.images %}
         <div class="gallery-lightbox__slide{% if forloop.first %} active{% endif %}" data-index="{{ forloop.index0 }}">
-          <img
-            class="gallery-lightbox__image leave-alone"
-            src="{% imgPath img.src, 'f_auto,q_auto:good,c_limit,w_1200,h_900' %}"
-            alt="{{ img.alt }}"
-            loading="lazy"
-          >
+          <div class="gallery-lightbox__image-wrap">
+            <img
+              class="gallery-lightbox__image leave-alone"
+              src="{% imgPath img.src, 'f_auto,q_auto:good,c_limit,w_1200,h_900' %}"
+              alt="{{ img.alt }}"
+              loading="lazy"
+            >
+            {% if img.credit %}<span class="photo-credit">&copy; {{ img.credit }}</span>{% endif %}
+          </div>
           <p class="gallery-lightbox__caption">{{ img.alt }}</p>
         </div>
       {% endfor %}
