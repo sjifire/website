@@ -219,8 +219,7 @@
       "employee_type": "staff",
       "staff_type": "PT Line Staff",
       "roles": [
-        "Apparatus Operator",
-        "Firefighter"
+        "Apparatus Operator"
       ],
       "photo": null
     },
@@ -471,7 +470,7 @@
       "staff_type": "Volunteer",
       "roles": [
         "Apparatus Operator",
-        "Wildland Firefighter"
+        "Firefighter"
       ],
       "photo": null
     },
@@ -572,8 +571,7 @@
       "employee_type": "volunteer",
       "staff_type": "Volunteer",
       "roles": [
-        "Marine Crew",
-        "Wildland Firefighter"
+        "Firefighter"
       ],
       "photo": null
     },
@@ -681,9 +679,7 @@
       "employee_type": "volunteer",
       "staff_type": "Volunteer",
       "roles": [
-        "Apparatus Operator",
-        "Firefighter",
-        "Marine Crew"
+        "Apparatus Operator"
       ],
       "photo": "/assets/media/personnel_imgs/matthew_wickey.jpg"
     },
