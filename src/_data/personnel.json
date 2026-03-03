@@ -1,10 +1,10 @@
 {
-  "count": 63,
+  "count": 62,
   "counts": {
     "fullTimeFirefighters": 9,
     "partTimeFirefighters": 6,
     "administrativeStaff": 2,
-    "volunteerFirefighters": 33,
+    "volunteerFirefighters": 32,
     "volunteerSupport": 13
   },
   "personnel": [
@@ -154,7 +154,8 @@
       "employee_type": "staff",
       "staff_type": "PT Line Staff",
       "roles": [
-        "Apparatus Operator"
+        "Apparatus Operator",
+        "Firefighter"
       ],
       "photo": "/assets/media/personnel_imgs/brad_smith.jpg"
     },
@@ -373,19 +374,6 @@
         "Support"
       ],
       "photo": "/assets/media/personnel_imgs/bonnie_stanger.jpg"
-    },
-    {
-      "first_name": "Brian",
-      "last_name": "Krembs",
-      "rank": null,
-      "title": null,
-      "employee_type": "volunteer",
-      "staff_type": "Volunteer",
-      "roles": [
-        "Apparatus Operator",
-        "Firefighter"
-      ],
-      "photo": null
     },
     {
       "first_name": "Bruce",
