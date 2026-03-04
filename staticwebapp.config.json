@@ -112,6 +112,11 @@
       "statusCode": 301
     },
     {
+      "route": "/news/media-releases/*",
+      "redirect": "https://sjifires.sharepoint.com/sites/SJIFirePublicRecords/Reading%20Room/Forms/AllItems.aspx?id=%2Fsites%2FSJIFirePublicRecords%2FReading%20Room%2FGovernance%20Documents%2FPRESS%20RELEASES%20%26%20NOTICES&viewid=f8bff041%2Db27e%2D4096%2Db436%2D8e5e92daf685&p=true",
+      "statusCode": 301
+    },
+    {
       "route": "/assets/docs/*",
       "redirect": "https://sjifires.sharepoint.com/:f:/s/SJIFirePublicRecords/IgBbJPhsXp0iTLx2WataGf3dARGo93hz2540LD3Gmcu4LRk",
       "statusCode": 301

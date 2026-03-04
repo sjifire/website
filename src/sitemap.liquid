@@ -36,14 +36,6 @@ eleventyExcludeFromCollections: true
     <priority>0.5</priority>
   </url>
   {%- endfor %}
-  {%- comment %}Media releases (PDFs){% endcomment %}
-  {%- for release in media_releases %}
-  <url>
-    <loc>{{ site.prodUrl }}{{ release.document }}</loc>
-    <changefreq>never</changefreq>
-    <priority>0.4</priority>
-  </url>
-  {%- endfor %}
   {%- comment %}Footer-only pages{% endcomment %}
   {%- for link in nav.footerLinks %}
   <url>

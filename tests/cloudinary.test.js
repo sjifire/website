@@ -47,10 +47,10 @@ describe('cloudinary module', () => {
     });
 
     it('works with PDF page extraction transform', () => {
-      const result = cloudinary.imgPath('/assets/media_releases/doc.pdf', 'f_auto,pg_1');
+      const result = cloudinary.imgPath('/assets/media/doc.pdf', 'f_auto,pg_1');
       assert.strictEqual(
         result,
-        'https://res.cloudinary.com/test-account/image/fetch/f_auto,pg_1/https://example.com/assets/media_releases/doc.pdf'
+        'https://res.cloudinary.com/test-account/image/fetch/f_auto,pg_1/https://example.com/assets/media/doc.pdf'
       );
     });
   });

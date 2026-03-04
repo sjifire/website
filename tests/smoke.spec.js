@@ -157,27 +157,4 @@ test.describe("Smoke Tests", () => {
     await expect(meetingInfo.locator("text=Fire Station")).toBeVisible();
   });
 
-  test("Media Releases page displays releases with PDF thumbnails", async ({ page }) => {
-    await page.goto("/news/media-releases/");
-
-    // Should have media releases section
-    await expect(page.locator(".media-releases")).toBeVisible();
-
-    // Should have release toggles (grouped by year)
-    const releaseToggles = page.locator(".media-release__toggle");
-    const toggleCount = await releaseToggles.count();
-    expect(toggleCount).toBeGreaterThanOrEqual(1);
-
-    // Should have PDF thumbnail images
-    const thumbnails = page.locator(".media_container img");
-    const thumbnailCount = await thumbnails.count();
-    expect(thumbnailCount).toBeGreaterThanOrEqual(1);
-
-    // Verify thumbnails have valid Cloudinary URLs for PDF rendering
-    const firstThumbnail = thumbnails.first();
-    const src = await firstThumbnail.getAttribute("src");
-    expect(src).toContain("cloudinary.com");
-    expect(src).toContain("/assets/media_releases/");
-    expect(src).toContain(".pdf");
-  });
 });

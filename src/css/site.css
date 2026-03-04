@@ -578,37 +578,6 @@ body {
 }
 
 
-.media-releases {
-  margin-block: 3rem 5rem;
-}
-
-.media-releases details {
-  border-bottom: 1px dashed var(--md-gray);
-}
-
-.media-releases details:first-child {
-  border-top: 1px dashed var(--md-gray)
-}
-
-.media-releases summary {
-  padding-block: 1rem;
-  cursor: pointer;
-}
-
-.media-releases summary h2 {
-  display: inline;
-  vertical-align: middle;
-  color: var(--dk-red);
-}
-
-.media-releases h3 {
-  font-size: 0.95rem;
-}
-
-.media-releases p {
-  font-size: 0.85rem;
-}
-
 .media_container {
   display: block;
   margin-bottom: 0.5rem;
