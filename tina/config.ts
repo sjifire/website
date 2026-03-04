@@ -704,6 +704,9 @@ export default defineConfig({
               return `${date}-${slug}`;
             },
           },
+          defaultItem: () => ({
+            date: new Date().toISOString(),
+          }),
           itemProps: (item: { title?: string; date?: string }) => ({
             label: item?.title || "Untitled Post",
           }),
@@ -794,6 +797,9 @@ export default defineConfig({
               return `${date}-${slug}`;
             },
           },
+          defaultItem: () => ({
+            date: new Date().toISOString(),
+          }),
           itemProps: (item: { title?: string }) => ({
             label: item?.title || "Untitled Release",
           }),
