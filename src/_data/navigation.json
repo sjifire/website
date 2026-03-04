@@ -13,16 +13,7 @@
     },
     {
       "label": "News",
-      "children": [
-        {
-          "label": "News",
-          "url": "/news/"
-        },
-        {
-          "label": "Media Releases",
-          "url": "/news/media-releases/"
-        }
-      ]
+      "url": "/news/"
     },
     {
       "label": "Services",

@@ -62,28 +62,3 @@ layout: page
     {% endif %}
   </nav>
 {% endif %}
-
-{%- capture sidebar_content -%}
-  {%- assign groupedReleases = media_releases | groupby: 'year' -%}
-  {%- assign sortedGroups = groupedReleases | dictsort | reverse -%}
-  {% for group in sortedGroups %}
-    {%- assign year = group[0] -%}
-    {%- assign releases = group[1] -%}
-    <details class="block-content"{% if forloop.first %} open{% endif %}>
-      <summary class="sidebar__heading">Media Releases: {{ year }}</summary>
-      <dl class="sidebar__desc-list">
-        {%- assign reversedReleases = releases | reverse -%}
-        {% for media_release in reversedReleases %}
-          <dt>
-            {{ media_release.date | postDateTerseNoYearISO }}
-          </dt>
-          <dd>
-            <a href="{{ media_release.document }}">
-              {{ media_release.title }}
-            </a>
-          </dd>
-        {% endfor %}
-      </dl>
-    </details>
-  {% endfor %}
-{%- endcapture -%}
