@@ -34,6 +34,9 @@ export default defineConfig({
     publicFolder: "_site",
   },
 
+  // Enable search in admin UI to suppress the "not configured" banner
+  search: { tina: {} },
+
   // Media config: local filesystem for dev, custom GitHub store for production
   media: isLocal
     ? {
