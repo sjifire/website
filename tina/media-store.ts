@@ -13,6 +13,7 @@ export interface GitHubMediaStoreConfig {
  */
 export class GitHubMediaStore implements MediaStore {
   accept = "*";
+  parse = (media: Media): string => media.src;
   private apiBase: string;
 
   constructor(config: GitHubMediaStoreConfig = {}) {
