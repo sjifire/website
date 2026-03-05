@@ -3,7 +3,8 @@
  * Sync personnel data from Microsoft 365
  *
  * Uses Entra ID user attributes:
- *   - employeeType: Determines staff vs volunteer (must be set to be included)
+ *   - Staff group membership: Determines staff vs volunteer
+ *   - employeeType: Must be set to be included (used for staff_type detail)
  *   - jobTitle: Display title
  *   - extensionAttribute1: Rank (Chief, Captain, Lieutenant, etc.)
  *   - extensionAttribute2: Apparatus Operator certification expiration date
@@ -42,13 +43,8 @@ const PHOTO_HASHES_PATH = join(PHOTOS_DIR, ".photo-hashes.json");
 const PHOTO_TRANSFORM = "w_1000,h_1000,c_fill,g_faces,q_auto";
 const DEFAULT_HASH_THRESHOLD = 10;
 
-// Employee types that map to "staff" (vs "volunteer")
-const STAFF_EMPLOYEE_TYPES = [
-  "Administrative",
-  "Day Staff",
-  "FT Line Staff",
-  "PT Line Staff",
-];
+// Entra ID group used to determine staff vs volunteer (set via STAFF_GROUP_ID env var)
+const STAFF_GROUP_ID = process.env.STAFF_GROUP_ID;
 
 // Ranks in sort order (Chief first)
 const RANKS = [
@@ -94,13 +90,11 @@ function normalizeFilename(firstName, lastName) {
 }
 
 /**
- * Determine employee category from employeeType attribute
+ * Fetch user IDs of the Staff group members
  */
-function determineEmployeeType(employeeType) {
-  if (!employeeType) return null;
-  if (STAFF_EMPLOYEE_TYPES.includes(employeeType)) return "staff";
-  if (employeeType === "Volunteer") return "volunteer";
-  return "volunteer"; // Unknown type defaults to volunteer
+async function fetchStaffGroupMembers(client) {
+  const response = await client.getGroupMembers(STAFF_GROUP_ID, ["id"]);
+  return new Set((response.value || []).map(m => m.id));
 }
 
 /**
@@ -451,11 +445,12 @@ async function main() {
 
   // Validate environment
   const { MS_GRAPH_TENANT_ID, MS_GRAPH_CLIENT_ID, MS_GRAPH_CLIENT_SECRET } = process.env;
-  if (!MS_GRAPH_TENANT_ID || !MS_GRAPH_CLIENT_ID || !MS_GRAPH_CLIENT_SECRET) {
+  if (!MS_GRAPH_TENANT_ID || !MS_GRAPH_CLIENT_ID || !MS_GRAPH_CLIENT_SECRET || !STAFF_GROUP_ID) {
     console.error("Missing required environment variables:");
     if (!MS_GRAPH_TENANT_ID) console.error("  - MS_GRAPH_TENANT_ID");
     if (!MS_GRAPH_CLIENT_ID) console.error("  - MS_GRAPH_CLIENT_ID");
     if (!MS_GRAPH_CLIENT_SECRET) console.error("  - MS_GRAPH_CLIENT_SECRET");
+    if (!STAFF_GROUP_ID) console.error("  - STAFF_GROUP_ID");
     process.exit(1);
   }
 
@@ -474,9 +469,12 @@ async function main() {
     clientSecret: MS_GRAPH_CLIENT_SECRET,
   });
 
-  console.log("\nFetching users from Microsoft 365...");
-  const users = await fetchUsersFromGraph(client);
-  console.log(`Found ${users.length} users`);
+  console.log("\nFetching users and staff group from Microsoft 365...");
+  const [users, staffMemberIds] = await Promise.all([
+    fetchUsersFromGraph(client),
+    fetchStaffGroupMembers(client),
+  ]);
+  console.log(`Found ${users.length} users, ${staffMemberIds.size} staff group members`);
 
   // Ensure directories exist
   await mkdir(PHOTOS_DIR, { recursive: true });
@@ -493,14 +491,15 @@ async function main() {
   for (const user of users) {
     if (!user.givenName || !user.surname) continue;
 
-    const employeeType = determineEmployeeType(user.employeeType);
-    if (!employeeType) {
+    if (!user.employeeType) {
       usersWithoutEmployeeType.push({
         name: `${user.givenName} ${user.surname}`,
         email: user.userPrincipalName,
       });
       continue;
     }
+
+    const employeeType = staffMemberIds.has(user.id) ? "staff" : "volunteer";
 
     const extAttrs = user.onPremisesExtensionAttributes || {};
     if (!extAttrs.extensionAttribute3?.trim()) {

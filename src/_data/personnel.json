@@ -4,7 +4,7 @@
     "fullTimeFirefighters": 9,
     "partTimeFirefighters": 6,
     "administrativeStaff": 2,
-    "volunteerFirefighters": 32,
+    "volunteerFirefighters": 31,
     "volunteerSupport": 13
   },
   "personnel": [
@@ -134,6 +134,18 @@
       "employee_type": "staff",
       "staff_type": "Day Staff",
       "roles": [],
+      "photo": null
+    },
+    {
+      "first_name": "Irene",
+      "last_name": "Voskamp",
+      "rank": null,
+      "title": "Director of IT",
+      "employee_type": "staff",
+      "staff_type": "Contractor",
+      "roles": [
+        "Firefighter"
+      ],
       "photo": null
     },
     {
@@ -274,18 +286,6 @@
         "Marine Crew"
       ],
       "photo": "/assets/media/personnel_imgs/john_salinas.jpg"
-    },
-    {
-      "first_name": "Irene",
-      "last_name": "Voskamp",
-      "rank": null,
-      "title": "Director of IT",
-      "employee_type": "volunteer",
-      "staff_type": "Contractor",
-      "roles": [
-        "Firefighter"
-      ],
-      "photo": null
     },
     {
       "first_name": "John",
