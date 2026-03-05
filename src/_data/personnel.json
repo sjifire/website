@@ -1,10 +1,10 @@
 {
   "count": 62,
   "counts": {
-    "fullTimeFirefighters": 9,
+    "fullTimeFirefighters": 11,
     "partTimeFirefighters": 6,
     "administrativeStaff": 2,
-    "volunteerFirefighters": 32,
+    "volunteerFirefighters": 30,
     "volunteerSupport": 13
   },
   "personnel": [
@@ -20,6 +20,18 @@
         "Firefighter"
       ],
       "photo": "/assets/media/personnel_imgs/noel_monin.jpg"
+    },
+    {
+      "first_name": "Jordan",
+      "last_name": "Pollack",
+      "rank": "Division Chief",
+      "title": null,
+      "employee_type": "staff",
+      "staff_type": "Contractor",
+      "roles": [
+        "Firefighter"
+      ],
+      "photo": "/assets/media/personnel_imgs/jordan_pollack.jpg"
     },
     {
       "first_name": "Michael",
@@ -137,6 +149,18 @@
       "photo": null
     },
     {
+      "first_name": "Irene",
+      "last_name": "Voskamp",
+      "rank": null,
+      "title": "Director of IT",
+      "employee_type": "staff",
+      "staff_type": "Contractor",
+      "roles": [
+        "Firefighter"
+      ],
+      "photo": null
+    },
+    {
       "first_name": "Robin",
       "last_name": "Garcia",
       "rank": null,
@@ -225,18 +249,6 @@
       "photo": null
     },
     {
-      "first_name": "Jordan",
-      "last_name": "Pollack",
-      "rank": "Division Chief",
-      "title": null,
-      "employee_type": "volunteer",
-      "staff_type": "Volunteer",
-      "roles": [
-        "Firefighter"
-      ],
-      "photo": "/assets/media/personnel_imgs/jordan_pollack.jpg"
-    },
-    {
       "first_name": "Erin",
       "last_name": "Graham",
       "rank": "Captain",
@@ -274,18 +286,6 @@
         "Marine Crew"
       ],
       "photo": "/assets/media/personnel_imgs/john_salinas.jpg"
-    },
-    {
-      "first_name": "Irene",
-      "last_name": "Voskamp",
-      "rank": null,
-      "title": "Director of IT",
-      "employee_type": "volunteer",
-      "staff_type": "Contractor",
-      "roles": [
-        "Firefighter"
-      ],
-      "photo": null
     },
     {
       "first_name": "John",

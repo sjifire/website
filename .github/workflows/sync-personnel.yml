@@ -90,6 +90,8 @@ jobs:
         run: npm ci
 
       - name: Sync personnel from Microsoft 365
+        env:
+          STAFF_GROUP_ID: c57e26ba-cab4-4185-afd2-61a47786229b
         run: |
           if [ "${{ inputs.force_refresh }}" = "true" ]; then
             node scripts/sync-personnel.mjs --force-refresh
