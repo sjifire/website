@@ -351,15 +351,14 @@ function computeCounts(personnel) {
     p.roles?.includes("Apparatus Operator") ||
     p.roles?.includes("Marine Crew");
 
-  // Full-time: FT Line Staff, Day Staff, or Administrative with FF role
-  const fullTimeTypes = ["FT Line Staff", "Day Staff", "Administrative"];
-  const fullTimeFirefighters = staff.filter(
-    p => fullTimeTypes.includes(p.staff_type) && hasFirefighterRole(p)
-  ).length;
-
   // Part-time: PT Line Staff with FF role
   const partTimeFirefighters = staff.filter(
     p => p.staff_type === "PT Line Staff" && hasFirefighterRole(p)
+  ).length;
+
+  // Full-time: all other staff with FF role (FT Line Staff, Day Staff, Administrative, Contractor, etc.)
+  const fullTimeFirefighters = staff.filter(
+    p => p.staff_type !== "PT Line Staff" && hasFirefighterRole(p)
   ).length;
 
   // Administrative: staff without FF role

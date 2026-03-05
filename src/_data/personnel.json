@@ -1,7 +1,7 @@
 {
   "count": 62,
   "counts": {
-    "fullTimeFirefighters": 9,
+    "fullTimeFirefighters": 10,
     "partTimeFirefighters": 6,
     "administrativeStaff": 2,
     "volunteerFirefighters": 31,
@@ -242,7 +242,7 @@
       "rank": "Division Chief",
       "title": null,
       "employee_type": "volunteer",
-      "staff_type": "Volunteer",
+      "staff_type": "Contractor",
       "roles": [
         "Firefighter"
       ],
