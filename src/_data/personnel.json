@@ -32,6 +32,16 @@
       "photo": "/assets/media/personnel_imgs/robin_garcia.jpg"
     },
     {
+      "first_name": "Amy",
+      "last_name": "Taylor",
+      "rank": null,
+      "title": "Administrative Assistant",
+      "employee_type": "staff",
+      "staff_type": "Day Staff",
+      "roles": [],
+      "photo": null
+    },
+    {
       "first_name": "Jordan",
       "last_name": "Pollack",
       "rank": "Division Chief",
@@ -146,16 +156,6 @@
         "Apparatus Operator",
         "Firefighter"
       ],
-      "photo": null
-    },
-    {
-      "first_name": "Amy",
-      "last_name": "Taylor",
-      "rank": null,
-      "title": "Administrative Assistant",
-      "employee_type": "staff",
-      "staff_type": "Day Staff",
-      "roles": [],
       "photo": null
     },
     {
