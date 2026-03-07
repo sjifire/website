@@ -22,26 +22,6 @@
       "photo": "/assets/media/personnel_imgs/noel_monin.jpg"
     },
     {
-      "first_name": "Robin",
-      "last_name": "Garcia",
-      "rank": null,
-      "title": "Executive Assistant, Finance Officer",
-      "employee_type": "staff",
-      "staff_type": "Administrative",
-      "roles": [],
-      "photo": "/assets/media/personnel_imgs/robin_garcia.jpg"
-    },
-    {
-      "first_name": "Amy",
-      "last_name": "Taylor",
-      "rank": null,
-      "title": "Administrative Assistant",
-      "employee_type": "staff",
-      "staff_type": "Day Staff",
-      "roles": [],
-      "photo": null
-    },
-    {
       "first_name": "Jordan",
       "last_name": "Pollack",
       "rank": "Division Chief",
@@ -65,6 +45,26 @@
         "Firefighter"
       ],
       "photo": "/assets/media/personnel_imgs/michael_hartzell.jpg"
+    },
+    {
+      "first_name": "Robin",
+      "last_name": "Garcia",
+      "rank": null,
+      "title": "Executive Assistant, Finance Officer",
+      "employee_type": "staff",
+      "staff_type": "Administrative",
+      "roles": [],
+      "photo": "/assets/media/personnel_imgs/robin_garcia.jpg"
+    },
+    {
+      "first_name": "Amy",
+      "last_name": "Taylor",
+      "rank": null,
+      "title": "Administrative Assistant",
+      "employee_type": "staff",
+      "staff_type": "Day Staff",
+      "roles": [],
+      "photo": null
     },
     {
       "first_name": "Karl",

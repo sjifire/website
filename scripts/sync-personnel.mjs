@@ -168,15 +168,16 @@ function sortPersonnel(personnel) {
     return a.first_name.localeCompare(b.first_name);
   });
 
-  // Exception: move admin staff (Executive Assistant, then Administrative Assistant) right after Chief
-  const chiefIndex = sorted.findIndex(p => p.rank === "Chief");
-  if (chiefIndex > -1) {
+  // Exception: move admin staff (Executive Assistant, then Administrative Assistant) right after all Chiefs
+  const lastChiefIndex = sorted.findLastIndex(p => p.rank && p.rank.includes("Chief"));
+  if (lastChiefIndex > -1) {
     const adminTitles = ["executive assistant", "administrative assistant"];
     for (let i = adminTitles.length - 1; i >= 0; i--) {
       const idx = sorted.findIndex(p => p.title && p.title.toLowerCase().includes(adminTitles[i]));
-      if (idx > -1 && idx !== chiefIndex + 1) {
+      if (idx > -1) {
         const [person] = sorted.splice(idx, 1);
-        sorted.splice(chiefIndex + 1, 0, person);
+        const insertAfter = sorted.findLastIndex(p => p.rank && p.rank.includes("Chief"));
+        sorted.splice(insertAfter + 1, 0, person);
       }
     }
   }
