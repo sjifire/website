@@ -148,7 +148,7 @@ function determineRoles(extAttrs) {
  * Sort personnel: staff first (by rank, then title presence, then name), volunteers (by rank, then title presence, then name)
  */
 function sortPersonnel(personnel) {
-  return [...personnel].sort((a, b) => {
+  const sorted = [...personnel].sort((a, b) => {
     // Staff before volunteers
     if (a.employee_type !== b.employee_type) {
       return a.employee_type === "staff" ? -1 : 1;
@@ -167,6 +167,16 @@ function sortPersonnel(personnel) {
     // Then by first name
     return a.first_name.localeCompare(b.first_name);
   });
+
+  // Exception: move Executive Assistant to right after the Chief
+  const eaIndex = sorted.findIndex(p => p.title && p.title.toLowerCase().includes("executive assistant"));
+  const chiefIndex = sorted.findIndex(p => p.rank === "Chief");
+  if (eaIndex > -1 && chiefIndex > -1 && eaIndex !== chiefIndex + 1) {
+    const [ea] = sorted.splice(eaIndex, 1);
+    sorted.splice(chiefIndex + 1, 0, ea);
+  }
+
+  return sorted;
 }
 
 // ============================================================================
