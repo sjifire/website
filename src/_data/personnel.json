@@ -47,6 +47,26 @@
       "photo": "/assets/media/personnel_imgs/michael_hartzell.jpg"
     },
     {
+      "first_name": "Robin",
+      "last_name": "Garcia",
+      "rank": null,
+      "title": "Executive Assistant, Finance Officer",
+      "employee_type": "staff",
+      "staff_type": "Administrative",
+      "roles": [],
+      "photo": "/assets/media/personnel_imgs/robin_garcia.jpg"
+    },
+    {
+      "first_name": "Amy",
+      "last_name": "Taylor",
+      "rank": null,
+      "title": "Administrative Assistant",
+      "employee_type": "staff",
+      "staff_type": "Day Staff",
+      "roles": [],
+      "photo": null
+    },
+    {
       "first_name": "Karl",
       "last_name": "Kuetzing",
       "rank": "Captain",
@@ -139,16 +159,6 @@
       "photo": null
     },
     {
-      "first_name": "Amy",
-      "last_name": "Taylor",
-      "rank": null,
-      "title": "Administrative Assistant",
-      "employee_type": "staff",
-      "staff_type": "Day Staff",
-      "roles": [],
-      "photo": null
-    },
-    {
       "first_name": "Irene",
       "last_name": "Voskamp",
       "rank": null,
@@ -159,16 +169,6 @@
         "Firefighter"
       ],
       "photo": null
-    },
-    {
-      "first_name": "Robin",
-      "last_name": "Garcia",
-      "rank": null,
-      "title": "Executive Assistant, Finance Officer",
-      "employee_type": "staff",
-      "staff_type": "Administrative",
-      "roles": [],
-      "photo": "/assets/media/personnel_imgs/robin_garcia.jpg"
     },
     {
       "first_name": "Brad",
