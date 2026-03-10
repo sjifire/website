@@ -75,7 +75,7 @@
       "staff_type": "Day Staff",
       "roles": [
         "Apparatus Operator",
-        "Wildland Firefighter"
+        "Firefighter"
       ],
       "photo": "/assets/media/personnel_imgs/karl_kuetzing.jpg"
     },
@@ -620,7 +620,7 @@
       "employee_type": "volunteer",
       "staff_type": "Volunteer",
       "roles": [
-        "Firefighter"
+        "Wildland Firefighter"
       ],
       "photo": null
     },
@@ -730,7 +730,7 @@
       "employee_type": "volunteer",
       "staff_type": "Volunteer",
       "roles": [
-        "Firefighter"
+        "Wildland Firefighter"
       ],
       "photo": null
     },
