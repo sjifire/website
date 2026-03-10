@@ -1,0 +1,46 @@
+---
+title: News Archive
+permalink: /news/archive/
+layout: page
+---
+<header class="hgroup">
+  <div class="lede">
+    <p>Older posts that are no longer shown in the main news feed.</p>
+  </div>
+</header>
+
+{% if archivedPosts.size > 0 %}
+<ul class="l-grid l-grid--auto">
+  {% assign sortedArchived = archivedPosts | sort: "date" | reverse %}
+  {% for post in sortedArchived %}
+    <li class="card">
+      <div class="card__body">
+        <div class="news__type">
+          {% render "post_type_icons.liquid", post: post %}
+          {{ post.post_type }}
+        </div>
+        <h3 class="news__headline">
+          <a href="{{ post.url }}/">
+            {{ post.title }}
+          </a>
+        </h3>
+        <time datetime="{{ post.date | htmlDateStringISO }}" pubdate="pubdate" class="news__date">
+          {{ post.date | postDateTerseISO }}
+        </time>
+        <div class="news__lede">
+          {{ post.lede | markdownify }}
+        </div>
+      </div>
+      <div class="card__footer">
+        <a href="{{ post.url }}/" class="news__readmore" aria-label="Read more about {{ post.title }}">Read more <svg aria-hidden="true"><use xlink:href="#right-arrow"></svg></a>
+      </div>
+    </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p>No archived posts at this time.</p>
+{% endif %}
+
+<p style="margin-top: 2rem;">
+  <a href="/news/">« Back to News</a>
+</p>

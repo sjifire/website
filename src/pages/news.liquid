@@ -1,7 +1,7 @@
 ---
 title: News & Announcements
 pagination:
-  data: posts
+  data: activePosts
   size: 24
   alias: post
   reverse: true
@@ -61,4 +61,10 @@ layout: page
       <span>»</span>
     {% endif %}
   </nav>
+{% endif %}
+
+{% if archivedPosts.size > 0 %}
+<p class="text-center" style="margin-top: 2rem;">
+  Looking for older announcements? <a href="/news/archive/">Browse the archive</a>.
+</p>
 {% endif %}

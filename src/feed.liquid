@@ -15,7 +15,7 @@ eleventyExcludeFromCollections: true
     <uri>{{ site.prodUrl }}</uri>
   </author>
   <generator>Eleventy</generator>
-  {%- assign sortedPosts = posts | sort: "date" | reverse %}
+  {%- assign sortedPosts = activePosts | sort: "date" | reverse %}
   {%- for post in sortedPosts %}
   <entry>
     <title>{{ post.title | escape }}</title>
