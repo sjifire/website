@@ -7,8 +7,12 @@ pagination:
   reverse: true
 permalink: "/news/{% if pagination.pageNumber > 0 %}page-{{ pagination.pageNumber | plus: 1 }}/{% endif %}index.html"
 layout: page
+wide_layout: true
 ---
 <header class="hgroup">
+  {% if archivedPosts.size > 0 %}
+    <a href="/news/archive/" class="news__archive-link">Browse archive <svg aria-hidden="true"><use xlink:href="#right-arrow"></svg></a>
+  {% endif %}
   <div class="lede">
     {{ news.preamble | markdownify }}
   </div>
@@ -61,10 +65,4 @@ layout: page
       <span>»</span>
     {% endif %}
   </nav>
-{% endif %}
-
-{% if archivedPosts.size > 0 %}
-<p class="text-center" style="margin-top: 2rem;">
-  Looking for older announcements? <a href="/news/archive/">Browse the archive</a>.
-</p>
 {% endif %}
