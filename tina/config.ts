@@ -731,6 +731,13 @@ export default defineConfig({
             required: true,
           },
           {
+            type: "datetime",
+            name: "archived_at",
+            label: "Auto-archive date",
+            description:
+              "Post will be removed from the news feed after this date. Leave empty to never archive. Useful for time-limited posts like training classes or auctions.",
+          },
+          {
             type: "string",
             name: "title",
             label: "Title",
@@ -771,13 +778,6 @@ export default defineConfig({
             ui: {
               component: "textarea",
             },
-          },
-          {
-            type: "datetime",
-            name: "archived_at",
-            label: "Auto-archive date",
-            description:
-              "Post will be removed from the news feed after this date. Leave empty to never archive. Useful for time-limited posts like training classes or auctions.",
           },
         ],
       },
