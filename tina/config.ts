@@ -751,13 +751,19 @@ export default defineConfig({
             required: true,
           },
           {
-            type: "string",
+            type: "rich-text",
             name: "lede",
             label: "Lede (Summary)",
             description: "A brief summary shown in post listings",
-            ui: {
-              component: "textarea",
-            },
+            toolbarOverride: [
+              "bold",
+              "italic",
+              "underline",
+              "strikethrough",
+              "ul",
+              "ol",
+              "link",
+            ],
           },
           {
             type: "object",
