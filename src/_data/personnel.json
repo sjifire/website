@@ -171,6 +171,28 @@
       "photo": null
     },
     {
+      "first_name": "Irene",
+      "last_name": "Voskamp",
+      "rank": null,
+      "title": "Director of IT",
+      "employee_type": "staff",
+      "staff_type": "Contractor",
+      "roles": [
+        "Firefighter"
+      ],
+      "photo": null
+    },
+    {
+      "first_name": "Robin",
+      "last_name": "Garcia",
+      "rank": null,
+      "title": "Executive Assistant, Finance Officer",
+      "employee_type": "staff",
+      "staff_type": "Administrative",
+      "roles": [],
+      "photo": "/assets/media/personnel_imgs/robin_garcia.jpg"
+    },
+    {
       "first_name": "Brad",
       "last_name": "Smith",
       "rank": null,
