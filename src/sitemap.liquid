@@ -28,12 +28,21 @@ eleventyExcludeFromCollections: true
   </url>
     {%- endif %}
   {%- endfor %}
-  {%- comment %}News posts{% endcomment %}
-  {%- for post in posts reversed %}
+  {%- comment %}Active news posts{% endcomment %}
+  {%- for post in activePosts reversed %}
   <url>
     <loc>{{ site.prodUrl }}{{ post.url }}/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
+  </url>
+  {%- endfor %}
+  {%- comment %}Archived news posts (lower priority, no longer updated){% endcomment %}
+  {%- for post in archivedPosts reversed %}
+  <url>
+    <loc>{{ site.prodUrl }}{{ post.url }}/</loc>
+    <lastmod>{{ post.archived_at | date: "%Y-%m-%d" }}</lastmod>
+    <changefreq>never</changefreq>
+    <priority>0.2</priority>
   </url>
   {%- endfor %}
   {%- comment %}Footer-only pages{% endcomment %}

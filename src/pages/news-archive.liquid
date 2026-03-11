@@ -2,8 +2,10 @@
 title: News Archive
 permalink: /news/archive/
 layout: page
+wide_layout: true
 ---
 <header class="hgroup">
+  <a href="/news/" class="news__archive-link">« Back to News</a>
   <div class="lede">
     <p>Older posts that are no longer shown in the main news feed.</p>
   </div>
@@ -16,6 +18,7 @@ layout: page
     <li class="card">
       <div class="card__body">
         <div class="news__type">
+          {% if post.pinned %}<svg class="pin-icon" aria-label="Pinned post"><use xlink:href="#pin"></use></svg>{% endif %}
           {% render "post_type_icons.liquid", post: post %}
           {{ post.post_type }}
         </div>
@@ -40,7 +43,3 @@ layout: page
 {% else %}
 <p>No archived posts at this time.</p>
 {% endif %}
-
-<p style="margin-top: 2rem;">
-  <a href="/news/">« Back to News</a>
-</p>
