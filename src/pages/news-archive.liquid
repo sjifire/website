@@ -1,6 +1,11 @@
 ---
 title: News Archive
-permalink: /news/archive/
+pagination:
+  data: archivedPosts
+  size: 24
+  alias: post
+  reverse: true
+permalink: "/news/archive/{% if pagination.pageNumber > 0 %}page-{{ pagination.pageNumber | plus: 1 }}/{% endif %}index.html"
 layout: page
 wide_layout: true
 ---
@@ -10,11 +15,8 @@ wide_layout: true
     <p>Older posts that are no longer shown in the main news feed.</p>
   </div>
 </header>
-
-{% if archivedPosts.size > 0 %}
 <ul class="l-grid l-grid--auto">
-  {% assign sortedArchived = archivedPosts | sort: "date" | reverse %}
-  {% for post in sortedArchived %}
+  {% for post in pagination.items %}
     <li class="card">
       <div class="card__body">
         <div class="news__type">
@@ -40,6 +42,25 @@ wide_layout: true
     </li>
   {% endfor %}
 </ul>
-{% else %}
-<p>No archived posts at this time.</p>
+
+{% if pagination.href.previous or pagination.href.next %}
+  <nav class="pagination">
+    {% if pagination.href.previous %}
+      <a href="{{ pagination.href.previous | url }}">«</a>
+    {% else %}
+      <span>«</span>
+    {% endif %}
+  {%- for pageEntry in pagination.pages %}
+    {% if page.url == pagination.hrefs[forloop.index0] %}
+      <span>{{ forloop.index }}</span>
+    {% else %}
+      <a href="{{ pagination.hrefs[forloop.index0] | url }}">{{ forloop.index }}</a>
+    {% endif %}
+  {%- endfor %}
+    {% if pagination.href.next %}
+      <a href="{{ pagination.href.next | url }}">»</a>
+    {% else %}
+      <span>»</span>
+    {% endif %}
+  </nav>
 {% endif %}
