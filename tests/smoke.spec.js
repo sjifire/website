@@ -18,6 +18,7 @@ const pages = [
   { path: "/services/fire-alarms/", name: "Fire Alarms" },
   { path: "/services/firewise/", name: "Firewise" },
   { path: "/services/knoxbox/", name: "Knox Box" },
+  { path: "/news/archive/", name: "News Archive" },
 ];
 
 test.describe("Smoke Tests", () => {
