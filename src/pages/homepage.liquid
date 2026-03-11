@@ -27,7 +27,7 @@ scripts: '<script src="/js/carousel.js" defer></script>'
   </section>
   <div class="l-grid__main block-content">
     <ul class="l-grid l-grid--auto">
-      {% assign limitedPosts = posts | reverse | limit: homepage.number_news_stories %}
+      {% assign limitedPosts = activePosts | reverse | limit: homepage.number_news_stories %}
       {% for post in limitedPosts %}
         <li class="card">
           <div class="card__body">

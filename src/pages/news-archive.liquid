@@ -1,20 +1,18 @@
 ---
-title: News & Announcements
+title: News Archive
 pagination:
-  data: activePosts
+  data: archivedPosts
   size: 24
   alias: post
   reverse: true
-permalink: "/news/{% if pagination.pageNumber > 0 %}page-{{ pagination.pageNumber | plus: 1 }}/{% endif %}index.html"
+permalink: "/news/archive/{% if pagination.pageNumber > 0 %}page-{{ pagination.pageNumber | plus: 1 }}/{% endif %}index.html"
 layout: page
 wide_layout: true
 ---
 <header class="hgroup">
-  {% if archivedPosts.size > 0 %}
-    <a href="/news/archive/" class="news__archive-link">Browse archive <svg aria-hidden="true"><use xlink:href="#right-arrow"></svg></a>
-  {% endif %}
+  <a href="/news/" class="news__archive-link">« Back to News</a>
   <div class="lede">
-    {{ news.preamble | markdownify }}
+    <p>Older posts that are no longer shown in the main news feed.</p>
   </div>
 </header>
 <ul class="l-grid l-grid--auto">

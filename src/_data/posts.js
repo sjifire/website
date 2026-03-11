@@ -5,6 +5,7 @@ const { DateTime } = require("luxon");
 const matter = require("gray-matter");
 
 const postsFolder = path.resolve(__dirname, "../posts");
+const now = new Date();
 
 const posts = fs
   .readdirSync(postsFolder)
@@ -34,6 +35,7 @@ posts.forEach((p) => {
     strict: true,
   });
   p.url = `/news/${urlDate}-${titleSlug}`;
+  p.archived = !!(p.archived_at && new Date(p.archived_at) <= now);
 });
 
 module.exports = posts;

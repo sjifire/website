@@ -70,6 +70,18 @@ module.exports = function(eleventyConfig) {
     return array.slice(0, parseInt(limit, 10));
   });
 
+  // Filter array where property equals value (like Jekyll/Jinja where filter)
+  eleventyConfig.addFilter("where", function(arr, attr, value) {
+    if (!arr) return [];
+    return arr.filter((item) => item[attr] === value);
+  });
+
+  // Filter array excluding items where property equals value
+  eleventyConfig.addFilter("reject", function(arr, attr, value) {
+    if (!arr) return [];
+    return arr.filter((item) => item[attr] !== value);
+  });
+
   // Filter array by object property value
   eleventyConfig.addFilter("pluckByValue", function (arr, value, attr) {
     if(!arr || !value) return;

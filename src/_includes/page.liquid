@@ -35,7 +35,7 @@ layout: base
   </div>
 {% else %}
   {% comment %}Single-column layout{% endcomment %}
-  <div class="l-squeezed block-content">
+  <div class="{% if wide_layout %}l-wide{% else %}l-squeezed{% endif %} block-content">
     <h1>{{ title }}</h1>
     {% if preamble %}
       <div class="lede">

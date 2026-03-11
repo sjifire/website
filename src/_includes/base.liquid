@@ -160,6 +160,7 @@
       const image = imgs[Math.floor(Math.random() * imgs.length)];
       document.getElementById('home-header').style.setProperty('--home-header-bg-image', 'url('+image+')');
     {% endif %}
+    document.querySelectorAll('a[href]').forEach(function(a){var h=a.hostname;if(h&&h!==location.hostname){a.setAttribute('target','_blank');a.setAttribute('rel','noopener');}});
   {%- endcapture -%}
   <script defer>
     {{ js }}

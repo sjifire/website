@@ -15,6 +15,12 @@
 }
 ---
 
+{% if post.archived %}
+<div class="archive-banner" style="background-color: #f0f0f0; border-left: 4px solid #666; padding: 0.75rem 1rem; margin-bottom: 1.5rem; max-width: 48rem; margin-left: auto; margin-right: auto;">
+  <strong>Archived</strong> — This post is no longer shown in the news feed. <a href="/news/archive/">Browse the archive</a>.
+</div>
+{% endif %}
+
 <article class="l-squeezed">
   <div class="block-content">
     {{ post.body | markdownify | processStyledImages }}
