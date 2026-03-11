@@ -204,61 +204,48 @@ test.describe("Carousel", () => {
   });
 
   test("autoplay advances slides", async ({ page }) => {
-    // Homepage has autoplay: true, interval: 5
-    const initialSlide = page.locator(".carousel__slide.active");
-    const initialLabel = await initialSlide.getAttribute("aria-label");
+    // Homepage has autoplay: true, interval: 5s
+    // Use waitForFunction to detect when the active slide changes,
+    // rather than relying on a fixed timeout
+    const initialLabel = await page
+      .locator(".carousel__slide.active")
+      .getAttribute("aria-label");
 
-    // Wait longer than the interval (5 seconds) + transition time
-    await page.waitForTimeout(6000);
+    await page.waitForFunction(
+      (label) => {
+        const active = document.querySelector(".carousel__slide.active");
+        return active && active.getAttribute("aria-label") !== label;
+      },
+      initialLabel,
+      { timeout: 12000 }
+    );
 
-    const afterAutoplay = page.locator(".carousel__slide.active");
-    const afterAutoplayLabel = await afterAutoplay.getAttribute("aria-label");
-
-    expect(afterAutoplayLabel).not.toBe(initialLabel);
+    const newLabel = await page
+      .locator(".carousel__slide.active")
+      .getAttribute("aria-label");
+    expect(newLabel).not.toBe(initialLabel);
   });
 
   test("autoplay pauses on hover", async ({ page }) => {
     const carousel = page.locator(".carousel");
-
-    // Wait for carousel to be fully loaded
     await expect(carousel).toBeVisible();
 
-    // Continuously dispatch mouseenter events and verify slide stays stable
-    // This approach is more robust than a single pause + wait
-    let lastLabel = null;
-    let stableCount = 0;
-    const requiredStableChecks = 6; // Check 6 times over ~6 seconds
+    // Hover over the carousel using Playwright's native hover (real mouse event)
+    await carousel.hover();
 
-    for (let i = 0; i < requiredStableChecks; i++) {
-      // Trigger mouseenter to pause autoplay
-      await page.evaluate(() => {
-        const carouselEl = document.querySelector('.carousel');
-        carouselEl.dispatchEvent(new MouseEvent('mouseenter', { bubbles: true }));
-      });
+    // Record which slide is active after hovering
+    const pausedLabel = await page
+      .locator(".carousel__slide.active")
+      .getAttribute("aria-label");
 
-      // Get current slide
-      const currentLabel = await page.locator(".carousel__slide.active").getAttribute("aria-label");
+    // Wait longer than the autoplay interval (5s) while hovering
+    await page.waitForTimeout(6000);
 
-      if (lastLabel === null) {
-        // First check - record the initial state
-        lastLabel = currentLabel;
-        stableCount = 1;
-      } else if (currentLabel === lastLabel) {
-        // Slide hasn't changed - good!
-        stableCount++;
-      } else {
-        // Slide changed - reset and try to stabilize from new position
-        lastLabel = currentLabel;
-        stableCount = 1;
-      }
-
-      // Wait 1 second before next check (total ~6 seconds for 6 checks)
-      await page.waitForTimeout(1000);
-    }
-
-    // We should have at least 5 consecutive stable checks (slide didn't change for 5+ seconds)
-    // This proves the pause is working - autoplay interval is 5 seconds
-    expect(stableCount).toBeGreaterThanOrEqual(5);
+    // Slide should not have changed while hovered
+    const afterLabel = await page
+      .locator(".carousel__slide.active")
+      .getAttribute("aria-label");
+    expect(afterLabel).toBe(pausedLabel);
   });
 
   test("carousel has proper ARIA attributes", async ({ page }) => {
