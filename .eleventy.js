@@ -4,7 +4,6 @@ const escapeHtml = require("escape-html");
 const { sanitizeUrl } = require("@braintree/sanitize-url");
 const createCloudinary = require("./src/_lib/cloudinary");
 const { dateFilters, getNextMeeting, formatMeetingSchedule } = require("./src/_lib/date-utils");
-const { richTextToHtml } = require("./src/_lib/tina-rich-text");
 
 module.exports = function(eleventyConfig) {
   const siteData = require("./src/_data/site.json");
@@ -104,20 +103,6 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addFilter("markdownify", function (rawString) {
     if(!rawString) return;
     return mdRender.render(rawString);
-  });
-
-  // Render post body: handles both legacy markdown strings and TinaCMS rich-text AST objects
-  eleventyConfig.addFilter("renderPostBody", function (body) {
-    if (!body) return "";
-    // Legacy posts store body as a plain markdown string
-    if (typeof body === "string") {
-      return mdRender.render(body);
-    }
-    // New posts store body as a TinaCMS rich-text AST object
-    if (typeof body === "object") {
-      return richTextToHtml(body, cloudinary);
-    }
-    return "";
   });
 
   // Process TinaCMS styled-image components
