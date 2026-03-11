@@ -688,7 +688,7 @@ export default defineConfig({
         name: "post",
         label: "News Posts",
         path: "src/posts",
-        format: "json",
+        format: "mdx",
         ui: {
           filename: {
             readonly: true,
@@ -768,6 +768,7 @@ export default defineConfig({
             type: "rich-text",
             name: "body",
             label: "Body",
+            isBody: true,
             templates: [
               {
                 name: "StyledImage",
