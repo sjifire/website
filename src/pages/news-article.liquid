@@ -23,7 +23,7 @@
 
 <article class="l-squeezed">
   <div class="block-content">
-    {{ post.body | markdownify }}
+    {{ post.body | markdownify | processStyledImages }}
   </div>
 </article>
 

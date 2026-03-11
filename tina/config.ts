@@ -688,7 +688,7 @@ export default defineConfig({
         name: "post",
         label: "News Posts",
         path: "src/posts",
-        format: "json",
+        format: "mdx",
         ui: {
           filename: {
             readonly: true,
@@ -772,12 +772,56 @@ export default defineConfig({
             ],
           },
           {
-            type: "string",
+            type: "rich-text",
             name: "body",
             label: "Body",
-            ui: {
-              component: "textarea",
-            },
+            isBody: true,
+            templates: [
+              {
+                name: "StyledImage",
+                label: "Styled Image",
+                ui: {
+                  defaultItem: {
+                    size: "medium",
+                    align: "center",
+                  },
+                },
+                fields: [
+                  {
+                    type: "image",
+                    name: "src",
+                    label: "Image",
+                    required: true,
+                  },
+                  {
+                    type: "string",
+                    name: "alt",
+                    label: "Alt Text",
+                  },
+                  {
+                    type: "string",
+                    name: "size",
+                    label: "Size",
+                    options: [
+                      { value: "small", label: "Small (25%)" },
+                      { value: "medium", label: "Medium (50%)" },
+                      { value: "large", label: "Large (75%)" },
+                      { value: "full", label: "Full Width" },
+                    ],
+                  },
+                  {
+                    type: "string",
+                    name: "align",
+                    label: "Alignment",
+                    options: [
+                      { value: "left", label: "Float Left" },
+                      { value: "center", label: "Center" },
+                      { value: "right", label: "Float Right" },
+                    ],
+                  },
+                ],
+              },
+            ],
           },
         ],
       },
