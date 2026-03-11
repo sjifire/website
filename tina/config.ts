@@ -738,6 +738,12 @@ export default defineConfig({
               "Post will be removed from the news feed after this date. Leave empty to never archive. Useful for time-limited posts like training classes or auctions.",
           },
           {
+            type: "boolean",
+            name: "pinned",
+            label: "Pin to Top",
+            description: "Pinned posts appear at the top of the news list",
+          },
+          {
             type: "string",
             name: "title",
             label: "Title",
@@ -752,12 +758,6 @@ export default defineConfig({
             ui: {
               component: "textarea",
             },
-          },
-          {
-            type: "boolean",
-            name: "pinned",
-            label: "Pin to Top",
-            description: "Pinned posts appear at the top of the news list",
           },
           {
             type: "object",
