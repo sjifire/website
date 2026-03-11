@@ -37,6 +37,7 @@
     "cloudinary": "^2.9.0",
     "dotenv": "^17.2.3",
     "escape-html": "^1.0.3",
+    "gray-matter": "^4.0.3",
     "jpeg-js": "^0.4.4",
     "luxon": "^3.7.2",
     "markdown-it": "^14.1.0",

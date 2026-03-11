@@ -8,18 +8,12 @@ const postsFolder = path.resolve(__dirname, "../posts");
 
 const posts = fs
   .readdirSync(postsFolder)
-  .filter((name) => [".json", ".mdx"].includes(path.extname(name)))
+  .filter((name) => path.extname(name) === ".mdx")
   .map((name) => {
-    const ext = path.extname(name);
-    const filePath = path.join(postsFolder, name);
-
-    if (ext === ".mdx") {
-      const { data, content } = matter(fs.readFileSync(filePath, "utf8"));
-      return { ...data, body: content };
-    }
-
-    // Legacy JSON posts
-    return { ...require(filePath) };
+    const { data, content } = matter(
+      fs.readFileSync(path.join(postsFolder, name), "utf8")
+    );
+    return { ...data, body: content };
   })
   .sort((a, b) => {
     // Pinned posts come first, then sort by date
