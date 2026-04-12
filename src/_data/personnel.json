@@ -1,10 +1,10 @@
 {
-  "count": 63,
+  "count": 67,
   "counts": {
     "fullTimeFirefighters": 11,
     "partTimeFirefighters": 6,
     "administrativeStaff": 2,
-    "volunteerFirefighters": 31,
+    "volunteerFirefighters": 35,
     "volunteerSupport": 13
   },
   "personnel": [
@@ -459,7 +459,7 @@
       "staff_type": "Volunteer",
       "roles": [
         "Apparatus Operator",
-        "Wildland Firefighter"
+        "Firefighter"
       ],
       "photo": null
     },
@@ -483,7 +483,7 @@
       "employee_type": "volunteer",
       "staff_type": "Volunteer",
       "roles": [
-        "Wildland Firefighter"
+        "Firefighter"
       ],
       "photo": null
     },
@@ -578,6 +578,18 @@
       "photo": null
     },
     {
+      "first_name": "John",
+      "last_name": "de la Haye",
+      "rank": null,
+      "title": null,
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [
+        "Firefighter"
+      ],
+      "photo": "/assets/media/personnel_imgs/john_de_la_haye.jpg"
+    },
+    {
       "first_name": "Joran",
       "last_name": "Bouwman",
       "rank": null,
@@ -638,6 +650,18 @@
       "photo": null
     },
     {
+      "first_name": "Madison",
+      "last_name": "Miller",
+      "rank": null,
+      "title": null,
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [
+        "Firefighter"
+      ],
+      "photo": null
+    },
+    {
       "first_name": "Mason",
       "last_name": "Clark",
       "rank": null,
@@ -674,6 +698,18 @@
         "Marine Crew"
       ],
       "photo": "/assets/media/personnel_imgs/matthew_wickey.jpg"
+    },
+    {
+      "first_name": "Max",
+      "last_name": "Mattox",
+      "rank": null,
+      "title": null,
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [
+        "Firefighter"
+      ],
+      "photo": null
     },
     {
       "first_name": "Maxwell",
@@ -764,6 +800,18 @@
     {
       "first_name": "Shane",
       "last_name": "Merritt",
+      "rank": null,
+      "title": null,
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [
+        "Firefighter"
+      ],
+      "photo": null
+    },
+    {
+      "first_name": "Stewart",
+      "last_name": "Bell",
       "rank": null,
       "title": null,
       "employee_type": "volunteer",
