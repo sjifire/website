@@ -1,10 +1,10 @@
 {
   "count": 67,
   "counts": {
-    "fullTimeFirefighters": 11,
+    "fullTimeFirefighters": 12,
     "partTimeFirefighters": 6,
     "administrativeStaff": 2,
-    "volunteerFirefighters": 35,
+    "volunteerFirefighters": 34,
     "volunteerSupport": 13
   },
   "personnel": [
@@ -221,6 +221,19 @@
         "Firefighter"
       ],
       "photo": null
+    },
+    {
+      "first_name": "Eric",
+      "last_name": "Eisenhardt",
+      "rank": null,
+      "title": null,
+      "employee_type": "staff",
+      "staff_type": "FT Line Staff",
+      "roles": [
+        "Firefighter",
+        "Marine Crew"
+      ],
+      "photo": "/assets/media/personnel_imgs/eric_eisenhardt.jpg"
     },
     {
       "first_name": "Jaden",
@@ -500,19 +513,6 @@
         "Marine Crew"
       ],
       "photo": "/assets/media/personnel_imgs/eric_rezabek.jpg"
-    },
-    {
-      "first_name": "Eric",
-      "last_name": "Eisenhardt",
-      "rank": null,
-      "title": null,
-      "employee_type": "volunteer",
-      "staff_type": "FT Line Staff",
-      "roles": [
-        "Firefighter",
-        "Marine Crew"
-      ],
-      "photo": "/assets/media/personnel_imgs/eric_eisenhardt.jpg"
     },
     {
       "first_name": "Friday",
