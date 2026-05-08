@@ -1,11 +1,11 @@
 {
-  "count": 67,
+  "count": 65,
   "counts": {
     "fullTimeFirefighters": 12,
     "partTimeFirefighters": 6,
     "administrativeStaff": 2,
-    "volunteerFirefighters": 34,
-    "volunteerSupport": 13
+    "volunteerFirefighters": 31,
+    "volunteerSupport": 14
   },
   "personnel": [
     {
@@ -438,18 +438,6 @@
       "photo": "/assets/media/personnel_imgs/charles_genther.jpg"
     },
     {
-      "first_name": "Claire",
-      "last_name": "Crawbuck",
-      "rank": null,
-      "title": null,
-      "employee_type": "volunteer",
-      "staff_type": "Volunteer",
-      "roles": [
-        "Wildland Firefighter"
-      ],
-      "photo": null
-    },
-    {
       "first_name": "David",
       "last_name": "Howitt",
       "rank": null,
@@ -626,18 +614,6 @@
       "photo": "/assets/media/personnel_imgs/karen_gentry.jpg"
     },
     {
-      "first_name": "Katie",
-      "last_name": "Hilding",
-      "rank": null,
-      "title": null,
-      "employee_type": "volunteer",
-      "staff_type": "Volunteer",
-      "roles": [
-        "Wildland Firefighter"
-      ],
-      "photo": null
-    },
-    {
       "first_name": "Lucas",
       "last_name": "Ramey",
       "rank": null,
@@ -760,14 +736,14 @@
       "photo": null
     },
     {
-      "first_name": "Rob",
-      "last_name": "Stewart",
+      "first_name": "Rhys",
+      "last_name": "Spoor",
       "rank": null,
       "title": null,
       "employee_type": "volunteer",
       "staff_type": "Volunteer",
       "roles": [
-        "Wildland Firefighter"
+        "Support"
       ],
       "photo": null
     },
