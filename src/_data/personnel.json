@@ -1,5 +1,5 @@
 {
-  "count": 65,
+  "count": 66,
   "counts": {
     "fullTimeFirefighters": 12,
     "partTimeFirefighters": 6,
@@ -299,6 +299,16 @@
         "Marine Crew"
       ],
       "photo": "/assets/media/personnel_imgs/john_salinas.jpg"
+    },
+    {
+      "first_name": "Tom",
+      "last_name": "Eades",
+      "rank": "Lieutenant",
+      "title": null,
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [],
+      "photo": "/assets/media/personnel_imgs/tom_eades.jpg"
     },
     {
       "first_name": "John",
