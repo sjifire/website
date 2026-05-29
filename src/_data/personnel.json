@@ -1,8 +1,8 @@
 {
   "count": 66,
   "counts": {
-    "fullTimeFirefighters": 12,
-    "partTimeFirefighters": 6,
+    "fullTimeFirefighters": 11,
+    "partTimeFirefighters": 7,
     "administrativeStaff": 2,
     "volunteerFirefighters": 31,
     "volunteerSupport": 14
@@ -202,7 +202,7 @@
       "rank": null,
       "title": null,
       "employee_type": "staff",
-      "staff_type": "FT Line Staff",
+      "staff_type": "PT Line Staff",
       "roles": [
         "Apparatus Operator",
         "Firefighter"
