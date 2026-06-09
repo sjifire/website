@@ -301,16 +301,6 @@
       "photo": "/assets/media/personnel_imgs/john_salinas.jpg"
     },
     {
-      "first_name": "Tom",
-      "last_name": "Eades",
-      "rank": "Lieutenant",
-      "title": null,
-      "employee_type": "volunteer",
-      "staff_type": "Volunteer",
-      "roles": [],
-      "photo": "/assets/media/personnel_imgs/tom_eades.jpg"
-    },
-    {
       "first_name": "John",
       "last_name": "McDowell",
       "rank": null,
@@ -818,6 +808,16 @@
         "Support"
       ],
       "photo": null
+    },
+    {
+      "first_name": "Tom",
+      "last_name": "Eades",
+      "rank": null,
+      "title": null,
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [],
+      "photo": "/assets/media/personnel_imgs/tom_eades.jpg"
     },
     {
       "first_name": "Tony",
