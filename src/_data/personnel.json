@@ -166,6 +166,7 @@
       "employee_type": "staff",
       "staff_type": "Contractor",
       "roles": [
+        "Apparatus Operator",
         "Firefighter"
       ],
       "photo": null
