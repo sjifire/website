@@ -224,19 +224,6 @@
       "photo": null
     },
     {
-      "first_name": "Eric",
-      "last_name": "Eisenhardt",
-      "rank": null,
-      "title": null,
-      "employee_type": "staff",
-      "staff_type": "Volunteer",
-      "roles": [
-        "Firefighter",
-        "Marine Crew"
-      ],
-      "photo": "/assets/media/personnel_imgs/eric_eisenhardt.jpg"
-    },
-    {
       "first_name": "Jaden",
       "last_name": "Jones",
       "rank": null,
@@ -258,6 +245,18 @@
       "staff_type": "PT Line Staff",
       "roles": [
         "Apparatus Operator",
+        "Firefighter"
+      ],
+      "photo": null
+    },
+    {
+      "first_name": "Stewart",
+      "last_name": "Bell",
+      "rank": null,
+      "title": null,
+      "employee_type": "staff",
+      "staff_type": "Day Staff",
+      "roles": [
         "Firefighter"
       ],
       "photo": null
@@ -502,6 +501,19 @@
         "Marine Crew"
       ],
       "photo": "/assets/media/personnel_imgs/eric_rezabek.jpg"
+    },
+    {
+      "first_name": "Eric",
+      "last_name": "Eisenhardt",
+      "rank": null,
+      "title": null,
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [
+        "Firefighter",
+        "Marine Crew"
+      ],
+      "photo": "/assets/media/personnel_imgs/eric_eisenhardt.jpg"
     },
     {
       "first_name": "Friday",
@@ -783,18 +795,6 @@
       "staff_type": "Volunteer",
       "roles": [
         "Apparatus Operator",
-        "Firefighter"
-      ],
-      "photo": null
-    },
-    {
-      "first_name": "Stewart",
-      "last_name": "Bell",
-      "rank": null,
-      "title": null,
-      "employee_type": "volunteer",
-      "staff_type": "Day Staff",
-      "roles": [
         "Firefighter"
       ],
       "photo": null
