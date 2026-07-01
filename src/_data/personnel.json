@@ -1,10 +1,10 @@
 {
-  "count": 66,
+  "count": 65,
   "counts": {
     "fullTimeFirefighters": 11,
     "partTimeFirefighters": 7,
     "administrativeStaff": 2,
-    "volunteerFirefighters": 29,
+    "volunteerFirefighters": 28,
     "volunteerSupport": 14
   },
   "personnel": [
@@ -488,6 +488,7 @@
       "employee_type": "volunteer",
       "staff_type": "Volunteer",
       "roles": [
+        "Apparatus Operator",
         "Firefighter",
         "Marine Crew"
       ],
@@ -542,19 +543,6 @@
         "Support"
       ],
       "photo": "/assets/media/personnel_imgs/hella_cascorbi.jpg"
-    },
-    {
-      "first_name": "Jacob",
-      "last_name": "Wagner",
-      "rank": null,
-      "title": null,
-      "employee_type": "volunteer",
-      "staff_type": "Volunteer",
-      "roles": [
-        "Marine Crew",
-        "Wildland Firefighter"
-      ],
-      "photo": null
     },
     {
       "first_name": "Jenny",
