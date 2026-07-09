@@ -4,7 +4,7 @@
     "fullTimeFirefighters": 11,
     "partTimeFirefighters": 7,
     "administrativeStaff": 2,
-    "volunteerFirefighters": 28,
+    "volunteerFirefighters": 29,
     "volunteerSupport": 14
   },
   "personnel": [
@@ -290,6 +290,7 @@
       "employee_type": "volunteer",
       "staff_type": "Volunteer",
       "roles": [
+        "Apparatus Operator",
         "Firefighter",
         "Marine Crew"
       ],
@@ -341,6 +342,7 @@
       "employee_type": "volunteer",
       "staff_type": "Volunteer",
       "roles": [
+        "Apparatus Operator",
         "Firefighter"
       ],
       "photo": "/assets/media/personnel_imgs/adam_greene.jpg"
@@ -805,7 +807,9 @@
       "title": null,
       "employee_type": "volunteer",
       "staff_type": "Volunteer",
-      "roles": [],
+      "roles": [
+        "Apparatus Operator"
+      ],
       "photo": null
     }
   ]
