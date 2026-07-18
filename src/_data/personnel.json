@@ -273,6 +273,19 @@
       "photo": "/assets/media/personnel_imgs/erin_graham.jpg"
     },
     {
+      "first_name": "Adam",
+      "last_name": "Greene",
+      "rank": "Lieutenant",
+      "title": "Tender Group Supervisor",
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [
+        "Apparatus Operator",
+        "Firefighter"
+      ],
+      "photo": "/assets/media/personnel_imgs/adam_greene.jpg"
+    },
+    {
       "first_name": "Harry",
       "last_name": "See",
       "rank": "Lieutenant",
@@ -333,19 +346,6 @@
         "Support"
       ],
       "photo": "/assets/media/personnel_imgs/sue_ann_stabley.jpg"
-    },
-    {
-      "first_name": "Adam",
-      "last_name": "Greene",
-      "rank": null,
-      "title": null,
-      "employee_type": "volunteer",
-      "staff_type": "Volunteer",
-      "roles": [
-        "Apparatus Operator",
-        "Firefighter"
-      ],
-      "photo": "/assets/media/personnel_imgs/adam_greene.jpg"
     },
     {
       "first_name": "Alexa",
