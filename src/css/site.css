@@ -1311,6 +1311,41 @@ body {
   color: white;
 }
 
+/* EPA AQI categories (air quality / smoke) */
+.widget__body .level--aqi-good {
+  background-color: #cee8ce;
+  color: #206220;
+}
+
+.widget__body .level--aqi-moderate {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.widget__body .level--aqi-unhealthy-for-sensitive-groups {
+  background-color: #ffe3c2;
+  color: #8a4b00;
+}
+
+.widget__body .level--aqi-unhealthy {
+  background-color: #ffe0e0;
+  color: var(--bright-red);
+}
+
+.widget__body .level--aqi-very-unhealthy {
+  background-color: #e7d5f0;
+  color: #6b2a86;
+}
+
+.widget__body .level--aqi-hazardous {
+  background-color: #4a0d18;
+  color: white;
+}
+
+.widget__body .level a {
+  color: inherit;
+}
+
 .widget__foot td {
   padding: 6px 15px;
   text-align: right;

@@ -1,0 +1,66 @@
+name: Update Air Quality from AirNow
+
+on:
+  schedule:
+    # Every 3 hours. AirNow updates hourly; the widget also links to the live
+    # Fire & Smoke Map for real-time conditions. Adjust cadence as needed.
+    - cron: '0 */3 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-air-quality:
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          ssh-key: ${{ secrets.DEPLOY_KEY }}
+
+      - name: Validate required secret
+        run: |
+          if [ -z "${{ secrets.AIRNOW_API_KEY }}" ]; then
+            echo "::error::Missing AIRNOW_API_KEY secret. Get a free key at https://docs.airnowapi.org/"
+            exit 1
+          fi
+          echo "AIRNOW_API_KEY is present"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Fetch current air quality
+        env:
+          AIRNOW_API_KEY: ${{ secrets.AIRNOW_API_KEY }}
+        run: npm run air-quality
+
+      - name: Check for changes
+        id: changes
+        run: |
+          git add src/_data/air_quality.json
+          if git diff --cached --quiet; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+            git diff --cached -- src/_data/air_quality.json >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Commit and push changes
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore: update air quality data from AirNow
+
+          Auto-generated update of the current AQI for the Fire Safety widget."
+          git push

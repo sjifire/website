@@ -59,6 +59,21 @@
         {{ burn_status.np_campfire_status }}
       </td>
     </tr>
+    <tr class="odd">
+      <th>
+        Air Quality &amp; Smoke
+        {% if air_quality.reporting_area %}<aside>Nearest monitor: {{ air_quality.reporting_area }}</aside>{% endif %}
+      </th>
+      {% if air_quality.aqi %}
+        <td class="level level--aqi-{{ air_quality.category | slugify }}">
+          <a href="{{ air_quality.source_url }}" target="_blank" rel="noopener">{{ air_quality.aqi }} &middot; {{ air_quality.category }}</a>
+        </td>
+      {% else %}
+        <td>
+          <a href="{{ air_quality.source_url }}" target="_blank" rel="noopener">Check Air Quality &raquo;</a>
+        </td>
+      {% endif %}
+    </tr>
   </tbody>
   {% if page.url == '/' %}
     <tfoot class="widget__foot">
