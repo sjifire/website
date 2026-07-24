@@ -1248,6 +1248,12 @@ body {
   background-color: var(--lt-gray);
 }
 
+/* Burn-status widget stripes by position so conditionally-hidden rows
+   (e.g. Air Quality when there's no reading) never break the zebra. */
+.widget--burn-status .widget__body tr:nth-of-type(odd) {
+  background-color: var(--lt-gray);
+}
+
 .widget__body th,
 .widget__body td {
   border-bottom: 1px solid #d1d5d9;
