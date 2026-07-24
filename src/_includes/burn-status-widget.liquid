@@ -21,13 +21,31 @@
     </tr>
     <tr class="even">
       <th>
+        Air Quality &amp; Smoke
+        {% if air_quality.reporting_area %}<aside>Nearest monitor: {{ air_quality.reporting_area }}{% if air_quality.pollutant %} &middot; {{ air_quality.pollutant }}{% endif %}</aside>{% endif %}
+      </th>
+      {% if air_quality.aqi %}
+        <td class="level level--aqi-{{ air_quality.category | slugify }}">
+          <a href="{{ air_quality.source_url }}" target="_blank" rel="noopener">
+            <span class="level__score">{{ air_quality.aqi }}</span>
+            <span class="level__label">AQI &middot; {{ air_quality.category }}</span>
+          </a>
+        </td>
+      {% else %}
+        <td>
+          <a href="{{ air_quality.source_url }}" target="_blank" rel="noopener">Fire &amp; Smoke Map &raquo;</a>
+        </td>
+      {% endif %}
+    </tr>
+    <tr class="odd">
+      <th>
         Residential Burn Permits
       </th>
       <td class="level level--{{ burn_status.burn_ban_status | slugify }}">
         {{ burn_status.burn_ban_status }}
       </td>
     </tr>
-    <tr class="odd">
+    <tr class="even">
       <th>
         Commercial Burn Permits
       </th>
@@ -35,7 +53,7 @@
         {{ burn_status.commercial_burn_ban_status }}
       </td>
     </tr>
-    <tr class="even">
+    <tr class="odd">
       <th>
         Recreational Fires: San Juan County
       </th>
@@ -43,7 +61,7 @@
         {{ burn_status.rec_campfire_status }}
       </td>
     </tr>
-    <tr class="odd">
+    <tr class="even">
       <th>
         Recreational Fires: State Park & DNR
       </th>
@@ -51,28 +69,13 @@
         {{ burn_status.state_campfire_status }}
       </td>
     </tr>
-    <tr class="even">
+    <tr class="odd">
       <th>
         Recreational Fires: National Parks
       </th>
       <td class="level level--{{ burn_status.np_campfire_status | slugify }}">
         {{ burn_status.np_campfire_status }}
       </td>
-    </tr>
-    <tr class="odd">
-      <th>
-        Air Quality &amp; Smoke
-        {% if air_quality.reporting_area %}<aside>Nearest monitor: {{ air_quality.reporting_area }}</aside>{% endif %}
-      </th>
-      {% if air_quality.aqi %}
-        <td class="level level--aqi-{{ air_quality.category | slugify }}">
-          <a href="{{ air_quality.source_url }}" target="_blank" rel="noopener">{{ air_quality.aqi }} &middot; {{ air_quality.category }}</a>
-        </td>
-      {% else %}
-        <td>
-          <a href="{{ air_quality.source_url }}" target="_blank" rel="noopener">Check Air Quality &raquo;</a>
-        </td>
-      {% endif %}
     </tr>
   </tbody>
   {% if page.url == '/' %}
