@@ -23,7 +23,7 @@
  */
 
 import "dotenv/config";
-import { writeFile } from "node:fs/promises";
+import { writeFile, readFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
@@ -39,6 +39,11 @@ const LATITUDE = 48.5343;
 const LONGITUDE = -123.017;
 // Search radius (miles) — wide enough to reach the nearest reporting monitor
 const SEARCH_DISTANCE = 75;
+
+// Only rewrite the data file (which triggers a rebuild/deploy) when the AQI
+// moves by at least this fraction, or when the AQI category changes. Keeps
+// hourly runs from redeploying the site on trivial fluctuations.
+const CHANGE_THRESHOLD = 0.05;
 
 const API_KEY = process.env.AIRNOW_API_KEY;
 
@@ -60,6 +65,27 @@ async function fetchCurrentObservations() {
     throw new Error(`AirNow API returned ${res.status} ${res.statusText}`);
   }
   return res.json();
+}
+
+async function readExisting() {
+  try {
+    return JSON.parse(await readFile(OUTPUT_PATH, "utf8"));
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Decide whether a new reading is worth writing (and thus redeploying the
+ * site). Always write on the first real reading or when the AQI category
+ * changes (a meaningful public-safety shift); otherwise only when the AQI
+ * moves by at least CHANGE_THRESHOLD relative to the last stored value.
+ */
+function isSignificantChange(oldData, next) {
+  if (!oldData || oldData.aqi == null) return true;
+  if (oldData.category !== next.category) return true;
+  if (oldData.aqi === 0) return next.aqi !== 0;
+  return Math.abs(next.aqi - oldData.aqi) / oldData.aqi >= CHANGE_THRESHOLD;
 }
 
 // ============================================================================
@@ -104,6 +130,15 @@ async function main() {
     updated: new Date().toISOString(),
     source_url: FIRE_AND_SMOKE_MAP_URL,
   };
+
+  const oldData = await readExisting();
+  if (!isSignificantChange(oldData, data)) {
+    console.log(
+      `Air quality unchanged (AQI ${data.aqi}, ${data.category}); ` +
+        `within ${CHANGE_THRESHOLD * 100}% of last value — leaving file unchanged.`,
+    );
+    return;
+  }
 
   await writeFile(OUTPUT_PATH, JSON.stringify(data, null, 2) + "\n");
   console.log(

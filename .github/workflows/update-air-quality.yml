@@ -2,9 +2,10 @@ name: Update Air Quality from AirNow
 
 on:
   schedule:
-    # Every 3 hours. AirNow updates hourly; the widget also links to the live
-    # Fire & Smoke Map for real-time conditions. Adjust cadence as needed.
-    - cron: '0 */3 * * *'
+    # Hourly (AirNow updates hourly). The fetch script only rewrites the data
+    # file — and thus redeploys the site — when the AQI moves >=5% or its
+    # category changes, so routine hourly runs are no-ops.
+    - cron: '0 * * * *'
   workflow_dispatch:
 
 permissions:

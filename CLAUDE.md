@@ -149,7 +149,7 @@ to the AirNow Fire & Smoke Map for live, hyperlocal smoke coverage.
 **Files:**
 - `scripts/generate-air-quality.mjs` - Fetches the nearest current AQI observation to Friday Harbor and writes `src/_data/air_quality.json`
 - `src/_includes/burn-status-widget.liquid` - Renders the "Air Quality & Smoke" row (color-coded by EPA AQI category; falls back to a "Check Air Quality" link when no reading is available)
-- `.github/workflows/update-air-quality.yml` - Scheduled workflow (every 3 hours)
+- `.github/workflows/update-air-quality.yml` - Scheduled workflow (hourly; only commits when the AQI moves ≥5% or its category changes)
 
 `air_quality.json` is auto-generated and is NOT edited via TinaCMS (unlike
 `burn_status.json`), so the sync never conflicts with manual edits.
