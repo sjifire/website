@@ -138,6 +138,31 @@ Personnel data and photos are synced daily from Microsoft 365 via Microsoft Grap
 npm run sync-personnel
 ```
 
+### Air Quality (AirNow)
+
+Current air quality / wildfire smoke conditions for the Fire Safety widget are
+pulled from AirNow (airnow.gov), the EPA's authoritative U.S. air quality source.
+San Juan Island has no permanent EPA monitor, so AirNow returns the nearest
+reporting station (often Anacortes); the widget shows that station name and links
+to the AirNow Fire & Smoke Map for live, hyperlocal smoke coverage.
+
+**Files:**
+- `scripts/generate-air-quality.mjs` - Fetches the nearest current AQI observation to Friday Harbor and writes `src/_data/air_quality.json`
+- `src/_includes/burn-status-widget.liquid` - Renders the "Air Quality & Smoke" row (color-coded by EPA AQI category; falls back to a "Check Air Quality" link when no reading is available)
+- `.github/workflows/update-air-quality.yml` - Scheduled workflow (hourly; only commits when the AQI moves ≥5% or its category changes)
+
+`air_quality.json` is auto-generated and is NOT edited via TinaCMS (unlike
+`burn_status.json`), so the sync never conflicts with manual edits.
+
+**Secrets:**
+- From GitHub Secrets: `AIRNOW_API_KEY` (free key from https://docs.airnowapi.org/), `DEPLOY_KEY` (SSH deploy key for pushing changes)
+
+**Local Testing:**
+```bash
+export AIRNOW_API_KEY="your-api-key"
+npm run air-quality
+```
+
 ## Azure Key Vault
 
 Most secrets are centralized in Azure Key Vault `gh-website-utilities`. GitHub Actions use OIDC to authenticate and fetch secrets at runtime. GitHub-specific secrets (like deploy keys) are stored in GitHub Secrets instead.

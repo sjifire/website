@@ -11,7 +11,7 @@
     </div>
   </caption>
   <tbody class="widget__body">
-    <tr class="odd">
+    <tr>
       <th>
         Fire Danger
       </th>
@@ -19,7 +19,21 @@
         {{ burn_status.fire_status }}
       </td>
     </tr>
-    <tr class="even">
+    {% if air_quality.aqi %}
+    <tr>
+      <th>
+        Air Quality &amp; Smoke
+        {% if air_quality.reporting_area %}<aside>Nearest monitor: {{ air_quality.reporting_area }}{% if air_quality.pollutant %} <span class="widget__nowrap">&middot; {{ air_quality.pollutant }}</span>{% endif %}</aside>{% endif %}
+      </th>
+      <td class="level level--aqi-{{ air_quality.category | slugify }}">
+        <a href="{{ air_quality.source_url }}" target="_blank" rel="noopener">
+          <span class="level__score">{{ air_quality.aqi }}</span>
+          <span class="level__label">AQI &middot; {{ air_quality.category }}</span>
+        </a>
+      </td>
+    </tr>
+    {% endif %}
+    <tr>
       <th>
         Residential Burn Permits
       </th>
@@ -27,7 +41,7 @@
         {{ burn_status.burn_ban_status }}
       </td>
     </tr>
-    <tr class="odd">
+    <tr>
       <th>
         Commercial Burn Permits
       </th>
@@ -35,7 +49,7 @@
         {{ burn_status.commercial_burn_ban_status }}
       </td>
     </tr>
-    <tr class="even">
+    <tr>
       <th>
         Recreational Fires: San Juan County
       </th>
@@ -43,7 +57,7 @@
         {{ burn_status.rec_campfire_status }}
       </td>
     </tr>
-    <tr class="odd">
+    <tr>
       <th>
         Recreational Fires: State Park & DNR
       </th>
@@ -51,7 +65,7 @@
         {{ burn_status.state_campfire_status }}
       </td>
     </tr>
-    <tr class="even">
+    <tr>
       <th>
         Recreational Fires: National Parks
       </th>
