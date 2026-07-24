@@ -22,7 +22,7 @@
     <tr class="even">
       <th>
         Air Quality &amp; Smoke
-        {% if air_quality.reporting_area %}<aside>Nearest monitor: {{ air_quality.reporting_area }}{% if air_quality.pollutant %} &middot; {{ air_quality.pollutant }}{% endif %}</aside>{% endif %}
+        {% if air_quality.reporting_area %}<aside>Nearest monitor: {{ air_quality.reporting_area }}{% if air_quality.pollutant %} <span class="widget__nowrap">&middot; {{ air_quality.pollutant }}</span>{% endif %}</aside>{% endif %}
       </th>
       {% if air_quality.aqi %}
         <td class="level level--aqi-{{ air_quality.category | slugify }}">

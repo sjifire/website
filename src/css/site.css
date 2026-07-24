@@ -1352,6 +1352,10 @@ body {
   text-decoration: underline;
 }
 
+.widget__nowrap {
+  white-space: nowrap;
+}
+
 .widget__body .level__score {
   display: block;
   font-size: 26px;
