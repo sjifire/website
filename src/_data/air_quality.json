@@ -1,8 +1,8 @@
 {
-  "aqi": 14,
+  "aqi": 18,
   "category": "Good",
   "pollutant": "O3",
   "reporting_area": "Anacortes",
-  "updated": "2026-08-01T19:29:29.766Z",
+  "updated": "2026-08-01T20:23:35.824Z",
   "source_url": "https://fire.airnow.gov/#8/48.5343/-123.017"
 }
