@@ -1,8 +1,8 @@
 {
-  "aqi": 110,
-  "category": "Unhealthy for Sensitive Groups",
+  "aqi": 91,
+  "category": "Moderate",
   "pollutant": "PM2.5",
   "reporting_area": "Anacortes",
-  "updated": "2026-08-06T00:01:46.684Z",
+  "updated": "2026-08-06T03:31:21.642Z",
   "source_url": "https://fire.airnow.gov/#8/48.5343/-123.017"
 }
