@@ -1,11 +1,11 @@
 {
-  "count": 65,
+  "count": 64,
   "counts": {
     "fullTimeFirefighters": 11,
     "partTimeFirefighters": 7,
     "administrativeStaff": 2,
     "volunteerFirefighters": 29,
-    "volunteerSupport": 14
+    "volunteerSupport": 13
   },
   "personnel": [
     {
@@ -593,18 +593,6 @@
         "Support"
       ],
       "photo": null
-    },
-    {
-      "first_name": "Karen",
-      "last_name": "Gentry",
-      "rank": null,
-      "title": null,
-      "employee_type": "volunteer",
-      "staff_type": "Volunteer",
-      "roles": [
-        "Support"
-      ],
-      "photo": "/assets/media/personnel_imgs/karen_gentry.jpg"
     },
     {
       "first_name": "Lucas",
