@@ -1,77 +1,63 @@
-<table class="widget widget--burn-status">
+<table class="widget widget--burn-status" data-burn-status aria-busy="true">
   <caption class="widget__header">
     <div class="flex">
       <svg aria-hidden="true"><use xlink:href='#flame' /></svg>
       <div>
         <span class="widget__title">Fire Safety</span>
-        <div class="timeframe">
-          Burn Season: {{ burn_status.burn_season_start | postDateTerseNoYearISO }}-{{ burn_status.burn_season_end | postDateTerseNoYearISO }}
+        <div class="timeframe" data-burn-season hidden>
+          Burn Season: <span data-season-range></span>
         </div>
       </div>
     </div>
   </caption>
-  <tbody class="widget__body">
+  <tbody class="widget__body" data-burn-body>
     <tr>
       <th>
         Fire Danger
       </th>
-      <td class="level level--{{ burn_status.fire_status | slugify }}">
-        {{ burn_status.fire_status }}
-      </td>
+      <td class="level level--unknown" data-row="fire-danger">&mdash;</td>
     </tr>
-    {% if air_quality.aqi %}
-    <tr>
+    <tr data-aqi-row hidden>
       <th>
         Air Quality &amp; Smoke
-        {% if air_quality.reporting_area %}<aside>Nearest monitor: {{ air_quality.reporting_area }}{% if air_quality.pollutant %} <span class="widget__nowrap">&middot; {{ air_quality.pollutant }}</span>{% endif %}</aside>{% endif %}
+        <aside data-aqi-source></aside>
       </th>
-      <td class="level level--aqi-{{ air_quality.category | slugify }}">
-        <a href="{{ air_quality.source_url }}" target="_blank" rel="noopener">
-          <span class="level__score">{{ air_quality.aqi }}</span>
-          <span class="level__label">AQI &middot; {{ air_quality.category }}</span>
+      <td class="level" data-row="air-quality">
+        <a href="#" target="_blank" rel="noopener" data-aqi-link>
+          <span class="level__score" data-aqi-score></span>
+          <span class="level__label" data-aqi-label></span>
         </a>
       </td>
     </tr>
-    {% endif %}
     <tr>
       <th>
         Residential Burn Permits
       </th>
-      <td class="level level--{{ burn_status.burn_ban_status | slugify }}">
-        {{ burn_status.burn_ban_status }}
-      </td>
+      <td class="level level--unknown" data-row="residential">&mdash;</td>
     </tr>
     <tr>
       <th>
         Commercial Burn Permits
       </th>
-      <td class="level level--{{ burn_status.commercial_burn_ban_status | slugify }}">
-        {{ burn_status.commercial_burn_ban_status }}
-      </td>
+      <td class="level level--unknown" data-row="commercial">&mdash;</td>
     </tr>
     <tr>
       <th>
         Recreational Fires: San Juan County
       </th>
-      <td class="level level--{{ burn_status.rec_campfire_status | slugify }}">
-        {{ burn_status.rec_campfire_status }}
-      </td>
+      <td class="level level--unknown" data-row="recreational-county">&mdash;</td>
     </tr>
     <tr>
       <th>
         Recreational Fires: State Park & DNR
       </th>
-      <td class="level level--{{ burn_status.state_campfire_status | slugify }}">
-        {{ burn_status.state_campfire_status }}
-      </td>
+      <td class="level level--unknown" data-row="recreational-dnr">&mdash;</td>
     </tr>
     <tr>
       <th>
         Recreational Fires: National Parks
       </th>
-      <td class="level level--{{ burn_status.np_campfire_status | slugify }}">
-        {{ burn_status.np_campfire_status }}
-      </td>
+      <td class="level level--unknown" data-row="recreational-nps">&mdash;</td>
     </tr>
   </tbody>
   {% if page.url == '/' %}
@@ -82,3 +68,4 @@
     </tfoot>
   {% endif %}
 </table>
+<script defer src="/js/burn-status.js"></script>
