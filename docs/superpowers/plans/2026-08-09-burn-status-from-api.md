@@ -730,7 +730,11 @@ renders 2026-10-06 as Oct 5 in Pacific time."
 - Consumes: `boot`, `ok`, `cell`, `fixture` from Task 2's test file.
 - Produces: nothing new. This task pins behavior Task 2 already implements.
 
-- [ ] **Step 1: Write the failing tests**
+**These are characterisation tests, not red-green TDD.** Task 2 built the transforms; this task
+locks the full confirmed enums against regression. Expect them to pass on the first run. If one
+fails, Task 2 has a real bug — fix `src/js/burn-status.js`, never the assertion.
+
+- [ ] **Step 1: Write the tests**
 
 Append to `tests/burn-status.test.js`:
 
@@ -836,7 +840,11 @@ Also pins that airQuality.category is not title-cased: EPA's label is
 - Consumes: `boot`, `ok`, `cell`, `fixture`, `withPayload` from Tasks 2–3.
 - Produces: nothing new.
 
-- [ ] **Step 1: Write the failing tests**
+**Characterisation tests, as in Task 3.** Task 2 implemented these paths; expect them to pass on the
+first run. A failure means a real bug in `src/js/burn-status.js` — fix the implementation, never the
+assertion.
+
+- [ ] **Step 1: Write the tests**
 
 Append to `tests/burn-status.test.js`:
 
