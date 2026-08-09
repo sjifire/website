@@ -224,6 +224,9 @@ show a new value beside a stale category color, or a half-filled table.
 The last row matters: an unknown state degrades to *uncolored but readable*, never to a wrong color.
 A green "Partial" would be worse than a plain one.
 
+On failure the "Burn Season:" line in the header is hidden too — a season range is a status claim,
+and showing it above an "unavailable" message implies the widget knows more than it does.
+
 The warning replaces the tbody with a single cell:
 
 > ⚠ Live fire status unavailable. Call (360) 378-5334 or see Burn Permits ›
@@ -293,7 +296,8 @@ reads them after this change.
 `fetch`. Fixture at `tests/fixtures/agency-status.json`, the captured live response above.
 
 - full fixture patches all seven rows, the season header, and the AQI link `href`
-- `aria-busy` is removed on success and retained on failure
+- `aria-busy` is removed on **both** success and failure — the widget is no longer loading either
+  way, and leaving it set would tell a screen reader the content is still arriving
 - **table-driven over the full confirmed enums** — each of `low`, `moderate`, `high`, `very_high`,
   `extreme`, `open`, `restricted`, `closed` produces its expected display text and its expected
   `level--*` class. `very_high` → `Very High` / `level--very-high` is the one most likely to regress.
