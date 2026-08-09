@@ -195,3 +195,90 @@ describe("Value normalisation", () => {
     );
   });
 });
+
+const warning = (doc) => doc.querySelector(".widget__warning");
+
+describe("Failure handling", () => {
+  const FAILURES = [
+    ["a network rejection", () => Promise.reject(new Error("offline"))],
+    ["HTTP 500", () => Promise.resolve({ ok: false, status: 500, json: () => Promise.resolve({}) })],
+    ["malformed JSON", () => Promise.resolve({ ok: true, status: 200, json: () => Promise.reject(new SyntaxError("bad")) })],
+    ["a payload with no statuses array", ok({ season: { start: "2026-10-06", end: "2027-06-05" } })],
+    ["a payload with an empty statuses array", ok({ statuses: [] })],
+  ];
+
+  for (const [label, responder] of FAILURES) {
+    it(`shows the warning on ${label}`, async () => {
+      const doc = await boot(responder);
+      const cellEl = warning(doc);
+      assert.ok(cellEl, "expected a warning cell");
+      assert.match(cellEl.textContent, /Live fire status unavailable/);
+      assert.strictEqual(
+        cellEl.querySelector('a[href="tel:(360) 378-5334"]').textContent,
+        "(360) 378-5334"
+      );
+      assert.ok(cellEl.querySelector('a[href="/services/burn-permits/"]'));
+    });
+
+    it(`leaves no half-patched rows on ${label}`, async () => {
+      const doc = await boot(responder);
+      // The whole tbody is replaced, so no status cells survive at all.
+      assert.strictEqual(doc.querySelectorAll("[data-row]").length, 0);
+      assert.strictEqual(doc.querySelector("[data-burn-season]").hidden, true);
+      assert.strictEqual(
+        doc.querySelector("[data-burn-status]").hasAttribute("aria-busy"),
+        false
+      );
+    });
+  }
+});
+
+describe("Partial data", () => {
+  it("shows an em dash for a slug missing from statuses[] and still patches the rest", async () => {
+    const doc = await boot(ok(withPayload((p) => {
+      p.statuses = p.statuses.filter((s) => s.slug !== "commercial");
+    })));
+    assert.strictEqual(cell(doc, "commercial").textContent.trim(), "—");
+    assert.ok(cell(doc, "commercial").className.includes("level--unknown"));
+    // Neighbouring rows are unaffected.
+    assert.strictEqual(cell(doc, "residential").textContent.trim(), "Closed");
+    assert.ok(!warning(doc), "a missing slug must not trigger the warning");
+  });
+
+  it("shows an em dash when fireDanger is absent", async () => {
+    const doc = await boot(ok(withPayload((p) => { delete p.fireDanger; })));
+    assert.strictEqual(cell(doc, "fire-danger").textContent.trim(), "—");
+    assert.ok(cell(doc, "fire-danger").className.includes("level--unknown"));
+  });
+
+  it("renders an unrecognised state uncoloured rather than mis-coloured", async () => {
+    const doc = await boot(ok(withPayload((p) => {
+      p.statuses.find((s) => s.slug === "residential").state = "partial";
+    })));
+    const target = cell(doc, "residential");
+    assert.strictEqual(target.textContent.trim(), "Partial");
+    assert.strictEqual(target.className, "level");
+  });
+
+  const NO_AQI = [
+    ["airQuality is null", (p) => { p.airQuality = null; }],
+    ["airQuality is absent", (p) => { delete p.airQuality; }],
+    ["pm25Aqi is negative", (p) => { p.airQuality.pm25Aqi = -1; }],
+    ["pm25Aqi is not a number", (p) => { p.airQuality.pm25Aqi = "17"; }],
+  ];
+
+  for (const [label, mutate] of NO_AQI) {
+    it(`hides the air quality row when ${label}`, async () => {
+      const doc = await boot(ok(withPayload(mutate)));
+      assert.strictEqual(doc.querySelector("[data-aqi-row]").hidden, true);
+      assert.ok(!warning(doc), "a missing AQI must not trigger the warning");
+    });
+  }
+
+  it("hides the season line when season is absent", async () => {
+    const doc = await boot(ok(withPayload((p) => { delete p.season; })));
+    assert.strictEqual(doc.querySelector("[data-burn-season]").hidden, true);
+    // Everything else still patches.
+    assert.strictEqual(cell(doc, "residential").textContent.trim(), "Closed");
+  });
+});
