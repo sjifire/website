@@ -22,9 +22,14 @@ matters:
 | Recreational — DNR / NPS | `Open` | `closed` |
 | Burn season | 2025-10-06 – 2026-06-15 | 2026-10-06 – 2027-06-05 |
 
-The residential row is the one the public acts on. Right now the website tells islanders that
-burning is permitted during a burn ban. That is the defect this design exists to fix; everything
-else here follows from it.
+**Permit availability and burning legality are not the same thing.** Residential burn *permits* are
+currently closed while county-wide residential burning remains allowed for now. So the stale `Open`
+is not telling anyone to burn during a ban — it misstates whether permits can be obtained, next to a
+fire danger level two steps low and a burn season a full year out of date.
+
+That is still the defect this design exists to fix. The widget presents itself as current fire
+safety information and is not current. It drifts silently, nothing in the build catches it, and
+hand-maintained data that only updates when someone remembers to open TinaCMS will keep drifting.
 
 **2. The air quality pipeline costs a commit and a redeploy per reading.**
 `.github/workflows/update-air-quality.yml` runs hourly, fetches AirNow, and commits
@@ -77,9 +82,11 @@ Response headers confirm it is browser-callable and self-throttling:
 
 Considered and rejected: keeping `burn_status.json` as a server-rendered baseline that JS upgrades.
 It reads as the safe choice and is the opposite. A stale baseline means the no-JS path and every
-fetch failure display a **confident, wrong, legally-relevant answer** — "Residential Burn Permits:
-Open" during a ban. A widget that admits it does not know is strictly safer than one that guesses,
-because a visitor who sees a warning goes and checks, and a visitor who sees "Open" lights a fire.
+fetch failure display a **confident, wrong answer** on rows the public reads as authoritative fire
+safety guidance — and today's drift is the proof of how far that goes unnoticed: four misstated
+status rows, a fire danger two levels low, a season a year out of date, no warning anywhere. A
+widget that admits it does not know is safer than one that guesses, because a visitor who sees a
+warning goes and checks.
 
 The cost is real and accepted: no-JS visitors and crawlers never see live status values, only row
 labels and a pointer to the burn permits page.
@@ -216,17 +223,32 @@ in the repo per the explicit request — but nothing runs on a timer and nothing
 
 `scripts/generate-air-quality.mjs` is **unchanged**.
 
+### `tina/config.ts` (modified — deprecation notice only)
+
+The `configBurnStatus` collection keeps working; it is labelled as dead so nobody edits it by
+mistake. Two changes, both using long-stable Tina schema properties:
+
+- Collection `label` → `"Burn Status (DEPRECATED — DO NOT EDIT)"`, so the warning is visible in the
+  sidebar list before anyone opens the screen.
+- A `description` on the first field (`fire_status`, which renders at the top of the form) stating
+  that edits no longer appear on the website, that burn status is now changed in the StationWorks
+  permits system, that **saving here will succeed and change nothing public**, and that the screen
+  will be removed shortly.
+
+The "saving will succeed and change nothing" sentence is the important one. The failure mode is not
+an error; it is silence, and an editor mid-incident needs to be told that explicitly rather than
+inferring it from a label.
+
+No fields are removed and no data is migrated, so this is fully reversible.
+
+> **Follow-up, not covered here.** "Will be removed shortly" is a promise this change does not keep.
+> Deleting the collection, `burn_status.json`, and `air_quality.json` is a separate small change once
+> the API-driven widget has run in production long enough to trust.
+
 ### Deliberately untouched
 
-`src/_data/burn_status.json`, `src/_data/air_quality.json`, and the `configBurnStatus` collection in
-`tina/config.ts` all stay exactly as they are. Nothing reads them after this change.
-
-> **Known trap, accepted with eyes open.** TinaCMS keeps showing a "Burn Status" editor whose edits
-> no longer affect the public site. An editor can change residential permits to `Open` in Tina, see
-> it save, and have the website continue showing `Closed` from the API — with no error and no
-> explanation. This is documented in `CLAUDE.md` as part of this change. Removing the collection
-> from `tina/config.ts` is the fix if it ever bites; it was considered and consciously deferred to
-> keep this diff small and reversible.
+`src/_data/burn_status.json` and `src/_data/air_quality.json` stay exactly as they are. Nothing
+reads them after this change.
 
 ## Testing
 
@@ -253,7 +275,8 @@ in the repo per the explicit request — but nothing runs on a timer and nothing
 ## Out of scope
 
 - **Removing the AirNow pipeline.** The script and workflow stay, manually runnable.
-- **Removing the Tina collection or the orphaned JSON data files.** See the trap note above.
+- **Removing the Tina collection or the orphaned JSON data files.** This change only marks the
+  collection deprecated; deletion is the follow-up noted above.
 - **Per-status `linkUrl`.** The API carries it on each status but sends `null` for all of them
   today. Only `airQuality.linkUrl` is consumed. Worth revisiting if the API starts populating it.
 - **Rendering rows dynamically from `statuses[]`.** Considered — it would let StationWorks add a

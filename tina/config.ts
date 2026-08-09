@@ -50,7 +50,7 @@ export default defineConfig({
     collections: [
       {
         name: "configBurnStatus",
-        label: "Burn Status",
+        label: "Burn Status (DEPRECATED — DO NOT EDIT)",
         path: "src/_data",
         format: "json",
         match: {
@@ -67,6 +67,12 @@ export default defineConfig({
             type: "string",
             name: "fire_status",
             label: "Fire Danger Level",
+            description:
+              "⚠️ DEPRECATED — EDITS HERE NO LONGER APPEAR ON THE WEBSITE. " +
+              "The Fire Safety widget now reads live from the StationWorks permits " +
+              "system on every page load. Change burn status there, not here. " +
+              "Saving on this screen will succeed and change nothing public. " +
+              "This screen will be removed shortly.",
             options: ["Low", "Moderate", "High", "Very High", "Extreme"],
             required: true,
           },
