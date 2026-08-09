@@ -128,3 +128,70 @@ describe("Burn status widget", () => {
     );
   });
 });
+
+/** Deep-clones the fixture and applies `mutate` before returning it. */
+function withPayload(mutate) {
+  const payload = JSON.parse(JSON.stringify(fixture));
+  mutate(payload);
+  return payload;
+}
+
+describe("Value normalisation", () => {
+  const FIRE_DANGER = [
+    ["low", "Low", "level--low"],
+    ["moderate", "Moderate", "level--moderate"],
+    ["high", "High", "level--high"],
+    ["very_high", "Very High", "level--very-high"],
+    ["extreme", "Extreme", "level--extreme"],
+  ];
+
+  for (const [token, text, className] of FIRE_DANGER) {
+    it(`renders fireDanger "${token}" as "${text}"`, async () => {
+      const doc = await boot(ok(withPayload((p) => { p.fireDanger = token; })));
+      assert.strictEqual(cell(doc, "fire-danger").textContent.trim(), text);
+      assert.ok(cell(doc, "fire-danger").className.includes(className));
+    });
+  }
+
+  const STATES = [
+    ["open", "Open", "level--open"],
+    ["closed", "Closed", "level--closed"],
+    ["restricted", "Restricted", "level--restricted"],
+  ];
+
+  for (const [token, text, className] of STATES) {
+    it(`renders state "${token}" as "${text}" on a permit row`, async () => {
+      // restricted on a *permit* row is the case the old Tina schema could not
+      // express -- permits were Open/Closed only.
+      const doc = await boot(ok(withPayload((p) => {
+        p.statuses.find((s) => s.slug === "residential").state = token;
+      })));
+      assert.strictEqual(cell(doc, "residential").textContent.trim(), text);
+      assert.ok(cell(doc, "residential").className.includes(className));
+    });
+  }
+
+  for (const separator of ["very high", "very-high"]) {
+    it(`accepts "${separator}" as equivalent to very_high`, async () => {
+      const doc = await boot(ok(withPayload((p) => { p.fireDanger = separator; })));
+      assert.strictEqual(cell(doc, "fire-danger").textContent.trim(), "Very High");
+      assert.ok(cell(doc, "fire-danger").className.includes("level--very-high"));
+    });
+  }
+
+  it("does not title-case airQuality.category", async () => {
+    const doc = await boot(ok(withPayload((p) => {
+      p.airQuality.category = "Unhealthy for Sensitive Groups";
+      p.airQuality.pm25Aqi = 130;
+    })));
+    // EPA's own capitalisation -- "for" stays lowercase.
+    assert.strictEqual(
+      doc.querySelector("[data-aqi-label]").textContent,
+      "AQI · Unhealthy for Sensitive Groups"
+    );
+    assert.ok(
+      cell(doc, "air-quality").className
+        .includes("level--aqi-unhealthy-for-sensitive-groups")
+    );
+  });
+});
