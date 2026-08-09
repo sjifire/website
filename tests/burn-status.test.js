@@ -249,6 +249,7 @@ describe("Partial data", () => {
     const doc = await boot(ok(withPayload((p) => { delete p.fireDanger; })));
     assert.strictEqual(cell(doc, "fire-danger").textContent.trim(), "—");
     assert.ok(cell(doc, "fire-danger").className.includes("level--unknown"));
+    assert.ok(!warning(doc), "an absent fireDanger must not trigger the warning");
   });
 
   it("renders an unrecognised state uncoloured rather than mis-coloured", async () => {
@@ -258,6 +259,7 @@ describe("Partial data", () => {
     const target = cell(doc, "residential");
     assert.strictEqual(target.textContent.trim(), "Partial");
     assert.strictEqual(target.className, "level");
+    assert.ok(!warning(doc), "an unrecognised state must not trigger the warning");
   });
 
   const NO_AQI = [
@@ -280,5 +282,6 @@ describe("Partial data", () => {
     assert.strictEqual(doc.querySelector("[data-burn-season]").hidden, true);
     // Everything else still patches.
     assert.strictEqual(cell(doc, "residential").textContent.trim(), "Closed");
+    assert.ok(!warning(doc), "an absent season must not trigger the warning");
   });
 });
