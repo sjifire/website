@@ -152,9 +152,13 @@ build step, early-return guard, 2-space indent. Passthrough-copied to `/js/` by 
 
 #### Value normalisation
 
-`fireDanger` and `state` arrive as **lowercase snake_case machine tokens** — `"high"`, `"closed"`,
-and confirmed by StationWorks, `"very_high"`. Each drives two different outputs, so there are two
-transforms:
+`fireDanger` and `state` arrive as **lowercase snake_case machine tokens**. Both enums are confirmed
+by StationWorks:
+
+- `fireDanger` — `low`, `moderate`, `high`, `very_high`, `extreme`
+- `state` — `open`, `closed`, `restricted` (**all** status rows, permits included)
+
+Each token drives two different outputs, so there are two transforms:
 
 ```js
 // CSS class suffix: lowercase, runs of whitespace/underscore/hyphen → single hyphen
@@ -180,10 +184,13 @@ needed**. Both transforms also accept whitespace- and hyphen-separated input, so
 `"very-high"` produce identical output to `"very_high"` — the API is snake_case today and the widget
 does not break if that ever changes.
 
-Of the eight tokens, `high`, `open`, `closed` are observed live and `very_high` is confirmed by
-StationWorks. The remaining four (`low`, `moderate`, `extreme`, `restricted`) are inferred from the
-existing TinaCMS enums, which the API appears to mirror. If any turns out to use a different word,
-it renders as readable uncolored text — never a wrong color — per the unrecognised-value rule below.
+**`restricted` on a permit row is new.** The TinaCMS schema only ever allowed `Open`/`Closed` for
+residential and commercial permits — `Restricted` existed solely on the three recreational fields.
+The API allows `restricted` on every status row, so the widget can now express a state the old
+hand-edited data structurally could not. No special handling is required: rows are mapped uniformly
+by slug and `level--restricted` already exists, so this works by construction rather than by a
+per-row rule. It is called out because a reader comparing the two schemas will notice the
+difference, and because the recreational-only assumption must not be carried into the code.
 
 **`airQuality.category` is the exception: do not title-case it.** It arrives display-ready
 (`"Good"`), and EPA's own label is `"Unhealthy for Sensitive Groups"` — title-casing every word
@@ -287,10 +294,11 @@ reads them after this change.
 
 - full fixture patches all seven rows, the season header, and the AQI link `href`
 - `aria-busy` is removed on success and retained on failure
-- **table-driven over every token in the normalisation table above** — each of `low`, `moderate`,
-  `high`, `very_high`, `extreme`, `open`, `restricted`, `closed` produces its expected display text
-  and its expected `level--*` class. `very_high` → `Very High` / `level--very-high` is the case
-  StationWorks confirmed and the one most likely to regress.
+- **table-driven over the full confirmed enums** — each of `low`, `moderate`, `high`, `very_high`,
+  `extreme`, `open`, `restricted`, `closed` produces its expected display text and its expected
+  `level--*` class. `very_high` → `Very High` / `level--very-high` is the one most likely to regress.
+- `restricted` renders correctly on a **permit** row, not just a recreational one — the case the old
+  Tina schema could not represent
 - separator tolerance: `"very high"` and `"very-high"` produce the same output as `"very_high"`
 - `airQuality.category` is **not** title-cased — `"Unhealthy for Sensitive Groups"` renders verbatim
   with class `level--aqi-unhealthy-for-sensitive-groups`, not `Unhealthy For Sensitive Groups`
