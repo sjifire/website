@@ -1,0 +1,21 @@
+{
+  "agency": { "slug": "sjifire", "displayName": "San Juan Island Fire & Rescue" },
+  "season": { "start": "2026-10-06", "end": "2027-06-05" },
+  "fireDanger": "high",
+  "statuses": [
+    { "slug": "residential", "label": "Residential Burn Permits", "state": "closed", "permitTypeSlug": "residential", "linkUrl": null, "section": null },
+    { "slug": "commercial", "label": "Commercial Burn Permits", "state": "closed", "permitTypeSlug": "commercial", "linkUrl": null, "section": null },
+    { "slug": "recreational-county", "label": "County lands", "state": "open", "permitTypeSlug": null, "linkUrl": null, "section": "recreational-fires" },
+    { "slug": "recreational-dnr", "label": "State Park & DNR lands", "state": "closed", "permitTypeSlug": null, "linkUrl": null, "section": "recreational-fires" },
+    { "slug": "recreational-nps", "label": "National Park lands", "state": "closed", "permitTypeSlug": null, "linkUrl": null, "section": "recreational-fires" }
+  ],
+  "airQuality": {
+    "station": "Anacortes",
+    "pm25Aqi": 17,
+    "category": "Good",
+    "categoryNumber": 1,
+    "observedAt": "2026-08-09T17:00:00.000Z",
+    "linkUrl": "https://www.airnow.gov/?reportingArea=Anacortes&stateCode=WA"
+  },
+  "asOf": "2026-08-09T17:35:39.339Z"
+}
