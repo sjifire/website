@@ -252,15 +252,27 @@
     table.removeAttribute('aria-busy');
   }
 
-  function load() {
-    const controller = new AbortController();
-    const timer = setTimeout(function () { controller.abort(); }, TIMEOUT_MS);
+  // base.liquid starts this request during head parse so it isn't waiting on
+  // this file to download and run. Use that in-flight promise when it exists;
+  // fetch here otherwise, so the script still works on its own.
+  function fetchPayload() {
+    if (window.__burnStatusFetch) return window.__burnStatusFetch;
+    return fetch(ENDPOINT).then(function (response) {
+      if (!response.ok) throw new Error('HTTP ' + response.status);
+      return response.json();
+    });
+  }
 
-    return fetch(ENDPOINT, { signal: controller.signal })
-      .then(function (response) {
-        if (!response.ok) throw new Error('HTTP ' + response.status);
-        return response.json();
-      })
+  function load() {
+    let timer;
+    // Races the request rather than aborting it: the head-started fetch is
+    // already in flight and we have no controller for it. An ignored response
+    // is harmless; a widget stuck on placeholders is not.
+    const timeout = new Promise(function (_resolve, reject) {
+      timer = setTimeout(function () { reject(new Error('timeout')); }, TIMEOUT_MS);
+    });
+
+    return Promise.race([fetchPayload(), timeout])
       .then(function (payload) {
         const view = buildView(payload);
         if (!view) throw new Error('unusable payload');

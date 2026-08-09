@@ -126,6 +126,24 @@
   }
   </script>
   {%- endif -%}
+
+  {%- comment -%}
+    Fire Safety widget: start the status request during head parse rather than
+    waiting for /js/burn-status.js to run at DOMContentLoaded. The widget sits in
+    the sidebar, so the deferred script fires late; the endpoint is a Lambda
+    behind CloudFront and a cold miss costs 2-3s, so the earlier start matters.
+    burn-status.js consumes this promise and falls back to its own fetch if it
+    is absent. Gated so pages without the widget don't make a pointless request.
+  {%- endcomment -%}
+  {%- if include_burn_widget %}
+  <link rel="preconnect" href="https://api.permits.stationworks.app" crossorigin>
+  <script>
+    window.__burnStatusFetch = fetch('https://api.permits.stationworks.app/v1/agencies/sjifire/status')
+      .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); });
+    // Pre-empt an unhandled rejection if the widget script never loads.
+    window.__burnStatusFetch.catch(function () {});
+  </script>
+  {%- endif %}
 </head>
 <body>
 

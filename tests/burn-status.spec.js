@@ -126,3 +126,46 @@ test.describe("Fire Safety widget, JavaScript disabled", () => {
       .not.toHaveAttribute("aria-busy", "true");
   });
 });
+
+test.describe("Head-started request", () => {
+  test("starts the fetch in <head> on pages that render the widget", async ({ page }) => {
+    await page.route(ENDPOINT, (route) => route.fulfill({ json: PAYLOAD }));
+
+    // Record when the API request fires relative to DOMContentLoaded. The whole
+    // point of the head snippet is that it goes out before the deferred script
+    // runs, so the request must precede DOMContentLoaded.
+    const apiRequest = page.waitForRequest("**/v1/agencies/sjifire/status");
+    await page.goto("/", { waitUntil: "domcontentloaded" });
+    await apiRequest;
+
+    // The page already carries several unrelated preconnects, so scope to ours.
+    await expect(
+      page.locator('head link[rel=preconnect][href="https://api.permits.stationworks.app"]')
+    ).toHaveCount(1);
+    // The promise the head script exposes is what burn-status.js consumes.
+    await expect
+      .poll(() => page.evaluate(() => typeof window.__burnStatusFetch))
+      .toBe("object");
+
+    await expect(page.locator('[data-row="fire-danger"]')).toHaveText("Very High");
+  });
+
+  test("omits the head snippet on pages without the widget", async ({ page }) => {
+    let apiCalls = 0;
+    await page.route(ENDPOINT, (route) => {
+      apiCalls += 1;
+      return route.fulfill({ json: PAYLOAD });
+    });
+
+    await page.goto("/contact/");
+
+    await expect(page.locator("[data-burn-status]")).toHaveCount(0);
+    await expect(
+      page.locator('head link[rel=preconnect][href*="permits.stationworks"]')
+    ).toHaveCount(0);
+    expect(
+      await page.evaluate(() => window.__burnStatusFetch === undefined)
+    ).toBe(true);
+    expect(apiCalls, "a page without the widget must not call the API").toBe(0);
+  });
+});

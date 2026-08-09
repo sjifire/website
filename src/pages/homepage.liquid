@@ -2,6 +2,11 @@
 title: San Juan Island Fire and Rescue
 permalink: /
 layout: base
+# Signals base.liquid to preconnect and start the burn-status fetch in <head>.
+# The homepage renders the widget directly (below) rather than via page.liquid,
+# so it needs the flag set explicitly; layout: base means this cannot
+# double-render the widget the way it would under layout: page.
+include_burn_widget: true
 header_image_transform: /h_520,q_auto:eco,b_rgb:334155/e_art:incognito/o_30/e_gradient_fade:symmetric_pad,x_0.1/
 scripts: '<script src="/js/carousel.js" defer></script>'
 ---

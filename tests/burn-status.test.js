@@ -376,3 +376,58 @@ describe("Air quality link safety", () => {
     assert.strictEqual(doc.querySelector("[data-aqi-score]").textContent, "17");
   });
 });
+
+/**
+ * Boots the widget with a pre-started request already on window, the way
+ * base.liquid's inline head script provides it. `fetch` is stubbed to throw so
+ * any test in this block that falls back to fetching fails loudly.
+ */
+async function bootWithEarlyFetch(payloadPromise) {
+  const dom = new JSDOM(WIDGET_HTML, { runScripts: "dangerously" });
+  let fetchCalls = 0;
+  dom.window.fetch = () => {
+    fetchCalls += 1;
+    return Promise.reject(new Error("burn-status.js must not re-fetch"));
+  };
+  dom.window.__burnStatusFetch = payloadPromise;
+  const el = dom.window.document.createElement("script");
+  el.textContent = script;
+  dom.window.document.body.appendChild(el);
+  await dom.window.__burnStatusReady;
+  return { doc: dom.window.document, fetchCalls: () => fetchCalls };
+}
+
+describe("Head-started request", () => {
+  it("uses the in-flight promise and does not fetch again", async () => {
+    const { doc, fetchCalls } = await bootWithEarlyFetch(Promise.resolve(fixture));
+
+    assert.strictEqual(fetchCalls(), 0, "should reuse the head-started request");
+    assert.strictEqual(cell(doc, "fire-danger").textContent.trim(), "High");
+    assert.strictEqual(cell(doc, "residential").textContent.trim(), "Closed");
+    assert.strictEqual(
+      doc.querySelector("[data-burn-status]").hasAttribute("aria-busy"),
+      false
+    );
+  });
+
+  it("shows the warning when the head-started request rejects", async () => {
+    const { doc } = await bootWithEarlyFetch(Promise.reject(new Error("HTTP 500")));
+
+    const cellEl = doc.querySelector(".widget__warning");
+    assert.ok(cellEl, "expected a warning cell");
+    assert.match(cellEl.textContent, /Live fire status unavailable/);
+    assert.strictEqual(doc.querySelectorAll("[data-row]").length, 0);
+  });
+
+  it("shows the warning when the head-started request yields an unusable payload", async () => {
+    const { doc } = await bootWithEarlyFetch(Promise.resolve({ statuses: [] }));
+
+    assert.ok(doc.querySelector(".widget__warning"));
+  });
+
+  it("still fetches for itself when no head-started request exists", async () => {
+    // The fallback path -- e.g. a page whose head snippet did not render.
+    const doc = await boot(ok(fixture));
+    assert.strictEqual(cell(doc, "fire-danger").textContent.trim(), "High");
+  });
+});
