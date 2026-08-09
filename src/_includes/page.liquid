@@ -17,7 +17,7 @@ layout: base
     <aside class="l-grid__sidebar">
       {% if include_burn_widget %}
         <div class="sidebar-block">
-          {% render "burn-status-widget.liquid", burn_status: burn_status, air_quality: air_quality, page: page %}
+          {% render "burn-status-widget.liquid", page: page %}
         </div>
       {% endif %}
       {% if include_incident_widget %}

@@ -1,7 +1,34 @@
 import { test, expect } from "@playwright/test";
 
+// The homepage's Fire Safety widget fetches this endpoint live on every load.
+// Mock it here so these unrelated specs don't make a real cross-internet
+// request per navigation and don't risk a late DOM mutation from the widget
+// patching in after the page has already settled.
+const BURN_STATUS_ENDPOINT = "**/v1/agencies/sjifire/status";
+const BURN_STATUS_PAYLOAD = {
+  agency: { slug: "sjifire", displayName: "San Juan Island Fire & Rescue" },
+  season: { start: "2026-10-06", end: "2027-06-05" },
+  fireDanger: "moderate",
+  statuses: [
+    { slug: "residential", label: "Residential Burn Permits", state: "open" },
+    { slug: "commercial", label: "Commercial Burn Permits", state: "open" },
+    { slug: "recreational-county", label: "County lands", state: "open" },
+    { slug: "recreational-dnr", label: "State Park & DNR lands", state: "open" },
+    { slug: "recreational-nps", label: "National Park lands", state: "open" },
+  ],
+  airQuality: {
+    station: "Anacortes",
+    pm25Aqi: 12,
+    category: "Good",
+    linkUrl: "https://www.airnow.gov/?reportingArea=Anacortes&stateCode=WA",
+  },
+};
+
 test.describe("Carousel", () => {
   test.beforeEach(async ({ page }) => {
+    await page.route(BURN_STATUS_ENDPOINT, (route) =>
+      route.fulfill({ json: BURN_STATUS_PAYLOAD })
+    );
     await page.goto("/");
   });
 

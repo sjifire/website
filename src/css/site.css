@@ -1248,9 +1248,11 @@ body {
   background-color: var(--lt-gray);
 }
 
-/* Burn-status widget stripes by position so conditionally-hidden rows
-   (e.g. Air Quality when there's no reading) never break the zebra. */
-.widget--burn-status .widget__body tr:nth-of-type(odd) {
+/* Burn-status widget stripes by position among *visible* rows -- the Air
+   Quality row stays in the DOM with [hidden] rather than being removed, and
+   plain :nth-of-type counts it regardless of visibility, which would leave
+   two adjacent visible rows sharing a background when it's hidden. */
+.widget--burn-status .widget__body tr:nth-child(odd of :not([hidden])) {
   background-color: var(--lt-gray);
 }
 
@@ -1346,6 +1348,28 @@ body {
 .widget__body .level--aqi-hazardous {
   background-color: #4a0d18;
   color: white;
+}
+
+/* Placeholder shown before the live fetch resolves */
+.widget__body .level--unknown {
+  background-color: #f0f0f0;
+  color: #6b6b6b;
+  font-weight: 400;
+}
+
+/* Shown when the live status API is unreachable */
+.widget__body .widget__warning {
+  padding: 15px 5px;
+  font-size: 0.9em;
+  line-height: 1.4;
+  color: #6b6b6b;
+  text-align: left;
+  text-transform: none;
+}
+
+.widget__body .widget__warning a {
+  color: inherit;
+  text-decoration: underline;
 }
 
 .widget__body .level a {
