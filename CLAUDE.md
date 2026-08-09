@@ -138,24 +138,57 @@ Personnel data and photos are synced daily from Microsoft 365 via Microsoft Grap
 npm run sync-personnel
 ```
 
-### Air Quality (AirNow)
+### Fire Safety Widget (Burn Status + Air Quality)
 
-Current air quality / wildfire smoke conditions for the Fire Safety widget are
-pulled from AirNow (airnow.gov), the EPA's authoritative U.S. air quality source.
-San Juan Island has no permanent EPA monitor, so AirNow returns the nearest
-reporting station (often Anacortes); the widget shows that station name and links
-to the AirNow Fire & Smoke Map for live, hyperlocal smoke coverage.
+The Fire Safety widget reads **live at runtime** from the StationWorks permits
+API. Nothing about it is baked in at build time.
+
+**Endpoint:** `https://api.permits.stationworks.app/v1/agencies/sjifire/status`
+(CORS-open, no API key, `cache-control: max-age=120`)
+
+One response supplies the whole widget: burn season, fire danger, all five
+permit/recreational statuses, and air quality.
 
 **Files:**
-- `scripts/generate-air-quality.mjs` - Fetches the nearest current AQI observation to Friday Harbor and writes `src/_data/air_quality.json`
-- `src/_includes/burn-status-widget.liquid` - Renders the "Air Quality & Smoke" row (color-coded by EPA AQI category; falls back to a "Check Air Quality" link when no reading is available)
-- `.github/workflows/update-air-quality.yml` - Scheduled workflow (hourly; only commits when the AQI moves ≥5% or its category changes)
+- `src/_includes/burn-status-widget.liquid` - renders structure only (row labels,
+  placeholder cells, `data-*` hooks). Contains no data references.
+- `src/js/burn-status.js` - fetches on every page load and patches the cells.
+  Maps the entire payload before touching the DOM, so the widget is never
+  half-patched.
 
-`air_quality.json` is auto-generated and is NOT edited via TinaCMS (unlike
-`burn_status.json`), so the sync never conflicts with manual edits.
+**There is no static fallback, deliberately.** If the API is unreachable the
+widget shows "Live fire status unavailable" with the office phone number. A
+stale committed baseline would instead show a confident wrong answer about
+burn permits, which is worse than admitting we don't know.
 
-**Secrets:**
-- From GitHub Secrets: `AIRNOW_API_KEY` (free key from https://docs.airnowapi.org/), `DEPLOY_KEY` (SSH deploy key for pushing changes)
+**Enums** (confirmed with StationWorks):
+- `fireDanger`: `low`, `moderate`, `high`, `very_high`, `extreme`
+- `state`: `open`, `closed`, `restricted` - valid on **every** status row,
+  including residential and commercial permits
+
+Tokens are snake_case; the widget title-cases them for display (`very_high` ->
+"Very High") and slugifies them for the CSS class (`level--very-high`). One
+exception: `airQuality.category` arrives display-ready and is **never**
+title-cased, or EPA's "Unhealthy for Sensitive Groups" would render as
+"Unhealthy For Sensitive Groups".
+
+#### Deprecated: TinaCMS "Burn Status" and the AirNow pipeline
+
+`src/_data/burn_status.json` and `src/_data/air_quality.json` are **no longer read
+by the site.** They remain on disk, and the TinaCMS collection is still present
+but labelled `Burn Status (DEPRECATED — DO NOT EDIT)`.
+
+**Editing burn status in TinaCMS has no effect on the public site and produces no
+error.** Burn status is changed in the StationWorks permits system. Deleting the
+collection and both JSON files is a pending follow-up.
+
+`.github/workflows/update-air-quality.yml` and `scripts/generate-air-quality.mjs`
+are retained and manually runnable (`workflow_dispatch`), but **no longer run on a
+schedule**. The hourly cron produced 214 commits in 16 days -- roughly 13 site
+redeploys a day -- to maintain a number the browser now fetches directly.
+
+**Secrets** (only needed for a manual run):
+- From GitHub Secrets: `AIRNOW_API_KEY`, `DEPLOY_KEY`
 
 **Local Testing:**
 ```bash
