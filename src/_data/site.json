@@ -17,5 +17,6 @@
     "owner": "sjifire",
     "repo": "website",
     "branch": "main"
-  }
+  },
+  "burn_status_api": "https://api.permits.stationworks.app/v1/agencies/sjifire/status"
 }

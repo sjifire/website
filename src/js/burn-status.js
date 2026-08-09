@@ -12,7 +12,12 @@
   // genuinely fetching.
   table.setAttribute('aria-busy', 'true');
 
-  const ENDPOINT = 'https://api.permits.stationworks.app/v1/agencies/sjifire/status';
+  // base.liquid publishes the canonical URL from site.json's burn_status_api.
+  // This literal is only the fallback for when that head snippet didn't render;
+  // keep the two in sync. This file is passthrough-copied, so it can't read
+  // Liquid data directly.
+  const ENDPOINT = window.__burnStatusEndpoint ||
+    'https://api.permits.stationworks.app/v1/agencies/sjifire/status';
   const TIMEOUT_MS = 8000;
 
   // The data-row attribute for these rows IS the API's status slug.
@@ -252,27 +257,53 @@
     table.removeAttribute('aria-busy');
   }
 
-  // base.liquid starts this request during head parse so it isn't waiting on
-  // this file to download and run. Use that in-flight promise when it exists;
-  // fetch here otherwise, so the script still works on its own.
-  function fetchPayload() {
-    if (window.__burnStatusFetch) return window.__burnStatusFetch;
-    return fetch(ENDPOINT).then(function (response) {
+  // Our own request, with a controller so the timeout can actually cancel it.
+  function fetchDirect(controller) {
+    return fetch(ENDPOINT, { signal: controller.signal }).then(function (response) {
       if (!response.ok) throw new Error('HTTP ' + response.status);
       return response.json();
     });
   }
 
+  // A thenable is the only thing we can consume; anything else on the global
+  // (a sentinel, a colliding extension) must not be mistaken for a payload.
+  function isThenable(value) {
+    return !!value && typeof value.then === 'function';
+  }
+
+  // base.liquid starts this request during head parse so it isn't waiting on
+  // this file to download and run. Use that in-flight promise when it exists,
+  // but retry ourselves if it already failed: it was issued in the first
+  // milliseconds of page load, before DNS/TLS was warm, so a single early
+  // failure is exactly the case where a second attempt tends to succeed.
+  function fetchPayload(controller) {
+    const early = window.__burnStatusFetch;
+    if (isThenable(early)) {
+      return early.catch(function () { return fetchDirect(controller); });
+    }
+    return fetchDirect(controller);
+  }
+
   function load() {
     let timer;
-    // Races the request rather than aborting it: the head-started fetch is
-    // already in flight and we have no controller for it. An ignored response
-    // is harmless; a widget stuck on placeholders is not.
+    const controller = new AbortController();
+    // Cancels our own request and, either way, stops waiting. The head-started
+    // fetch has its own controller on window; abort it too when present, so a
+    // stalled early request isn't left holding a connection.
     const timeout = new Promise(function (_resolve, reject) {
-      timer = setTimeout(function () { reject(new Error('timeout')); }, TIMEOUT_MS);
+      timer = setTimeout(function () {
+        controller.abort();
+        if (window.__burnStatusAbort) window.__burnStatusAbort();
+        reject(new Error('timeout'));
+      }, TIMEOUT_MS);
     });
 
-    return Promise.race([fetchPayload(), timeout])
+    // Guards against fetch itself throwing synchronously (a proxy or privacy
+    // shim can), which would otherwise escape before .catch is attached and
+    // leave the widget aria-busy forever.
+    const request = new Promise(function (resolve) { resolve(fetchPayload(controller)); });
+
+    return Promise.race([request, timeout])
       .then(function (payload) {
         const view = buildView(payload);
         if (!view) throw new Error('unusable payload');

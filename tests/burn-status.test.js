@@ -425,9 +425,73 @@ describe("Head-started request", () => {
     assert.ok(doc.querySelector(".widget__warning"));
   });
 
-  it("still fetches for itself when no head-started request exists", async () => {
-    // The fallback path -- e.g. a page whose head snippet did not render.
-    const doc = await boot(ok(fixture));
+  it("retries itself when the head-started request already failed", async () => {
+    // The early fetch goes out before DNS/TLS is warm, so a single early
+    // failure is exactly when a second attempt tends to succeed.
+    const dom = new JSDOM(WIDGET_HTML, { runScripts: "dangerously" });
+    let fetchCalls = 0;
+    dom.window.fetch = () => {
+      fetchCalls += 1;
+      return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve(fixture) });
+    };
+    dom.window.__burnStatusFetch = Promise.reject(new Error("cold start 502"));
+    const el = dom.window.document.createElement("script");
+    el.textContent = script;
+    dom.window.document.body.appendChild(el);
+    await dom.window.__burnStatusReady;
+
+    assert.strictEqual(fetchCalls, 1, "should retry after an early failure");
+    const doc = dom.window.document;
     assert.strictEqual(cell(doc, "fire-danger").textContent.trim(), "High");
+    assert.ok(!doc.querySelector(".widget__warning"), "retry succeeded, no warning");
+  });
+
+  it("ignores a truthy non-thenable on the global", async () => {
+    const dom = new JSDOM(WIDGET_HTML, { runScripts: "dangerously" });
+    let fetchCalls = 0;
+    dom.window.fetch = () => {
+      fetchCalls += 1;
+      return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve(fixture) });
+    };
+    // e.g. an A/B sentinel or a colliding extension global.
+    dom.window.__burnStatusFetch = true;
+    const el = dom.window.document.createElement("script");
+    el.textContent = script;
+    dom.window.document.body.appendChild(el);
+    await dom.window.__burnStatusReady;
+
+    assert.strictEqual(fetchCalls, 1, "a non-thenable must not be used as a payload");
+    assert.strictEqual(cell(dom.window.document, "fire-danger").textContent.trim(), "High");
+  });
+
+  it("warns and clears aria-busy when the request never settles", async () => {
+    // Covers the Promise.race timeout branch, which had no coverage.
+    // The 8s timer is fired immediately rather than waited out, so this costs
+    // no wall-clock time and needs no test-only hook in the production script.
+    const dom = new JSDOM(WIDGET_HTML, { runScripts: "dangerously" });
+    dom.window.fetch = () => new Promise(() => {});
+    dom.window.__burnStatusFetch = new Promise(() => {});
+    const realSetTimeout = dom.window.setTimeout;
+    dom.window.setTimeout = (fn, ms) => realSetTimeout(fn, ms >= 8000 ? 0 : ms);
+
+    const el = dom.window.document.createElement("script");
+    el.textContent = script;
+    dom.window.document.body.appendChild(el);
+
+    // Bounded: if the timeout branch is broken, __burnStatusReady never
+    // settles. Without this guard that shows up as a hung CI job rather than
+    // a failing test.
+    const settled = await Promise.race([
+      dom.window.__burnStatusReady.then(() => "settled"),
+      new Promise((r) => setTimeout(() => r("hung"), 2000)),
+    ]);
+    assert.strictEqual(settled, "settled", "timeout branch never settled");
+
+    const doc = dom.window.document;
+    assert.ok(doc.querySelector(".widget__warning"), "timeout must render the warning");
+    assert.strictEqual(
+      doc.querySelector("[data-burn-status]").hasAttribute("aria-busy"),
+      false
+    );
   });
 });

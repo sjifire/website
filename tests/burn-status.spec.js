@@ -128,27 +128,44 @@ test.describe("Fire Safety widget, JavaScript disabled", () => {
 });
 
 test.describe("Head-started request", () => {
-  test("starts the fetch in <head> on pages that render the widget", async ({ page }) => {
-    await page.route(ENDPOINT, (route) => route.fulfill({ json: PAYLOAD }));
+  // Both pages that render the widget. /services/burn-permits/ goes through the
+  // layout: page -> layout: base chain, which is the case the head snippet's
+  // gating can silently miss.
+  for (const target of PAGES) {
+    test(`starts the request before the deferred script on the ${target.name}`, async ({ page }) => {
+      let apiCalls = 0;
+      await page.route(ENDPOINT, (route) => {
+        apiCalls += 1;
+        return route.fulfill({ json: PAYLOAD });
+      });
 
-    // Record when the API request fires relative to DOMContentLoaded. The whole
-    // point of the head snippet is that it goes out before the deferred script
-    // runs, so the request must precede DOMContentLoaded.
-    const apiRequest = page.waitForRequest("**/v1/agencies/sjifire/status");
-    await page.goto("/", { waitUntil: "domcontentloaded" });
-    await apiRequest;
+      await page.goto(target.path, { waitUntil: "load" });
 
-    // The page already carries several unrelated preconnects, so scope to ours.
-    await expect(
-      page.locator('head link[rel=preconnect][href="https://api.permits.stationworks.app"]')
-    ).toHaveCount(1);
-    // The promise the head script exposes is what burn-status.js consumes.
-    await expect
-      .poll(() => page.evaluate(() => typeof window.__burnStatusFetch))
-      .toBe("object");
+      // The real claim: the request starts before /js/burn-status.js has even
+      // finished downloading. Comparing against DOMContentLoaded proves nothing
+      // -- deferred scripts already run before DCL, so that assertion holds
+      // even with the head snippet deleted.
+      const timing = await page.evaluate(() => {
+        const r = performance.getEntriesByType("resource");
+        const api = r.find((e) => e.name.includes("/v1/agencies/sjifire/status"));
+        const js = r.find((e) => e.name.includes("burn-status.js"));
+        return api && js ? { apiStart: api.startTime, jsEnd: js.responseEnd } : null;
+      });
+      expect(timing, "expected both the API request and the script").not.toBeNull();
+      expect(
+        timing.apiStart,
+        "API request must start before burn-status.js finishes loading"
+      ).toBeLessThan(timing.jsEnd);
 
-    await expect(page.locator('[data-row="fire-danger"]')).toHaveText("Very High");
-  });
+      // Exactly one request: the head snippet's, reused by the script.
+      expect(apiCalls, "head-started request must be reused, not duplicated").toBe(1);
+
+      await expect(
+        page.locator('head link[rel=preconnect][href="https://api.permits.stationworks.app"]')
+      ).toHaveCount(1);
+      await expect(page.locator('[data-row="fire-danger"]')).toHaveText("Very High");
+    });
+  }
 
   test("omits the head snippet on pages without the widget", async ({ page }) => {
     let apiCalls = 0;
