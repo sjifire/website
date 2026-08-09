@@ -72,11 +72,57 @@ test.describe("Fire Safety widget", () => {
       const warning = page.locator(".widget__warning");
       await expect(warning).toBeVisible();
       await expect(warning).toContainText("Live fire status unavailable");
-      await expect(warning.locator('a[href="tel:(360) 378-5334"]')).toBeVisible();
+      await expect(warning.locator('a[href="tel:+13603785334"]')).toBeVisible();
       await expect(page.locator("[data-burn-status]"))
         .not.toHaveAttribute("aria-busy", "true");
       // Never blank, never half-filled.
       await expect(page.locator("[data-row]")).toHaveCount(0);
     });
   }
+
+  test("removes the AQI href instead of leaving a dud href=\"#\" when linkUrl is null", async ({ page }) => {
+    await page.route(ENDPOINT, (route) =>
+      route.fulfill({ json: { ...PAYLOAD, airQuality: { ...PAYLOAD.airQuality, linkUrl: null } } })
+    );
+    await page.goto("/");
+
+    const link = page.locator("[data-aqi-link]");
+    await expect(link).toBeVisible();
+    expect(await link.getAttribute("href")).toBeNull();
+  });
+
+  test("never writes a javascript: URL from the API into the AQI href", async ({ page }) => {
+    await page.route(ENDPOINT, (route) =>
+      route.fulfill({
+        json: {
+          ...PAYLOAD,
+          airQuality: { ...PAYLOAD.airQuality, linkUrl: "javascript:alert(document.cookie)" },
+        },
+      })
+    );
+    await page.goto("/");
+
+    const link = page.locator("[data-aqi-link]");
+    await expect(link).toBeVisible();
+    expect(await link.getAttribute("href")).toBeNull();
+  });
+});
+
+test.describe("Fire Safety widget, JavaScript disabled", () => {
+  test.use({ javaScriptEnabled: false });
+
+  test("shows the static no-JS fallback with a working phone and permits link", async ({ page }) => {
+    await page.goto("/");
+
+    const notice = page.locator(".widget__notice--burn-status");
+    await expect(notice).toBeVisible();
+    await expect(notice).toContainText("Live fire status unavailable");
+    await expect(notice.locator('a[href="tel:+13603785334"]')).toBeVisible();
+    await expect(notice.locator('a[href="/services/burn-permits/"]')).toBeVisible();
+
+    // The un-patched table is still there, but nothing claims to be busy --
+    // no JS ran, so nothing ever set aria-busy in the first place.
+    await expect(page.locator("[data-burn-status]"))
+      .not.toHaveAttribute("aria-busy", "true");
+  });
 });

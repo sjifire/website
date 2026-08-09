@@ -129,6 +129,29 @@ describe("Burn status widget", () => {
   });
 });
 
+describe("aria-busy lifecycle", () => {
+  it("sets aria-busy itself, synchronously, rather than relying on server markup", () => {
+    // The server no longer renders aria-busy -- prove the script sets it as
+    // its first action, before the (held-open) fetch has a chance to resolve.
+    const noBusyHtml = WIDGET_HTML.replace(' aria-busy="true"', "");
+    const dom = new JSDOM(noBusyHtml, { runScripts: "dangerously" });
+    let resolveFetch;
+    dom.window.fetch = () => new Promise((resolve) => { resolveFetch = resolve; });
+
+    const el = dom.window.document.createElement("script");
+    el.textContent = script;
+    dom.window.document.body.appendChild(el);
+
+    assert.strictEqual(
+      dom.window.document.querySelector("[data-burn-status]").getAttribute("aria-busy"),
+      "true"
+    );
+
+    resolveFetch({ ok: true, status: 200, json: () => Promise.resolve(fixture) });
+    return dom.window.__burnStatusReady;
+  });
+});
+
 /** Deep-clones the fixture and applies `mutate` before returning it. */
 function withPayload(mutate) {
   const payload = JSON.parse(JSON.stringify(fixture));
@@ -205,6 +228,10 @@ describe("Failure handling", () => {
     ["malformed JSON", () => Promise.resolve({ ok: true, status: 200, json: () => Promise.reject(new SyntaxError("bad")) })],
     ["a payload with no statuses array", ok({ season: { start: "2026-10-06", end: "2027-06-05" } })],
     ["a payload with an empty statuses array", ok({ statuses: [] })],
+    ["a payload where none of the five expected slugs match (wholesale slug rename)",
+      ok(withPayload((p) => {
+        p.statuses.forEach((s) => { s.slug = "renamed-" + s.slug; });
+      }))],
   ];
 
   for (const [label, responder] of FAILURES) {
@@ -214,7 +241,7 @@ describe("Failure handling", () => {
       assert.ok(cellEl, "expected a warning cell");
       assert.match(cellEl.textContent, /Live fire status unavailable/);
       assert.strictEqual(
-        cellEl.querySelector('a[href="tel:(360) 378-5334"]').textContent,
+        cellEl.querySelector('a[href="tel:+13603785334"]').textContent,
         "(360) 378-5334"
       );
       assert.ok(cellEl.querySelector('a[href="/services/burn-permits/"]'));
@@ -243,6 +270,24 @@ describe("Partial data", () => {
     // Neighbouring rows are unaffected.
     assert.strictEqual(cell(doc, "residential").textContent.trim(), "Closed");
     assert.ok(!warning(doc), "a missing slug must not trigger the warning");
+  });
+
+  it("still patches per-row (no warning) when only one of the five expected slugs matches", async () => {
+    // The boundary case just short of a total slug rename (M3): as long as
+    // at least one expected slug is present, this is partial data, not an
+    // unusable payload -- each unmatched row degrades to an em dash on its
+    // own, and the rest of the table still renders.
+    const doc = await boot(ok(withPayload((p) => {
+      p.statuses.forEach((s) => {
+        if (s.slug !== "residential") s.slug = "renamed-" + s.slug;
+      });
+    })));
+    assert.strictEqual(cell(doc, "residential").textContent.trim(), "Closed");
+    assert.strictEqual(cell(doc, "commercial").textContent.trim(), "—");
+    assert.strictEqual(cell(doc, "recreational-county").textContent.trim(), "—");
+    assert.strictEqual(cell(doc, "recreational-dnr").textContent.trim(), "—");
+    assert.strictEqual(cell(doc, "recreational-nps").textContent.trim(), "—");
+    assert.ok(!warning(doc), "at least one matching slug must not trigger the warning");
   });
 
   it("shows an em dash when fireDanger is absent", async () => {
@@ -283,5 +328,51 @@ describe("Partial data", () => {
     // Everything else still patches.
     assert.strictEqual(cell(doc, "residential").textContent.trim(), "Closed");
     assert.ok(!warning(doc), "an absent season must not trigger the warning");
+  });
+});
+
+describe("Air quality link safety", () => {
+  it("rejects a javascript: URL rather than writing it into the href", async () => {
+    const doc = await boot(ok(withPayload((p) => {
+      p.airQuality.linkUrl = "javascript:alert(document.cookie)";
+    })));
+    const link = doc.querySelector("[data-aqi-link]");
+    assert.strictEqual(link.getAttribute("href"), null);
+    // The row still renders -- only the link is refused.
+    assert.strictEqual(doc.querySelector("[data-aqi-row]").hidden, false);
+  });
+
+  it("treats an unparseable URL (throws in the URL constructor) as no link", async () => {
+    const doc = await boot(ok(withPayload((p) => {
+      // A malformed host (embedded space) -- new URL() throws for this
+      // regardless of base, exercising the safeHttpUrl catch branch.
+      p.airQuality.linkUrl = "http://exa mple.com";
+    })));
+    const link = doc.querySelector("[data-aqi-link]");
+    assert.strictEqual(link.getAttribute("href"), null);
+    // The row still renders -- a bad link degrades to plain text, not a warning.
+    assert.strictEqual(doc.querySelector("[data-aqi-row]").hidden, false);
+    assert.ok(!warning(doc), "a malformed AQI link must not trigger the warning");
+  });
+
+  it("accepts an http: URL, not just https:", async () => {
+    const doc = await boot(ok(withPayload((p) => {
+      p.airQuality.linkUrl = "http://example.com/aqi";
+    })));
+    assert.strictEqual(
+      doc.querySelector("[data-aqi-link]").getAttribute("href"),
+      "http://example.com/aqi"
+    );
+  });
+
+  it("removes the href (rather than leaving href=\"#\") when linkUrl is null", async () => {
+    const doc = await boot(ok(withPayload((p) => {
+      p.airQuality.linkUrl = null;
+    })));
+    const link = doc.querySelector("[data-aqi-link]");
+    assert.strictEqual(link.getAttribute("href"), null);
+    // The row is still shown and filled in -- only the link is absent.
+    assert.strictEqual(doc.querySelector("[data-aqi-row]").hidden, false);
+    assert.strictEqual(doc.querySelector("[data-aqi-score]").textContent, "17");
   });
 });

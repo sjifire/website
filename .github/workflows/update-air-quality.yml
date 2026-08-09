@@ -62,5 +62,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git commit -m "chore: update air quality data from AirNow
 
-          Auto-generated update of the current AQI for the Fire Safety widget."
+          Auto-generated update of the retained src/_data/air_quality.json snapshot.
+          The Fire Safety widget no longer reads this file -- it fetches air
+          quality live from the StationWorks API at runtime."
           git push

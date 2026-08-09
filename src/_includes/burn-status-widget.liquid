@@ -1,4 +1,4 @@
-<table class="widget widget--burn-status" data-burn-status aria-busy="true">
+<table class="widget widget--burn-status" data-burn-status>
   <caption class="widget__header">
     <div class="flex">
       <svg aria-hidden="true"><use xlink:href='#flame' /></svg>
@@ -68,4 +68,12 @@
     </tfoot>
   {% endif %}
 </table>
+<noscript>
+  <p class="widget__notice widget__notice--burn-status">
+    &#9888; Live fire status unavailable. Call
+    <a href="tel:+13603785334">(360) 378-5334</a>
+    or see
+    <a href="/services/burn-permits/">Burn Permits &rsaquo;</a>
+  </p>
+</noscript>
 <script defer src="/js/burn-status.js"></script>

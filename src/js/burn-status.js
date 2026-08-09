@@ -6,6 +6,12 @@
   const table = document.querySelector('[data-burn-status]');
   if (!table) return;
 
+  // First action: the server never renders aria-busy -- if JS doesn't run
+  // (disabled, blocked, fails to parse), the table must not look permanently
+  // busy. Set it ourselves so the busy state only ever exists while we are
+  // genuinely fetching.
+  table.setAttribute('aria-busy', 'true');
+
   const ENDPOINT = 'https://api.permits.stationworks.app/v1/agencies/sjifire/status';
   const TIMEOUT_MS = 8000;
 
@@ -78,6 +84,20 @@
     return start && end ? start + '-' + end : null;
   }
 
+  // Only http(s) links are safe to write into an anchor's href -- the API is
+  // an external, uncontrolled source, and a `javascript:` URL would execute
+  // in this origin on click. A malformed URL (throws) is treated the same as
+  // an absent one: no link, never a guess.
+  function safeHttpUrl(value) {
+    if (typeof value !== 'string' || !value) return null;
+    try {
+      const url = new URL(value, location.href);
+      return url.protocol === 'http:' || url.protocol === 'https:' ? url.href : null;
+    } catch (e) {
+      return null;
+    }
+  }
+
   function airQualityFor(aq) {
     if (!aq) return null;
     const aqi = aq.pm25Aqi;
@@ -90,7 +110,7 @@
       label: category ? 'AQI · ' + category : 'AQI',
       className: category ? 'level level--aqi-' + slugify(category) : 'level',
       station: typeof aq.station === 'string' ? aq.station : '',
-      href: typeof aq.linkUrl === 'string' && aq.linkUrl ? aq.linkUrl : null
+      href: safeHttpUrl(aq.linkUrl)
     };
   }
 
@@ -105,6 +125,15 @@
     payload.statuses.forEach(function (status) {
       if (status && typeof status.slug === 'string') bySlug[status.slug] = status;
     });
+
+    // If StationWorks renamed every slug we know about, the payload is a
+    // slug-contract break, not partial data -- show the warning rather than
+    // five permanent, silent em dashes. One or two missing slugs still
+    // degrade per-row below; only a total mismatch is fatal.
+    const matchedSlugs = STATUS_SLUGS.filter(function (slug) {
+      return Object.prototype.hasOwnProperty.call(bySlug, slug);
+    });
+    if (matchedSlugs.length === 0) return null;
 
     const rows = { 'fire-danger': cellFor(payload.fireDanger) };
     STATUS_SLUGS.forEach(function (slug) {
@@ -136,7 +165,15 @@
     if (label) label.textContent = aq.label;
 
     const link = table.querySelector('[data-aqi-link]');
-    if (link && aq.href) link.setAttribute('href', aq.href);
+    if (link) {
+      // No valid link -> plain text, not a dud href="#" that duplicates the
+      // current tab (the anchor still has target="_blank").
+      if (aq.href) {
+        link.setAttribute('href', aq.href);
+      } else {
+        link.removeAttribute('href');
+      }
+    }
 
     const source = table.querySelector('[data-aqi-source]');
     if (source) {
@@ -191,7 +228,7 @@
       );
 
       const phone = document.createElement('a');
-      phone.setAttribute('href', 'tel:(360) 378-5334');
+      phone.setAttribute('href', 'tel:+13603785334');
       phone.textContent = '(360) 378-5334';
       cell.appendChild(phone);
 
