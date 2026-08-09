@@ -150,16 +150,45 @@ build step, early-return guard, 2-space indent. Passthrough-copied to `/js/` by 
 | Recreational Fires: State Park & DNR | `statuses[slug="recreational-dnr"].state` |
 | Recreational Fires: National Parks | `statuses[slug="recreational-nps"].state` |
 
-The API sends lowercase (`"high"`, `"closed"`). Display title-cases each word (`"very high"` →
-`Very High`). The CSS class slugifies: lowercase, then collapse any run of whitespace or
-underscores to a single hyphen (`"very high"` and `"very_high"` both → `level--very-high`). This
-reproduces what Liquid's `slugify` produced before, and is deliberately tolerant because the exact
-casing and separator the API uses for multi-word danger levels has not been observed — only
-`"high"` has been seen live.
+#### Value normalisation
 
-**No new CSS colors are needed.** Every class already exists at `site.css:1296-1349`:
-`level--low`, `--moderate`, `--high`, `--very-high`, `--extreme`, `--open`, `--restricted`,
-`--closed`, and the six `level--aqi-*`.
+`fireDanger` and `state` arrive as **lowercase snake_case machine tokens** — `"high"`, `"closed"`,
+and confirmed by StationWorks, `"very_high"`. Each drives two different outputs, so there are two
+transforms:
+
+```js
+// CSS class suffix: lowercase, runs of whitespace/underscore/hyphen → single hyphen
+slugify("very_high")   // → "very-high"   → class "level--very-high"
+
+// Display text: split on the same separators, capitalise each word, join with spaces
+titleCase("very_high") // → "Very High"
+```
+
+| API token | CSS class | Displayed |
+|---|---|---|
+| `low` | `level--low` | Low |
+| `moderate` | `level--moderate` | Moderate |
+| `high` | `level--high` | High |
+| `very_high` | `level--very-high` | Very High |
+| `extreme` | `level--extreme` | Extreme |
+| `open` | `level--open` | Open |
+| `restricted` | `level--restricted` | Restricted |
+| `closed` | `level--closed` | Closed |
+
+Every class in that table already exists at `site.css:1296-1349`, so **no new CSS colors are
+needed**. Both transforms also accept whitespace- and hyphen-separated input, so `"very high"` and
+`"very-high"` produce identical output to `"very_high"` — the API is snake_case today and the widget
+does not break if that ever changes.
+
+Of the eight tokens, `high`, `open`, `closed` are observed live and `very_high` is confirmed by
+StationWorks. The remaining four (`low`, `moderate`, `extreme`, `restricted`) are inferred from the
+existing TinaCMS enums, which the API appears to mirror. If any turns out to use a different word,
+it renders as readable uncolored text — never a wrong color — per the unrecognised-value rule below.
+
+**`airQuality.category` is the exception: do not title-case it.** It arrives display-ready
+(`"Good"`), and EPA's own label is `"Unhealthy for Sensitive Groups"` — title-casing every word
+would render `Unhealthy For Sensitive Groups`, which is wrong. Use the string verbatim for display
+and only slugify it for the `level--aqi-*` class, exactly as the Liquid template did.
 
 #### Dates
 
@@ -258,7 +287,13 @@ reads them after this change.
 
 - full fixture patches all seven rows, the season header, and the AQI link `href`
 - `aria-busy` is removed on success and retained on failure
-- lowercase API values render title-cased with the correct `level--*` class
+- **table-driven over every token in the normalisation table above** — each of `low`, `moderate`,
+  `high`, `very_high`, `extreme`, `open`, `restricted`, `closed` produces its expected display text
+  and its expected `level--*` class. `very_high` → `Very High` / `level--very-high` is the case
+  StationWorks confirmed and the one most likely to regress.
+- separator tolerance: `"very high"` and `"very-high"` produce the same output as `"very_high"`
+- `airQuality.category` is **not** title-cased — `"Unhealthy for Sensitive Groups"` renders verbatim
+  with class `level--aqi-unhealthy-for-sensitive-groups`, not `Unhealthy For Sensitive Groups`
 - season renders `Oct 6-Jun 5`, **not** `Oct 5-Jun 4` — the UTC regression test
 - a slug missing from `statuses[]` leaves that one row at `—` and patches the rest
 - absent `airQuality` hides the row; negative and non-numeric `pm25Aqi` also hide it
