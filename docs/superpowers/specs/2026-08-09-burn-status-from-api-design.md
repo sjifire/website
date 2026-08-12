@@ -41,7 +41,7 @@ A single upstream API now serves both concerns.
 
 ## Solution
 
-Fetch `https://api.permits.stationworks.app/v1/agencies/sjifire/status` from the browser on every
+Fetch `https://permits.stationworks.app/v1/agencies/sjifire/status` from the browser on every
 page load and render the whole widget from the response. No build-time data, no committed baseline,
 no static fallback.
 
@@ -95,7 +95,7 @@ labels and a pointer to the burn permits page.
 
 ```
 Server render (Eleventy):   structure only — labels, placeholders, aria-busy="true"
-          ↓  fetch api.permits.stationworks.app  (every page load; HTTP-cached 120s)
+          ↓  fetch permits.stationworks.app  (every page load; HTTP-cached 120s)
    success:                 all rows patched together, aria-busy removed
    failure:                 tbody replaced with a single warning row
 ```
@@ -250,7 +250,7 @@ Two small additions only:
 
 ### `staticwebapp.config.json` (modified)
 
-Add `https://api.permits.stationworks.app` to `connect-src` in the CSP `globalHeaders`. This widens
+Add `https://permits.stationworks.app` to `connect-src` in the CSP `globalHeaders`. This widens
 the CSP by exactly one host and is the only security-relevant edit. No routing change — nothing is
 added under `/api/`, so the admin auth gate is untouched.
 

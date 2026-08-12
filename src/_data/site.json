@@ -18,5 +18,5 @@
     "repo": "website",
     "branch": "main"
   },
-  "burn_status_api": "https://api.permits.stationworks.app/v1/agencies/sjifire/status"
+  "burn_status_api": "https://permits.stationworks.app/v1/agencies/sjifire/status"
 }

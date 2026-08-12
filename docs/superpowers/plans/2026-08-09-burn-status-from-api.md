@@ -4,7 +4,7 @@
 
 **Goal:** Render the Fire Safety widget entirely from a live client-side fetch of the StationWorks permits API, replacing two committed data files, and stop the hourly AirNow workflow that redeploys the site ~13× a day.
 
-**Architecture:** Eleventy renders the widget's structure only — row labels, placeholder cells, `aria-busy="true"`. A plain browser IIFE at `src/js/burn-status.js` fetches `https://api.permits.stationworks.app/v1/agencies/sjifire/status` on every page load, maps the payload to a view model, and patches every cell in one pass. Any failure replaces the table body with a warning. There is no static fallback and no `localStorage` — the response's `cache-control: max-age=120` does the throttling.
+**Architecture:** Eleventy renders the widget's structure only — row labels, placeholder cells, `aria-busy="true"`. A plain browser IIFE at `src/js/burn-status.js` fetches `https://permits.stationworks.app/v1/agencies/sjifire/status` on every page load, maps the payload to a view model, and patches every cell in one pass. Any failure replaces the table body with a warning. There is no static fallback and no `localStorage` — the response's `cache-control: max-age=120` does the throttling.
 
 **Tech Stack:** Eleventy 3 + LiquidJS · vanilla browser JS (no build step, no modules) · `node --test` + jsdom 28 for unit tests · Playwright 1.57 for e2e · Azure Static Web Apps CSP.
 
@@ -15,7 +15,7 @@
 - **Worktree:** `.claude/worktrees/burn-status-from-api`, branch `feat/burn-status-from-api`. All paths below are relative to it.
 - **`src/js/burn-status.js` is a plain browser IIFE.** No ESM, no bundler, no dependencies. 2-space indent, `'use strict'`, early-return guard — match `src/js/carousel.js`.
 - **Unit tests are CommonJS** (`require`). `package.json` has no `"type"` field, so `.js` is CJS. Match `tests/carousel.test.js`.
-- **Endpoint:** `https://api.permits.stationworks.app/v1/agencies/sjifire/status`
+- **Endpoint:** `https://permits.stationworks.app/v1/agencies/sjifire/status`
 - **`fireDanger` enum (confirmed):** `low`, `moderate`, `high`, `very_high`, `extreme`
 - **`state` enum (confirmed):** `open`, `closed`, `restricted` — valid on **every** status row including permits.
 - **Status slugs consumed:** `residential`, `commercial`, `recreational-county`, `recreational-dnr`, `recreational-nps`
@@ -223,7 +223,7 @@ connect-src 'self' https://res.cloudinary.com https://api.cloudinary.com https:/
 to:
 
 ```
-connect-src 'self' https://res.cloudinary.com https://api.cloudinary.com https://content.cloudinary.com https://api.permits.stationworks.app;
+connect-src 'self' https://res.cloudinary.com https://api.cloudinary.com https://content.cloudinary.com https://permits.stationworks.app;
 ```
 
 Change nothing else in that header.
@@ -255,7 +255,7 @@ git commit -m "feat: render Fire Safety widget as a static skeleton
 Strips all burn_status and air_quality data references from the widget,
 leaving row labels, placeholder cells and stable data-* hooks for the
 client-side script to patch. Adds .level--unknown and .widget__warning
-styles, and allows api.permits.stationworks.app in connect-src.
+styles, and allows permits.stationworks.app in connect-src.
 
 The widget shows placeholders until the next task adds the fetch."
 ```
@@ -458,7 +458,7 @@ Create `src/js/burn-status.js`:
   const table = document.querySelector('[data-burn-status]');
   if (!table) return;
 
-  const ENDPOINT = 'https://api.permits.stationworks.app/v1/agencies/sjifire/status';
+  const ENDPOINT = 'https://permits.stationworks.app/v1/agencies/sjifire/status';
   const TIMEOUT_MS = 8000;
 
   // The data-row attribute for these rows IS the API's status slug.
@@ -1021,7 +1021,7 @@ Replace the whole `### Air Quality (AirNow)` section with:
 The Fire Safety widget reads **live at runtime** from the StationWorks permits
 API. Nothing about it is baked in at build time.
 
-**Endpoint:** `https://api.permits.stationworks.app/v1/agencies/sjifire/status`
+**Endpoint:** `https://permits.stationworks.app/v1/agencies/sjifire/status`
 (CORS-open, no API key, `cache-control: max-age=120`)
 
 One response supplies the whole widget: burn season, fire danger, all five
@@ -1225,7 +1225,7 @@ live sighting are exercised in a real browser."
 
 ## Manual verification before opening a PR
 
-- [ ] Run `npm run dev` and load `http://localhost:8080/` with devtools open. Confirm exactly one request to `api.permits.stationworks.app`, and that the widget matches the live API's current values.
+- [ ] Run `npm run dev` and load `http://localhost:8080/` with devtools open. Confirm exactly one request to `permits.stationworks.app`, and that the widget matches the live API's current values.
 - [ ] In devtools, throttle to offline and reload. Confirm the warning appears and the phone link dials.
 - [ ] Load an interior page with the sidebar widget (`/services/burn-permits/`) and confirm the script loads once, not twice.
 - [ ] Confirm no console errors on either page.

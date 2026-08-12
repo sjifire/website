@@ -13,11 +13,18 @@
   table.setAttribute('aria-busy', 'true');
 
   // base.liquid publishes the canonical URL from site.json's burn_status_api.
-  // This literal is only the fallback for when that head snippet didn't render;
-  // keep the two in sync. This file is passthrough-copied, so it can't read
-  // Liquid data directly.
+  // This literal is only the fallback for when that head snippet didn't render.
+  // This file is passthrough-copied, so it can't read Liquid data directly.
+  //
+  // Changing the endpoint means editing THREE files, not two:
+  //   1. src/_data/site.json      burn_status_api (the canonical value)
+  //   2. this literal             must match it exactly
+  //   3. staticwebapp.config.json the origin in the CSP connect-src
+  // Miss (3) and nothing fails locally or in CI -- `eleventy --serve` sends no
+  // globalHeaders, so the CSP is only ever enforced on deployed Azure, where
+  // the widget then shows "Live fire status unavailable" on every load.
   const ENDPOINT = window.__burnStatusEndpoint ||
-    'https://api.permits.stationworks.app/v1/agencies/sjifire/status';
+    'https://permits.stationworks.app/v1/agencies/sjifire/status';
   const TIMEOUT_MS = 8000;
 
   // The data-row attribute for these rows IS the API's status slug.
