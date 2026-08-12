@@ -88,6 +88,26 @@ jobs:
       - name: Build TinaCMS and index schema
         run: npx tinacms build --skip-cloud-checks
         env:
+          # Only index into the shared production Cosmos collection from main.
+          #
+          # tina/database.ts writes to branch "main" / collection "main"
+          # unconditionally whenever COSMOS_DB_CONNECTION_STRING and GITHUB_TOKEN
+          # are both set. Since this workflow also runs on pull_request, every PR
+          # preview build was re-indexing the LIVE schema -- with whatever
+          # @tinacms/datalayer version that PR happened to resolve, while the
+          # deployed api/ Function read it with its own. Blanking the connection
+          # string here makes database.ts take its createLocalDatabase() branch,
+          # so the PR still builds (and still proves the bundle compiles) without
+          # touching production.
+          #
+          # Consequence, deliberate: a PR preview's admin reads whatever schema
+          # main last indexed. Schema changes appear in Cosmos only once merged.
+          #
+          # Expression note: written as `!= 'pull_request' && <value> || ''`
+          # rather than `== 'pull_request' && '' || <value>`. GitHub's ternary
+          # idiom falls through on a falsy middle operand, so the latter would
+          # yield <value> on pull_request -- the exact opposite of the intent.
+          COSMOS_DB_CONNECTION_STRING: ${{ github.event_name != 'pull_request' && env.COSMOS_DB_CONNECTION_STRING || '' }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_OWNER: ${{ github.repository_owner }}
           GITHUB_REPO: ${{ github.event.repository.name }}
