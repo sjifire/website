@@ -1,6 +1,26 @@
 import { test, expect } from "@playwright/test";
+import fs from "node:fs";
+import path from "node:path";
 
-const ENDPOINT = "**/v1/agencies/sjifire/status";
+// Read the endpoint rather than restating it, so changing the host does not
+// mean editing this file too. Note what this does NOT buy: because everything
+// here derives from site.json, a host that is simply wrong stays internally
+// consistent and still passes. Cross-file drift is caught statically in
+// burn-status.test.js; that the host is *correct* is only ever provable
+// against the live API.
+//
+// __dirname, not import.meta.url: package.json has no "type": "module", so
+// Playwright transpiles this spec to CJS and import.meta does not survive.
+const BURN_STATUS_API = JSON.parse(
+  fs.readFileSync(path.join(__dirname, "../src/_data/site.json"), "utf-8")
+).burn_status_api;
+
+// The route pattern is the full URL, so interception is host-pinned.
+const ENDPOINT = BURN_STATUS_API;
+
+// Mirrors base.liquid's `| split: '/v1/' | first`, which is what the preconnect
+// href and the CSP connect-src origin both have to agree with.
+const API_ORIGIN = BURN_STATUS_API.split("/v1/")[0];
 
 const PAYLOAD = {
   agency: { slug: "sjifire", displayName: "San Juan Island Fire & Rescue" },
@@ -145,12 +165,12 @@ test.describe("Head-started request", () => {
       // finished downloading. Comparing against DOMContentLoaded proves nothing
       // -- deferred scripts already run before DCL, so that assertion holds
       // even with the head snippet deleted.
-      const timing = await page.evaluate(() => {
+      const timing = await page.evaluate((endpoint) => {
         const r = performance.getEntriesByType("resource");
-        const api = r.find((e) => e.name.includes("/v1/agencies/sjifire/status"));
+        const api = r.find((e) => e.name === endpoint);
         const js = r.find((e) => e.name.includes("burn-status.js"));
         return api && js ? { apiStart: api.startTime, jsEnd: js.responseEnd } : null;
-      });
+      }, BURN_STATUS_API);
       expect(timing, "expected both the API request and the script").not.toBeNull();
       expect(
         timing.apiStart,
@@ -161,7 +181,7 @@ test.describe("Head-started request", () => {
       expect(apiCalls, "head-started request must be reused, not duplicated").toBe(1);
 
       await expect(
-        page.locator('head link[rel=preconnect][href="https://permits.stationworks.app"]')
+        page.locator(`head link[rel=preconnect][href="${API_ORIGIN}"]`)
       ).toHaveCount(1);
       await expect(page.locator('[data-row="fire-danger"]')).toHaveText("Very High");
     });

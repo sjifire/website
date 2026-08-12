@@ -144,17 +144,42 @@ The Fire Safety widget reads **live at runtime** from the StationWorks permits
 API. Nothing about it is baked in at build time.
 
 **Endpoint:** `https://permits.stationworks.app/v1/agencies/sjifire/status`
-(CORS-open, no API key, `cache-control: max-age=120`)
+(CORS-open, no API key,
+`cache-control: public, max-age=120, stale-while-revalidate=300`)
+
+Note the `stale-while-revalidate`: worst-case staleness is ~7 minutes, not 2.
+Inside the SWR window the browser serves the cached body immediately and
+revalidates in the background, so a status change made at the district can take
+up to 420s to reach a visitor. The widget has no cache-busting of its own -- the
+response headers do all the throttling.
 
 One response supplies the whole widget: burn season, fire danger, all five
 permit/recreational statuses, and air quality.
 
 **Files:**
+- `src/_data/site.json` - `burn_status_api` is the **canonical URL**. Everything
+  below derives from it.
+- `src/_includes/base.liquid` - starts the fetch during head parse and publishes
+  the URL as `window.__burnStatusEndpoint`. Derives the preconnect origin with
+  `| split: '/v1/' | first`, so that origin must match the CSP exactly.
 - `src/_includes/burn-status-widget.liquid` - renders structure only (row labels,
   placeholder cells, `data-*` hooks). Contains no data references.
 - `src/js/burn-status.js` - fetches on every page load and patches the cells.
   Maps the entire payload before touching the DOM, so the widget is never
-  half-patched.
+  half-patched. Carries a fallback copy of the URL that must track site.json.
+- `staticwebapp.config.json` - the CSP `connect-src` must list the API origin.
+
+**Changing the endpoint touches three files** (site.json, burn-status.js's
+fallback literal, and the CSP `connect-src`). Only the first two are covered by
+tests: `eleventy --serve` sends no `globalHeaders`, so the CSP is enforced only
+on deployed Azure. Miss it and CI stays green while production shows "Live fire
+status unavailable" on every load.
+
+**Migration overlap (remove after ~2026-09):** `connect-src` currently lists both
+`permits.stationworks.app` and the retired `api.permits.stationworks.app`. The
+old host still serves an identical payload, so keeping it listed for one release
+means reverting `burn_status_api` alone is a working rollback. Drop the old
+origin once the new one has been stable in production.
 
 **There is no static fallback, deliberately.** If the API is unreachable the
 widget shows "Live fire status unavailable" with the office phone number. A

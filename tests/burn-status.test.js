@@ -495,3 +495,52 @@ describe("Head-started request", () => {
     );
   });
 });
+
+// The endpoint URL exists in three places that must agree. Two of them are
+// invisible to every other test: the CSP is enforced only on deployed Azure
+// (`eleventy --serve` sends no globalHeaders), and burn-status.js's fallback
+// literal only runs when base.liquid's head snippet didn't render. Both fail
+// in production and nowhere else, so they are pinned statically here.
+describe("burn-status endpoint stays in sync across files", () => {
+  const site = JSON.parse(
+    fs.readFileSync(path.join(__dirname, "../src/_data/site.json"), "utf-8")
+  );
+  const endpoint = site.burn_status_api;
+
+  // Mirrors base.liquid's `{{ site.burn_status_api | split: '/v1/' | first }}`.
+  const origin = endpoint.split("/v1/")[0];
+
+  it("declares an endpoint the preconnect filter can reduce to a bare origin", () => {
+    assert.match(
+      origin,
+      /^https:\/\/[a-z0-9.-]+$/,
+      `burn_status_api must contain '/v1/' and yield a scheme+host origin, got ${origin}`
+    );
+  });
+
+  it("keeps burn-status.js's fallback literal identical to site.json", () => {
+    const literal = script.match(
+      /window\.__burnStatusEndpoint\s*\|\|\s*\n?\s*'([^']+)'/
+    );
+    assert.ok(literal, "could not locate the ENDPOINT fallback literal");
+    assert.strictEqual(
+      literal[1],
+      endpoint,
+      "burn-status.js's fallback URL drifted from src/_data/site.json"
+    );
+  });
+
+  it("allows the endpoint's origin in the CSP connect-src", () => {
+    const swa = JSON.parse(
+      fs.readFileSync(path.join(__dirname, "../staticwebapp.config.json"), "utf-8")
+    );
+    const csp = swa.globalHeaders["Content-Security-Policy"];
+    const connectSrc = csp.match(/connect-src ([^;]*)/);
+    assert.ok(connectSrc, "CSP has no connect-src directive");
+    assert.ok(
+      connectSrc[1].split(/\s+/).includes(origin),
+      `connect-src must list ${origin} or the widget is blocked in production ` +
+        `(local dev and CI never enforce this header). Got: ${connectSrc[1]}`
+    );
+  });
+});
