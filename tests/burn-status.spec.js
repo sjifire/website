@@ -161,7 +161,7 @@ test.describe("Head-started request", () => {
       expect(apiCalls, "head-started request must be reused, not duplicated").toBe(1);
 
       await expect(
-        page.locator('head link[rel=preconnect][href="https://api.permits.stationworks.app"]')
+        page.locator('head link[rel=preconnect][href="https://permits.stationworks.app"]')
       ).toHaveCount(1);
       await expect(page.locator('[data-row="fire-danger"]')).toHaveText("Very High");
     });

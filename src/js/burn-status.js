@@ -17,7 +17,7 @@
   // keep the two in sync. This file is passthrough-copied, so it can't read
   // Liquid data directly.
   const ENDPOINT = window.__burnStatusEndpoint ||
-    'https://api.permits.stationworks.app/v1/agencies/sjifire/status';
+    'https://permits.stationworks.app/v1/agencies/sjifire/status';
   const TIMEOUT_MS = 8000;
 
   // The data-row attribute for these rows IS the API's status slug.

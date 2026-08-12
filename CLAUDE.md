@@ -143,7 +143,7 @@ npm run sync-personnel
 The Fire Safety widget reads **live at runtime** from the StationWorks permits
 API. Nothing about it is baked in at build time.
 
-**Endpoint:** `https://api.permits.stationworks.app/v1/agencies/sjifire/status`
+**Endpoint:** `https://permits.stationworks.app/v1/agencies/sjifire/status`
 (CORS-open, no API key, `cache-control: max-age=120`)
 
 One response supplies the whole widget: burn season, fire danger, all five
