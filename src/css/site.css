@@ -907,16 +907,24 @@ body {
   padding: 0;
 }
 
+/* Single column until the 768px breakpoint widens these back out. Declaring the
+   column explicitly matters: without grid-template-columns the tracks are
+   implicit and size to their content, and because grid items default to
+   min-width:auto a wide child (a table, a long unbroken string) drags the track
+   past the viewport instead of being made to fit. minmax(0, 1fr) supplies the
+   zero floor that lets the track shrink, so an over-wide child scrolls or wraps
+   inside the column rather than widening the page. */
 .l-grid--2col {
   grid-template-areas:
-    "main main"
-    "sidebar sidebar";
+    "main"
+    "sidebar";
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .l-grid--2col.flipped {
   grid-template-areas:
-    "sidebar sidebar"
-    "main main";
+    "sidebar"
+    "main";
 }
 
 .l-grid__sidebar {
@@ -962,10 +970,30 @@ body {
     text-align: center;
 }
 
-/* Prevent text wrap on Type and Location columns */
-.block-content td:nth-child(2),
-.block-content td:nth-child(4) {
-    white-space: nowrap;
+/* Prevent text wrap on Type and Location columns.
+   Desktop only, and deliberately so. These are positional selectors, so they hit
+   the 2nd and 4th column of every table in .block-content -- on the fire
+   insurance page that is Station Name and the street address, which then cannot
+   wrap and force the table (and the page) far wider than a phone screen. Where
+   there is room to spare the no-wrap reads better; where there is not, wrapping
+   wins. */
+@media (width >= 768px) {
+    .block-content td:nth-child(2),
+    .block-content td:nth-child(4) {
+        white-space: nowrap;
+    }
+}
+
+/* Let a table that is still too wide scroll within its column instead of
+   widening the page. Tables do not shrink below their min-content width, so on a
+   narrow screen even fully-wrapped content can exceed the viewport. */
+@media (width < 768px) {
+    .l-grid__main table,
+    .block-content table {
+        display: block;
+        overflow-x: auto;
+        max-width: 100%;
+    }
 }
 
 /* Empty row as table section separator */
@@ -987,9 +1015,10 @@ body {
 /* Homepage layout: quicklinks before widgets on mobile */
 .l-grid--home {
   grid-template-areas:
-    "quicklinks quicklinks"
-    "sidebar sidebar"
-    "main main";
+    "quicklinks"
+    "sidebar"
+    "main";
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .l-grid--media {
