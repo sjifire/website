@@ -4,7 +4,7 @@
     "fullTimeFirefighters": 11,
     "partTimeFirefighters": 7,
     "administrativeStaff": 2,
-    "volunteerFirefighters": 29,
+    "volunteerFirefighters": 30,
     "volunteerSupport": 13
   },
   "personnel": [
@@ -292,7 +292,9 @@
       "title": "Tender Group Supervisor",
       "employee_type": "volunteer",
       "staff_type": "Volunteer",
-      "roles": [],
+      "roles": [
+        "Apparatus Operator"
+      ],
       "photo": "/assets/media/personnel_imgs/harry_see.jpg"
     },
     {
