@@ -196,37 +196,38 @@ body {
   background-color: var(--bright-red) !important;
 }
 
-/* Language switcher */
+/* Language switcher: a quiet utility strip tucked under the 911 bar. It sits
+   outside .menu so it stays visible on mobile instead of hiding behind the
+   hamburger --- visitors who can't read the English nav won't go looking for
+   it --- while staying visually subordinate to both the emergency number and
+   the nav itself. */
+.site-header__utility .rap {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 0.5rem;
+}
+
 .lang-switch {
   display: inline-flex;
   align-items: center;
-  gap: 0.35em;
+  gap: 0.3em;
+  font-size: 0.8rem;
+  line-height: 1.2;
+  color: rgb(255, 255, 255, 0.6);
+  text-decoration: none;
   white-space: nowrap;
+}
+
+.lang-switch:hover,
+.lang-switch:focus {
+  color: var(--yellow);
+  text-decoration: underline;
 }
 
 .lang-switch__icon {
   width: 1em;
   height: 1em;
   flex: none;
-}
-
-/* Stays visible on mobile rather than hiding behind the hamburger --- the
-   visitors who need it may not recognize the English nav well enough to go
-   looking for it. */
-.menu .item--lang {
-  display: block;
-  order: 1;
-  width: auto;
-}
-
-.menu .item--lang a {
-  border: 1px solid rgba(255, 255, 255, 0.45);
-}
-
-.menu .item--lang a:hover,
-.menu .item--lang a:focus {
-  border-color: var(--yellow);
-  color: var(--yellow);
 }
 
 /* Mobile menu */

@@ -2,6 +2,12 @@
   <span>Emergency? Call <em>911</em></span>
 </aside>
 
+<div class="site-header__utility">
+  <div class="rap">
+    {% render "language-switcher.liquid", site: site, page: page %}
+  </div>
+</div>
+
 <nav class="rap">
   <ul class="menu">
     <li class="logo">
@@ -26,9 +32,6 @@
     {% endfor %}
     <li class="toggle">
       <a href="#" aria-label="Toggle navigation menu"><svg aria-hidden="true"><use xlink:href='#menu' /></svg><span class="sr-only">Menu</span></a>
-    </li>
-    <li class="item item--lang">
-      {% render "language-switcher.liquid", site: site, page: page %}
     </li>
     {% if nav.headerHighlight %}
     <li class="item item--highlight">
