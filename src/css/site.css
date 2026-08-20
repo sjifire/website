@@ -211,6 +211,11 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 0.3em;
+
+  /* Matches the 10px padding on .menu li.item so this lines up with the right
+     edge of the Join Us button below it, rather than sitting flush against the
+     container edge the button is inset from. */
+  padding-right: 10px;
   font-size: 0.8rem;
   line-height: 1.2;
   color: rgb(255, 255, 255, 0.6);
