@@ -1,0 +1,67 @@
+# Routine dependency version updates.
+#
+# Security updates are a separate, repo-level setting (Settings > Code security)
+# and keep running independently of this file.
+#
+# Grouping keeps the weekly noise down: minor and patch bumps arrive as one PR
+# per ecosystem, while npm major bumps get their own PR so a breaking change is
+# never tangled up with six unrelated upgrades.
+version: 2
+updates:
+  # Site (root)
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: America/Los_Angeles
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: chore
+      include: scope
+    groups:
+      npm-minor:
+        patterns:
+          - "*"
+        update-types:
+          - minor
+          - patch
+
+  # Azure Functions API
+  - package-ecosystem: npm
+    directory: "/api"
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: America/Los_Angeles
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: chore
+      include: scope
+    groups:
+      api-npm-minor:
+        patterns:
+          - "*"
+        update-types:
+          - minor
+          - patch
+
+  # Workflow actions. Majors here are usually just checkout@v4 -> @v5, so they
+  # ride along in the group rather than each taking its own PR.
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: America/Los_Angeles
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: chore
+      include: scope
+    groups:
+      github-actions:
+        patterns:
+          - "*"
