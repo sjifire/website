@@ -1072,11 +1072,15 @@ body {
     margin-right: auto;
   }
 
+  /* minmax(0, 2.5fr) for the same reason the single-column track above uses it:
+     a bare 2.5fr still floors at the item's min-content width, so longer text --
+     machine-translated Spanish runs ~20% longer than the English -- pushes the
+     main track past its share and shoves the sidebar off-screen. */
   .l-grid--2col,
   .l-grid--2col.flipped {
     grid-template-areas:
       "main sidebar";
-    grid-template-columns: 2.5fr minmax(240px, 1fr);
+    grid-template-columns: minmax(0, 2.5fr) minmax(240px, 1fr);
     gap: 60px;
   }
 
