@@ -164,7 +164,7 @@
   {% render "svg-sprite.svg" %}
 
   <header id="home-header" class="site-header{% if page.url == '/' %} site-header--home{% endif %}" role="banner">
-    {% render "header.liquid", page: page, title: title, preamble: preamble, post: post, nav: nav %}
+    {% render "header.liquid", page: page, title: title, preamble: preamble, post: post, nav: nav, site: site %}
   </header>
 
   {% if page.fileSlug == 'news-article' and post.featured_image and post.featured_image.source != "" %}
@@ -182,7 +182,7 @@
 
   <footer class="site-footer" role="contentinfo">
     <div class="rap">
-      {% render "footer.liquid", nav: nav, helpers: helpers, site: site %}
+      {% render "footer.liquid", nav: nav, helpers: helpers, site: site, page: page %}
     </div>
   </footer>
   {%- capture js -%}

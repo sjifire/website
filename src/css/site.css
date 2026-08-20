@@ -196,6 +196,39 @@ body {
   background-color: var(--bright-red) !important;
 }
 
+/* Language switcher */
+.lang-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  white-space: nowrap;
+}
+
+.lang-switch__icon {
+  width: 1em;
+  height: 1em;
+  flex: none;
+}
+
+/* Stays visible on mobile rather than hiding behind the hamburger --- the
+   visitors who need it may not recognize the English nav well enough to go
+   looking for it. */
+.menu .item--lang {
+  display: block;
+  order: 1;
+  width: auto;
+}
+
+.menu .item--lang a {
+  border: 1px solid rgba(255, 255, 255, 0.45);
+}
+
+.menu .item--lang a:hover,
+.menu .item--lang a:focus {
+  border-color: var(--yellow);
+  color: var(--yellow);
+}
+
 /* Mobile menu */
 .menu {
   display: flex;

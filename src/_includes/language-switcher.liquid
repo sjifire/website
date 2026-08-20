@@ -1,0 +1,19 @@
+{%- comment -%}
+  Links to Google's translate proxy so Spanish speakers can read the site even when
+  their computer's language is set to English (which suppresses the browser's own
+  "translate this page?" prompt). The proxy host is derived from site.prodUrl:
+  hyphens are doubled and dots become hyphens, e.g.
+    https://www.sjifire.org -> www-sjifire-org.translate.goog
+  _x_tr_sl/_x_tr_tl are the source/target languages; _x_tr_hl puts Google's own
+  translation banner into Spanish as well.
+{%- endcomment -%}
+{%- assign translateHost = site.prodUrl | remove: "https://" | replace: "-", "--" | replace: ".", "-" -%}
+{%- assign translateUrl = "https://" | append: translateHost | append: ".translate.goog" | append: page.url | append: "?_x_tr_sl=en&amp;_x_tr_tl=es&amp;_x_tr_hl=es" -%}
+<a class="lang-switch" href="{{ translateUrl }}" hreflang="es" rel="nofollow" lang="es">
+  <svg class="lang-switch__icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="10" />
+    <path d="M2 12h20" />
+    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+  </svg>
+  Español
+</a>

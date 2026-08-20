@@ -27,6 +27,9 @@
     <li class="toggle">
       <a href="#" aria-label="Toggle navigation menu"><svg aria-hidden="true"><use xlink:href='#menu' /></svg><span class="sr-only">Menu</span></a>
     </li>
+    <li class="item item--lang">
+      {% render "language-switcher.liquid", site: site, page: page %}
+    </li>
     {% if nav.headerHighlight %}
     <li class="item item--highlight">
       <a href="{{ nav.headerHighlight.url | safeUrl }}">{{ nav.headerHighlight.nav_title }}</a>
