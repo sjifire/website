@@ -41,7 +41,7 @@
     "gray-matter": "^4.0.3",
     "jpeg-js": "^0.4.4",
     "luxon": "^3.7.2",
-    "markdown-it": "^14.3.0",
+    "markdown-it": "^15.0.0",
     "markdown-it-attrs": "^4.3.1",
     "mongodb": "^7.5.0",
     "mongodb-level": "^0.0.4",
