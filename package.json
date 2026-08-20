@@ -32,7 +32,7 @@
     "@microsoft/microsoft-graph-client": "^3.0.7",
     "@octokit/auth-app": "^8.1.2",
     "@octokit/rest": "^22.0.1",
-    "@tinacms/cli": "^2.1.2",
+    "@tinacms/cli": "^2.5.2",
     "@tinacms/datalayer": "^2.0.7",
     "blockhash-core": "^0.1.0",
     "cloudinary": "^2.9.0",
@@ -41,13 +41,13 @@
     "gray-matter": "^4.0.3",
     "jpeg-js": "^0.4.4",
     "luxon": "^3.7.2",
-    "markdown-it": "^14.3.0",
+    "markdown-it": "^15.0.0",
     "markdown-it-attrs": "^4.3.1",
     "mongodb": "^7.0.0",
     "mongodb-level": "^0.0.4",
     "tinacms": "^3.3.2",
     "tinacms-gitprovider-github": "^4.0.7",
-    "uuid": "^13.0.0"
+    "uuid": "^14.0.2"
   },
   "devDependencies": {
     "@11ty/eleventy": "^3.1.2",
