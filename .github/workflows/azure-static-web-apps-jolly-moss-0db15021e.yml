@@ -36,20 +36,20 @@ jobs:
       contents: read
       pull-requests: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           submodules: true
           fetch-depth: 1
 
       - name: Azure login with OIDC
-        uses: azure/login@v2
+        uses: azure/login@v3
         with:
           client-id: 7d94bc11-9bdf-445b-96c8-fca2560cd441
           tenant-id: 4122848f-c317-4267-9c07-7c504150d1bd
           allow-no-subscriptions: true
 
       - name: Get secrets from Key Vault
-        uses: azure/cli@v2
+        uses: azure/cli@v3
         with:
           azcliversion: latest
           inlineScript: |
@@ -66,12 +66,12 @@ jobs:
             echo "AZURE_STATIC_WEB_APPS_API_TOKEN=$AZURE_STATIC_WEB_APPS_API_TOKEN" >> $GITHUB_ENV
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: '22'
 
       - name: Cache node_modules
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         id: node-modules-cache
         with:
           path: node_modules
@@ -119,7 +119,7 @@ jobs:
         run: npm install @actions/core@1.6.0 @actions/http-client
 
       - name: Get Id Token
-        uses: actions/github-script@v6
+        uses: actions/github-script@v9
         id: idtoken
         with:
           script: |
@@ -179,14 +179,14 @@ jobs:
       pull-requests: write
     steps:
       - name: Azure login with OIDC
-        uses: azure/login@v2
+        uses: azure/login@v3
         with:
           client-id: 7d94bc11-9bdf-445b-96c8-fca2560cd441
           tenant-id: 4122848f-c317-4267-9c07-7c504150d1bd
           allow-no-subscriptions: true
 
       - name: Get secrets from Key Vault
-        uses: azure/cli@v2
+        uses: azure/cli@v3
         with:
           azcliversion: latest
           inlineScript: |
@@ -198,7 +198,7 @@ jobs:
         run: npm install @actions/core@1.6.0 @actions/http-client
 
       - name: Get Id Token
-        uses: actions/github-script@v6
+        uses: actions/github-script@v9
         id: idtoken
         with:
           script: |
