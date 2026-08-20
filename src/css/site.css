@@ -196,6 +196,45 @@ body {
   background-color: var(--bright-red) !important;
 }
 
+/* Language switcher: a quiet utility strip tucked under the 911 bar. It sits
+   outside .menu so it stays visible on mobile instead of hiding behind the
+   hamburger --- visitors who can't read the English nav won't go looking for
+   it --- while staying visually subordinate to both the emergency number and
+   the nav itself. */
+.site-header__utility .rap {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 0.5rem;
+}
+
+.lang-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+
+  /* Matches the 10px padding on .menu li.item so this lines up with the right
+     edge of the Join Us button below it, rather than sitting flush against the
+     container edge the button is inset from. */
+  padding-right: 10px;
+  font-size: 0.8rem;
+  line-height: 1.2;
+  color: rgb(255, 255, 255, 0.6);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.lang-switch:hover,
+.lang-switch:focus {
+  color: var(--yellow);
+  text-decoration: underline;
+}
+
+.lang-switch__icon {
+  width: 1em;
+  height: 1em;
+  flex: none;
+}
+
 /* Mobile menu */
 .menu {
   display: flex;
@@ -1039,11 +1078,15 @@ body {
     margin-right: auto;
   }
 
+  /* minmax(0, 2.5fr) for the same reason the single-column track above uses it:
+     a bare 2.5fr still floors at the item's min-content width, so longer text --
+     machine-translated Spanish runs ~20% longer than the English -- pushes the
+     main track past its share and shoves the sidebar off-screen. */
   .l-grid--2col,
   .l-grid--2col.flipped {
     grid-template-areas:
       "main sidebar";
-    grid-template-columns: 2.5fr minmax(240px, 1fr);
+    grid-template-columns: minmax(0, 2.5fr) minmax(240px, 1fr);
     gap: 60px;
   }
 
