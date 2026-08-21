@@ -4,6 +4,7 @@ const escapeHtml = require("escape-html");
 const { sanitizeUrl } = require("@braintree/sanitize-url");
 const createCloudinary = require("./src/_lib/cloudinary");
 const { dateFilters, getNextMeeting, formatMeetingSchedule } = require("./src/_lib/date-utils");
+const { markdownify } = require("./src/_lib/markdown");
 
 module.exports = function(eleventyConfig) {
   const siteData = require("./src/_data/site.json");
@@ -103,19 +104,8 @@ module.exports = function(eleventyConfig) {
     return formatMeetingSchedule(schedule);
   });
 
-  // Markdown rendering filter (with breaks: true so newlines become <br>)
-  // Note: html: true is required for existing content; XSS risk mitigated by admin-only content editing
-  const mdRender = require("markdown-it")({
-    linkify: true,
-    typographer: true,
-    html: true,
-    breaks: true,
-  }).use(require("markdown-it-attrs"));
-
-  eleventyConfig.addFilter("markdownify", function (rawString) {
-    if(!rawString) return;
-    return mdRender.render(rawString);
-  });
+  // Markdown rendering filter (see src/_lib/markdown.js for the configuration)
+  eleventyConfig.addFilter("markdownify", markdownify);
 
   // Process TinaCMS styled-image components
   // Security: Validates size/align values and escapes alt text to prevent XSS
