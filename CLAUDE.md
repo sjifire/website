@@ -17,7 +17,13 @@ npm run api:dev      # Run Azure Functions API locally
 npm start            # Parallel: dev + api:dev
 ```
 
-Requires Node.js 20+. Output goes to `_site/`.
+Requires Node.js 22 (see `.nvmrc`). Output goes to `_site/`.
+
+Node 22 is used everywhere — CI, the scheduled workflows, and the deployed
+Functions host via `platform.apiRuntime` in `staticwebapp.config.json`. It is not
+the newest LTS (24 is), but Azure Static Web Apps' `apiRuntime` supports no version
+above `node:22`, so 22 is the highest version the API can run. Building on a newer
+version than the API executes on is what this pin exists to prevent.
 
 ## Architecture
 

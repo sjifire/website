@@ -14,6 +14,57 @@ permissions:
   contents: read
 
 jobs:
+  # api/ ships to Azure standalone: Oryx installs it from api/'s own lockfile with
+  # no repo root in scope. Installing it the same way and importing it catches an
+  # unresolvable import before deploy instead of after -- which is how /admin came
+  # to return 403 once uuid stopped being hoisted into api/'s tree, with every
+  # deploy still reporting success.
+  #
+  # Its own job so it runs in parallel with lint/test rather than sitting on their
+  # critical path, and so it can pin the Node version independently.
+  api-deploy-check:
+    name: api/ installs and loads standalone
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 1
+
+      # Must match `platform.apiRuntime` in staticwebapp.config.json -- this job
+      # exists to check the runtime the API is actually deployed onto. If the two
+      # drift apart, the check stops meaning anything.
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: "22"
+
+      # Deliberately uncached -- a warm cache would hide the lockfile drift that
+      # `npm ci` is here to catch.
+      #
+      # Runs OUTSIDE the working tree on purpose: the root node_modules is a
+      # parent directory of api/, so Node resolves anything missing from api/'s
+      # own tree from the root instead. Checking in place passes even on a tree
+      # that is broken for deploy -- verified against the commit that broke /admin.
+      - name: Verify api/ installs and loads standalone
+        run: |
+          CHECK_DIR="${RUNNER_TEMP:-/tmp}/api-deploy-check"
+          rm -rf "$CHECK_DIR"
+          mkdir -p "$CHECK_DIR"
+          cp -R api/. "$CHECK_DIR"/
+          rm -rf "$CHECK_DIR/node_modules"
+          npm ci --prefix "$CHECK_DIR"
+          # index.js reaches every function, but tina.js pulls the database layer
+          # in through a lazy import that only runs on a live request, so
+          # mongodb-level is not in the eager graph. Import it explicitly or the
+          # one dependency it alone owns goes unchecked.
+          node --input-type=module -e "
+            await import('$CHECK_DIR/src/functions/index.js');
+            await import('$CHECK_DIR/tina/database.js');
+            console.log('api/ entry point and lazy database layer both resolve');
+          "
+
   ci:
     name: Lint & Test
     runs-on: ubuntu-latest

@@ -1,6 +1,9 @@
 {
   "name": "SJIFIRE",
   "version": "2.0.0",
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "stats": "node src/scripts/generate-stats.mjs",
     "air-quality": "node scripts/generate-air-quality.mjs",
@@ -45,6 +48,7 @@
     "markdown-it-attrs": "^5.0.1",
     "mongodb": "^7.5.0",
     "mongodb-level": "^0.0.4",
+    "slugify": "^1.6.9",
     "tinacms": "^3.3.2",
     "tinacms-gitprovider-github": "^4.0.7",
     "uuid": "^14.0.2"

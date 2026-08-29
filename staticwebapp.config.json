@@ -1,6 +1,6 @@
 {
   "platform": {
-    "apiRuntime": "node:20"
+    "apiRuntime": "node:22"
   },
   "auth": {
     "rolesSource": "/api/auth/get-roles",
@@ -130,6 +130,10 @@
     "401": {
       "statusCode": 302,
       "redirect": "/.auth/login/aad?post_login_redirect_uri=/admin/&prompt=select_account"
+    },
+    "403": {
+      "rewrite": "/session-refresh/index.html",
+      "statusCode": 403
     }
   },
   "globalHeaders": {
