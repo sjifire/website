@@ -15,7 +15,6 @@
     "@tinacms/datalayer": "^2.0.5",
     "dotenv": "^17.4.2",
     "mongodb-level": "^0.0.4",
-    "tinacms-gitprovider-github": "^4.0.5",
     "uuid": "^14.0.2"
   }
 }
