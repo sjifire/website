@@ -15,10 +15,16 @@ const apiDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../ap
  * vanish on deploy and take the whole Functions app down with it. That is what
  * broke /admin: uuid rode along under @azure/msal-node until a bump dropped it.
  *
- * This is a static check on the manifest. It does not prove the tree installs or
- * loads; a CI step that runs `npm ci --prefix api` and imports
- * api/src/functions/index.js would, and would also cover lockfile drift and
- * subpath-export removals that this cannot see.
+ * This is a static check on the manifest, and it is the fast half of the story: it
+ * names the offending file and package immediately. It does not prove the tree
+ * installs or loads. The `api-deploy-check` job in .github/workflows/ci.yml does
+ * that, and also covers lockfile drift and removed subpath exports that a manifest
+ * check cannot see.
+ *
+ * That job copies api/ out of the working tree before installing it, and it must:
+ * the repo root node_modules is a parent directory of api/, so an in-place
+ * `npm ci --prefix api` would resolve a package missing from api/'s own tree from
+ * the root and pass on a tree that is broken for deploy.
  */
 
 const builtins = new Set(builtinModules);
@@ -41,10 +47,12 @@ function sourceFilesUnder(dir) {
 
 /**
  * Drops comments so prose such as `// pulled from "Entra ID"` is not read as an
- * import. The `[^:]` guard keeps `https://…` inside string literals intact.
+ * import. Only whole-line `//` comments go: stripping from any `//` would cut a
+ * code line at a `//` sitting inside a string literal -- a protocol-relative URL,
+ * say -- silently deleting any import after it and letting it through unchecked.
  */
 function stripComments(source) {
-  return source.replace(/\/\*[\s\S]*?\*\//g, "").replace(/(^|[^:])\/\/.*$/gm, "$1");
+  return source.replace(/\/\*[\s\S]*?\*\//g, "").replace(/^\s*\/\/.*$/gm, "");
 }
 
 /**
@@ -66,7 +74,12 @@ function bareImportsIn(file) {
   );
 
   return specifiers
-    .filter((specifier) => !specifier.startsWith(".") && !specifier.startsWith("node:"))
+    .filter(
+      (specifier) =>
+        // Absolute specifiers are not packages, and would reduce to an empty
+        // package name that gets reported as an unnamed undeclared import.
+        !specifier.startsWith(".") && !specifier.startsWith("/") && !specifier.startsWith("node:")
+    )
     .map(packageName)
     .filter((name) => !builtins.has(name));
 }

@@ -132,8 +132,8 @@
       "redirect": "/.auth/login/aad?post_login_redirect_uri=/admin/&prompt=select_account"
     },
     "403": {
-      "statusCode": 302,
-      "redirect": "/session-refresh/"
+      "rewrite": "/session-refresh/index.html",
+      "statusCode": 403
     }
   },
   "globalHeaders": {
