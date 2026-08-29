@@ -11,9 +11,11 @@
     "@azure/identity": "^4.13.0",
     "@microsoft/microsoft-graph-client": "^3.0.7",
     "@octokit/auth-app": "^8.3.0",
+    "@octokit/rest": "^22.0.1",
     "@tinacms/datalayer": "^2.0.5",
     "dotenv": "^17.4.2",
     "mongodb-level": "^0.0.4",
-    "tinacms-gitprovider-github": "^4.0.5"
+    "tinacms-gitprovider-github": "^4.0.5",
+    "uuid": "^14.0.2"
   }
 }
