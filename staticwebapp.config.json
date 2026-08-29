@@ -130,6 +130,10 @@
     "401": {
       "statusCode": 302,
       "redirect": "/.auth/login/aad?post_login_redirect_uri=/admin/&prompt=select_account"
+    },
+    "403": {
+      "statusCode": 302,
+      "redirect": "/session-refresh/"
     }
   },
   "globalHeaders": {
