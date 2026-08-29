@@ -1,6 +1,9 @@
 {
   "name": "SJIFIRE",
   "version": "2.0.0",
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "stats": "node src/scripts/generate-stats.mjs",
     "air-quality": "node scripts/generate-air-quality.mjs",
