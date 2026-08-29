@@ -32,15 +32,13 @@ jobs:
         with:
           fetch-depth: 1
 
-      # Must match `platform.apiRuntime` in staticwebapp.config.json, not the
-      # version the rest of CI uses. api/'s tree already contains packages
-      # declaring engines.node >= 22 (@azure/identity, @azure/core-process) that
-      # are deployed onto a Node 20 host, so checking under 22 would be checking
-      # the wrong runtime.
+      # Must match `platform.apiRuntime` in staticwebapp.config.json -- this job
+      # exists to check the runtime the API is actually deployed onto. If the two
+      # drift apart, the check stops meaning anything.
       - name: Setup Node.js
         uses: actions/setup-node@v7
         with:
-          node-version: "20"
+          node-version: "22"
 
       # Deliberately uncached -- a warm cache would hide the lockfile drift that
       # `npm ci` is here to catch.
