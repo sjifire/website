@@ -40,6 +40,30 @@ jobs:
         if: steps.node-modules-cache.outputs.cache-hit != 'true'
         run: npm ci
 
+      # api/ ships to Azure standalone: Oryx installs it from api/'s own lockfile
+      # with no repo root in scope. Importing the entry point registers every
+      # function, so an unresolvable import in any of them fails here instead of
+      # silently taking down the whole Functions app after deploy -- which is how
+      # /admin started returning 403 once uuid stopped being hoisted into api/.
+      #
+      # This must run OUTSIDE the repo: the root node_modules is a parent
+      # directory of api/, so Node would resolve a package missing from api/'s
+      # own tree from the root instead and mask exactly the break we are hunting.
+      # Deliberately uncached -- a warm cache would hide the lockfile drift that
+      # `npm ci` is here to catch.
+      - name: Verify api/ installs and loads standalone
+        run: |
+          CHECK_DIR="${RUNNER_TEMP:-/tmp}/api-deploy-check"
+          rm -rf "$CHECK_DIR"
+          mkdir -p "$CHECK_DIR"
+          cp -R api/. "$CHECK_DIR"/
+          rm -rf "$CHECK_DIR/node_modules"
+          npm ci --prefix "$CHECK_DIR"
+          node --input-type=module -e "
+            await import('$CHECK_DIR/src/functions/index.js');
+            console.log('api/ entry point loaded; all function modules resolve');
+          "
+
       - name: Run ESLint
         run: npm run lint:js
 
