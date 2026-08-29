@@ -29,12 +29,22 @@ function jsFilesUnder(dir) {
     .map((entry) => path.join(entry.parentPath, entry.name));
 }
 
+/**
+ * Each pattern is anchored on a non-member position so method calls that merely
+ * end in `from` -- `Buffer.from("base64")` -- are not mistaken for imports.
+ */
+const IMPORT_PATTERNS = [
+  /(?:^|[^\w.$])from\s+["']([^"']+)["']/g, // import x from "pkg" / export … from "pkg"
+  /(?:^|[^\w.$])import\s+["']([^"']+)["']/g, // import "pkg"
+  /(?:^|[^\w.$])import\s*\(\s*["']([^"']+)["']/g, // await import("pkg")
+  /(?:^|[^\w.$])require\s*\(\s*["']([^"']+)["']/g, // require("pkg")
+];
+
 function bareImportsIn(file) {
   const source = readFileSync(file, "utf8");
-  const specifiers = [
-    ...source.matchAll(/(?:from|import)\s*\(?\s*["']([^"']+)["']/g),
-    ...source.matchAll(/require\s*\(\s*["']([^"']+)["']/g),
-  ].map((match) => match[1]);
+  const specifiers = IMPORT_PATTERNS.flatMap((pattern) => [...source.matchAll(pattern)]).map(
+    (match) => match[1]
+  );
 
   return specifiers
     .filter((specifier) => !specifier.startsWith(".") && !specifier.startsWith("node:"))
