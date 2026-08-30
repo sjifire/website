@@ -5,6 +5,7 @@ const { sanitizeUrl } = require("@braintree/sanitize-url");
 const createCloudinary = require("./src/_lib/cloudinary");
 const { dateFilters, getNextMeeting, formatMeetingSchedule } = require("./src/_lib/date-utils");
 const { markdownify } = require("./src/_lib/markdown");
+const { protectCmsContent } = require("./src/_lib/cms-content");
 
 module.exports = function(eleventyConfig) {
   const siteData = require("./src/_data/site.json");
@@ -51,6 +52,14 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addExtension("mdx", {
     key: "md",  // Treat MDX as markdown
   });
+
+  // TinaCMS-managed pages are content, not templates. Wrap them in
+  // {% raw %} so "{{" / "{%" typed or pasted by an editor can't break the
+  // build; pages that deliberately use Liquid are allow-listed in
+  // src/_lib/cms-content.js.
+  eleventyConfig.addPreprocessor("protect-cms-content", "mdx", (data, content) =>
+    protectCmsContent(data.page.inputPath, content)
+  );
 
 
   // ===============================
