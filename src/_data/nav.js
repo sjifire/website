@@ -1,12 +1,14 @@
 const fs = require("fs");
 const path = require("path");
 const matter = require("gray-matter");
+const { resolveHighlightLabel } = require("../_lib/nav-utils");
 
 const pagesDir = path.resolve(__dirname, "../pages");
 const dataDir = __dirname;
 const navigationJson = require("./navigation.json");
 const navigationConfig = navigationJson.items;
 const headerHighlightUrl = navigationJson.header_highlight_url;
+const headerHighlightLabel = navigationJson.header_highlight_label;
 
 // Check for a corresponding JSON config file in _data/ (e.g., ourTeamPage.json for our-team.liquid)
 function getPageConfig(slug) {
@@ -115,8 +117,19 @@ const items = navigationConfig.map((item) => {
   return item;
 });
 
-// Build highlight info
-const headerHighlight = headerHighlightUrl ? getPageInfo(headerHighlightUrl) : null;
+// Build highlight info. The label comes from the Navigation config when set, so
+// editors can word the button independently of the linked page's title.
+function getHeaderHighlight() {
+  if (!headerHighlightUrl) return null;
+
+  const pageInfo = getPageInfo(headerHighlightUrl);
+  const label = resolveHighlightLabel(headerHighlightLabel, pageInfo);
+  if (!label) return null;
+
+  return { ...pageInfo, url: headerHighlightUrl, label };
+}
+
+const headerHighlight = getHeaderHighlight();
 
 // Footer-only links
 const footerLinks = navigationJson.footer_links || [];

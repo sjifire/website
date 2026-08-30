@@ -856,7 +856,13 @@ export default defineConfig({
             type: "string",
             name: "header_highlight_url",
             label: "Header Highlight URL",
-            description: "URL of page to highlight in navigation (e.g., /about/join/). Label is pulled from page title.",
+            description: "URL the highlighted nav button links to (e.g., /about/join/).",
+          },
+          {
+            type: "string",
+            name: "header_highlight_label",
+            label: "Header Highlight Label",
+            description: "Text shown on the highlighted nav button (e.g., 'Apply now for our 2027 Academy'). Leave blank to use the linked page's title.",
           },
           {
             type: "object",
