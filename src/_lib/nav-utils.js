@@ -9,4 +9,14 @@ function resolveHighlightLabel(configLabel, pageInfo) {
   return configLabel?.trim() || pageInfo?.nav_title || pageInfo?.title || null;
 }
 
-module.exports = { resolveHighlightLabel };
+/**
+ * Resolve the plain link text for the highlighted page, used where it appears
+ * in an ordinary list of links rather than as a call-to-action button (the
+ * footer). This is the page's own name, so a shouty button label like
+ * "APPLY NOW FOR OUR 2027 ACADEMY" doesn't leak into the footer.
+ */
+function resolvePageLabel(pageInfo, highlightLabel) {
+  return pageInfo?.nav_title || pageInfo?.title || highlightLabel || null;
+}
+
+module.exports = { resolveHighlightLabel, resolvePageLabel };
