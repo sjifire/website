@@ -1,6 +1,6 @@
 const { describe, it } = require("node:test");
 const assert = require("node:assert");
-const { resolveHighlightLabel, resolvePageLabel } = require("../src/_lib/nav-utils");
+const { resolveHighlightLabel, buildHeaderHighlight } = require("../src/_lib/nav-utils");
 
 describe("resolveHighlightLabel", () => {
   const pageInfo = { title: "Join Us", nav_title: "Volunteer" };
@@ -28,35 +28,43 @@ describe("resolveHighlightLabel", () => {
     assert.strictEqual(resolveHighlightLabel(undefined, pageInfo), "Volunteer");
   });
 
-  it("falls back to the page title when the page has no nav_title", () => {
-    assert.strictEqual(resolveHighlightLabel(undefined, { title: "Join Us" }), "Join Us");
-  });
-
-  it("returns null when there is no label and no page info", () => {
+  it("returns null when there is no label and no page", () => {
     assert.strictEqual(resolveHighlightLabel(undefined, null), null);
-  });
-
-  it("uses the configured label even when the page cannot be resolved", () => {
-    assert.strictEqual(resolveHighlightLabel("Apply Now", null), "Apply Now");
   });
 });
 
-describe("resolvePageLabel", () => {
-  it("prefers the page nav_title over the button label", () => {
-    const pageInfo = { title: "Join Us", nav_title: "Volunteer" };
-    assert.strictEqual(resolvePageLabel(pageInfo, "APPLY NOW FOR OUR 2027 ACADEMY"), "Volunteer");
+describe("buildHeaderHighlight", () => {
+  const joinPage = { title: "Join Us", nav_title: "Join Us", url: "/join/" };
+  const lookupJoin = (url) => (url === "/join/" ? joinPage : null);
+
+  it("returns null when no highlight URL is configured", () => {
+    assert.strictEqual(buildHeaderHighlight("", "Apply Now", lookupJoin), null);
   });
 
-  it("uses the page title when the page has no nav_title", () => {
-    const pageInfo = { title: "Join Us" };
-    assert.strictEqual(resolvePageLabel(pageInfo, "APPLY NOW FOR OUR 2027 ACADEMY"), "Join Us");
+  it("returns null when the linked page does not exist", () => {
+    // Fail safe: an editor pointing the highlight at a missing page hides the
+    // button rather than shipping a sitewide link to a 404.
+    assert.strictEqual(buildHeaderHighlight("/about/join/", "Apply Now", lookupJoin), null);
   });
 
-  it("falls back to the button label when the page cannot be resolved", () => {
-    assert.strictEqual(resolvePageLabel(null, "APPLY NOW FOR OUR 2027 ACADEMY"), "APPLY NOW FOR OUR 2027 ACADEMY");
+  it("uses the configured label for the button", () => {
+    const highlight = buildHeaderHighlight("/join/", "APPLY NOW FOR OUR 2027 ACADEMY", lookupJoin);
+    assert.strictEqual(highlight.label, "APPLY NOW FOR OUR 2027 ACADEMY");
+    assert.strictEqual(highlight.url, "/join/");
   });
 
-  it("returns null when there is no page and no button label", () => {
-    assert.strictEqual(resolvePageLabel(null, null), null);
+  it("keeps the page nav_title alongside the button label, for the footer", () => {
+    const highlight = buildHeaderHighlight("/join/", "APPLY NOW FOR OUR 2027 ACADEMY", lookupJoin);
+    assert.strictEqual(highlight.nav_title, "Join Us");
+  });
+
+  it("falls back to the page nav_title when no label is configured", () => {
+    const highlight = buildHeaderHighlight("/join/", "", lookupJoin);
+    assert.strictEqual(highlight.label, "Join Us");
+  });
+
+  it("returns null when the page resolves but yields no usable label", () => {
+    const untitled = (url) => (url === "/join/" ? { url } : null);
+    assert.strictEqual(buildHeaderHighlight("/join/", "", untitled), null);
   });
 });

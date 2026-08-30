@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const matter = require("gray-matter");
-const { resolveHighlightLabel, resolvePageLabel } = require("../_lib/nav-utils");
+const { buildHeaderHighlight } = require("../_lib/nav-utils");
 
 const pagesDir = path.resolve(__dirname, "../pages");
 const dataDir = __dirname;
@@ -117,26 +117,8 @@ const items = navigationConfig.map((item) => {
   return item;
 });
 
-// Build highlight info. `label` is the call-to-action wording for the header
-// button, set in the Navigation config so editors can word it independently of
-// the linked page's title. `pageLabel` is the page's own name, for the footer,
-// where the link sits in an ordinary list.
-function getHeaderHighlight() {
-  if (!headerHighlightUrl) return null;
-
-  const pageInfo = getPageInfo(headerHighlightUrl);
-  const label = resolveHighlightLabel(headerHighlightLabel, pageInfo);
-  if (!label) return null;
-
-  return {
-    ...pageInfo,
-    url: headerHighlightUrl,
-    label,
-    pageLabel: resolvePageLabel(pageInfo, label),
-  };
-}
-
-const headerHighlight = getHeaderHighlight();
+// Build highlight info
+const headerHighlight = buildHeaderHighlight(headerHighlightUrl, headerHighlightLabel, getPageInfo);
 
 // Footer-only links
 const footerLinks = navigationJson.footer_links || [];

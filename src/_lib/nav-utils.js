@@ -10,13 +10,27 @@ function resolveHighlightLabel(configLabel, pageInfo) {
 }
 
 /**
- * Resolve the plain link text for the highlighted page, used where it appears
- * in an ordinary list of links rather than as a call-to-action button (the
- * footer). This is the page's own name, so a shouty button label like
- * "APPLY NOW FOR OUR 2027 ACADEMY" doesn't leak into the footer.
+ * Build the highlighted nav entry from the Navigation config.
+ *
+ * `lookupPage` takes the configured URL and returns the linked page's info, or
+ * null when no such page exists. A missing page hides the highlight entirely:
+ * the button is the site's primary call to action, so failing to render is far
+ * better than rendering a link to a 404.
+ *
+ * The result carries two labels. `label` is the call-to-action wording for the
+ * header button; `nav_title` is the page's own name, which the footer uses so a
+ * shouty button label doesn't leak into its plain list of links.
  */
-function resolvePageLabel(pageInfo, highlightLabel) {
-  return pageInfo?.nav_title || pageInfo?.title || highlightLabel || null;
+function buildHeaderHighlight(url, configLabel, lookupPage) {
+  if (!url) return null;
+
+  const pageInfo = lookupPage(url);
+  if (!pageInfo) return null;
+
+  const label = resolveHighlightLabel(configLabel, pageInfo);
+  if (!label) return null;
+
+  return { ...pageInfo, label };
 }
 
-module.exports = { resolveHighlightLabel, resolvePageLabel };
+module.exports = { resolveHighlightLabel, buildHeaderHighlight };

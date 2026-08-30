@@ -856,13 +856,13 @@ export default defineConfig({
             type: "string",
             name: "header_highlight_url",
             label: "Header Highlight URL",
-            description: "URL the highlighted nav button links to (e.g., /about/join/).",
+            description: "URL the highlighted nav button links to (e.g., /join/). Must be an existing page, or the button is hidden.",
           },
           {
             type: "string",
             name: "header_highlight_label",
             label: "Header Highlight Label",
-            description: "Text shown on the highlighted nav button (e.g., 'Apply now for our 2027 Academy'). Leave blank to use the linked page's title.",
+            description: "Text shown on the highlighted nav button in the header (e.g., 'Apply now for our 2027 Academy'). Leave blank to use the linked page's navigation title. The footer link always uses the page's navigation title.",
           },
           {
             type: "object",
