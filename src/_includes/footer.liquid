@@ -20,7 +20,7 @@
     <dd class="footer-navlink"><a href="/gallery/">Gallery</a></dd>
     <dd class="footer-navlink"><a href="/contact/">Contact Us</a></dd>
     {% if nav.headerHighlight %}
-    <dd class="footer-navlink"><a href="{{ nav.headerHighlight.url }}">Become a Volunteer</a></dd>
+    <dd class="footer-navlink"><a href="{{ nav.headerHighlight.url | safeUrl }}">{{ nav.headerHighlight.nav_title }}</a></dd>
     {% endif %}
     <dd class="footer-navlink">
       <a href="https://www.facebook.com/SJIFire/"><svg class="footer-icon"><use xlink:href="#facebook"></use></svg> Facebook</a>

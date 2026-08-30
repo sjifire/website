@@ -1,12 +1,14 @@
 const fs = require("fs");
 const path = require("path");
 const matter = require("gray-matter");
+const { buildHeaderHighlight } = require("../_lib/nav-utils");
 
 const pagesDir = path.resolve(__dirname, "../pages");
 const dataDir = __dirname;
 const navigationJson = require("./navigation.json");
 const navigationConfig = navigationJson.items;
 const headerHighlightUrl = navigationJson.header_highlight_url;
+const headerHighlightLabel = navigationJson.header_highlight_label;
 
 // Check for a corresponding JSON config file in _data/ (e.g., ourTeamPage.json for our-team.liquid)
 function getPageConfig(slug) {
@@ -116,7 +118,7 @@ const items = navigationConfig.map((item) => {
 });
 
 // Build highlight info
-const headerHighlight = headerHighlightUrl ? getPageInfo(headerHighlightUrl) : null;
+const headerHighlight = buildHeaderHighlight(headerHighlightUrl, headerHighlightLabel, getPageInfo);
 
 // Footer-only links
 const footerLinks = navigationJson.footer_links || [];
