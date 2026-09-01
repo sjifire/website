@@ -37,6 +37,29 @@ function parseTimeString(timeStr) {
 }
 
 /**
+ * Normalize a date to a UTC DateTime.
+ *
+ * Dates arrive three ways: Tina's datetime field writes the value unquoted,
+ * which YAML parses as a timestamp and gray-matter surfaces as a JS Date; the
+ * older hand-written posts quote it, so it stays a string; and getNextMeeting
+ * puts a Luxon DateTime in template scope. Anything else — including a Date
+ * built from garbage, which is why this uses fromJSDate rather than
+ * toISOString() — comes back invalid rather than throwing. Check .isValid.
+ *
+ * Shared with post-url.js so a post's URL and its rendered date can never
+ * disagree about the same value.
+ *
+ * @param {Date|DateTime|string|*} value
+ * @returns {DateTime}
+ */
+function toDateTime(value) {
+  if (DateTime.isDateTime(value)) return value.setZone("utc");
+  if (value instanceof Date) return DateTime.fromJSDate(value, { zone: "utc" });
+  if (typeof value === "string") return DateTime.fromISO(value, { zone: "utc" });
+  return DateTime.invalid("not a Date, a DateTime, or an ISO string");
+}
+
+/**
  * Factory function to create date filters for Eleventy.
  * Handles both Date objects and ISO strings, always uses UTC to avoid DST issues.
  *
@@ -44,26 +67,6 @@ function parseTimeString(timeStr) {
  *                                    or a format string for toFormat()
  * @returns {Function} A filter function that takes a date and returns a formatted string
  */
-/**
- * Normalize a front-matter date to a UTC DateTime.
- *
- * Dates arrive two ways: Tina's datetime field writes the value unquoted, which
- * YAML parses as a timestamp and gray-matter surfaces as a JS Date; the older
- * hand-written posts quote it, so it stays a string. Anything else comes back
- * invalid rather than throwing — check .isValid. Shared with post-url.js so the
- * URL and the rendered date never disagree about the same field.
- *
- * @param {Date|string|*} value
- * @returns {DateTime}
- */
-function toDateTime(value) {
-  if (value instanceof Date || (value && typeof value.toISOString === "function")) {
-    return DateTime.fromISO(value.toISOString(), { zone: "utc" });
-  }
-  if (typeof value === "string") return DateTime.fromISO(value, { zone: "utc" });
-  return DateTime.invalid("not a Date or an ISO string");
-}
-
 function createDateFilter(formatter) {
   return (dateObj) => {
     if (!dateObj) return;

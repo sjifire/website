@@ -1,7 +1,7 @@
 const { describe, it } = require("node:test");
 const assert = require("node:assert");
 const matter = require("gray-matter");
-const { PINNED_URLS, derivePostUrl } = require("../src/_lib/post-url");
+const { PINNED_URLS, PIN_SHAPE, derivePostUrl } = require("../src/_lib/post-url");
 
 // What gray-matter hands back for the two spellings of a date in src/posts:
 // Tina's datetime field writes it unquoted (parsed as a timestamp, surfaced as
@@ -28,11 +28,11 @@ describe("derivePostUrl", () => {
   it("refuses a date it cannot parse, naming the file", () => {
     assert.throws(
       () => derivePostUrl({ date: "not a date", title: "Oops" }, "2026-01-01-oops.mdx"),
-      /2026-01-01-oops\.mdx: cannot build a URL from date "not a date"/
+      /2026-01-01-oops\.mdx: cannot read date "not a date"/
     );
     assert.throws(
       () => derivePostUrl({ title: "No date" }, "2026-01-01-no-date.mdx"),
-      /cannot build a URL from date/
+      /cannot read date/
     );
   });
 
@@ -61,6 +61,18 @@ describe("derivePostUrl", () => {
       url
     );
   });
+
+  // A pin fixes the address, not the timestamp: feed <published>, JSON-LD and
+  // the <time> element all still render this post's date, so an unreadable one
+  // has to stop the build even though the URL never needed it.
+  it("still rejects an unreadable date on a pinned file", () => {
+    const [fileName] = Object.entries(PINNED_URLS)[0];
+    assert.throws(
+      () => derivePostUrl({ date: "2026-13-45", title: "Pinned" }, fileName),
+      /cannot read date "2026-13-45"/
+    );
+    assert.throws(() => derivePostUrl({ title: "Pinned" }, fileName), /cannot read date/);
+  });
 });
 
 describe("PINNED_URLS", () => {
@@ -71,11 +83,21 @@ describe("PINNED_URLS", () => {
     assert.strictEqual(Object.keys(PINNED_URLS).length, 6);
   });
 
-  it("every pin is the shape consumers assume: under /news/, no trailing slash", () => {
+  // Against the exported regex, not a copy of it, so tightening the runtime
+  // check cannot leave this passing on a stale rule.
+  it("every pin satisfies the shape derivePostUrl enforces", () => {
     for (const [fileName, url] of Object.entries(PINNED_URLS)) {
-      assert.match(url, /^\/news\/.*[^/]$/, fileName);
+      assert.match(url, PIN_SHAPE, fileName);
       assert.match(url, /^\/news\/Invalid DateTime-/, `${fileName} is not a legacy URL`);
     }
+  });
+
+  // The literal space is what is deployed and linked; a pin must be allowed to
+  // keep it, while a trailing slash pasted from a browser must not pass.
+  it("allows the legacy space but rejects a trailing slash", () => {
+    assert.match("/news/Invalid DateTime-x", PIN_SHAPE);
+    assert.doesNotMatch("/news/x/", PIN_SHAPE);
+    assert.doesNotMatch("news/x", PIN_SHAPE);
   });
 
   it("cannot be changed at runtime", () => {

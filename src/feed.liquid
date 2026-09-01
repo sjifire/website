@@ -8,14 +8,23 @@ eleventyExcludeFromCollections: true
   <subtitle>{{ site.site_desc }}</subtitle>
   <link href="{{ site.prodUrl }}/news/feed.xml" rel="self" type="application/atom+xml"/>
   <link href="{{ site.prodUrl }}/news/" rel="alternate" type="text/html"/>
-  <updated>{{ "now" | date: "%Y-%m-%dT%H:%M:%SZ" }}</updated>
+  {%- comment -%}
+    Atom's <updated> is when the feed last meaningfully changed, which is the
+    newest entry — not the build time. Build time was rendered with Liquid's
+    `date` filter, which formats in the build machine's local zone, then had a
+    "Z" stamped after it, so a Pacific build claimed an instant 7 hours stale
+    and could date the feed before its own newest entry. Using the entry also
+    makes the feed byte-stable across rebuilds.
+  {%- endcomment -%}
+  {%- assign sortedPosts = activePosts | sort: "date" | reverse %}
+  {%- assign newestPost = sortedPosts | first %}
+  <updated>{{ newestPost.date | isoDateTimeUTC }}</updated>
   <id>{{ site.prodUrl }}/news/</id>
   <author>
     <name>{{ site.site_name }}</name>
     <uri>{{ site.prodUrl }}</uri>
   </author>
   <generator>Eleventy</generator>
-  {%- assign sortedPosts = activePosts | sort: "date" | reverse %}
   {%- for post in sortedPosts %}
   <entry>
     <title>{{ post.title | escape }}</title>

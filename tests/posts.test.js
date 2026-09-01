@@ -102,11 +102,33 @@ describe("posts data loader", () => {
       assert.ok(entries.length > 0, "feed has entries");
 
       for (const { id, published } of entries) {
+        assert.ok(id, "every entry has an <id>");
         const post = posts.find((p) => id.endsWith(`${p.url}/`));
         assert.ok(post, `no post for feed id ${id}`);
         assert.strictEqual(published, dateFilters.isoDateTimeUTC(post.date), post.title);
       }
     });
+  });
+
+  // The check above cannot see the bug it documents: CI runs in UTC, where
+  // Liquid's local-time `date` filter and a real UTC filter agree byte for
+  // byte, so reverting the templates would keep it green. This one holds
+  // wherever it runs.
+  describe("the templates that emit timestamps", () => {
+    const fs = require("node:fs");
+    const path = require("node:path");
+
+    for (const template of ["feed.liquid", "sitemap.liquid", "_includes/base.liquid"]) {
+      it(`${template} formats dates in UTC, not the build machine's zone`, () => {
+        const source = fs.readFileSync(path.resolve(__dirname, "../src", template), "utf8");
+        assert.doesNotMatch(
+          source,
+          /\|\s*date\s*:/,
+          `${template} uses Liquid's \`date\` filter, which formats in local time; ` +
+            "use isoDateTimeUTC or htmlDateStringISO"
+        );
+      });
+    }
   });
 
   it("splits into active and archived posts correctly", () => {

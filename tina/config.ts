@@ -755,6 +755,17 @@ export default defineConfig({
             label: "Title",
             isTitle: true,
             required: true,
+            ui: {
+              // The post's URL is built from this. `required` is only a !value
+              // check, so "???" or an emoji-only title passes it, slugifies to
+              // nothing, and would fail the build — after Tina has already
+              // committed to main, where the deploy runs no tests and the site
+              // silently stops updating. Caught here so the editor sees it.
+              validate: (value?: string) =>
+                value && !/[a-z0-9]/i.test(value)
+                  ? "Title needs at least one letter or number — it becomes the page's web address."
+                  : undefined,
+            },
           },
           {
             type: "rich-text",

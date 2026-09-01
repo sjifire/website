@@ -55,19 +55,23 @@ function derivePostUrl(post, fileName) {
     throw new TypeError("derivePostUrl needs the post's file name");
   }
 
+  // Checked whether or not the URL is pinned. A pin fixes the address, not the
+  // timestamp — feed <published>, JSON-LD datePublished and the <time> element
+  // all still render this date, and an unreadable one reaches them as the
+  // literal "Invalid DateTime" rather than stopping the build.
+  const dt = toDateTime(post.date);
+  if (!dt.isValid) {
+    throw new Error(
+      `${fileName}: cannot read date ${JSON.stringify(post.date)} (${dt.invalidReason}).`
+    );
+  }
+
   const pinned = PINNED_URLS[fileName];
   if (pinned !== undefined) {
     if (!PIN_SHAPE.test(pinned)) {
       throw new Error(`${fileName}: pinned URL ${JSON.stringify(pinned)} is not /news/<path> without a trailing slash`);
     }
     return pinned;
-  }
-
-  const dt = toDateTime(post.date);
-  if (!dt.isValid) {
-    throw new Error(
-      `${fileName}: cannot build a URL from date ${JSON.stringify(post.date)} (${dt.invalidReason}).`
-    );
   }
 
   const slug = slugify(post.title ?? "", SLUG_OPTIONS);
@@ -80,4 +84,4 @@ function derivePostUrl(post, fileName) {
   return `/news/${dt.toFormat("yyyy-LL-dd")}-${slug}`;
 }
 
-module.exports = { PINNED_URLS, derivePostUrl };
+module.exports = { PINNED_URLS, PIN_SHAPE, derivePostUrl };

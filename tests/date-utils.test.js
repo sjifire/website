@@ -694,6 +694,22 @@ describe("toDateTime", () => {
     }
   });
 
+  // A Date built from garbage passes `instanceof Date`; calling toISOString()
+  // on it raises RangeError from inside a .map() with no field name attached.
+  it("is invalid, not a RangeError, for an Invalid Date", () => {
+    assert.strictEqual(toDateTime(new Date("garbage")).isValid, false);
+    assert.strictEqual(toDateTime(new Date(NaN)).isValid, false);
+    assert.doesNotThrow(() => createDateFilter("yyyy-LL-dd")(new Date("garbage")));
+  });
+
+  // getNextMeeting puts one in template scope, and routing the filters through
+  // this normalizer must not narrow what they already accepted.
+  it("accepts a Luxon DateTime, which the filters took before", () => {
+    const { DateTime } = require("luxon");
+    assert.strictEqual(toDateTime(DateTime.utc(2025, 1, 1)).toFormat("yyyy-LL-dd"), "2025-01-01");
+    assert.strictEqual(createDateFilter("yyyy-LL-dd")(DateTime.utc(2025, 1, 1)), "2025-01-01");
+  });
+
   // The date filters go through the same normalizer, so a value that renders
   // on the page is by construction one the URL derivation can read too.
   it("is what the date filters use, so both agree on a Date", () => {

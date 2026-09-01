@@ -20,12 +20,13 @@ const posts = fs
     // feed.liquid was comparing the two kinds and scrambling the feed order.
     // An unparseable value is left as-is for derivePostUrl to report.
     const date = toDateTime(data.date);
-    const archivedAt = data.archived_at ? toDateTime(data.archived_at) : null;
-    const post = {
-      ...data,
-      date: date.isValid ? date.toISO() : data.date,
-      archived_at: archivedAt?.isValid ? archivedAt.toISO() : data.archived_at,
-    };
+    const post = { ...data, date: date.isValid ? date.toISO() : data.date };
+    // Only when the post has one, so posts without an archive date keep no key
+    // at all rather than gaining an explicit undefined.
+    if (data.archived_at) {
+      const archivedAt = toDateTime(data.archived_at);
+      post.archived_at = archivedAt.isValid ? archivedAt.toISO() : data.archived_at;
+    }
     return { ...post, body: content, url: derivePostUrl(post, name) };
   })
   .sort((a, b) => {
