@@ -1,6 +1,10 @@
 const { describe, it } = require("node:test");
 const assert = require("node:assert");
+const fs = require("node:fs");
+const os = require("node:os");
+const path = require("node:path");
 const { Liquid } = require("liquidjs");
+const { Eleventy } = require("@11ty/eleventy");
 const {
   LIQUID_ENABLED_PAGES,
   usesLiquid,
@@ -261,6 +265,68 @@ describe("cms-content", () => {
         output,
         'APPLICATIONS ARE **<mark style="background-color: #FEF08A">OPEN</mark>**'
       );
+    });
+  });
+
+  // Everything above asserts that the override is *assigned*. That an assignment
+  // made inside a preprocessor is still honoured is an ordering dependency on
+  // Eleventy internals that no documentation promises: Template.getTemplates
+  // runs preprocessors against the same data object TemplateContent._render
+  // later reads. If an upgrade resolved the engine first, every other test here
+  // would stay green while CMS pages quietly became Liquid templates again, and
+  // the next "{{" an editor typed in Tina would break production. So build one
+  // through Eleventy for real.
+  describe("through a real Eleventy build", () => {
+    const TYPED = "Literal {{ 1 | plus: 2 }} and {% endraw %} and {% if true %}X{% endif %}";
+
+    // Mirrors the registration in .eleventy.js, calling the same decision
+    // function; `applyOverride: false` is the control.
+    const fixtureConfig = (applyOverride) => `
+      const { templateEngineFor } = require(${JSON.stringify(
+        path.resolve(__dirname, "../src/_lib/cms-content.js")
+      )});
+      module.exports = function (eleventyConfig) {
+        eleventyConfig.setTemplateFormats(["mdx"]);
+        eleventyConfig.addExtension("mdx", { key: "md" });
+        eleventyConfig.addPreprocessor("protect-cms-content", "mdx", (data, content) => {
+          ${
+            applyOverride
+              ? "const engine = templateEngineFor(data.page.inputPath);" +
+                " if (engine) { data.templateEngineOverride = engine; }"
+              : ""
+          }
+          return content;
+        });
+      };
+    `;
+
+    async function buildFixture(applyOverride) {
+      const dir = fs.mkdtempSync(path.join(os.tmpdir(), "cms-content-"));
+      try {
+        fs.writeFileSync(path.join(dir, "probe.mdx"), `${TYPED}\n`);
+        const configPath = path.join(dir, "eleventy.config.cjs");
+        fs.writeFileSync(configPath, fixtureConfig(applyOverride));
+        const eleventy = new Eleventy(dir, path.join(dir, "_out"), { configPath });
+        const results = await eleventy.toJSON();
+        return results.map((result) => result.content).join("");
+      } finally {
+        fs.rmSync(dir, { recursive: true, force: true });
+      }
+    }
+
+    it("renders what an editor typed as text, with no Liquid executed", async () => {
+      const html = await buildFixture(true);
+      assert.match(html, /Literal \{\{ 1 \| plus: 2 \}\}/);
+      assert.match(html, /\{% endraw %\}/);
+      assert.match(html, /\{% if true %\}X\{% endif %\}/);
+      assert.doesNotMatch(html, /Literal 3/);
+    });
+
+    // Without the override the same page is a Liquid template and blows up on
+    // the unmatched {% endraw %} — which is what makes the assertion above mean
+    // something rather than passing for an unrelated reason.
+    it("is the override doing that, not markdown being harmless", async () => {
+      await assert.rejects(() => buildFixture(false), /liquid/i);
     });
   });
 });

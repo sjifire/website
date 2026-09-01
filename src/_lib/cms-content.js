@@ -14,7 +14,8 @@
  * handed the remainder back to Liquid, which is the outage it existed to
  * prevent. There is no delimiter an editor cannot type, so the page instead
  * declares it isn't a Liquid template at all — see templateEngineFor. Only the
- * pages listed below deliberately use Liquid in their body.
+ * pages listed below deliberately use Liquid in their body, and they remain
+ * exposed to that outage; see the note on LIQUID_ENABLED_PAGES.
  *
  * Not running Liquid is only half the job: markdown-it then rejects the JSX
  * attribute as invalid HTML and prints it as text. normalizeJsxStyleAttributes
@@ -22,6 +23,15 @@
  */
 const path = require("node:path");
 
+// The two pages that print data in their body, and so must stay on Liquid.
+//
+// Note what this costs them: both are inside Tina's `page` collection
+// (tina/config.ts — `path: "src/pages"`, only `homepage` excluded), so an
+// editor can reach them, and for these two a typed "{{" or an unmatched "{%"
+// still fails the build exactly as in the August outage. The guarantee above
+// covers 21 of the 23 .mdx pages, not all of them. Closing that would mean
+// excluding these two from the Tina collection — an editorial decision, not
+// one to make here.
 const LIQUID_ENABLED_PAGES = new Set([
   "src/pages/about/key-information.mdx",
   "src/pages/about/governance.mdx",
@@ -127,6 +137,12 @@ function normalizeJsxStyleAttributes(content) {
  * typed is text rather than something to execute or choke on. Allow-listed
  * pages get undefined, meaning "leave Eleventy's default alone", which is the
  * markdownTemplateEngine ("liquid") their `{{ personnel.counts.* }}` needs.
+ *
+ * The caller applies this over any templateEngineOverride already in a page's
+ * front matter, which is deliberate: a page opting itself back into Liquid
+ * there would be a second switch, invisible to this list, re-exposing a
+ * Tina-editable page to the outage. Put it in LIQUID_ENABLED_PAGES instead,
+ * where the cost is stated and reviewable.
  *
  * @param {string} inputPath - Eleventy inputPath for the page
  * @returns {string|undefined} engine override, or undefined to keep the default
