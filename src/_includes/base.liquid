@@ -169,8 +169,8 @@
     "@type": "NewsArticle",
     "headline": "{{ post.title | escape }}",
     "description": "{{ post.excerpt | default: post.title | escape }}",
-    "datePublished": "{{ post.date | date: '%Y-%m-%dT%H:%M:%S-08:00' }}",
-    "dateModified": "{{ post.date | date: '%Y-%m-%dT%H:%M:%S-08:00' }}",
+    "datePublished": "{{ post.date | isoDateTimeUTC }}",
+    "dateModified": "{{ post.date | isoDateTimeUTC }}",
     "author": {
       "@type": "Organization",
       "@id": "{{ site.prodUrl }}/#organization"

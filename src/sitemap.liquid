@@ -40,7 +40,7 @@ eleventyExcludeFromCollections: true
   {%- for post in archivedPosts reversed %}
   <url>
     <loc>{{ site.prodUrl }}{{ post.url }}/</loc>
-    <lastmod>{{ post.archived_at | date: "%Y-%m-%d" }}</lastmod>
+    <lastmod>{{ post.archived_at | htmlDateStringISO }}</lastmod>
     <changefreq>never</changefreq>
     <priority>0.2</priority>
   </url>

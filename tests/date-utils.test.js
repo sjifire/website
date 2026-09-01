@@ -669,3 +669,58 @@ describe("formatMeetingSchedule", () => {
     });
   });
 });
+
+describe("toDateTime", () => {
+  const { toDateTime, createDateFilter } = require("../src/_lib/date-utils");
+  const matter = require("gray-matter");
+  // The two spellings that exist in src/posts, as gray-matter surfaces them.
+  const parsed = (yaml) => matter(`---\n${yaml}\n---\n`).data;
+
+  it("reads the unquoted timestamp Tina writes, which arrives as a Date", () => {
+    const { date } = parsed("date: 2026-03-09T19:59:15.933Z");
+    assert.ok(date instanceof Date, "precondition: gray-matter gives a Date");
+    assert.strictEqual(toDateTime(date).toISO(), "2026-03-09T19:59:15.933Z");
+  });
+
+  it("reads the quoted string the older posts carry", () => {
+    const { date } = parsed('date: "2021-11-10"');
+    assert.strictEqual(typeof date, "string", "precondition: gray-matter gives a string");
+    assert.strictEqual(toDateTime(date).toFormat("yyyy-LL-dd"), "2021-11-10");
+  });
+
+  it("is invalid, not a throw, for anything else", () => {
+    for (const value of [undefined, null, 42, {}, "not a date"]) {
+      assert.strictEqual(toDateTime(value).isValid, false, String(value));
+    }
+  });
+
+  // The date filters go through the same normalizer, so a value that renders
+  // on the page is by construction one the URL derivation can read too.
+  it("is what the date filters use, so both agree on a Date", () => {
+    const { date } = parsed("date: 2026-03-09T19:59:15.933Z");
+    assert.strictEqual(createDateFilter("yyyy-LL-dd")(date), "2026-03-09");
+  });
+});
+
+describe("isoDateTimeUTC", () => {
+  const { dateFilters } = require("../src/_lib/date-utils");
+  const { isoDateTimeUTC } = dateFilters;
+
+  // Liquid's `date` filter formatted in the build machine's local time and the
+  // templates stamped a hardcoded "Z" or "-08:00" after it, so the feed and
+  // JSON-LD carried the wrong instant — and a date-only post the wrong day.
+  it("formats the actual UTC instant, with a real Z", () => {
+    assert.strictEqual(isoDateTimeUTC("2026-07-26T21:32:02.761Z"), "2026-07-26T21:32:02Z");
+    assert.strictEqual(isoDateTimeUTC(new Date("2026-07-26T21:32:02.761Z")), "2026-07-26T21:32:02Z");
+  });
+
+  it("keeps a date-only value on its own calendar day", () => {
+    assert.strictEqual(isoDateTimeUTC("2025-07-13"), "2025-07-13T00:00:00Z");
+    assert.strictEqual(isoDateTimeUTC("2025-07-13T00:00:00.000Z"), "2025-07-13T00:00:00Z");
+  });
+
+  it("returns undefined for no value, like the other date filters", () => {
+    assert.strictEqual(isoDateTimeUTC(undefined), undefined);
+    assert.strictEqual(isoDateTimeUTC(""), undefined);
+  });
+});

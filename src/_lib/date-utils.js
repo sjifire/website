@@ -44,13 +44,30 @@ function parseTimeString(timeStr) {
  *                                    or a format string for toFormat()
  * @returns {Function} A filter function that takes a date and returns a formatted string
  */
+/**
+ * Normalize a front-matter date to a UTC DateTime.
+ *
+ * Dates arrive two ways: Tina's datetime field writes the value unquoted, which
+ * YAML parses as a timestamp and gray-matter surfaces as a JS Date; the older
+ * hand-written posts quote it, so it stays a string. Anything else comes back
+ * invalid rather than throwing — check .isValid. Shared with post-url.js so the
+ * URL and the rendered date never disagree about the same field.
+ *
+ * @param {Date|string|*} value
+ * @returns {DateTime}
+ */
+function toDateTime(value) {
+  if (value instanceof Date || (value && typeof value.toISOString === "function")) {
+    return DateTime.fromISO(value.toISOString(), { zone: "utc" });
+  }
+  if (typeof value === "string") return DateTime.fromISO(value, { zone: "utc" });
+  return DateTime.invalid("not a Date or an ISO string");
+}
+
 function createDateFilter(formatter) {
   return (dateObj) => {
     if (!dateObj) return;
-    if (typeof dateObj.toISOString === "function") {
-      dateObj = dateObj.toISOString();
-    }
-    const dt = DateTime.fromISO(dateObj, { zone: "utc" });
+    const dt = toDateTime(dateObj);
     return typeof formatter === "string"
       ? dt.toFormat(formatter)
       : dt.toLocaleString(formatter);
@@ -178,6 +195,12 @@ const dateFilters = {
   // "2024-01-15" - HTML datetime attribute format
   htmlDateStringISO: createDateFilter("yyyy-LL-dd"),
 
+  // "2026-07-26T21:32:02Z" - RFC 3339 in UTC, for the Atom feed and JSON-LD.
+  // Liquid's own `date` filter formats in the build machine's local time, so
+  // pairing it with a hardcoded "Z" or "-08:00" stamped the wrong instant —
+  // and for a date-only value, the wrong calendar day.
+  isoDateTimeUTC: createDateFilter("yyyy-LL-dd'T'HH:mm:ss'Z'"),
+
   // "Jan 15, 2024" - medium format with year
   postDateTerseISO: createDateFilter(DateTime.DATE_MED),
 
@@ -186,6 +209,7 @@ const dateFilters = {
 };
 
 module.exports = {
+  toDateTime,
   createDateFilter,
   dateFilters,
   getNextMeetingDate,
