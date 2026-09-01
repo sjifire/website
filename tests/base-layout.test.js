@@ -28,51 +28,68 @@ describe("base.liquid", () => {
   // the whole class: a Jinja-style {# #} comment, which LiquidJS has no tag for
   // and so prints verbatim; a stray {{ output }} or {% include %}; and a
   // {% comment %} body LiquidJS chokes on.
-  it("emits nothing before the doctype", async () => {
-    const preamble = BASE_LIQUID.slice(0, BASE_LIQUID.indexOf("<!DOCTYPE"));
-    const rendered = await liquid.parseAndRender(preamble, {
-      page: { url: "/news/example/" },
-      title: "Example",
-      description: "Example description",
-      site: { site_name: "Site Name", site_desc: "Site description" },
-    });
+  // Both branches: the homepage takes a different path through the preamble, so
+  // testing only an interior URL leaves half of it unpinned.
+  for (const url of ["/", "/news/example/"]) {
+    it(`emits nothing before the doctype (${url})`, async () => {
+      const preamble = BASE_LIQUID.slice(0, BASE_LIQUID.indexOf("<!DOCTYPE"));
+      const rendered = await liquid.parseAndRender(preamble, {
+        page: { url },
+        title: "Example",
+        description: "Example description",
+        site: { site_name: "Site Name", site_desc: "Site description" },
+      });
 
-    assert.strictEqual(
-      rendered.trim(),
-      "",
-      `base.liquid emits this before <!DOCTYPE>:\n${rendered.trim()}`
-    );
-  });
+      assert.strictEqual(
+        rendered.trim(),
+        "",
+        `base.liquid emits this before <!DOCTYPE>:\n${rendered.trim()}`
+      );
+    });
+  }
 
   describe("the title it puts in content=\"…\"", () => {
-    const assignPageTitle = BASE_LIQUID.match(/^.*assign pageTitle = title.*$/m)?.[0];
+    // Interior pages and the homepage assign pageTitle on separate lines; both
+    // feed og:title, so both need pinning.
+    const assignInterior = BASE_LIQUID.match(/^.*assign pageTitle = title.*$/m)?.[0];
+    const assignHome = BASE_LIQUID.match(/^.*assign pageTitle = site\.site_name.*$/m)?.[0];
 
-    const titleAs = async (title) =>
-      liquid.parseAndRender(`${assignPageTitle}{{ pageTitle }}`, {
+    const render = async (assign, title) =>
+      liquid.parseAndRender(`${assign}{{ pageTitle }}`, {
         title,
         site: { site_name: "SJIF&R" },
       });
 
-    it("was found in the layout", () => {
-      assert.ok(assignPageTitle, "no `assign pageTitle = title` line in base.liquid");
+    it("both assigns were found in the layout", () => {
+      assert.ok(assignInterior, "no interior `assign pageTitle = title` line");
+      assert.ok(assignHome, "no homepage `assign pageTitle = site.site_name` line");
     });
 
     // pageTitle goes into og:title and twitter:title, so a quote in an editor's
     // post title would end those attributes early. Unlike the description this
-    // is unencoded plain text, so a single `escape` is the right treatment.
-    it("escapes quotes and ampersands from an editor's title", async () => {
-      const quoted = await titleAs('The "Big" One');
-      assert.doesNotMatch(quoted, /"/);
-      assert.match(quoted, /Big/);
+    // is unencoded plain text, so a single `escape` is the right treatment —
+    // asserting the exact string is what catches a second one being added.
+    it("escapes an editor's title exactly once", async () => {
+      assert.strictEqual(
+        await render(assignInterior, "News & Announcements"),
+        "News &amp; Announcements | SJIF&amp;R"
+      );
+      assert.strictEqual(
+        await render(assignInterior, 'The "Big" One'),
+        "The &#34;Big&#34; One | SJIF&amp;R"
+      );
+    });
 
-      assert.doesNotMatch(await titleAs("SJIF&R Announces"), /&(?!amp;|#\d+;)/);
+    it("escapes the homepage title exactly once", async () => {
+      assert.strictEqual(await render(assignHome, undefined), "SJIF&amp;R");
     });
   });
 
   describe("the description it puts in content=\"…\"", () => {
     // Read the real assign out of the layout rather than restating its filters,
     // so this can't pass against a pipeline the site no longer uses.
-    const assignPageDsc = BASE_LIQUID.match(/^.*assign pageDsc =.*$/m)?.[0];
+    // Both assigns: the first picks the source, the second sanitizes it.
+    const assignPageDsc = BASE_LIQUID.match(/^.*assign pageDsc =.*$/gm)?.join("\n");
     const describeAs = async (description) =>
       liquid.parseAndRender(`${assignPageDsc}{{ pageDsc }}`, {
         description,
@@ -114,6 +131,17 @@ describe("base.liquid", () => {
     // description of pure whitespace.
     it("falls back when the lede strips to nothing, not just when it is absent", async () => {
       assert.strictEqual(await describeAs(markdownify("![alt text](photo.jpg)")), "fallback");
+    });
+
+    // Nothing but news-article.liquid sets a page-level description, so the
+    // fallback is the live value on almost every page — it has to be sanitized
+    // too, not trusted for being the default.
+    it("sanitizes the fallback, which is what most pages actually ship", async () => {
+      const out = await liquid.parseAndRender(`${assignPageDsc}{{ pageDsc }}`, {
+        site: { site_desc: `The island's "first line" of response.` },
+      });
+      assert.doesNotMatch(out, /"/);
+      assert.match(out, /&#?\w+;first/);
     });
 
     // markdownify leaves a newline between blocks, which would break the meta

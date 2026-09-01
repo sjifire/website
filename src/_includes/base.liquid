@@ -2,8 +2,11 @@
   Escaped because pageTitle goes into og:title and twitter:title as well as
   <title>. A post's title is an editor's plain text, so a single escape is
   right here — unlike pageDsc below, which arrives already encoded. Without it
-  a post called `The "Big" One` ends the og:title attribute at `The `, and the
-  site_name's own ampersand ships bare on every page.
+  a post called `The "Big" One` ends the og:title attribute at `The `.
+
+  site_name is a Tina field too, so the same applies wherever it is emitted
+  raw — og:site_name and the feed link below. (It holds no ampersand or quote
+  today; this is about what an editor can type into it, not a live defect.)
 {%- endcomment -%}
 {%- if page.url == "/" -%}
   {%- assign pageTitle = site.site_name | escape -%}
@@ -19,14 +22,20 @@
   a naive <[^>]*> strip, though, so a ">" inside an attribute value leaves the
   rest of that tag behind — hence also replacing any bare quote it left.
 
-  `default` comes last on purpose. markdownify turns an image-only lede into
-  `<p><img …></p>`, which is truthy, so a leading `default` would pass it
-  through and strip_html would then reduce it to whitespace — shipping an empty
-  description. Stripping first means both nil and strips-to-nothing fall back.
-  normalize_whitespace collapses the newlines markdownify leaves between
+  It takes two passes. The first picks the source: markdownify turns an
+  image-only lede into `<p><img …></p>`, which is truthy, so a `default` applied
+  before the strip would keep it and then reduce it to whitespace, shipping an
+  empty description. Stripping first means both nil and strips-to-nothing fall
+  back. normalize_whitespace collapses the newlines markdownify leaves between
   blocks, which would otherwise break the tag across lines.
+
+  The second pass sanitizes whichever source won. site_desc is a Tina field and
+  it is the live value on every page except the news articles — nothing else
+  sets a page-level description — so it needs the same treatment, not a free
+  pass for being the fallback.
 {%- endcomment -%}
-{%- assign pageDsc = description | strip_html | normalize_whitespace | strip | replace: '"', '&quot;' | default: site.site_desc -%}
+{%- assign pageDsc = description | strip_html | normalize_whitespace | strip | default: site.site_desc -%}
+{%- assign pageDsc = pageDsc | strip_html | normalize_whitespace | strip | replace: '"', '&quot;' -%}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -40,7 +49,7 @@
   {% comment %}icon tags{% endcomment %}
     <link rel="icon" type="image/png" href="{% imgPath '/assets/sjifire-logo-clear.png' %}" />
   {% comment %}RSS feed{% endcomment %}
-    <link rel="alternate" type="application/atom+xml" title="{{ site.site_name }} News Feed" href="{{ site.prodUrl }}/news/feed.xml" />
+    <link rel="alternate" type="application/atom+xml" title="{{ site.site_name | escape }} News Feed" href="{{ site.prodUrl }}/news/feed.xml" />
   {% comment %}canonical URL{% endcomment %}
     <link rel="canonical" href="{{ site.prodUrl }}{{ page.url }}" />
   {% comment %}og{% endcomment %}
@@ -52,7 +61,7 @@
       {%- assign ogImgPath = '/assets/media/' | append: site.opengraph_image -%}
     {%- endif -%}
     <meta property="og:image" content="{% imgPath ogImgPath, 'f_auto,q_auto:good,c_fill,w_1200,h_630' %}" key="ogimage" />
-    <meta property="og:site_name" content="{{ site.site_name }}" key="ogsitename" />
+    <meta property="og:site_name" content="{{ site.site_name | escape }}" key="ogsitename" />
     <meta property="og:title" content="{{ pageTitle }}" key="ogtitle" />
     <meta property="og:description" content="{{ pageDsc }}" key="ogdesc" />
   {% comment %}twitter cards{% endcomment %}
