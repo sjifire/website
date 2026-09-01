@@ -34,6 +34,14 @@ function createMarkdownRenderer() {
 
 const renderer = createMarkdownRenderer();
 
+// <br> in any spelling: a word boundary that arrives as raw inline HTML.
+const INLINE_BREAK = /^\s*<br\s*\/?>\s*$/i;
+
+// Stripped rather than collapsed, because JavaScript's \s matches U+FEFF — so
+// a stray zero-width space in a lede became a visible one ("S<ZWSP>tuart" ->
+// "S tuart") once the description stopped being a copy of the title.
+const ZERO_WIDTH = /[\u200B-\u200D\uFEFF]/g;
+
 /**
  * Renders a markdown string to HTML
  * @param {string} rawString - markdown source
@@ -67,18 +75,46 @@ function markdownToPlainText(rawString) {
   if (!rawString) return "";
 
   const words = [];
+
   for (const token of renderer.parse(normalizeJsxStyleAttributes(rawString), {})) {
-    if (token.type !== "inline") continue;
-    for (const child of token.children) {
-      if (child.type === "text" || child.type === "code_inline") {
-        words.push(child.content);
+    if (token.type === "inline") {
+      for (const child of token.children) {
+        switch (child.type) {
+          case "text":
+          case "code_inline":
+            words.push(child.content);
+            break;
+          // Every kind of line break is a word boundary. Dropping them silently
+          // welded words together: a lede reading "Wildland Team\nFire
+          // Simulation" came out as "TeamFire Simulation".
+          case "softbreak":
+          case "hardbreak":
+            words.push(" ");
+            break;
+          case "html_inline":
+            if (INLINE_BREAK.test(child.content)) words.push(" ");
+            break;
+          default:
+            break;
+        }
       }
+    } else if (token.type === "fence" || token.type === "code_block") {
+      words.push(token.content);
+    } else if (token.type === "html_block") {
+      // A lede pasted as raw HTML is one whole block whose content never
+      // reaches children, so it used to come back empty and fall through to
+      // the headline. The tag strip is naive — a ">" inside an attribute value
+      // ends the match early — which only ever costs a stray fragment of
+      // attribute here, in text nothing parses further.
+      words.push(renderer.utils.unescapeAll(token.content.replace(/<[^>]*>/g, " ")));
+    } else {
+      continue;
     }
     // Blocks run together without this: "First para.Second para."
     words.push(" ");
   }
 
-  return words.join("").replace(/\s+/g, " ").trim();
+  return words.join("").replace(ZERO_WIDTH, "").replace(/\s+/g, " ").trim();
 }
 
 module.exports = { createMarkdownRenderer, markdownify, markdownToPlainText };

@@ -64,6 +64,32 @@ describe("markdownToPlainText", () => {
     );
   });
 
+  // Every kind of break is a word boundary. Dropping them welded words
+  // together — a real lede reading "Wildland Team\nFire Simulation" shipped as
+  // "TeamFire Simulation".
+  it("treats every kind of line break as a word boundary", () => {
+    assert.strictEqual(markdownToPlainText("Team \nFire Simulation"), "Team Fire Simulation");
+    assert.strictEqual(markdownToPlainText("Line one  \nLine two"), "Line one Line two");
+    assert.strictEqual(markdownToPlainText("Team<br>Fire"), "Team Fire");
+    assert.strictEqual(markdownToPlainText("Team<br />Fire"), "Team Fire");
+  });
+
+  // These arrive as one block whose content never reaches children, so they
+  // used to come back empty — and an empty description silently falls through
+  // to the headline, which is the bug this filter exists to fix.
+  it("reads block-level content that never reaches the children", () => {
+    assert.strictEqual(markdownToPlainText("<p>Hello world</p>"), "Hello world");
+    assert.strictEqual(markdownToPlainText("<div>Meet &amp; Greet</div>"), "Meet & Greet");
+    assert.strictEqual(markdownToPlainText("```\ncode here\n```"), "code here");
+  });
+
+  // JavaScript's \s matches U+FEFF, so collapsing whitespace turned an
+  // invisible character in a real post's lede into a visible space.
+  it("removes zero-width characters instead of collapsing them to a space", () => {
+    assert.strictEqual(markdownToPlainText("S\uFEFFtuart Island"), "Stuart Island");
+    assert.strictEqual(markdownToPlainText("a\u200Bb"), "ab");
+  });
+
   it("returns an empty string for no input", () => {
     for (const empty of [undefined, null, ""]) {
       assert.strictEqual(markdownToPlainText(empty), "");

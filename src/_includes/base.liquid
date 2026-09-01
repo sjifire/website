@@ -49,11 +49,11 @@
   {% comment %}icon tags{% endcomment %}
     <link rel="icon" type="image/png" href="{% imgPath '/assets/sjifire-logo-clear.png' %}" />
   {% comment %}RSS feed{% endcomment %}
-    <link rel="alternate" type="application/atom+xml" title="{{ site.site_name | escape }} News Feed" href="{{ site.prodUrl }}/news/feed.xml" />
+    <link rel="alternate" type="application/atom+xml" title="{{ site.site_name | escape }} News Feed" href="{{ site.prodUrl | escape }}/news/feed.xml" />
   {% comment %}canonical URL{% endcomment %}
-    <link rel="canonical" href="{{ site.prodUrl }}{{ page.url }}" />
+    <link rel="canonical" href="{{ site.prodUrl | append: page.url | escape }}" />
   {% comment %}og{% endcomment %}
-    <meta property="og:url" content="{{ site.prodUrl }}{{ page.url }}" key="ogurl" />
+    <meta property="og:url" content="{{ site.prodUrl | append: page.url | escape }}" key="ogurl" />
     <meta property="og:type" content="website" />
     {%- if page.fileSlug == 'news-article' and post.featured_image and post.featured_image.source != "" -%}
       {%- assign ogImgPath = '/assets/media/' | append: post.featured_image.source -%}
@@ -124,12 +124,12 @@
   {
     "@context": "https://schema.org",
     "@type": "FireStation",
-    "@id": "{{ site.prodUrl }}/#organization",
+    "@id": {{ site.prodUrl | append: "/#organization" | jsonLd }},
     "name": {{ site.site_name | jsonLd }},
     "alternateName": "SJIF&R",
     "legalName": "San Juan County Fire District #3",
-    "url": "{{ site.prodUrl }}",
-    "logo": "{{ site.prodUrl }}/assets/sjifire-logo-clear.png",
+    "url": {{ site.prodUrl | jsonLd }},
+    "logo": {{ site.prodUrl | append: "/assets/sjifire-logo-clear.png" | jsonLd }},
     "description": {{ site.site_desc | jsonLd }},
     "telephone": "360-378-5334",
     "address": {
@@ -159,11 +159,11 @@
   {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    "url": "{{ site.prodUrl }}",
+    "url": {{ site.prodUrl | jsonLd }},
     "name": {{ site.site_name | jsonLd }},
     "description": {{ site.site_desc | jsonLd }},
     "publisher": {
-      "@id": "{{ site.prodUrl }}/#organization"
+      "@id": {{ site.prodUrl | append: "/#organization" | jsonLd }}
     }
   }
   </script>
@@ -184,14 +184,14 @@
     "dateModified": "{{ post.date | date: '%Y-%m-%dT%H:%M:%S-08:00' }}",
     "author": {
       "@type": "Organization",
-      "@id": "{{ site.prodUrl }}/#organization"
+      "@id": {{ site.prodUrl | append: "/#organization" | jsonLd }}
     },
     "publisher": {
-      "@id": "{{ site.prodUrl }}/#organization"
+      "@id": {{ site.prodUrl | append: "/#organization" | jsonLd }}
     },
     "mainEntityOfPage": {
       "@type": "WebPage",
-      "@id": "{{ site.prodUrl }}{{ page.url }}"
+      "@id": {{ site.prodUrl | append: page.url | jsonLd }}
     }
     {%- if post.featured_image and post.featured_image.source != "" -%}
     {%- assign articleImgPath = '/assets/media/' | append: post.featured_image.source -%}
