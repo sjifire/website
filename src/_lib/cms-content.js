@@ -36,8 +36,9 @@ function usesLiquid(inputPath) {
   return LIQUID_ENABLED_PAGES.has(normalizeInputPath(inputPath));
 }
 
-// `style={{ ... }}` — the JSX form. The lazy `}}` stops at the first close so a
-// malformed attribute can't swallow the rest of the page.
+// `style={{ ... }}` — the JSX form. Excluding braces from the body is what
+// bounds the match, so a malformed `style={{` can't swallow the rest of the
+// page looking for a far-off `}}`.
 const JSX_STYLE_ATTRIBUTE = /\bstyle=\{\{([^{}]*)\}\}/g;
 
 // One `key: "value"` pair, anchored so the parser can walk the object literal
@@ -45,9 +46,13 @@ const JSX_STYLE_ATTRIBUTE = /\bstyle=\{\{([^{}]*)\}\}/g;
 const DECLARATION =
   /^\s*(?:([A-Za-z_$][A-Za-z0-9_$]*)|'([^']*)'|"([^"]*)")\s*:\s*(?:'([^']*)'|"([^"]*)")\s*(,|$)/;
 
-// Anything that would terminate the double-quoted attribute we emit, or open a
-// tag of its own. Editors only ever paste colours here; refuse the rest.
-const UNSAFE_IN_ATTRIBUTE = /["'<>\\]/;
+// What a pasted CSS value is allowed to contain: colours (#FEF08A, red),
+// functional notation (rgba(255, 255, 0, .5)), and lengths (1.5em). An
+// allow-list rather than a ban-list, so the things that make a value dangerous
+// are excluded by construction — `"` would end the attribute, `;` would append
+// declarations nobody typed, and `:` would admit url(javascript:…) and
+// url(https://…), the latter beaconing a host the CSP never allowed.
+const SAFE_CSS_VALUE = /^[\w#%.,()/ -]+$/;
 
 // backgroundColor -> background-color, WebkitBoxShadow -> -webkit-box-shadow.
 function kebabCase(property) {
@@ -78,6 +83,8 @@ function kebabCase(property) {
  * @returns {string} body with convertible JSX style attributes rewritten
  */
 function normalizeJsxStyleAttributes(content) {
+  if (typeof content !== "string") return content;
+
   return content.replace(JSX_STYLE_ATTRIBUTE, (original, objectLiteral) => {
     const declarations = [];
     let rest = objectLiteral;
@@ -86,18 +93,17 @@ function normalizeJsxStyleAttributes(content) {
       const match = DECLARATION.exec(rest);
       if (!match) return original;
 
-      const [consumed, identifier, singleQuotedKey, doubleQuotedKey, singleQuotedValue, doubleQuotedValue, separator] = match;
-      const key = identifier ? kebabCase(identifier) : singleQuotedKey ?? doubleQuotedKey;
-      const value = singleQuotedValue ?? doubleQuotedValue;
+      const [consumed, identifier, singleQuotedKey, doubleQuotedKey, singleQuotedValue, doubleQuotedValue] = match;
+      // Quoting a key is a formatting choice, not a semantic one, so the same
+      // kebab-casing applies however it was written.
+      const key = kebabCase(identifier ?? singleQuotedKey ?? doubleQuotedKey);
+      const value = (singleQuotedValue ?? doubleQuotedValue).trim();
 
       if (!/^-{0,2}[a-z][a-z0-9-]*$/.test(key)) return original;
-      if (UNSAFE_IN_ATTRIBUTE.test(value)) return original;
+      if (!SAFE_CSS_VALUE.test(value)) return original;
 
-      declarations.push(`${key}: ${value.trim()}`);
-
+      declarations.push(`${key}: ${value}`);
       rest = rest.slice(consumed.length);
-      // A trailing comma with nothing after it isn't the shape we expect.
-      if (separator === "," && rest.trim() === "") return original;
     }
 
     if (declarations.length === 0) return original;
@@ -106,10 +112,18 @@ function normalizeJsxStyleAttributes(content) {
 }
 
 function protectCmsContent(inputPath, content) {
+  // Normalized first, and for every page. The allow-listed pages are editable
+  // in Tina too (the `page` collection is all of src/pages bar the homepage),
+  // and they get no {% raw %} to fall back on — a highlight pasted into one of
+  // them would reach Liquid as `{{ backgroundColor: ... }}` and take the build
+  // down. Rewriting the attribute removes the braces; their own Liquid, which
+  // never looks like `style={{`, is untouched.
+  const normalized = normalizeJsxStyleAttributes(content);
+
   if (usesLiquid(inputPath)) {
-    return content;
+    return normalized;
   }
-  return `{% raw %}${normalizeJsxStyleAttributes(content)}{% endraw %}`;
+  return `{% raw %}${normalized}{% endraw %}`;
 }
 
 module.exports = {
