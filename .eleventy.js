@@ -60,8 +60,13 @@ module.exports = function(eleventyConfig) {
   // Also rewrites the JSX style attributes Tina writes for a highlight.
   eleventyConfig.addPreprocessor("protect-cms-content", "mdx", (data, content) => {
     const engine = templateEngineFor(data.page.inputPath);
+    // Either branch overrules front matter, so the allow-list stays the only
+    // switch. Deleting, not assigning undefined, is what restores Eleventy's
+    // default — it treats the key's presence as an override on its own.
     if (engine) {
       data.templateEngineOverride = engine;
+    } else {
+      delete data.templateEngineOverride;
     }
     return normalizeJsxStyleAttributes(content);
   });

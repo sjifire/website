@@ -1,6 +1,10 @@
 const { describe, it } = require("node:test");
 const assert = require("node:assert");
+const fs = require("node:fs");
+const os = require("node:os");
+const path = require("node:path");
 const { Liquid } = require("liquidjs");
+const { Eleventy } = require("@11ty/eleventy");
 const {
   LIQUID_ENABLED_PAGES,
   usesLiquid,
@@ -241,6 +245,22 @@ describe("cms-content", () => {
       assert.strictEqual(data.templateEngineOverride, undefined);
     });
 
+    // Front matter must not become a second switch in either direction: one
+    // spelling would re-expose a CMS page to Liquid, the other would ship an
+    // allow-listed page's {{ personnel.counts.* }} to the public as text.
+    it("overrules a templateEngineOverride set in front matter, both ways", () => {
+      const cms = { page: { inputPath: "./src/pages/join.mdx" }, templateEngineOverride: "liquid,md" };
+      mdxPreprocessor(cms, "body");
+      assert.strictEqual(cms.templateEngineOverride, "md");
+
+      const allowed = {
+        page: { inputPath: "./src/pages/about/key-information.mdx" },
+        templateEngineOverride: "md",
+      };
+      mdxPreprocessor(allowed, "body");
+      assert.strictEqual("templateEngineOverride" in allowed, false);
+    });
+
     it("emits no raw block, so there is none for an editor to close early", () => {
       const typed = "before {% endraw %}{{ 1 | plus: 2 }}{% raw %} after";
       const { output } = run("./src/pages/join.mdx", typed);
@@ -260,6 +280,81 @@ describe("cms-content", () => {
       assert.strictEqual(
         output,
         'APPLICATIONS ARE **<mark style="background-color: #FEF08A">OPEN</mark>**'
+      );
+    });
+  });
+
+  // Everything above asserts that the override is *assigned*. That an assignment
+  // made inside a preprocessor is still honoured is an ordering dependency on
+  // Eleventy internals that no documentation promises: Template.getTemplates
+  // runs preprocessors against the same data object TemplateContent._render
+  // later reads. If an upgrade resolved the engine first, every other test here
+  // would stay green while CMS pages quietly became Liquid templates again, and
+  // the next "{{" an editor typed in Tina would break production. So build one
+  // through Eleventy for real.
+  describe("through a real Eleventy build", () => {
+    const TYPED = "Literal {{ 1 | plus: 2 }} and {% endraw %} and {% if true %}X{% endif %}";
+
+    // Installs the very preprocessor .eleventy.js registers, lifted out with
+    // the same stub used above, rather than a copy of it — a copy would keep
+    // passing if the real registration moved somewhere Eleventy resolves too
+    // late. The site's own config can't be loaded wholesale here: it pins
+    // dir.input to src/ and wants _includes, _data and Cloudinary config that a
+    // tmpdir hasn't got. `withPreprocessor: false` is the control.
+    const fixtureConfig = (withPreprocessor) => `
+      const eleventyPath = ${JSON.stringify(path.resolve(__dirname, "../.eleventy.js"))};
+      module.exports = function (eleventyConfig) {
+        eleventyConfig.setTemplateFormats(["mdx"]);
+        eleventyConfig.addExtension("mdx", { key: "md" });
+        ${
+          withPreprocessor
+            ? `
+        let real;
+        const stub = new Proxy({}, {
+          get: (_t, property) =>
+            property === "addPreprocessor"
+              ? (_name, extensions, fn) => { if (extensions === "mdx") real = fn; }
+              : () => stub,
+        });
+        require(eleventyPath)(stub);
+        eleventyConfig.addPreprocessor("protect-cms-content", "mdx", real);`
+            : ""
+        }
+      };
+    `;
+
+    async function buildFixture(withPreprocessor) {
+      const dir = fs.mkdtempSync(path.join(os.tmpdir(), "cms-content-"));
+      try {
+        fs.writeFileSync(path.join(dir, "probe.mdx"), `${TYPED}\n`);
+        const configPath = path.join(dir, "eleventy.config.cjs");
+        fs.writeFileSync(configPath, fixtureConfig(withPreprocessor));
+        const eleventy = new Eleventy(dir, path.join(dir, "_out"), { configPath });
+        // The control is expected to fail; without this Eleventy prints its
+        // whole error report to stderr in the middle of a passing run.
+        eleventy.disableLogger();
+        const results = await eleventy.toJSON();
+        return results.map((result) => result.content).join("");
+      } finally {
+        fs.rmSync(dir, { recursive: true, force: true });
+      }
+    }
+
+    it("renders what an editor typed as text, with no Liquid executed", async () => {
+      const html = await buildFixture(true);
+      assert.match(html, /Literal \{\{ 1 \| plus: 2 \}\}/);
+      assert.match(html, /\{% endraw %\}/);
+      assert.match(html, /\{% if true %\}X\{% endif %\}/);
+      assert.doesNotMatch(html, /Literal 3/);
+    });
+
+    // Without the preprocessor the same page is a Liquid template and blows up
+    // on the unmatched {% endraw %} — which is what makes the assertion above
+    // mean something rather than passing for an unrelated reason.
+    it("is the preprocessor doing that, not markdown being harmless", async () => {
+      await assert.rejects(
+        () => buildFixture(false),
+        /Having trouble rendering liquid template/
       );
     });
   });
