@@ -4,7 +4,8 @@ const escapeHtml = require("escape-html");
 const { sanitizeUrl } = require("@braintree/sanitize-url");
 const createCloudinary = require("./src/_lib/cloudinary");
 const { dateFilters, getNextMeeting, formatMeetingSchedule } = require("./src/_lib/date-utils");
-const { markdownify } = require("./src/_lib/markdown");
+const { markdownify, markdownToPlainText } = require("./src/_lib/markdown");
+const { jsonLd } = require("./src/_lib/json-ld");
 const { templateEngineFor, normalizeJsxStyleAttributes } = require("./src/_lib/cms-content");
 
 module.exports = function(eleventyConfig) {
@@ -125,6 +126,15 @@ module.exports = function(eleventyConfig) {
 
   // Markdown rendering filter (see src/_lib/markdown.js for the configuration)
   eleventyConfig.addFilter("markdownify", markdownify);
+
+  // Emits a value as a JSON string literal, quotes included, for the JSON-LD
+  // <script> bodies in base.liquid. See src/_lib/json-ld.js for why `escape`
+  // is the wrong tool there.
+  eleventyConfig.addFilter("jsonLd", jsonLd);
+
+  // Markdown to plain text, for JSON-LD where markdownify's entities would
+  // reach a consumer literally.
+  eleventyConfig.addFilter("plainText", markdownToPlainText);
 
   // Process TinaCMS styled-image components
   // Security: Validates size/align values and escapes alt text to prevent XSS
