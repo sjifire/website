@@ -1,5 +1,5 @@
 /**
- * Guard TinaCMS-managed pages against the Liquid template engine.
+ * Keep TinaCMS-managed pages away from the Liquid template engine.
  *
  * Eleventy runs every .mdx page through Liquid before markdown
  * (markdownTemplateEngine: "liquid"). That is what lets a handful of pages
@@ -9,11 +9,14 @@
  * `<mark style={{ backgroundColor: "#FEF08A" }}>`, and Liquid failed on the
  * `{{ ... }}` with `expected "|" before filter`, taking the whole build down.
  *
- * Only the pages listed below deliberately use Liquid in their body. Every
- * other page is wrapped in {% raw %} ... {% endraw %} so stray braces render
- * literally instead of breaking the site.
+ * #204 wrapped those pages in {% raw %} ... {% endraw %}. That was escapable:
+ * an editor whose text contained `{% endraw %}` closed the block early and
+ * handed the remainder back to Liquid, which is the outage it existed to
+ * prevent. There is no delimiter an editor cannot type, so the page instead
+ * declares it isn't a Liquid template at all — see templateEngineFor. Only the
+ * pages listed below deliberately use Liquid in their body.
  *
- * Surviving Liquid is only half the job: markdown-it then rejects the JSX
+ * Not running Liquid is only half the job: markdown-it then rejects the JSX
  * attribute as invalid HTML and prints it as text. normalizeJsxStyleAttributes
  * rewrites it to the plain HTML equivalent so the highlight actually renders.
  */
@@ -111,24 +114,24 @@ function normalizeJsxStyleAttributes(content) {
   });
 }
 
-function protectCmsContent(inputPath, content) {
-  // Normalized first, and for every page. The allow-listed pages are editable
-  // in Tina too (the `page` collection is all of src/pages bar the homepage),
-  // and they get no {% raw %} to fall back on — a highlight pasted into one of
-  // them would reach Liquid as `{{ backgroundColor: ... }}` and take the build
-  // down. Rewriting the attribute removes the braces; their own Liquid, which
-  // never looks like `style={{`, is untouched.
-  const normalized = normalizeJsxStyleAttributes(content);
-
-  if (usesLiquid(inputPath)) {
-    return normalized;
-  }
-  return `{% raw %}${normalized}{% endraw %}`;
+/**
+ * Which template engine a page should be compiled with.
+ *
+ * CMS pages get "md" — markdown only, no Liquid, so "{{" or "{%" an editor
+ * typed is text rather than something to execute or choke on. Allow-listed
+ * pages get undefined, meaning "leave Eleventy's default alone", which is the
+ * markdownTemplateEngine ("liquid") their `{{ personnel.counts.* }}` needs.
+ *
+ * @param {string} inputPath - Eleventy inputPath for the page
+ * @returns {string|undefined} engine override, or undefined to keep the default
+ */
+function templateEngineFor(inputPath) {
+  return usesLiquid(inputPath) ? undefined : "md";
 }
 
 module.exports = {
   LIQUID_ENABLED_PAGES,
   usesLiquid,
-  protectCmsContent,
+  templateEngineFor,
   normalizeJsxStyleAttributes,
 };

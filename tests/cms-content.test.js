@@ -4,7 +4,7 @@ const { Liquid } = require("liquidjs");
 const {
   LIQUID_ENABLED_PAGES,
   usesLiquid,
-  protectCmsContent,
+  templateEngineFor,
   normalizeJsxStyleAttributes,
 } = require("../src/_lib/cms-content");
 const { markdownify } = require("../src/_lib/markdown");
@@ -35,35 +35,17 @@ describe("cms-content", () => {
     });
   });
 
-  describe("protectCmsContent", () => {
-    it("wraps CMS pages in a Liquid raw block", () => {
-      const out = protectCmsContent("./src/pages/join.mdx", "plain body");
-      assert.strictEqual(out, "{% raw %}plain body{% endraw %}");
+  describe("templateEngineFor", () => {
+    it("compiles CMS pages as markdown only, with no Liquid to execute", () => {
+      assert.strictEqual(templateEngineFor("./src/pages/join.mdx"), "md");
+      assert.strictEqual(templateEngineFor("./src/pages/about/about.mdx"), "md");
     });
 
-    it("normalizes JSX style attributes inside the raw block", () => {
-      const out = protectCmsContent("./src/pages/join.mdx", PASTED_HIGHLIGHT);
+    it("leaves allow-listed pages on Eleventy's default so their Liquid runs", () => {
+      assert.strictEqual(templateEngineFor("./src/pages/about/governance.mdx"), undefined);
       assert.strictEqual(
-        out,
-        '{% raw %}APPLICATIONS ARE **<mark style="background-color: #FEF08A">OPEN</mark>**{% endraw %}'
-      );
-    });
-
-    it("leaves allow-listed pages untouched so their Liquid still runs", () => {
-      const body = "Count: {{ personnel.counts.volunteerFirefighters }}";
-      assert.strictEqual(
-        protectCmsContent("./src/pages/about/key-information.mdx", body),
-        body
-      );
-    });
-
-    // Allow-listed pages are Tina-editable too and get no {% raw %} to fall
-    // back on, so a pasted highlight there would reach Liquid and break the
-    // build. Normalizing removes the braces before that can happen.
-    it("still normalizes allow-listed pages, which have no raw block to save them", () => {
-      assert.strictEqual(
-        protectCmsContent("./src/pages/about/governance.mdx", PASTED_HIGHLIGHT),
-        'APPLICATIONS ARE **<mark style="background-color: #FEF08A">OPEN</mark>**'
+        templateEngineFor("./src/pages/about/key-information.mdx"),
+        undefined
       );
     });
   });
@@ -189,51 +171,86 @@ describe("cms-content", () => {
     });
   });
 
-  describe("through the Liquid engine", () => {
+  // Why CMS pages are kept off Liquid entirely: this is what an editor's
+  // pasted highlight does to the engine that used to compile them.
+  describe("why Liquid is not run on CMS content", () => {
     const liquid = new Liquid();
 
-    it("documents the failure: unprotected pasted JSX makes Liquid throw", async () => {
+    it("a pasted highlight makes Liquid throw", async () => {
       await assert.rejects(
         () => liquid.parseAndRender(PASTED_HIGHLIGHT),
         /expected "\|" before filter/
       );
     });
 
-    it("hands the pasted highlight to markdown as plain HTML", async () => {
-      const out = await liquid.parseAndRender(
-        protectCmsContent("./src/pages/join.mdx", PASTED_HIGHLIGHT)
+    // The hole this replaces: {% raw %} is only as strong as a delimiter the
+    // editor cannot type, and they can type any of them.
+    it("a raw block is escapable by content containing {% endraw %}", async () => {
+      const typed = "before {% endraw %}{{ 1 | plus: 2 }}{% raw %} after";
+      const out = await liquid.parseAndRender(`{% raw %}${typed}{% endraw %}`);
+      assert.strictEqual(out, "before 3 after");
+    });
+  });
+
+  // The preprocessor registered in .eleventy.js is what applies all of the
+  // above, so assert against the real config rather than a copy of it.
+  describe("as wired into .eleventy.js", () => {
+    const mdxPreprocessor = (() => {
+      let captured;
+      const stub = new Proxy(
+        {},
+        {
+          get: (_target, property) =>
+            property === "addPreprocessor"
+              ? (_name, extensions, fn) => {
+                  if (extensions === "mdx") captured = fn;
+                }
+              : () => stub,
+        }
       );
+      require("../.eleventy.js")(stub);
+      return captured;
+    })();
+
+    const run = (inputPath, content) => {
+      const data = { page: { inputPath } };
+      return { data, output: mdxPreprocessor(data, content) };
+    };
+
+    it("is registered for mdx", () => {
+      assert.strictEqual(typeof mdxPreprocessor, "function");
+    });
+
+    it("compiles a CMS page as markdown only", () => {
+      const { data } = run("./src/pages/join.mdx", "body");
+      assert.strictEqual(data.templateEngineOverride, "md");
+    });
+
+    it("does not override the engine on an allow-listed page", () => {
+      const { data } = run("./src/pages/about/key-information.mdx", "body");
+      assert.strictEqual(data.templateEngineOverride, undefined);
+    });
+
+    it("emits no raw block, so there is none for an editor to close early", () => {
+      const typed = "before {% endraw %}{{ 1 | plus: 2 }}{% raw %} after";
+      const { output } = run("./src/pages/join.mdx", typed);
+      assert.strictEqual(output, typed);
+    });
+
+    it("normalizes the pasted highlight on the way through", () => {
+      const { output } = run("./src/pages/join.mdx", PASTED_HIGHLIGHT);
       assert.strictEqual(
-        out,
+        output,
         'APPLICATIONS ARE **<mark style="background-color: #FEF08A">OPEN</mark>**'
       );
     });
 
-    it("still renders braces it cannot normalize literally instead of throwing", async () => {
-      const body = 'Pasted: <mark style={{ backgroundColor: color }}>OPEN</mark>';
-      const out = await liquid.parseAndRender(
-        protectCmsContent("./src/pages/join.mdx", body)
+    it("normalizes allow-listed pages too, which still run Liquid", () => {
+      const { output } = run("./src/pages/about/governance.mdx", PASTED_HIGHLIGHT);
+      assert.strictEqual(
+        output,
+        'APPLICATIONS ARE **<mark style="background-color: #FEF08A">OPEN</mark>**'
       );
-      assert.strictEqual(out, body);
-    });
-
-    it("protected CMS content also survives Liquid tag syntax", async () => {
-      const body = "Use {% include 'x' %} literally, and {{ this }} too.";
-      const out = await liquid.parseAndRender(
-        protectCmsContent("./src/pages/join.mdx", body)
-      );
-      assert.strictEqual(out, body);
-    });
-
-    it("allow-listed pages still evaluate Liquid", async () => {
-      const out = await liquid.parseAndRender(
-        protectCmsContent(
-          "./src/pages/about/key-information.mdx",
-          "Volunteers: {{ counts.volunteers }}"
-        ),
-        { counts: { volunteers: 42 } }
-      );
-      assert.strictEqual(out, "Volunteers: 42");
     });
   });
 });
