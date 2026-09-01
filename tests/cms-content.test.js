@@ -124,10 +124,20 @@ describe("cms-content", () => {
       assert.strictEqual(normalizeJsxStyleAttributes(overlay), overlay);
     });
 
-    it("refuses a url() value that would beacon a host the CSP never allowed", () => {
-      const beacon =
-        '<mark style={{ backgroundImage: "url(https://evil.example/x.png)" }}>x</mark>';
-      assert.strictEqual(normalizeJsxStyleAttributes(beacon), beacon);
+    // Excluding ":" alone caught only the first of these: a protocol-relative
+    // URL carries no scheme, and a relative one carries no slash either.
+    it("refuses every url() value, however the host is spelled", () => {
+      const values = [
+        "url(https://evil.example/x.png)",
+        "url(//evil.example/x.png)",
+        "url(x.png)",
+        "URL(x.png)",
+        "url (x.png)",
+      ];
+      for (const value of values) {
+        const beacon = `<mark style={{ backgroundImage: "${value}" }}>x</mark>`;
+        assert.strictEqual(normalizeJsxStyleAttributes(beacon), beacon, value);
+      }
     });
 
     it("refuses an empty value rather than emitting a valueless declaration", () => {
