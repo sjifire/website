@@ -39,18 +39,11 @@ const renderer = createMarkdownRenderer();
 // attributes, and <br class="x"> is still a line break.
 const INLINE_BREAK = /^\s*<br\b[^>]*>\s*$/i;
 
-// Content of a raw HTML block that is not text the page shows. Comments exist
-// to be invisible, so publishing an editor's "draft > final" note as the
-// description would be worse than the empty description this replaced; script
-// and style bodies are markup a Word or Docs paste routinely brings along.
-const HTML_HIDDEN = /<!--[\s\S]*?-->|<(script|style|template)\b[^>]*>[\s\S]*?<\/\1\s*>/gi;
-
-// Tags that end a run of text. Closing inline tags deliberately are not here:
-// "sjifire<b>.org</b>" is one word, and giving every tag a space split it.
-const HTML_BOUNDARY =
-  /<\s*(?:br\b[^>]*|\/\s*(?:p|div|li|tr|td|th|h[1-6]|blockquote|section|article|header|footer|figure|figcaption|ul|ol|dl|dd|dt|table|pre)\b\s*)>/gi;
-
-const HTML_TAG = /<[^>]*>/g;
+// Elements whose contents the page never shows. markdown-it hands these back
+// as html_inline tags with the body as an ordinary text child between them, so
+// without tracking the open tag the body reads as article prose.
+const HIDDEN_OPEN = /^<\s*(?:script|style|template|noscript)\b/i;
+const HIDDEN_CLOSE = /^<\s*\/\s*(?:script|style|template|noscript)\s*>/i;
 
 // Only the two that are stray, not the joiners. JavaScript's \s matches
 // U+FEFF, so a zero-width space in a lede became a visible one ("S<ZWSP>tuart"
@@ -94,7 +87,20 @@ function markdownToPlainText(rawString) {
 
   for (const token of renderer.parse(normalizeJsxStyleAttributes(rawString), {})) {
     if (token.type === "inline") {
+      // Reset per block, so an unclosed hidden tag costs one paragraph rather
+      // than the rest of the description.
+      let hidden = 0;
+
       for (const child of token.children) {
+        if (child.type === "html_inline") {
+          if (HIDDEN_OPEN.test(child.content)) hidden += 1;
+          else if (HIDDEN_CLOSE.test(child.content)) hidden = Math.max(0, hidden - 1);
+          else if (hidden === 0 && INLINE_BREAK.test(child.content)) words.push(" ");
+          continue;
+        }
+
+        if (hidden > 0) continue;
+
         switch (child.type) {
           case "text":
           case "code_inline":
@@ -107,33 +113,26 @@ function markdownToPlainText(rawString) {
           case "hardbreak":
             words.push(" ");
             break;
-          case "html_inline":
-            if (INLINE_BREAK.test(child.content)) words.push(" ");
-            break;
           default:
             break;
         }
       }
     } else if (token.type === "fence" || token.type === "code_block") {
       words.push(token.content);
-    } else if (token.type === "html_block") {
-      // A lede pasted as raw HTML is one whole block whose content never
-      // reaches children, so it would otherwise come back empty and fall
-      // through to the headline. Hidden constructs are removed before the tags
-      // are, since those are the ones where leaking text is actively wrong
-      // rather than untidy. What remains is a regex, not a parser: a ">" inside
-      // an attribute value still ends a tag early and leaves a fragment of it
-      // in the text. That is the residual cost of not having an HTML parser
-      // here, and it is cosmetic — nothing downstream parses this again.
-      words.push(
-        renderer.utils.unescapeAll(
-          token.content
-            .replace(HTML_HIDDEN, " ")
-            .replace(HTML_BOUNDARY, " ")
-            .replace(HTML_TAG, "")
-        )
-      );
     } else {
+      // Everything else, html_block included, contributes nothing.
+      //
+      // Extracting text from a pasted HTML block was tried and withdrawn. Three
+      // review rounds found three separate ways for a regex strip to publish
+      // what the page hides — an editor's <!-- draft note -->, the <style> a
+      // Docs paste carries, an unterminated one of either — and one where a
+      // bare "<" in the prose deleted the words after it. Doing it correctly
+      // needs an HTML parser, which is not worth a dependency for a
+      // description field, and no post is written this way.
+      //
+      // The cost is that such a lede yields nothing and the caller falls back
+      // to the headline. That is the wrong description, visibly; the
+      // alternative was the right one with hidden text mixed in.
       continue;
     }
     // Blocks run together without this: "First para.Second para."

@@ -76,43 +76,42 @@ describe("markdownToPlainText", () => {
     assert.strictEqual(markdownToPlainText('Team<br class="x">Fire'), "Team Fire");
   });
 
-  // These arrive as one block whose content never reaches children, so they
-  // used to come back empty — and an empty description silently falls through
-  // to the headline, which is the bug this filter exists to fix.
-  it("reads block-level content that never reaches the children", () => {
-    assert.strictEqual(markdownToPlainText("<p>Hello world</p>"), "Hello world");
-    assert.strictEqual(markdownToPlainText("<div>Meet &amp; Greet</div>"), "Meet & Greet");
+  it("reads a fenced or indented block, whose content is literal text", () => {
     assert.strictEqual(markdownToPlainText("```\ncode here\n```"), "code here");
+    assert.strictEqual(markdownToPlainText("    indented code"), "indented code");
   });
 
-  // The reason a pasted block is filtered rather than just tag-stripped: these
-  // are invisible on the page, and publishing them as the description and the
-  // Atom summary would be worse than the empty string this replaced.
-  it("does not publish what a pasted block hides", () => {
-    assert.strictEqual(
-      markdownToPlainText("<!-- internal note: draft > final -->\nReal text"),
-      "Real text"
-    );
-    assert.strictEqual(
-      markdownToPlainText("<style>\n.lede{color:red}\n</style>\nReal text"),
-      "Real text"
-    );
-    assert.strictEqual(
-      markdownToPlainText("<script>alert(1)</script>\nReal text"),
-      "Real text"
-    );
+  // Deliberately nothing, so the caller falls back to the headline. Extracting
+  // this with a regex was tried and withdrawn: each of these published
+  // something the page hides, or deleted words that it shows.
+  it("yields nothing for a pasted HTML block rather than guessing at it", () => {
+    for (const pasted of [
+      "<p>Hello world</p>",
+      "<!-- internal note: draft > final -->",
+      "<style>\n.lede{color:red}\n</style>",
+      "<style>\n.lede{color:red}",
+      "<noscript>hidden fallback</noscript>",
+      "<p>5 < 10</p><p>more text</p>",
+      "<p>First.<p>Second.",
+    ]) {
+      assert.strictEqual(markdownToPlainText(pasted), "", pasted);
+    }
   });
 
-  // Inside a pasted block, only block-level tags end a run of text — the
-  // mirror of the break fix above, which must not split words instead.
-  it("keeps words whole inside a pasted block, but separates its blocks", () => {
+  // These are inline, not a block, so the prose around them is real content —
+  // only the hidden element's own body has to go.
+  it("keeps prose around an inline hidden element but drops its body", () => {
     assert.strictEqual(
-      markdownToPlainText("<p>Visit sjifire<b>.org</b> today, <em>re</em>opened!</p>"),
-      "Visit sjifire.org today, reopened!"
+      markdownToPlainText("Real text <script>alert(1)</script> more"),
+      "Real text more"
     );
     assert.strictEqual(
-      markdownToPlainText("<p>First.</p><p>Second.</p>"),
-      "First. Second."
+      markdownToPlainText("Real text <style>.x{color:red}</style> more"),
+      "Real text more"
+    );
+    assert.strictEqual(
+      markdownToPlainText("Real <template>hidden</template> text"),
+      "Real text"
     );
   });
 
