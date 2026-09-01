@@ -740,3 +740,33 @@ describe("isoDateTimeUTC", () => {
     assert.strictEqual(isoDateTimeUTC(""), undefined);
   });
 });
+
+describe("requireDateTime", () => {
+  const { requireDateTime } = require("../src/_lib/date-utils");
+
+  it("returns the DateTime for a value toDateTime can read", () => {
+    assert.strictEqual(
+      requireDateTime("2026-04-30T12:00:00Z", "archived_at", "a-post.mdx").toISO(),
+      "2026-04-30T12:00:00.000Z"
+    );
+  });
+
+  // The point of the helper: the file and the field are in the message, so a
+  // bad value is a build failure that names itself rather than a page, a URL
+  // or a <lastmod> spelling out "Invalid DateTime".
+  it("names the file and the field it could not read", () => {
+    assert.throws(
+      () => requireDateTime("2026-13-45", "archived_at", "a-post.mdx"),
+      /a-post\.mdx: cannot read archived_at "2026-13-45"/
+    );
+  });
+
+  // Every spelling `new Date` accepts and Luxon does not. These used to pass
+  // through as raw strings and be judged downstream by the other parser.
+  it("rejects the near-ISO spellings a second parser would have accepted", () => {
+    for (const value of ["2026-04-30 12:00", "April 30, 2026", "4/30/2026"]) {
+      assert.ok(!isNaN(new Date(value)), `precondition: new Date reads ${value}`);
+      assert.throws(() => requireDateTime(value, "archived_at", "a-post.mdx"), /cannot read/, value);
+    }
+  });
+});

@@ -18,6 +18,16 @@ eleventyExcludeFromCollections: true
   {%- endcomment -%}
   {%- assign sortedPosts = activePosts | sort: "date" | reverse %}
   {%- assign newestPost = sortedPosts | first %}
+  {%- comment -%}
+    Archiving every post leaves no newest entry, and an empty <updated> makes
+    the whole feed unparseable rather than merely entry-less: atom:feed/updated
+    is required and must be a date. The newest post overall stands in — that is
+    still the last time the feed's contents meaningfully changed. `posts` reads
+    committed files, so it is never itself empty.
+  {%- endcomment -%}
+  {%- unless newestPost %}
+    {%- assign newestPost = posts | sort: "date" | last %}
+  {%- endunless %}
   <updated>{{ newestPost.date | isoDateTimeUTC }}</updated>
   <id>{{ site.prodUrl }}/news/</id>
   <author>
@@ -28,7 +38,15 @@ eleventyExcludeFromCollections: true
   {%- for post in sortedPosts %}
   <entry>
     <title>{{ post.title | escape }}</title>
-    <link href="{{ site.prodUrl }}{{ post.url }}/" rel="alternate" type="text/html"/>
+    {%- comment -%}
+      href is percent-encoded, <id> deliberately is not. Six published URLs
+      contain a literal space (see src/_lib/post-url.js), which is not a legal
+      URI character, so Atom validators reject the href — and %20 fetches the
+      identical page, since that is what a browser sends for that link anyway.
+      An Atom <id> is not a URL to fetch but an identity string readers dedupe
+      on: re-encoding those six would re-notify every subscriber.
+    {%- endcomment -%}
+    <link href="{{ site.prodUrl | append: post.url | append: '/' | uriPath }}" rel="alternate" type="text/html"/>
     <id>{{ site.prodUrl }}{{ post.url }}/</id>
     <published>{{ post.date | isoDateTimeUTC }}</published>
     <updated>{{ post.date | isoDateTimeUTC }}</updated>

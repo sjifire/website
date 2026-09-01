@@ -5,6 +5,7 @@ const { sanitizeUrl } = require("@braintree/sanitize-url");
 const createCloudinary = require("./src/_lib/cloudinary");
 const { dateFilters, getNextMeeting, formatMeetingSchedule } = require("./src/_lib/date-utils");
 const { markdownify } = require("./src/_lib/markdown");
+const { uriPath } = require("./src/_lib/uri");
 const { templateEngineFor, normalizeJsxStyleAttributes } = require("./src/_lib/cms-content");
 
 module.exports = function(eleventyConfig) {
@@ -195,6 +196,10 @@ module.exports = function(eleventyConfig) {
     }
     return Math.round(num * factor) / factor;
   });
+
+  // Percent-encodes a URL on its way into a sitemap <loc>, an Atom <link href>
+  // or a canonical tag; see src/_lib/uri.js for why.
+  eleventyConfig.addFilter("uriPath", uriPath);
 
   // Safe URL filter - sanitizes URLs to prevent XSS (uses @braintree/sanitize-url)
   eleventyConfig.addFilter("safeUrl", function(url) {

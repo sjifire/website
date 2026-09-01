@@ -8,7 +8,7 @@
  *      the build naming the file — never a page named after the error.
  */
 const slugify = require("slugify");
-const { toDateTime } = require("./date-utils");
+const { requireDateTime } = require("./date-utils");
 
 /**
  * Six posts published while the date was mis-parsed (see toDateTime) and
@@ -59,12 +59,7 @@ function derivePostUrl(post, fileName) {
   // timestamp — feed <published>, JSON-LD datePublished and the <time> element
   // all still render this date, and an unreadable one reaches them as the
   // literal "Invalid DateTime" rather than stopping the build.
-  const dt = toDateTime(post.date);
-  if (!dt.isValid) {
-    throw new Error(
-      `${fileName}: cannot read date ${JSON.stringify(post.date)} (${dt.invalidReason}).`
-    );
-  }
+  const dt = requireDateTime(post.date, "date", fileName);
 
   const pinned = PINNED_URLS[fileName];
   if (pinned !== undefined) {

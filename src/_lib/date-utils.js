@@ -60,6 +60,26 @@ function toDateTime(value) {
 }
 
 /**
+ * toDateTime, but a value it cannot read fails the build naming the field and
+ * the file it came from — never a page, a URL or a <lastmod> made out of the
+ * words "Invalid DateTime".
+ *
+ * @param {Date|DateTime|string|*} value
+ * @param {string} field - front matter key, for the message
+ * @param {string} fileName - the post's file name, for the message
+ * @returns {DateTime} always valid
+ */
+function requireDateTime(value, field, fileName) {
+  const dt = toDateTime(value);
+  if (!dt.isValid) {
+    throw new Error(
+      `${fileName}: cannot read ${field} ${JSON.stringify(value)} (${dt.invalidReason}).`
+    );
+  }
+  return dt;
+}
+
+/**
  * Factory function to create date filters for Eleventy.
  * Handles both Date objects and ISO strings, always uses UTC to avoid DST issues.
  *
@@ -213,6 +233,7 @@ const dateFilters = {
 
 module.exports = {
   toDateTime,
+  requireDateTime,
   createDateFilter,
   dateFilters,
   getNextMeetingDate,
