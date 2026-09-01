@@ -49,10 +49,12 @@ function usesLiquid(inputPath) {
   return LIQUID_ENABLED_PAGES.has(normalizeInputPath(inputPath));
 }
 
-// `style={{ ... }}` — the JSX form. Excluding braces from the body is what
-// bounds the match, so a malformed `style={{` can't swallow the rest of the
-// page looking for a far-off `}}`.
-const JSX_STYLE_ATTRIBUTE = /\bstyle=\{\{([^{}]*)\}\}/g;
+// `style={{ ... }}` — the JSX form. The lookbehind keeps this to an attribute
+// actually named `style`: \b alone fires after a hyphen, so `data-style={{ … }}`
+// and `my-style={{ … }}` were being rewritten too. Excluding braces from the
+// body is what bounds the match, so a malformed `style={{` can't swallow the
+// rest of the page looking for a far-off `}}`.
+const JSX_STYLE_ATTRIBUTE = /(?<![\w-])style=\{\{([^{}]*)\}\}/g;
 
 // One `key: "value"` pair, anchored so the parser can walk the object literal
 // left to right and bail the moment it meets something it doesn't recognise.

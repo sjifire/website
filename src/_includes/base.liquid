@@ -3,7 +3,12 @@
 {%- else -%}
   {%- assign pageTitle = title | append: " | " | append: site.site_name -%}
 {%- endif -%}
-{%- assign pageDsc = description | default: site.site_desc -%}
+{#- A post's description is `post.lede | markdownify`, so it arrives as HTML and
+    goes into content="…" unescaped. Any quote in it — a link's href, or the
+    style="…" on a highlight an editor added — ends the attribute early and
+    spills the rest into <head>. strip_html leaves the text, entities and all;
+    piping through `escape` as well would double-escape them (&amp; -> &amp;amp;). -#}
+{%- assign pageDsc = description | default: site.site_desc | strip_html -%}
 <!DOCTYPE html>
 <html lang="en">
 <head>
