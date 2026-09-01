@@ -47,12 +47,17 @@ const DECLARATION =
   /^\s*(?:([A-Za-z_$][A-Za-z0-9_$]*)|'([^']*)'|"([^"]*)")\s*:\s*(?:'([^']*)'|"([^"]*)")\s*(,|$)/;
 
 // What a pasted CSS value is allowed to contain: colours (#FEF08A, red),
-// functional notation (rgba(255, 255, 0, .5)), and lengths (1.5em). An
-// allow-list rather than a ban-list, so the things that make a value dangerous
-// are excluded by construction — `"` would end the attribute, `;` would append
-// declarations nobody typed, and `:` would admit url(javascript:…) and
-// url(https://…), the latter beaconing a host the CSP never allowed.
-const SAFE_CSS_VALUE = /^[\w#%.,()/ -]+$/;
+// functional notation (rgba(255, 255, 0, .5)), and lengths (1.5em). Excluding
+// `"` keeps a value from ending the attribute, `;` from appending declarations
+// nobody typed, and `:` from admitting url(javascript:…) or url(https://…).
+const SAFE_CSS_VALUE = /^[\w#%.,() -]+$/;
+
+// Excluding `:` is not enough on its own: a protocol-relative url(//host/x.png)
+// needs no scheme, and a relative url(x.png) needs no slash. Nothing a
+// rich-text editor produces fetches a resource, so refuse the one CSS function
+// that can — otherwise a pasted highlight could load, and thereby report a
+// visit to, a host the CSP never allowed.
+const CSS_URL_FUNCTION = /\burl\s*\(/i;
 
 // backgroundColor -> background-color, WebkitBoxShadow -> -webkit-box-shadow.
 function kebabCase(property) {
@@ -101,6 +106,7 @@ function normalizeJsxStyleAttributes(content) {
 
       if (!/^-{0,2}[a-z][a-z0-9-]*$/.test(key)) return original;
       if (!SAFE_CSS_VALUE.test(value)) return original;
+      if (CSS_URL_FUNCTION.test(value)) return original;
 
       declarations.push(`${key}: ${value}`);
       rest = rest.slice(consumed.length);
