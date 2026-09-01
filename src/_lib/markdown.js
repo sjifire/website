@@ -48,4 +48,37 @@ function markdownify(rawString) {
   return renderer.render(normalizeJsxStyleAttributes(rawString));
 }
 
-module.exports = { createMarkdownRenderer, markdownify };
+/**
+ * Renders a markdown string to plain text.
+ *
+ * For places that need the words without any HTML around them — a JSON-LD
+ * script body, where entities are not decoded, so the `&amp;` that markdownify
+ * correctly emits for an HTML attribute would reach a consumer literally.
+ *
+ * Reads the token stream rather than stripping tags off rendered HTML: token
+ * content is already decoded (markdown-it escapes only at render time, and
+ * typographer's curly quotes are real characters by then), so this needs no
+ * entity table of its own to fall behind.
+ *
+ * @param {string} rawString - markdown source
+ * @returns {string} the text content, whitespace collapsed
+ */
+function markdownToPlainText(rawString) {
+  if (!rawString) return "";
+
+  const words = [];
+  for (const token of renderer.parse(normalizeJsxStyleAttributes(rawString), {})) {
+    if (token.type !== "inline") continue;
+    for (const child of token.children) {
+      if (child.type === "text" || child.type === "code_inline") {
+        words.push(child.content);
+      }
+    }
+    // Blocks run together without this: "First para.Second para."
+    words.push(" ");
+  }
+
+  return words.join("").replace(/\s+/g, " ").trim();
+}
+
+module.exports = { createMarkdownRenderer, markdownify, markdownToPlainText };

@@ -60,7 +60,12 @@
     {%- else -%}
       {%- assign ogImgPath = '/assets/media/' | append: site.opengraph_image -%}
     {%- endif -%}
-    <meta property="og:image" content="{% imgPath ogImgPath, 'f_auto,q_auto:good,c_fill,w_1200,h_630' %}" key="ogimage" />
+    {%- comment -%}
+      imgPath concatenates the filename into a URL without escaping or
+      encoding, and the filename is whatever an editor uploaded — so it needs
+      the same treatment as any other attribute value here.
+    {%- endcomment -%}
+    <meta property="og:image" content="{{ ogImgPath | imgPath: 'f_auto,q_auto:good,c_fill,w_1200,h_630' | escape }}" key="ogimage" />
     <meta property="og:site_name" content="{{ site.site_name | escape }}" key="ogsitename" />
     <meta property="og:title" content="{{ pageTitle }}" key="ogtitle" />
     <meta property="og:description" content="{{ pageDsc }}" key="ogdesc" />
@@ -68,7 +73,7 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="{{ pageTitle }}" />
     <meta name="twitter:description" content="{{ pageDsc }}" />
-    <meta name="twitter:image" content="{% imgPath ogImgPath, 'f_auto,q_auto:good,c_fill,w_1200,h_630' %}" />
+    <meta name="twitter:image" content="{{ ogImgPath | imgPath: 'f_auto,q_auto:good,c_fill,w_1200,h_630' | escape }}" />
   {% comment %}additional SEO{% endcomment %}
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <meta name="geo.region" content="US-WA" />
@@ -120,12 +125,12 @@
     "@context": "https://schema.org",
     "@type": "FireStation",
     "@id": "{{ site.prodUrl }}/#organization",
-    "name": "{{ site.site_name }}",
+    "name": {{ site.site_name | jsonLd }},
     "alternateName": "SJIF&R",
     "legalName": "San Juan County Fire District #3",
     "url": "{{ site.prodUrl }}",
     "logo": "{{ site.prodUrl }}/assets/sjifire-logo-clear.png",
-    "description": "{{ site.site_desc }}",
+    "description": {{ site.site_desc | jsonLd }},
     "telephone": "360-378-5334",
     "address": {
       "@type": "PostalAddress",
@@ -155,8 +160,8 @@
     "@context": "https://schema.org",
     "@type": "WebSite",
     "url": "{{ site.prodUrl }}",
-    "name": "{{ site.site_name }}",
-    "description": "{{ site.site_desc }}",
+    "name": {{ site.site_name | jsonLd }},
+    "description": {{ site.site_desc | jsonLd }},
     "publisher": {
       "@id": "{{ site.prodUrl }}/#organization"
     }
@@ -167,8 +172,14 @@
   {
     "@context": "https://schema.org",
     "@type": "NewsArticle",
-    "headline": "{{ post.title | escape }}",
-    "description": "{{ post.excerpt | default: post.title | escape }}",
+    {%- comment -%}
+      `post.excerpt` is not in the Tina post schema and exists in no post file,
+      so the old `post.excerpt | default: post.title` made every article's
+      description a copy of its headline. `lede` is the field that holds the
+      summary; plainText because entities do not decode in a script body.
+    {%- endcomment -%}
+    "headline": {{ post.title | jsonLd }},
+    "description": {{ post.lede | plainText | default: post.title | jsonLd }},
     "datePublished": "{{ post.date | date: '%Y-%m-%dT%H:%M:%S-08:00' }}",
     "dateModified": "{{ post.date | date: '%Y-%m-%dT%H:%M:%S-08:00' }}",
     "author": {
@@ -184,7 +195,7 @@
     }
     {%- if post.featured_image and post.featured_image.source != "" -%}
     {%- assign articleImgPath = '/assets/media/' | append: post.featured_image.source -%}
-    ,"image": "{% imgPath articleImgPath, 'f_auto,q_auto:good,w_1200' %}"
+    ,"image": {{ articleImgPath | imgPath: 'f_auto,q_auto:good,w_1200' | jsonLd }}
     {%- endif %}
   }
   </script>
@@ -202,7 +213,7 @@
   {% if page.fileSlug == 'news-article' and post.featured_image and post.featured_image.source != "" %}
     {%- assign featuredImgPath = '/assets/media/' | append: post.featured_image.source -%}
     <figure class="featured__media">
-      <img src="{% imgPath featuredImgPath, 'f_auto,c_limit,w_900,h_500' %}" alt="{{ post.featured_image.alt }}" loading="eager">
+      <img src="{{ featuredImgPath | imgPath: 'f_auto,c_limit,w_900,h_500' | escape }}" alt="{{ post.featured_image.alt | escape }}" loading="eager">
     </figure>
   {% endif %}
 
