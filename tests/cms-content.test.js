@@ -279,34 +279,44 @@ describe("cms-content", () => {
   describe("through a real Eleventy build", () => {
     const TYPED = "Literal {{ 1 | plus: 2 }} and {% endraw %} and {% if true %}X{% endif %}";
 
-    // Mirrors the registration in .eleventy.js, calling the same decision
-    // function; `applyOverride: false` is the control.
-    const fixtureConfig = (applyOverride) => `
-      const { templateEngineFor } = require(${JSON.stringify(
-        path.resolve(__dirname, "../src/_lib/cms-content.js")
-      )});
+    // Installs the very preprocessor .eleventy.js registers, lifted out with
+    // the same stub used above, rather than a copy of it — a copy would keep
+    // passing if the real registration moved somewhere Eleventy resolves too
+    // late. The site's own config can't be loaded wholesale here: it pins
+    // dir.input to src/ and wants _includes, _data and Cloudinary config that a
+    // tmpdir hasn't got. `withPreprocessor: false` is the control.
+    const fixtureConfig = (withPreprocessor) => `
+      const eleventyPath = ${JSON.stringify(path.resolve(__dirname, "../.eleventy.js"))};
       module.exports = function (eleventyConfig) {
         eleventyConfig.setTemplateFormats(["mdx"]);
         eleventyConfig.addExtension("mdx", { key: "md" });
-        eleventyConfig.addPreprocessor("protect-cms-content", "mdx", (data, content) => {
-          ${
-            applyOverride
-              ? "const engine = templateEngineFor(data.page.inputPath);" +
-                " if (engine) { data.templateEngineOverride = engine; }"
-              : ""
-          }
-          return content;
+        ${
+          withPreprocessor
+            ? `
+        let real;
+        const stub = new Proxy({}, {
+          get: (_t, property) =>
+            property === "addPreprocessor"
+              ? (_name, extensions, fn) => { if (extensions === "mdx") real = fn; }
+              : () => stub,
         });
+        require(eleventyPath)(stub);
+        eleventyConfig.addPreprocessor("protect-cms-content", "mdx", real);`
+            : ""
+        }
       };
     `;
 
-    async function buildFixture(applyOverride) {
+    async function buildFixture(withPreprocessor) {
       const dir = fs.mkdtempSync(path.join(os.tmpdir(), "cms-content-"));
       try {
         fs.writeFileSync(path.join(dir, "probe.mdx"), `${TYPED}\n`);
         const configPath = path.join(dir, "eleventy.config.cjs");
-        fs.writeFileSync(configPath, fixtureConfig(applyOverride));
+        fs.writeFileSync(configPath, fixtureConfig(withPreprocessor));
         const eleventy = new Eleventy(dir, path.join(dir, "_out"), { configPath });
+        // The control is expected to fail; without this Eleventy prints its
+        // whole error report to stderr in the middle of a passing run.
+        eleventy.disableLogger();
         const results = await eleventy.toJSON();
         return results.map((result) => result.content).join("");
       } finally {
@@ -322,11 +332,14 @@ describe("cms-content", () => {
       assert.doesNotMatch(html, /Literal 3/);
     });
 
-    // Without the override the same page is a Liquid template and blows up on
-    // the unmatched {% endraw %} — which is what makes the assertion above mean
-    // something rather than passing for an unrelated reason.
-    it("is the override doing that, not markdown being harmless", async () => {
-      await assert.rejects(() => buildFixture(false), /liquid/i);
+    // Without the preprocessor the same page is a Liquid template and blows up
+    // on the unmatched {% endraw %} — which is what makes the assertion above
+    // mean something rather than passing for an unrelated reason.
+    it("is the preprocessor doing that, not markdown being harmless", async () => {
+      await assert.rejects(
+        () => buildFixture(false),
+        /Having trouble rendering liquid template/
+      );
     });
   });
 });

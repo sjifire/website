@@ -29,9 +29,9 @@ const path = require("node:path");
 // (tina/config.ts — `path: "src/pages"`, only `homepage` excluded), so an
 // editor can reach them, and for these two a typed "{{" or an unmatched "{%"
 // still fails the build exactly as in the August outage. The guarantee above
-// covers 21 of the 23 .mdx pages, not all of them. Closing that would mean
-// excluding these two from the Tina collection — an editorial decision, not
-// one to make here.
+// covers every .mdx page under src/pages except the two named here. Closing
+// that would mean excluding them from the Tina collection — an editorial
+// decision, not one to make here.
 const LIQUID_ENABLED_PAGES = new Set([
   "src/pages/about/key-information.mdx",
   "src/pages/about/governance.mdx",
