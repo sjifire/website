@@ -245,6 +245,22 @@ describe("cms-content", () => {
       assert.strictEqual(data.templateEngineOverride, undefined);
     });
 
+    // Front matter must not become a second switch in either direction: one
+    // spelling would re-expose a CMS page to Liquid, the other would ship an
+    // allow-listed page's {{ personnel.counts.* }} to the public as text.
+    it("overrules a templateEngineOverride set in front matter, both ways", () => {
+      const cms = { page: { inputPath: "./src/pages/join.mdx" }, templateEngineOverride: "liquid,md" };
+      mdxPreprocessor(cms, "body");
+      assert.strictEqual(cms.templateEngineOverride, "md");
+
+      const allowed = {
+        page: { inputPath: "./src/pages/about/key-information.mdx" },
+        templateEngineOverride: "md",
+      };
+      mdxPreprocessor(allowed, "body");
+      assert.strictEqual("templateEngineOverride" in allowed, false);
+    });
+
     it("emits no raw block, so there is none for an editor to close early", () => {
       const typed = "before {% endraw %}{{ 1 | plus: 2 }}{% raw %} after";
       const { output } = run("./src/pages/join.mdx", typed);

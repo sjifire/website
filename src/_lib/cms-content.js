@@ -138,11 +138,12 @@ function normalizeJsxStyleAttributes(content) {
  * pages get undefined, meaning "leave Eleventy's default alone", which is the
  * markdownTemplateEngine ("liquid") their `{{ personnel.counts.* }}` needs.
  *
- * The caller applies this over any templateEngineOverride already in a page's
- * front matter, which is deliberate: a page opting itself back into Liquid
- * there would be a second switch, invisible to this list, re-exposing a
- * Tina-editable page to the outage. Put it in LIQUID_ENABLED_PAGES instead,
- * where the cost is stated and reviewable.
+ * The caller applies this over any templateEngineOverride in a page's front
+ * matter, in both directions — deliberately. Front matter that opted a CMS page
+ * back into Liquid would re-expose it to the outage; front matter that opted an
+ * allow-listed page out would ship its `{{ personnel.counts.* }}` to the public
+ * as literal text. Either way it is a second switch, invisible to this list.
+ * Change LIQUID_ENABLED_PAGES instead, where the cost is stated and reviewable.
  *
  * @param {string} inputPath - Eleventy inputPath for the page
  * @returns {string|undefined} engine override, or undefined to keep the default
