@@ -1,8 +1,7 @@
 const fs = require("fs");
 const path = require("path");
-const slugify = require("slugify");
-const { DateTime } = require("luxon");
 const matter = require("gray-matter");
+const { derivePostUrl } = require("../_lib/post-url");
 
 const postsFolder = path.resolve(__dirname, "../posts");
 const now = new Date();
@@ -14,7 +13,8 @@ const posts = fs
     const { data, content } = matter(
       fs.readFileSync(path.join(postsFolder, name), "utf8")
     );
-    return { ...data, body: content };
+    // Resolved here, while the file name is to hand for the error message.
+    return { ...data, body: content, url: derivePostUrl(data, name) };
   })
   .sort((a, b) => {
     // Pinned posts come first, then sort by date
@@ -24,17 +24,7 @@ const posts = fs
     return new Date(a.date) - new Date(b.date);
   });
 
-//FIXME: standardize slugify... can we set global configs?
 posts.forEach((p) => {
-  let urlDate = DateTime.fromISO(p.date, { zone: "utc" }).toFormat(
-    "yyyy-LL-dd"
-  );
-  let titleSlug = slugify(p.title, {
-    lower: true,
-    replacement: "-",
-    strict: true,
-  });
-  p.url = `/news/${urlDate}-${titleSlug}`;
   p.archived = !!(p.archived_at && new Date(p.archived_at) <= now);
 });
 

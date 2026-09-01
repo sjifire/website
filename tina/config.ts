@@ -750,6 +750,17 @@ export default defineConfig({
             description: "Pinned posts appear at the top of the news list",
           },
           {
+            // Hidden. Overrides the date-and-title URL for the six posts that
+            // were published at /news/Invalid DateTime-<slug>/ before the date
+            // parsing was fixed; those links exist, so they stay. Declared here
+            // so Tina round-trips it on save rather than dropping an unknown
+            // key — which would silently move a published page.
+            type: "string",
+            name: "permalink",
+            label: "Permalink (pinned URL)",
+            ui: { component: () => null },
+          },
+          {
             type: "string",
             name: "title",
             label: "Title",
