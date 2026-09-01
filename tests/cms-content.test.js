@@ -87,6 +87,19 @@ describe("cms-content", () => {
       assert.strictEqual(normalizeJsxStyleAttributes(unitless), unitless);
     });
 
+    // \b fires after a hyphen, so these were being rewritten as if they were
+    // the style attribute.
+    it("only rewrites an attribute actually named style", () => {
+      for (const attribute of ["data-style", "my-style", "notstyle"]) {
+        const markup = `<div ${attribute}={{ color: "red" }}>x</div>`;
+        assert.strictEqual(normalizeJsxStyleAttributes(markup), markup, attribute);
+      }
+      assert.strictEqual(
+        normalizeJsxStyleAttributes('<div style={{ color: "red" }}>x</div>'),
+        '<div style="color: red">x</div>'
+      );
+    });
+
     it("does not touch plain HTML style attributes or ordinary Liquid braces", () => {
       const plain = '<mark style="background-color: #FEF08A">x</mark>';
       assert.strictEqual(normalizeJsxStyleAttributes(plain), plain);
