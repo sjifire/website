@@ -72,6 +72,8 @@ describe("markdownToPlainText", () => {
     assert.strictEqual(markdownToPlainText("Line one  \nLine two"), "Line one Line two");
     assert.strictEqual(markdownToPlainText("Team<br>Fire"), "Team Fire");
     assert.strictEqual(markdownToPlainText("Team<br />Fire"), "Team Fire");
+    // A paste from Word or Docs carries attributes on it.
+    assert.strictEqual(markdownToPlainText('Team<br class="x">Fire'), "Team Fire");
   });
 
   // These arrive as one block whose content never reaches children, so they
@@ -83,11 +85,49 @@ describe("markdownToPlainText", () => {
     assert.strictEqual(markdownToPlainText("```\ncode here\n```"), "code here");
   });
 
+  // The reason a pasted block is filtered rather than just tag-stripped: these
+  // are invisible on the page, and publishing them as the description and the
+  // Atom summary would be worse than the empty string this replaced.
+  it("does not publish what a pasted block hides", () => {
+    assert.strictEqual(
+      markdownToPlainText("<!-- internal note: draft > final -->\nReal text"),
+      "Real text"
+    );
+    assert.strictEqual(
+      markdownToPlainText("<style>\n.lede{color:red}\n</style>\nReal text"),
+      "Real text"
+    );
+    assert.strictEqual(
+      markdownToPlainText("<script>alert(1)</script>\nReal text"),
+      "Real text"
+    );
+  });
+
+  // Inside a pasted block, only block-level tags end a run of text — the
+  // mirror of the break fix above, which must not split words instead.
+  it("keeps words whole inside a pasted block, but separates its blocks", () => {
+    assert.strictEqual(
+      markdownToPlainText("<p>Visit sjifire<b>.org</b> today, <em>re</em>opened!</p>"),
+      "Visit sjifire.org today, reopened!"
+    );
+    assert.strictEqual(
+      markdownToPlainText("<p>First.</p><p>Second.</p>"),
+      "First. Second."
+    );
+  });
+
   // JavaScript's \s matches U+FEFF, so collapsing whitespace turned an
   // invisible character in a real post's lede into a visible space.
   it("removes zero-width characters instead of collapsing them to a space", () => {
     assert.strictEqual(markdownToPlainText("S\uFEFFtuart Island"), "Stuart Island");
     assert.strictEqual(markdownToPlainText("a\u200Bb"), "ab");
+  });
+
+  // U+200C and U+200D are joiners, not stray whitespace: stripping ZWJ split
+  // the firefighter emoji into a man and a fire engine.
+  it("leaves joining characters alone, so emoji sequences survive", () => {
+    const firefighter = "Our \u{1F468}\u200D\u{1F692} crew";
+    assert.strictEqual(markdownToPlainText(firefighter), firefighter);
   });
 
   it("returns an empty string for no input", () => {

@@ -35,12 +35,28 @@ function createMarkdownRenderer() {
 const renderer = createMarkdownRenderer();
 
 // <br> in any spelling: a word boundary that arrives as raw inline HTML.
-const INLINE_BREAK = /^\s*<br\s*\/?>\s*$/i;
+// [^>]* rather than \s*\/? because a paste from Word or Docs carries
+// attributes, and <br class="x"> is still a line break.
+const INLINE_BREAK = /^\s*<br\b[^>]*>\s*$/i;
 
-// Stripped rather than collapsed, because JavaScript's \s matches U+FEFF — so
-// a stray zero-width space in a lede became a visible one ("S<ZWSP>tuart" ->
-// "S tuart") once the description stopped being a copy of the title.
-const ZERO_WIDTH = /[\u200B-\u200D\uFEFF]/g;
+// Content of a raw HTML block that is not text the page shows. Comments exist
+// to be invisible, so publishing an editor's "draft > final" note as the
+// description would be worse than the empty description this replaced; script
+// and style bodies are markup a Word or Docs paste routinely brings along.
+const HTML_HIDDEN = /<!--[\s\S]*?-->|<(script|style|template)\b[^>]*>[\s\S]*?<\/\1\s*>/gi;
+
+// Tags that end a run of text. Closing inline tags deliberately are not here:
+// "sjifire<b>.org</b>" is one word, and giving every tag a space split it.
+const HTML_BOUNDARY =
+  /<\s*(?:br\b[^>]*|\/\s*(?:p|div|li|tr|td|th|h[1-6]|blockquote|section|article|header|footer|figure|figcaption|ul|ol|dl|dd|dt|table|pre)\b\s*)>/gi;
+
+const HTML_TAG = /<[^>]*>/g;
+
+// Only the two that are stray, not the joiners. JavaScript's \s matches
+// U+FEFF, so a zero-width space in a lede became a visible one ("S<ZWSP>tuart"
+// -> "S tuart"); U+200C/U+200D carry meaning — stripping ZWJ turned the
+// firefighter emoji into two unrelated glyphs.
+const ZERO_WIDTH = /[\u200B\uFEFF]/g;
 
 /**
  * Renders a markdown string to HTML
@@ -102,11 +118,21 @@ function markdownToPlainText(rawString) {
       words.push(token.content);
     } else if (token.type === "html_block") {
       // A lede pasted as raw HTML is one whole block whose content never
-      // reaches children, so it used to come back empty and fall through to
-      // the headline. The tag strip is naive — a ">" inside an attribute value
-      // ends the match early — which only ever costs a stray fragment of
-      // attribute here, in text nothing parses further.
-      words.push(renderer.utils.unescapeAll(token.content.replace(/<[^>]*>/g, " ")));
+      // reaches children, so it would otherwise come back empty and fall
+      // through to the headline. Hidden constructs are removed before the tags
+      // are, since those are the ones where leaking text is actively wrong
+      // rather than untidy. What remains is a regex, not a parser: a ">" inside
+      // an attribute value still ends a tag early and leaves a fragment of it
+      // in the text. That is the residual cost of not having an HTML parser
+      // here, and it is cosmetic — nothing downstream parses this again.
+      words.push(
+        renderer.utils.unescapeAll(
+          token.content
+            .replace(HTML_HIDDEN, " ")
+            .replace(HTML_BOUNDARY, " ")
+            .replace(HTML_TAG, "")
+        )
+      );
     } else {
       continue;
     }
