@@ -5,6 +5,7 @@
 
 const MarkdownIt = require("markdown-it");
 const markdownItAttrs = require("markdown-it-attrs");
+const { normalizeJsxStyleAttributes } = require("./cms-content");
 
 // breaks: true so newlines in TinaCMS-authored content become <br>
 // html: true is required for existing content; XSS risk mitigated by admin-only content editing
@@ -40,7 +41,11 @@ const renderer = createMarkdownRenderer();
  */
 function markdownify(rawString) {
   if (!rawString) return;
-  return renderer.render(rawString);
+  // The mdx preprocessor only ever sees a page body, but Tina's rich-text
+  // fields also live in front matter (join.mdx's sidebar_blocks) and in JSON
+  // collections (a post's lede and body). Those all arrive here instead, so
+  // this is where the other two thirds of the CMS gets the same treatment.
+  return renderer.render(normalizeJsxStyleAttributes(rawString));
 }
 
 module.exports = { createMarkdownRenderer, markdownify };
