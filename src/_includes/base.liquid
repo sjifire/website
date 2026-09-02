@@ -51,9 +51,13 @@
   {% comment %}RSS feed{% endcomment %}
     <link rel="alternate" type="application/atom+xml" title="{{ site.site_name | escape }} News Feed" href="{{ site.prodUrl }}/news/feed.xml" />
   {% comment %}canonical URL{% endcomment %}
-    <link rel="canonical" href="{{ site.prodUrl }}{{ page.url }}" />
+    {%- comment -%}
+      Percent-encoded for the same reason as the sitemap's <loc>: six published
+      post URLs carry a literal space. A no-op on every other page.
+    {%- endcomment -%}
+    <link rel="canonical" href="{{ site.prodUrl | append: page.url | uriPath }}" />
   {% comment %}og{% endcomment %}
-    <meta property="og:url" content="{{ site.prodUrl }}{{ page.url }}" key="ogurl" />
+    <meta property="og:url" content="{{ site.prodUrl | append: page.url | uriPath }}" key="ogurl" />
     <meta property="og:type" content="website" />
     {%- if page.fileSlug == 'news-article' and post.featured_image and post.featured_image.source != "" -%}
       {%- assign ogImgPath = '/assets/media/' | append: post.featured_image.source -%}
@@ -169,8 +173,8 @@
     "@type": "NewsArticle",
     "headline": "{{ post.title | escape }}",
     "description": "{{ post.excerpt | default: post.title | escape }}",
-    "datePublished": "{{ post.date | date: '%Y-%m-%dT%H:%M:%S-08:00' }}",
-    "dateModified": "{{ post.date | date: '%Y-%m-%dT%H:%M:%S-08:00' }}",
+    "datePublished": "{{ post.date | isoDateTimeUTC }}",
+    "dateModified": "{{ post.date | isoDateTimeUTC }}",
     "author": {
       "@type": "Organization",
       "@id": "{{ site.prodUrl }}/#organization"
@@ -180,7 +184,7 @@
     },
     "mainEntityOfPage": {
       "@type": "WebPage",
-      "@id": "{{ site.prodUrl }}{{ page.url }}"
+      "@id": "{{ site.prodUrl | append: page.url | uriPath }}"
     }
     {%- if post.featured_image and post.featured_image.source != "" -%}
     {%- assign articleImgPath = '/assets/media/' | append: post.featured_image.source -%}

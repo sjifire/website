@@ -4,9 +4,14 @@ eleventyExcludeFromCollections: true
 ---
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  {%- comment %}
+    Every <loc> is percent-encoded. Six published post URLs carry a literal
+    space, which is not legal in a URI: Google reports those entries as invalid
+    and skips the pages. uriPath is a no-op on every other URL here.
+  {% endcomment -%}
   {%- comment %}Homepage{% endcomment %}
   <url>
-    <loc>{{ site.prodUrl }}/</loc>
+    <loc>{{ site.prodUrl | append: '/' | uriPath }}</loc>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -15,14 +20,14 @@ eleventyExcludeFromCollections: true
     {%- if item.children and item.children.size > 0 %}
       {%- for child in item.children %}
   <url>
-    <loc>{{ site.prodUrl }}{{ child.url }}</loc>
+    <loc>{{ site.prodUrl | append: child.url | uriPath }}</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
       {%- endfor %}
     {%- elsif item.url %}
   <url>
-    <loc>{{ site.prodUrl }}{{ item.url }}</loc>
+    <loc>{{ site.prodUrl | append: item.url | uriPath }}</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -31,7 +36,7 @@ eleventyExcludeFromCollections: true
   {%- comment %}Active news posts{% endcomment %}
   {%- for post in activePosts reversed %}
   <url>
-    <loc>{{ site.prodUrl }}{{ post.url }}/</loc>
+    <loc>{{ site.prodUrl | append: post.url | append: '/' | uriPath }}</loc>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
@@ -39,8 +44,8 @@ eleventyExcludeFromCollections: true
   {%- comment %}Archived news posts (lower priority, no longer updated){% endcomment %}
   {%- for post in archivedPosts reversed %}
   <url>
-    <loc>{{ site.prodUrl }}{{ post.url }}/</loc>
-    <lastmod>{{ post.archived_at | date: "%Y-%m-%d" }}</lastmod>
+    <loc>{{ site.prodUrl | append: post.url | append: '/' | uriPath }}</loc>
+    <lastmod>{{ post.archived_at | htmlDateStringISO }}</lastmod>
     <changefreq>never</changefreq>
     <priority>0.2</priority>
   </url>
@@ -48,7 +53,7 @@ eleventyExcludeFromCollections: true
   {%- comment %}Footer-only pages{% endcomment %}
   {%- for link in nav.footerLinks %}
   <url>
-    <loc>{{ site.prodUrl }}{{ link.url }}</loc>
+    <loc>{{ site.prodUrl | append: link.url | uriPath }}</loc>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>

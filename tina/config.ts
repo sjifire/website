@@ -755,6 +755,27 @@ export default defineConfig({
             label: "Title",
             isTitle: true,
             required: true,
+            ui: {
+              // The post's URL is built from this. `required` is only a !value
+              // check, so "???" or an emoji-only title passes it, slugifies to
+              // nothing, and would fail the build — after Tina has already
+              // committed to main, where the deploy runs no tests and the site
+              // silently stops updating. Caught here so the editor sees it.
+              //
+              // \p{L}\p{N}, not [a-z0-9]: slugify transliterates, so "Ñoño"
+              // and Cyrillic titles build fine and an ASCII-only test would
+              // refuse them with a message that is false for that title. The
+              // build's real rule is `slugify(title, ...) !== ""`, which this
+              // cannot import — tina/config.ts is bundled for the browser —
+              // so a title of pure punctuation slugify maps to a word ("&" ->
+              // "and") is still refused. That message is fair advice for such
+              // a title, and the direction that would break a deploy — passes
+              // here, fails the build — stays closed.
+              validate: (value?: string) =>
+                value && !/[\p{L}\p{N}]/u.test(value)
+                  ? "Title needs at least one letter or number — it becomes the page's web address."
+                  : undefined,
+            },
           },
           {
             type: "rich-text",
