@@ -6,7 +6,7 @@ const matter = require("gray-matter");
 const { Liquid } = require("liquidjs");
 
 const { dateFilters } = require("../src/_lib/date-utils");
-const { markdownify } = require("../src/_lib/markdown");
+const { markdownify, markdownToPlainText } = require("../src/_lib/markdown");
 const { uriPath } = require("../src/_lib/uri");
 
 // src/feed.liquid rendered directly, so its behaviour can be checked on data
@@ -20,6 +20,7 @@ const source = matter(
 const liquid = new Liquid({ strictFilters: true });
 for (const [name, filter] of Object.entries(dateFilters)) liquid.registerFilter(name, filter);
 liquid.registerFilter("markdownify", markdownify);
+liquid.registerFilter("plainText", markdownToPlainText);
 liquid.registerFilter("uriPath", uriPath);
 
 const site = { prodUrl: "https://example.test", site_name: "Test", site_desc: "Desc" };

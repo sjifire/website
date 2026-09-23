@@ -50,8 +50,14 @@ eleventyExcludeFromCollections: true
     <id>{{ site.prodUrl }}{{ post.url }}/</id>
     <published>{{ post.date | isoDateTimeUTC }}</published>
     <updated>{{ post.date | isoDateTimeUTC }}</updated>
-    {%- if post.excerpt %}
-    <summary>{{ post.excerpt | escape }}</summary>
+    {%- comment -%}
+      `excerpt` is not in the Tina post schema and exists in no post file, so
+      this guard has always been false and every entry shipped without a
+      summary. `lede` is the field that holds it.
+    {%- endcomment -%}
+    {%- assign postSummary = post.lede | plainText %}
+    {%- if postSummary != "" %}
+    <summary>{{ postSummary | escape }}</summary>
     {%- endif %}
     <content type="html">{{ post.body | markdownify | escape }}</content>
     <author>
