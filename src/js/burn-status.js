@@ -33,6 +33,7 @@
     'commercial',
     'recreational-county',
     'recreational-dnr',
+    'recreational-state-parks',
     'recreational-nps'
   ];
 
@@ -140,7 +141,7 @@
 
     // If StationWorks renamed every slug we know about, the payload is a
     // slug-contract break, not partial data -- show the warning rather than
-    // five permanent, silent em dashes. One or two missing slugs still
+    // six permanent, silent em dashes. One or two missing slugs still
     // degrade per-row below; only a total mismatch is fatal.
     const matchedSlugs = STATUS_SLUGS.filter(function (slug) {
       return Object.prototype.hasOwnProperty.call(bySlug, slug);
