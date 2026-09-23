@@ -36,8 +36,10 @@ const WIDGET_HTML = `<!DOCTYPE html><html><body>
         <td class="level level--unknown" data-row="commercial">&mdash;</td></tr>
       <tr><th>Recreational Fires: San Juan County</th>
         <td class="level level--unknown" data-row="recreational-county">&mdash;</td></tr>
-      <tr><th>Recreational Fires: State Park &amp; DNR</th>
+      <tr><th>Recreational Fires: DNR</th>
         <td class="level level--unknown" data-row="recreational-dnr">&mdash;</td></tr>
+      <tr><th>Recreational Fires: State Parks</th>
+        <td class="level level--unknown" data-row="recreational-state-parks">&mdash;</td></tr>
       <tr><th>Recreational Fires: National Parks</th>
         <td class="level level--unknown" data-row="recreational-nps">&mdash;</td></tr>
     </tbody>
@@ -83,7 +85,12 @@ describe("Burn status widget", () => {
     assert.strictEqual(cell(doc, "commercial").textContent.trim(), "Closed");
     assert.strictEqual(cell(doc, "recreational-county").textContent.trim(), "Open");
     assert.ok(cell(doc, "recreational-county").className.includes("level--open"));
+    // State Parks and DNR are separate slugs with different states in the
+    // fixture -- each row must read its own, not share one.
+    assert.strictEqual(cell(doc, "recreational-state-parks").textContent.trim(), "Open");
+    assert.ok(cell(doc, "recreational-state-parks").className.includes("level--open"));
     assert.strictEqual(cell(doc, "recreational-dnr").textContent.trim(), "Closed");
+    assert.ok(cell(doc, "recreational-dnr").className.includes("level--closed"));
     assert.strictEqual(cell(doc, "recreational-nps").textContent.trim(), "Closed");
   });
 
@@ -228,7 +235,7 @@ describe("Failure handling", () => {
     ["malformed JSON", () => Promise.resolve({ ok: true, status: 200, json: () => Promise.reject(new SyntaxError("bad")) })],
     ["a payload with no statuses array", ok({ season: { start: "2026-10-06", end: "2027-06-05" } })],
     ["a payload with an empty statuses array", ok({ statuses: [] })],
-    ["a payload where none of the five expected slugs match (wholesale slug rename)",
+    ["a payload where none of the six expected slugs match (wholesale slug rename)",
       ok(withPayload((p) => {
         p.statuses.forEach((s) => { s.slug = "renamed-" + s.slug; });
       }))],
@@ -272,7 +279,7 @@ describe("Partial data", () => {
     assert.ok(!warning(doc), "a missing slug must not trigger the warning");
   });
 
-  it("still patches per-row (no warning) when only one of the five expected slugs matches", async () => {
+  it("still patches per-row (no warning) when only one of the six expected slugs matches", async () => {
     // The boundary case just short of a total slug rename (M3): as long as
     // at least one expected slug is present, this is partial data, not an
     // unusable payload -- each unmatched row degrades to an em dash on its
@@ -285,6 +292,7 @@ describe("Partial data", () => {
     assert.strictEqual(cell(doc, "residential").textContent.trim(), "Closed");
     assert.strictEqual(cell(doc, "commercial").textContent.trim(), "—");
     assert.strictEqual(cell(doc, "recreational-county").textContent.trim(), "—");
+    assert.strictEqual(cell(doc, "recreational-state-parks").textContent.trim(), "—");
     assert.strictEqual(cell(doc, "recreational-dnr").textContent.trim(), "—");
     assert.strictEqual(cell(doc, "recreational-nps").textContent.trim(), "—");
     assert.ok(!warning(doc), "at least one matching slug must not trigger the warning");

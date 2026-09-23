@@ -30,7 +30,8 @@ const PAYLOAD = {
     { slug: "residential", label: "Residential Burn Permits", state: "restricted" },
     { slug: "commercial", label: "Commercial Burn Permits", state: "closed" },
     { slug: "recreational-county", label: "County lands", state: "open" },
-    { slug: "recreational-dnr", label: "State Park & DNR lands", state: "closed" },
+    { slug: "recreational-state-parks", label: "State Park lands", state: "closed" },
+    { slug: "recreational-dnr", label: "DNR lands", state: "closed" },
     { slug: "recreational-nps", label: "National Park lands", state: "closed" },
   ],
   airQuality: {
