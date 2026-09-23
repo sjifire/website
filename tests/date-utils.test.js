@@ -669,3 +669,104 @@ describe("formatMeetingSchedule", () => {
     });
   });
 });
+
+describe("toDateTime", () => {
+  const { toDateTime, createDateFilter } = require("../src/_lib/date-utils");
+  const matter = require("gray-matter");
+  // The two spellings that exist in src/posts, as gray-matter surfaces them.
+  const parsed = (yaml) => matter(`---\n${yaml}\n---\n`).data;
+
+  it("reads the unquoted timestamp Tina writes, which arrives as a Date", () => {
+    const { date } = parsed("date: 2026-03-09T19:59:15.933Z");
+    assert.ok(date instanceof Date, "precondition: gray-matter gives a Date");
+    assert.strictEqual(toDateTime(date).toISO(), "2026-03-09T19:59:15.933Z");
+  });
+
+  it("reads the quoted string the older posts carry", () => {
+    const { date } = parsed('date: "2021-11-10"');
+    assert.strictEqual(typeof date, "string", "precondition: gray-matter gives a string");
+    assert.strictEqual(toDateTime(date).toFormat("yyyy-LL-dd"), "2021-11-10");
+  });
+
+  it("is invalid, not a throw, for anything else", () => {
+    for (const value of [undefined, null, 42, {}, "not a date"]) {
+      assert.strictEqual(toDateTime(value).isValid, false, String(value));
+    }
+  });
+
+  // A Date built from garbage passes `instanceof Date`; calling toISOString()
+  // on it raises RangeError from inside a .map() with no field name attached.
+  it("is invalid, not a RangeError, for an Invalid Date", () => {
+    assert.strictEqual(toDateTime(new Date("garbage")).isValid, false);
+    assert.strictEqual(toDateTime(new Date(NaN)).isValid, false);
+    assert.doesNotThrow(() => createDateFilter("yyyy-LL-dd")(new Date("garbage")));
+  });
+
+  // getNextMeeting puts one in template scope, and routing the filters through
+  // this normalizer must not narrow what they already accepted.
+  it("accepts a Luxon DateTime, which the filters took before", () => {
+    const { DateTime } = require("luxon");
+    assert.strictEqual(toDateTime(DateTime.utc(2025, 1, 1)).toFormat("yyyy-LL-dd"), "2025-01-01");
+    assert.strictEqual(createDateFilter("yyyy-LL-dd")(DateTime.utc(2025, 1, 1)), "2025-01-01");
+  });
+
+  // The date filters go through the same normalizer, so a value that renders
+  // on the page is by construction one the URL derivation can read too.
+  it("is what the date filters use, so both agree on a Date", () => {
+    const { date } = parsed("date: 2026-03-09T19:59:15.933Z");
+    assert.strictEqual(createDateFilter("yyyy-LL-dd")(date), "2026-03-09");
+  });
+});
+
+describe("isoDateTimeUTC", () => {
+  const { dateFilters } = require("../src/_lib/date-utils");
+  const { isoDateTimeUTC } = dateFilters;
+
+  // Liquid's `date` filter formatted in the build machine's local time and the
+  // templates stamped a hardcoded "Z" or "-08:00" after it, so the feed and
+  // JSON-LD carried the wrong instant — and a date-only post the wrong day.
+  it("formats the actual UTC instant, with a real Z", () => {
+    assert.strictEqual(isoDateTimeUTC("2026-07-26T21:32:02.761Z"), "2026-07-26T21:32:02Z");
+    assert.strictEqual(isoDateTimeUTC(new Date("2026-07-26T21:32:02.761Z")), "2026-07-26T21:32:02Z");
+  });
+
+  it("keeps a date-only value on its own calendar day", () => {
+    assert.strictEqual(isoDateTimeUTC("2025-07-13"), "2025-07-13T00:00:00Z");
+    assert.strictEqual(isoDateTimeUTC("2025-07-13T00:00:00.000Z"), "2025-07-13T00:00:00Z");
+  });
+
+  it("returns undefined for no value, like the other date filters", () => {
+    assert.strictEqual(isoDateTimeUTC(undefined), undefined);
+    assert.strictEqual(isoDateTimeUTC(""), undefined);
+  });
+});
+
+describe("requireDateTime", () => {
+  const { requireDateTime } = require("../src/_lib/date-utils");
+
+  it("returns the DateTime for a value toDateTime can read", () => {
+    assert.strictEqual(
+      requireDateTime("2026-04-30T12:00:00Z", "archived_at", "a-post.mdx").toISO(),
+      "2026-04-30T12:00:00.000Z"
+    );
+  });
+
+  // The point of the helper: the file and the field are in the message, so a
+  // bad value is a build failure that names itself rather than a page, a URL
+  // or a <lastmod> spelling out "Invalid DateTime".
+  it("names the file and the field it could not read", () => {
+    assert.throws(
+      () => requireDateTime("2026-13-45", "archived_at", "a-post.mdx"),
+      /a-post\.mdx: cannot read archived_at "2026-13-45"/
+    );
+  });
+
+  // Every spelling `new Date` accepts and Luxon does not. These used to pass
+  // through as raw strings and be judged downstream by the other parser.
+  it("rejects the near-ISO spellings a second parser would have accepted", () => {
+    for (const value of ["2026-04-30 12:00", "April 30, 2026", "4/30/2026"]) {
+      assert.ok(!isNaN(new Date(value)), `precondition: new Date reads ${value}`);
+      assert.throws(() => requireDateTime(value, "archived_at", "a-post.mdx"), /cannot read/, value);
+    }
+  });
+});

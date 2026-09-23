@@ -1,11 +1,11 @@
 const fs = require("fs");
 const path = require("path");
-const slugify = require("slugify");
-const { DateTime } = require("luxon");
 const matter = require("gray-matter");
+const { normalizePost } = require("../_lib/post-data");
+const { DateTime } = require("../_lib/date-utils");
 
 const postsFolder = path.resolve(__dirname, "../posts");
-const now = new Date();
+const now = DateTime.now();
 
 const posts = fs
   .readdirSync(postsFolder)
@@ -14,7 +14,7 @@ const posts = fs
     const { data, content } = matter(
       fs.readFileSync(path.join(postsFolder, name), "utf8")
     );
-    return { ...data, body: content };
+    return normalizePost(data, content, name, now);
   })
   .sort((a, b) => {
     // Pinned posts come first, then sort by date
@@ -23,19 +23,5 @@ const posts = fs
     // Both pinned or both not pinned: sort by date
     return new Date(a.date) - new Date(b.date);
   });
-
-//FIXME: standardize slugify... can we set global configs?
-posts.forEach((p) => {
-  let urlDate = DateTime.fromISO(p.date, { zone: "utc" }).toFormat(
-    "yyyy-LL-dd"
-  );
-  let titleSlug = slugify(p.title, {
-    lower: true,
-    replacement: "-",
-    strict: true,
-  });
-  p.url = `/news/${urlDate}-${titleSlug}`;
-  p.archived = !!(p.archived_at && new Date(p.archived_at) <= now);
-});
 
 module.exports = posts;

@@ -37,6 +37,49 @@ function parseTimeString(timeStr) {
 }
 
 /**
+ * Normalize a date to a UTC DateTime.
+ *
+ * Dates arrive three ways: Tina's datetime field writes the value unquoted,
+ * which YAML parses as a timestamp and gray-matter surfaces as a JS Date; the
+ * older hand-written posts quote it, so it stays a string; and getNextMeeting
+ * puts a Luxon DateTime in template scope. Anything else — including a Date
+ * built from garbage, which is why this uses fromJSDate rather than
+ * toISOString() — comes back invalid rather than throwing. Check .isValid.
+ *
+ * Shared with post-url.js so a post's URL and its rendered date can never
+ * disagree about the same value.
+ *
+ * @param {Date|DateTime|string|*} value
+ * @returns {DateTime}
+ */
+function toDateTime(value) {
+  if (DateTime.isDateTime(value)) return value.setZone("utc");
+  if (value instanceof Date) return DateTime.fromJSDate(value, { zone: "utc" });
+  if (typeof value === "string") return DateTime.fromISO(value, { zone: "utc" });
+  return DateTime.invalid("not a Date, a DateTime, or an ISO string");
+}
+
+/**
+ * toDateTime, but a value it cannot read fails the build naming the field and
+ * the file it came from — never a page, a URL or a <lastmod> made out of the
+ * words "Invalid DateTime".
+ *
+ * @param {Date|DateTime|string|*} value
+ * @param {string} field - front matter key, for the message
+ * @param {string} fileName - the post's file name, for the message
+ * @returns {DateTime} always valid
+ */
+function requireDateTime(value, field, fileName) {
+  const dt = toDateTime(value);
+  if (!dt.isValid) {
+    throw new Error(
+      `${fileName}: cannot read ${field} ${JSON.stringify(value)} (${dt.invalidReason}).`
+    );
+  }
+  return dt;
+}
+
+/**
  * Factory function to create date filters for Eleventy.
  * Handles both Date objects and ISO strings, always uses UTC to avoid DST issues.
  *
@@ -47,10 +90,7 @@ function parseTimeString(timeStr) {
 function createDateFilter(formatter) {
   return (dateObj) => {
     if (!dateObj) return;
-    if (typeof dateObj.toISOString === "function") {
-      dateObj = dateObj.toISOString();
-    }
-    const dt = DateTime.fromISO(dateObj, { zone: "utc" });
+    const dt = toDateTime(dateObj);
     return typeof formatter === "string"
       ? dt.toFormat(formatter)
       : dt.toLocaleString(formatter);
@@ -178,6 +218,12 @@ const dateFilters = {
   // "2024-01-15" - HTML datetime attribute format
   htmlDateStringISO: createDateFilter("yyyy-LL-dd"),
 
+  // "2026-07-26T21:32:02Z" - RFC 3339 in UTC, for the Atom feed and JSON-LD.
+  // Liquid's own `date` filter formats in the build machine's local time, so
+  // pairing it with a hardcoded "Z" or "-08:00" stamped the wrong instant —
+  // and for a date-only value, the wrong calendar day.
+  isoDateTimeUTC: createDateFilter("yyyy-LL-dd'T'HH:mm:ss'Z'"),
+
   // "Jan 15, 2024" - medium format with year
   postDateTerseISO: createDateFilter(DateTime.DATE_MED),
 
@@ -186,6 +232,8 @@ const dateFilters = {
 };
 
 module.exports = {
+  toDateTime,
+  requireDateTime,
   createDateFilter,
   dateFilters,
   getNextMeetingDate,

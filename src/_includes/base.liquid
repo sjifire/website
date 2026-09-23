@@ -51,9 +51,14 @@
   {% comment %}RSS feed{% endcomment %}
     <link rel="alternate" type="application/atom+xml" title="{{ site.site_name | escape }} News Feed" href="{{ site.prodUrl | escape }}/news/feed.xml" />
   {% comment %}canonical URL{% endcomment %}
-    <link rel="canonical" href="{{ site.prodUrl | append: page.url | escape }}" />
+    {%- comment -%}
+      Percent-encoded for the same reason as the sitemap's <loc>: six published
+      post URLs carry a literal space. A no-op on every other page. Then
+      HTML-escaped, since encodeURI leaves "&" alone.
+    {%- endcomment -%}
+    <link rel="canonical" href="{{ site.prodUrl | append: page.url | uriPath | escape }}" />
   {% comment %}og{% endcomment %}
-    <meta property="og:url" content="{{ site.prodUrl | append: page.url | escape }}" key="ogurl" />
+    <meta property="og:url" content="{{ site.prodUrl | append: page.url | uriPath | escape }}" key="ogurl" />
     <meta property="og:type" content="website" />
     {%- if page.fileSlug == 'news-article' and post.featured_image and post.featured_image.source != "" -%}
       {%- assign ogImgPath = '/assets/media/' | append: post.featured_image.source -%}
@@ -180,8 +185,8 @@
     {%- endcomment -%}
     "headline": {{ post.title | jsonLd }},
     "description": {{ post.lede | plainText | default: post.title | jsonLd }},
-    "datePublished": "{{ post.date | date: '%Y-%m-%dT%H:%M:%S-08:00' }}",
-    "dateModified": "{{ post.date | date: '%Y-%m-%dT%H:%M:%S-08:00' }}",
+    "datePublished": "{{ post.date | isoDateTimeUTC }}",
+    "dateModified": "{{ post.date | isoDateTimeUTC }}",
     "author": {
       "@type": "Organization",
       "@id": {{ site.prodUrl | append: "/#organization" | jsonLd }}
@@ -191,7 +196,7 @@
     },
     "mainEntityOfPage": {
       "@type": "WebPage",
-      "@id": {{ site.prodUrl | append: page.url | jsonLd }}
+      "@id": {{ site.prodUrl | append: page.url | uriPath | jsonLd }}
     }
     {%- if post.featured_image and post.featured_image.source != "" -%}
     {%- assign articleImgPath = '/assets/media/' | append: post.featured_image.source -%}

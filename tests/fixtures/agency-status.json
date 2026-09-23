@@ -6,7 +6,8 @@
     { "slug": "residential", "label": "Residential Burn Permits", "state": "closed", "permitTypeSlug": "residential", "linkUrl": null, "section": null },
     { "slug": "commercial", "label": "Commercial Burn Permits", "state": "closed", "permitTypeSlug": "commercial", "linkUrl": null, "section": null },
     { "slug": "recreational-county", "label": "County lands", "state": "open", "permitTypeSlug": null, "linkUrl": null, "section": "recreational-fires" },
-    { "slug": "recreational-dnr", "label": "State Park & DNR lands", "state": "closed", "permitTypeSlug": null, "linkUrl": null, "section": "recreational-fires" },
+    { "slug": "recreational-state-parks", "label": "State Park lands", "state": "open", "permitTypeSlug": null, "linkUrl": null, "section": "recreational-fires" },
+    { "slug": "recreational-dnr", "label": "DNR lands", "state": "closed", "permitTypeSlug": null, "linkUrl": null, "section": "recreational-fires" },
     { "slug": "recreational-nps", "label": "National Park lands", "state": "closed", "permitTypeSlug": null, "linkUrl": null, "section": "recreational-fires" }
   ],
   "airQuality": {
