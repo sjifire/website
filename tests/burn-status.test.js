@@ -38,11 +38,24 @@ describe("Fire Safety widget config", () => {
   });
 
   it("redirects the retired burn page to the permits portal", () => {
-    for (const route of ["/services/burn-permits", "/services/burn-permits/"]) {
-      const rule = swa.routes.find((r) => r.route === route);
-      assert.ok(rule, `no route for ${route}`);
-      assert.strictEqual(rule.redirect, site.permits_url);
-      assert.strictEqual(rule.statusCode, 301);
+    // One rule covers both /services/burn-permits and its trailing-slash form.
+    const rule = swa.routes.find((r) => r.route === "/services/burn-permits");
+    assert.ok(rule, "no route for /services/burn-permits");
+    assert.strictEqual(rule.redirect, site.permits_url);
+    assert.strictEqual(rule.statusCode, 301);
+  });
+});
+
+describe("staticwebapp.config.json routes", () => {
+  // Azure treats /x and /x/ as the same route and rejects the whole deploy on
+  // a duplicate ("A rule was already processed with a duplicate route").
+  // Nothing local validates this file, so catch it here.
+  it("has no duplicate routes, ignoring a trailing slash", () => {
+    const seen = new Map();
+    for (const { route } of swa.routes) {
+      const key = route.length > 1 ? route.replace(/\/$/, "") : route;
+      assert.ok(!seen.has(key), `duplicate route: ${seen.get(key)} and ${route}`);
+      seen.set(key, route);
     }
   });
 });
