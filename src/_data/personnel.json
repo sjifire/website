@@ -1,10 +1,10 @@
 {
-  "count": 64,
+  "count": 65,
   "counts": {
     "fullTimeFirefighters": 12,
     "partTimeFirefighters": 7,
     "administrativeStaff": 2,
-    "volunteerFirefighters": 29,
+    "volunteerFirefighters": 30,
     "volunteerSupport": 13
   },
   "personnel": [
@@ -802,6 +802,18 @@
         "Apparatus Operator"
       ],
       "photo": null
+    },
+    {
+      "first_name": "Trevor",
+      "last_name": "Bolton",
+      "rank": null,
+      "title": null,
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [
+        "Firefighter"
+      ],
+      "photo": "/assets/media/personnel_imgs/trevor_bolton.jpg"
     }
   ]
 }
