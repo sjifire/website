@@ -18,5 +18,10 @@
     "repo": "website",
     "branch": "main"
   },
-  "burn_status_api": "https://permits.stationworks.app/v1/agencies/sjifire/status"
+  "permits_url": "https://permits.sjifire.org",
+  "burn_widget": {
+    "script": "https://permits.sjifire.org/widget/v1.js",
+    "agency_id": "019eacca-59bb-775a-b162-480458071490",
+    "key": "pk_live_M8qZPOsUGstZIQNVuI3lvmAgiboNp50r3w5Bxy"
+  }
 }

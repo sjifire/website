@@ -144,88 +144,47 @@ Personnel data and photos are synced daily from Microsoft 365 via Microsoft Grap
 npm run sync-personnel
 ```
 
-### Fire Safety Widget (Burn Status + Air Quality)
+### Fire Safety Widget and Burn Permits (StationWorks)
 
-The Fire Safety widget reads **live at runtime** from the StationWorks permits
-API. Nothing about it is baked in at build time.
+Burn permits, burn status, and outdoor-burning rules live in the StationWorks
+permits portal at **https://permits.sjifire.org**. The site has no burn page of
+its own: `/services/burn-permits` 301-redirects there (`staticwebapp.config.json`),
+and the homepage "Burn Permits" quick link points there too (`site.permits_url`).
 
-**Endpoint:** `https://permits.stationworks.app/v1/agencies/sjifire/status`
-(CORS-open, no API key,
-`cache-control: public, max-age=120, stale-while-revalidate=300`)
-
-Note the `stale-while-revalidate`: worst-case staleness is ~7 minutes, not 2.
-Inside the SWR window the browser serves the cached body immediately and
-revalidates in the background, so a status change made at the district can take
-up to 420s to reach a visitor. The widget has no cache-busting of its own -- the
-response headers do all the throttling.
-
-One response supplies the whole widget: burn season, fire danger, all five
-permit/recreational statuses, and air quality.
+The Fire Safety widget is the StationWorks `<burn-status>` embed
+(docs: https://developers.stationworks.app/embed). It fetches and renders
+**live at runtime** in the browser; nothing is baked in at build time. The
+widget shows the "Can I have a fire today?" verdict, fire danger, air quality,
+fire weather, red-flag/advisory banners, and every status row with the
+district's own labels and headings -- all configured in the StationWorks console,
+not here. StationWorks is ours, so widget changes (e.g. a "Get a permit" button)
+are made in the widget itself, not in this repo.
 
 **Files:**
-- `src/_data/site.json` - `burn_status_api` is the **canonical URL**. Everything
-  below derives from it.
-- `src/_includes/base.liquid` - starts the fetch during head parse and publishes
-  the URL as `window.__burnStatusEndpoint`. Derives the preconnect origin with
-  `| split: '/v1/' | first`, so that origin must match the CSP exactly.
-- `src/_includes/burn-status-widget.liquid` - renders structure only (row labels,
-  placeholder cells, `data-*` hooks). Contains no data references.
-- `src/js/burn-status.js` - fetches on every page load and patches the cells.
-  Maps the entire payload before touching the DOM, so the widget is never
-  half-patched. Carries a fallback copy of the URL that must track site.json.
-- `staticwebapp.config.json` - the CSP `connect-src` must list the API origin.
+- `src/_data/site.json` - `burn_widget` (`script`, `agency_id`, `key`) and
+  `permits_url`. The key is a publishable `pk_live_` key: safe in page source,
+  grants nothing. Keys are created/revoked in the console under Agency › API.
+- `src/_includes/burn-status-widget.liquid` - the embed markup plus a `<noscript>`
+  fallback. Uses `layout="compact"` (the sidebar layout, ~260px); drop it for
+  the full card if the widget ever goes in a main column. Rendered with `{% render ..., site: site %}` (render isolates scope).
+- `src/_includes/base.liquid` - preconnects to the script host and
+  `https://api.stationworks.app` on pages with `include_burn_widget`.
+- `src/css/site.css` - `burn-status { --burn-status-* }` theme. The widget draws
+  in a shadow root, so these custom properties are the **only** styling that
+  reaches it; ordinary selectors do nothing.
+- `staticwebapp.config.json` - CSP `script-src` must list the script origin and
+  `connect-src` must list `https://api.stationworks.app` (the widget's built-in
+  API endpoint).
 
-**Changing the endpoint touches three files** (site.json, burn-status.js's
-fallback literal, and the CSP `connect-src`). Only the first two are covered by
-tests: `eleventy --serve` sends no `globalHeaders`, so the CSP is enforced only
-on deployed Azure. Miss it and CI stays green while production shows "Live fire
-status unavailable" on every load.
+**The CSP is only enforced on deployed Azure** -- `eleventy --serve` sends no
+`globalHeaders`. A missing origin passes every e2e test and leaves a blank widget
+in production, so `tests/burn-status.test.js` checks the CSP and redirects
+statically against `site.json`.
 
-**Migration overlap (remove after ~2026-09):** `connect-src` currently lists both
-`permits.stationworks.app` and the retired `api.permits.stationworks.app`. The
-old host still serves an identical payload, so keeping it listed for one release
-means reverting `burn_status_api` alone is a working rollback. Drop the old
-origin once the new one has been stable in production.
-
-**There is no static fallback, deliberately.** If the API is unreachable the
-widget shows "Live fire status unavailable" with the office phone number. A
-stale committed baseline would instead show a confident wrong answer about
-burn permits, which is worse than admitting we don't know.
-
-**Enums** (confirmed with StationWorks):
-- `fireDanger`: `low`, `moderate`, `high`, `very_high`, `extreme`
-- `state`: `open`, `closed`, `restricted` - valid on **every** status row,
-  including residential and commercial permits
-
-Tokens are snake_case; the widget title-cases them for display (`very_high` ->
-"Very High") and slugifies them for the CSS class (`level--very-high`). One
-exception: `airQuality.category` arrives display-ready and is **never**
-title-cased, or EPA's "Unhealthy for Sensitive Groups" would render as
-"Unhealthy For Sensitive Groups".
-
-#### Deprecated: TinaCMS "Burn Status" and the AirNow pipeline
-
-`src/_data/burn_status.json` and `src/_data/air_quality.json` are **no longer read
-by the site.** They remain on disk, and the TinaCMS collection is still present
-but labelled `Burn Status (DEPRECATED — DO NOT EDIT)`.
-
-**Editing burn status in TinaCMS has no effect on the public site and produces no
-error.** Burn status is changed in the StationWorks permits system. Deleting the
-collection and both JSON files is a pending follow-up.
-
-`.github/workflows/update-air-quality.yml` and `scripts/generate-air-quality.mjs`
-are retained and manually runnable (`workflow_dispatch`), but **no longer run on a
-schedule**. The hourly cron produced 214 commits in 16 days -- roughly 13 site
-redeploys a day -- to maintain a number the browser now fetches directly.
-
-**Secrets** (only needed for a manual run):
-- From GitHub Secrets: `AIRNOW_API_KEY`, `DEPLOY_KEY`
-
-**Local Testing:**
-```bash
-export AIRNOW_API_KEY="your-api-key"
-npm run air-quality
-```
+The widget handles its own failure states ("Burn status is temporarily
+unavailable", or "not set up correctly" for a bad id/key, with the reason logged
+to the console). Smoke and carousel specs stub `**/widget/v1.js`;
+`tests/burn-status.spec.js` loads the real script and mocks only the API.
 
 ## Azure Key Vault
 

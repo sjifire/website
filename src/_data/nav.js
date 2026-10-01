@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const matter = require("gray-matter");
-const { buildHeaderHighlight } = require("../_lib/nav-utils");
+const { buildHeaderHighlight, mergeNavChildren } = require("../_lib/nav-utils");
 
 const pagesDir = path.resolve(__dirname, "../pages");
 const dataDir = __dirname;
@@ -111,7 +111,7 @@ const items = navigationConfig.map((item) => {
     return {
       label: item.label,
       folder: item.folder,
-      children: getPages(item.folder),
+      children: mergeNavChildren(getPages(item.folder), item.children),
     };
   }
   return item;

@@ -6,7 +6,6 @@
   },
   "scripts": {
     "stats": "node src/scripts/generate-stats.mjs",
-    "air-quality": "node scripts/generate-air-quality.mjs",
     "sync-personnel": "node scripts/sync-personnel.mjs",
     "cleanup-cloudinary": "node scripts/cleanup-cloudinary.mjs",
     "dev": "eleventy --serve --port=8080",

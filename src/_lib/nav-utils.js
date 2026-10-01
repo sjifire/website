@@ -33,4 +33,25 @@ function buildHeaderHighlight(url, configLabel, lookupPage) {
   return { ...pageInfo, label };
 }
 
-module.exports = { resolveHighlightLabel, buildHeaderHighlight };
+/**
+ * Merge an item's static children (Navigation pane in TinaCMS) into the pages
+ * auto-populated from its folder, ordered by nav_order. This is how a dropdown
+ * links somewhere that isn't a page here, e.g. Services -> the permits portal.
+ *
+ * A static child without nav_order sorts last, the same default pages get.
+ * Entries missing a label or url are dropped rather than rendered as dud links.
+ */
+function mergeNavChildren(pages, staticChildren) {
+  const extras = (staticChildren || [])
+    .filter((child) => child?.label && child?.url)
+    .map((child) => ({
+      label: child.label,
+      nav_title: child.label,
+      url: child.url,
+      nav_order: child.nav_order ?? 999,
+    }));
+  // Array#sort is stable, so equal nav_orders keep pages ahead of extras.
+  return [...pages, ...extras].sort((a, b) => a.nav_order - b.nav_order);
+}
+
+module.exports = { resolveHighlightLabel, buildHeaderHighlight, mergeNavChildren };

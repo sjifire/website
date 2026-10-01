@@ -49,81 +49,6 @@ export default defineConfig({
   schema: {
     collections: [
       {
-        name: "configBurnStatus",
-        label: "Burn Status (DEPRECATED — DO NOT EDIT)",
-        path: "src/_data",
-        format: "json",
-        match: {
-          include: "burn_status",
-        },
-        ui: {
-          allowedActions: {
-            create: false,
-            delete: false,
-          },
-        },
-        fields: [
-          {
-            type: "string",
-            name: "fire_status",
-            label: "Fire Danger Level",
-            description:
-              "⚠️ DEPRECATED — EDITS HERE NO LONGER APPEAR ON THE WEBSITE. " +
-              "The Fire Safety widget now reads live from the StationWorks permits " +
-              "system on every page load. Change burn status there, not here. " +
-              "Saving on this screen will succeed and change nothing public. " +
-              "This screen will be removed shortly.",
-            options: ["Low", "Moderate", "High", "Very High", "Extreme"],
-            required: true,
-          },
-          {
-            type: "datetime",
-            name: "burn_season_start",
-            label: "Burn Season Start",
-          },
-          {
-            type: "datetime",
-            name: "burn_season_end",
-            label: "Burn Season End",
-          },
-          {
-            type: "string",
-            name: "burn_ban_status",
-            label: "Residential Burn Permits Status",
-            options: ["Open", "Closed"],
-            required: true,
-          },
-          {
-            type: "string",
-            name: "commercial_burn_ban_status",
-            label: "Commercial Burn Permits Status",
-            options: ["Open", "Closed"],
-            required: true,
-          },
-          {
-            type: "string",
-            name: "rec_campfire_status",
-            label: "Recreational Fires (San Juan County)",
-            options: ["Open", "Restricted", "Closed"],
-            required: true,
-          },
-          {
-            type: "string",
-            name: "state_campfire_status",
-            label: "Recreational Fires (State Park & DNR)",
-            options: ["Open", "Restricted", "Closed"],
-            required: true,
-          },
-          {
-            type: "string",
-            name: "np_campfire_status",
-            label: "Recreational Fires (National Parks)",
-            options: ["Open", "Restricted", "Closed"],
-            required: true,
-          },
-        ],
-      },
-      {
         name: "configGovernanceMeeting",
         label: "Board Meeting Schedules",
         path: "src/_data",
@@ -918,7 +843,7 @@ export default defineConfig({
                 type: "object",
                 name: "children",
                 label: "Static Children",
-                description: "Manual child links (used when folder is not set)",
+                description: "Manual child links. With a folder set, these are merged into the folder's pages by Nav Order (e.g. an external link in the Services menu).",
                 list: true,
                 ui: {
                   itemProps: (item) => ({
@@ -937,6 +862,12 @@ export default defineConfig({
                     name: "url",
                     label: "URL",
                     required: true,
+                  },
+                  {
+                    type: "number",
+                    name: "nav_order",
+                    label: "Nav Order",
+                    description: "Position among the folder's pages (same scale as a page's Nav Order). Blank sorts last.",
                   },
                 ],
               },
