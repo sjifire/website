@@ -1,6 +1,6 @@
 const { describe, it } = require("node:test");
 const assert = require("node:assert");
-const { resolveHighlightLabel, buildHeaderHighlight } = require("../src/_lib/nav-utils");
+const { resolveHighlightLabel, buildHeaderHighlight, mergeNavChildren } = require("../src/_lib/nav-utils");
 
 describe("resolveHighlightLabel", () => {
   const pageInfo = { title: "Join Us", nav_title: "Volunteer" };
@@ -66,5 +66,38 @@ describe("buildHeaderHighlight", () => {
   it("returns null when the page resolves but yields no usable label", () => {
     const untitled = (url) => (url === "/join/" ? { url } : null);
     assert.strictEqual(buildHeaderHighlight("/join/", "", untitled), null);
+  });
+});
+
+describe("mergeNavChildren", () => {
+  const pages = [
+    { label: "Emergency", url: "/services/emergency/", nav_order: 1 },
+    { label: "Marine", url: "/services/marine/", nav_order: 4 },
+    { label: "Knox Box", url: "/services/knoxbox/", nav_order: 7 },
+  ];
+
+  it("returns the pages unchanged when there are no static children", () => {
+    assert.deepStrictEqual(mergeNavChildren(pages, undefined), pages);
+  });
+
+  it("slots an external link in by nav_order", () => {
+    const merged = mergeNavChildren(pages, [
+      { label: "Burn Information", url: "https://permits.sjifire.org", nav_order: 5 },
+    ]);
+    assert.deepStrictEqual(
+      merged.map((c) => c.label),
+      ["Emergency", "Marine", "Burn Information", "Knox Box"]
+    );
+    assert.strictEqual(merged[2].nav_title, "Burn Information");
+  });
+
+  it("sorts a static child without nav_order last", () => {
+    const merged = mergeNavChildren(pages, [{ label: "Extra", url: "https://example.org" }]);
+    assert.strictEqual(merged.at(-1).label, "Extra");
+  });
+
+  it("drops static children missing a label or url", () => {
+    const merged = mergeNavChildren(pages, [{ label: "No URL" }, { url: "https://x.org" }, null]);
+    assert.strictEqual(merged.length, pages.length);
   });
 });

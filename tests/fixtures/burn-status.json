@@ -1,0 +1,194 @@
+{
+    "agency": {
+        "id": "019eacca-59bb-775a-b162-480458071490",
+        "name": "San Juan Island Fire & Rescue",
+        "url": "https://permits.sjifire.org"
+    },
+    "verdict": {
+        "value": "open_limited",
+        "label": "Yes-Limited"
+    },
+    "season": {
+        "start": "2026-10-12",
+        "end": "2027-06-01"
+    },
+    "fireDanger": "low",
+    "statuses": [
+        {
+            "id": "c87e2b54-9fe3-407a-8832-80bb6b100b9d",
+            "label": "Within County",
+            "state": "open",
+            "kind": "informational",
+            "heading": "Recreational fires \u2014 no permit needed",
+            "description": "Small campfires \u2014 up to 3 ft across, attended, with water on hand.",
+            "stateReason": null,
+            "rulesMarkdown": "- 3 ft across or less, in a ring, pit, or bowl\n- Clean dry firewood or charcoal only\n- Someone attending the whole time\n- Water on hand \u2014 5 gallons or a charged hose\n- Keep at least 3 ft of clear space around the fire, and keep it well away from structures\n- Flames no higher than 3 ft\n- No yard waste, garbage, plastic, or painted wood \u2014 burning garbage can draw a fine\n- Burn barrels are never allowed, at any time \u2014 the Department of Ecology prohibits them\n- No fires when the wind is over 10 mph\n- Put it dead out before you leave it\n- No permit needed, year-round, except when a burn ban is in effect\n- State park, DNR, and private campground rules can differ \u2014 check the rules where you are staying\n- Propane and gas appliances are tracked separately below \u2014 charcoal is not one of them",
+            "source": null,
+            "linkUrl": null,
+            "permitId": null
+        },
+        {
+            "id": "12bcb280-5e74-4462-8e56-bc008930b26c",
+            "label": "Residential Burn Permits",
+            "state": "closed",
+            "kind": "permit",
+            "heading": null,
+            "description": null,
+            "stateReason": null,
+            "rulesMarkdown": null,
+            "source": null,
+            "linkUrl": null,
+            "permitId": "f5d6b64d-d5ec-4ac4-8bc3-01cf29cf10e5"
+        },
+        {
+            "id": "2eccabb7-6dcf-41bd-9dc2-302d546f14ab",
+            "label": "Commercial Burn Permits",
+            "state": "closed",
+            "kind": "permit",
+            "heading": null,
+            "description": null,
+            "stateReason": null,
+            "rulesMarkdown": null,
+            "source": null,
+            "linkUrl": null,
+            "permitId": "dcd8bb6e-8510-4d8e-8350-0dd829eb2270"
+        },
+        {
+            "id": "a8ffa329-e0d6-458c-b83d-e983abfe888a",
+            "label": "Propane & gas appliances",
+            "state": "open",
+            "kind": "informational",
+            "heading": "Recreational fires \u2014 no permit needed",
+            "description": "Self-contained propane and gas stoves, grills, and fire pits \u2014 tracked separately, so they can stay open under restrictions.",
+            "stateReason": null,
+            "rulesMarkdown": "- Propane and gas stoves, grills, and fire pits\n- No charcoal or briquettes\n- Over a non-flammable surface\n- 5 ft from anything that can burn\n- Self-contained propane or gas appliances, where the fuel shuts off at a valve\n- Charcoal, briquettes, and wood-burning BBQs are not gas appliances \u2014 they follow the recreational fire rules\n- This is tracked on its own, so it can stay available when recreational fires are restricted\n- Under the state burn ban, liquid-fueled and gas-fueled stoves and grills stay allowed (Proclamation 26-03)",
+            "source": null,
+            "linkUrl": null,
+            "permitId": null
+        },
+        {
+            "id": "5643d7f8-c47d-4917-8b19-125162334b1e",
+            "label": "DNR lands",
+            "state": "open",
+            "kind": "informational",
+            "heading": "Recreational fires \u2014 no permit needed",
+            "description": null,
+            "stateReason": null,
+            "rulesMarkdown": null,
+            "source": {
+                "url": "https://dnr.wa.gov/wildfire-resources/outdoor-burning/burn-restrictions",
+                "says": "Campfires, recreational fires, charcoal, and briquettes are AUTHORIZED.",
+                "staleSince": null
+            },
+            "linkUrl": null,
+            "permitId": null
+        },
+        {
+            "id": "8b6cb8e0-3719-42ee-888c-7980ad2ce524",
+            "label": "State Park lands",
+            "state": "closed",
+            "kind": "informational",
+            "heading": "Recreational fires \u2014 no permit needed",
+            "description": null,
+            "stateReason": null,
+            "rulesMarkdown": null,
+            "source": {
+                "url": "https://parks.wa.gov/find-parks/state-parks/lime-kiln-point-state-park",
+                "says": "No fires permitted at any time at Lime Kiln Point.",
+                "staleSince": null
+            },
+            "linkUrl": null,
+            "permitId": null
+        },
+        {
+            "id": "099a87e6-f796-46b8-96a7-2035a2a90f05",
+            "label": "National Park lands",
+            "state": "closed",
+            "kind": "informational",
+            "heading": "Recreational fires \u2014 no permit needed",
+            "description": null,
+            "stateReason": null,
+            "rulesMarkdown": null,
+            "source": {
+                "url": "https://www.nps.gov/sajh/",
+                "says": "Fire Ban in Effect \u2014 San Juan Island National Historical Park",
+                "staleSince": "2026-09-30T18:12:35.274Z"
+            },
+            "linkUrl": null,
+            "permitId": null
+        }
+    ],
+    "permits": [
+        {
+            "id": "f5d6b64d-d5ec-4ac4-8bc3-01cf29cf10e5",
+            "name": "Residential Burn Permit",
+            "description": "For piles up to 10 ft across and 6 ft tall \u2014 yard debris and brush at home. No inspection needed.",
+            "rulesMarkdown": "- Piles up to 10 ft across, 6 ft tall \u2014 one at a time\n- 50 ft from structures, 25 ft from property lines\n- An adult attending until it is dead out\n- Charged hose and shovel on site\n- Clear the ground to mineral earth \u2014 dirt, gravel, or rock \u2014 at least 4 ft out in every direction\n- Burn natural vegetation only. No garbage, paper, cardboard, plastics, rubber, treated wood, or petroleum\n- Fire danger LOW: burn any time of day. MODERATE: 6 am to noon, out by noon. HIGH or a burn ban: no burning\n- No burning when the wind is over 10 mph\n- Keep the signed permit on site \u2014 it is not valid without it\n- Runs through Jun 5, 2027. Burning is not allowed in an Urban Growth Area\n- If the fire escapes you are responsible for suppression costs and damage (RCW 52.12)",
+            "price": {
+                "amountCents": 1325,
+                "currency": "USD"
+            },
+            "validity": {
+                "kind": "season",
+                "start": "2026-10-12",
+                "end": "2027-06-05",
+                "maxDays": null
+            },
+            "requiresApproval": false,
+            "onSale": false,
+            "offSaleNote": "Burn season begins October 12.",
+            "statusId": "12bcb280-5e74-4462-8e56-bc008930b26c",
+            "buyUrl": "https://permits.sjifire.org/buy/residential"
+        },
+        {
+            "id": "dcd8bb6e-8510-4d8e-8350-0dd829eb2270",
+            "name": "Commercial Burn Permit",
+            "description": "For piles larger than 10 ft across or 6 ft tall \u2014 land clearing and bigger burns. The district inspects the site before you light.",
+            "rulesMarkdown": "- Site inspection required before you light\n- Piles up to 40 ft across \u2014 one at a time\n- 100 ft from structures, 50 ft from property lines\n- Excavator, shovel, and water on site\n- Required on site with an operator: a charged hose or water truck, an excavator, and a shovel\n- Without that equipment: two full 5-gallon buckets and a shovel, and piles are capped at 5 ft across\n- Clear the ground to mineral earth \u2014 dirt, gravel, or rock \u2014 at least 4 ft out in every direction\n- Burn natural vegetation only. No garbage, plastics, treated wood, petroleum, or hazardous material\n- Fire danger LOW: burn any time of day. MODERATE: 6 am to noon, out by noon. HIGH or a burn ban: no burning\n- No burning when the wind is over 10 mph\n- An adult must attend the fire until it is dead out\n- Keep the signed permit on site \u2014 it is not valid without it\n- No commercial burning after Jun 1, 2027, and none in an Urban Growth Area\n- If the fire escapes you are responsible for suppression costs and damage (RCW 52.12)",
+            "price": {
+                "amountCents": 31800,
+                "currency": "USD"
+            },
+            "validity": {
+                "kind": "project",
+                "start": null,
+                "end": null,
+                "maxDays": 30
+            },
+            "requiresApproval": true,
+            "onSale": false,
+            "offSaleNote": "Burn season begins October 12.",
+            "statusId": "2eccabb7-6dcf-41bd-9dc2-302d546f14ab",
+            "buyUrl": "https://permits.sjifire.org/buy/commercial"
+        }
+    ],
+    "airQuality": {
+        "station": "Anacortes",
+        "pm25Aqi": 26,
+        "category": "Good",
+        "categoryNumber": 1,
+        "observedAt": "2026-10-01T05:00:00.000Z",
+        "linkUrl": "https://www.airnow.gov/?reportingArea=Anacortes&stateCode=WA",
+        "ozoneAqi": 19,
+        "pm10Aqi": null
+    },
+    "fireWeather": {
+        "windMph": 1,
+        "windGustMph": 2,
+        "windDirectionDeg": 330,
+        "windDirectionCardinal": "NNW",
+        "tempF": 49,
+        "dewpointF": 46,
+        "relativeHumidityPct": 89,
+        "twentyFootWindMph": 1,
+        "twentyFootWindDirectionDeg": 340,
+        "twentyFootWindDirectionCardinal": "NNW",
+        "mixingHeightFt": 430,
+        "transportWindMph": 5,
+        "sunrise": "2026-09-30T07:10:51-07:00",
+        "sunset": "2026-09-30T18:53:29-07:00",
+        "redFlagWarning": null,
+        "advisories": []
+    },
+    "generatedAt": "2026-10-01T05:44:39.138Z"
+}

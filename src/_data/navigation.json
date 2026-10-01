@@ -18,7 +18,14 @@
     },
     {
       "label": "Services",
-      "folder": "services"
+      "folder": "services",
+      "children": [
+        {
+          "label": "Burn Information",
+          "url": "https://permits.sjifire.org",
+          "nav_order": 5
+        }
+      ]
     },
     {
       "label": "Gallery",

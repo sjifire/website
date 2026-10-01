@@ -19,6 +19,9 @@ eleventyExcludeFromCollections: true
   {%- for item in nav.items %}
     {%- if item.children and item.children.size > 0 %}
       {%- for child in item.children %}
+        {%- comment %}Off-site links (e.g. the permits portal) aren't ours to list.{% endcomment %}
+        {%- assign first_char = child.url | slice: 0 %}
+        {%- if first_char != '/' %}{% continue %}{% endif %}
   <url>
     <loc>{{ site.prodUrl | append: child.url | uriPath }}</loc>
     <changefreq>weekly</changefreq>

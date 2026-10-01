@@ -2,130 +2,92 @@ import { test, expect } from "@playwright/test";
 import fs from "node:fs";
 import path from "node:path";
 
-// Read the endpoint rather than restating it, so changing the host does not
-// mean editing this file too. Note what this does NOT buy: because everything
-// here derives from site.json, a host that is simply wrong stays internally
-// consistent and still passes. Cross-file drift is caught statically in
-// burn-status.test.js; that the host is *correct* is only ever provable
-// against the live API.
-//
 // __dirname, not import.meta.url: package.json has no "type": "module", so
 // Playwright transpiles this spec to CJS and import.meta does not survive.
-const BURN_STATUS_API = JSON.parse(
+const site = JSON.parse(
   fs.readFileSync(path.join(__dirname, "../src/_data/site.json"), "utf-8")
-).burn_status_api;
+);
+const WIDGET = site.burn_widget;
 
-// The route pattern is the full URL, so interception is host-pinned.
-const ENDPOINT = BURN_STATUS_API;
+// The real widget script is loaded from permits.sjifire.org; only its API
+// call is mocked, so these tests prove our embed markup actually boots it.
+const API = "https://api.stationworks.app/v1/permits/agencies/**";
 
-// Mirrors base.liquid's `| split: '/v1/' | first`, which is what the preconnect
-// href and the CSP connect-src origin both have to agree with.
-const API_ORIGIN = BURN_STATUS_API.split("/v1/")[0];
+// A recorded real response, not a hand-written one: the widget validates the
+// payload and renders "temporarily unavailable" for anything short of the
+// real contract, which a hand-written mock drifts from as the API grows.
+// Re-record with: curl "<api>/v1/permits/agencies/<id>/status?key=<key>"
+const PAYLOAD = JSON.parse(
+  fs.readFileSync(path.join(__dirname, "fixtures/burn-status.json"), "utf-8")
+);
 
-const PAYLOAD = {
-  agency: { slug: "sjifire", displayName: "San Juan Island Fire & Rescue" },
-  season: { start: "2026-10-06", end: "2027-06-05" },
-  fireDanger: "very_high",
-  statuses: [
-    { slug: "residential", label: "Residential Burn Permits", state: "restricted" },
-    { slug: "commercial", label: "Commercial Burn Permits", state: "closed" },
-    { slug: "recreational-county", label: "County lands", state: "open" },
-    { slug: "recreational-state-parks", label: "State Park lands", state: "closed" },
-    { slug: "recreational-dnr", label: "DNR lands", state: "closed" },
-    { slug: "recreational-nps", label: "National Park lands", state: "closed" },
-  ],
-  airQuality: {
-    station: "Anacortes",
-    pm25Aqi: 17,
-    category: "Good",
-    linkUrl: "https://www.airnow.gov/?reportingArea=Anacortes&stateCode=WA",
-  },
-};
-
-// The widget renders on the homepage and in the sidebar of interior pages.
-const PAGES = [
-  { path: "/", name: "homepage" },
-  { path: "/services/burn-permits/", name: "sidebar page" },
-];
+// The widget renders on the homepage and in the sidebar of any page with
+// include_burn_widget; the homepage is the only page that sets it today.
+const PAGES = [{ path: "/", name: "homepage" }];
 
 test.describe("Fire Safety widget", () => {
   for (const target of PAGES) {
-    test(`fills every row on the ${target.name}`, async ({ page }) => {
-      await page.route(ENDPOINT, (route) =>
-        route.fulfill({ json: PAYLOAD })
-      );
+    test(`embeds and renders on the ${target.name}`, async ({ page }) => {
+      let requested;
+      await page.route(API, (route) => {
+        requested = route.request().url();
+        return route.fulfill({ json: PAYLOAD });
+      });
       await page.goto(target.path);
 
-      const widget = page.locator("[data-burn-status]");
+      const widget = page.locator("burn-status");
+      await expect(widget).toHaveCount(1);
+      await expect(widget).toHaveAttribute("agency-id", WIDGET.agency_id);
+      await expect(widget).toHaveAttribute("key", WIDGET.key);
+      // Every placement is a sidebar; the full card is for main columns.
+      await expect(widget).toHaveAttribute("layout", "compact");
+      await expect(page.locator(`script[src="${WIDGET.script}"]`)).toHaveCount(1);
 
-      await expect(widget.locator('[data-row="fire-danger"]'))
-        .toHaveText("Very High");
-      await expect(widget.locator('[data-row="fire-danger"]'))
-        .toHaveClass(/level--very-high/);
-      await expect(widget.locator('[data-row="residential"]'))
-        .toHaveText("Restricted");
-      await expect(widget.locator('[data-row="residential"]'))
-        .toHaveClass(/level--restricted/);
-      await expect(widget.locator('[data-row="recreational-county"]'))
-        .toHaveText("Open");
-      await expect(widget.locator("[data-season-range]"))
-        .toHaveText("Oct 6-Jun 5");
-      await expect(widget.locator("[data-aqi-score]")).toHaveText("17");
-      await expect(widget).not.toHaveAttribute("aria-busy", "true");
-
-      // No placeholder survives a successful load.
-      await expect(widget.locator(".level--unknown")).toHaveCount(0);
+      // Playwright locators pierce open shadow roots.
+      await expect(widget.getByText("Can I have a fire today?")).toBeVisible();
+      await expect(widget.getByText("Residential Burn Permits")).toBeVisible();
+      expect(requested).toContain(WIDGET.agency_id);
     });
   }
 
-  const FAILURES = [
-    ["a 500", (route) => route.fulfill({ status: 500, body: "nope" })],
-    ["a garbage body", (route) =>
-      route.fulfill({ status: 200, contentType: "application/json", body: "{{{" })],
-    ["an aborted request", (route) => route.abort()],
-  ];
-
-  for (const [label, handler] of FAILURES) {
-    test(`shows the warning on ${label}`, async ({ page }) => {
-      await page.route(ENDPOINT, handler);
-      await page.goto("/");
-
-      const warning = page.locator(".widget__warning");
-      await expect(warning).toBeVisible();
-      await expect(warning).toContainText("Live fire status unavailable");
-      await expect(warning.locator('a[href="tel:+13603785334"]')).toBeVisible();
-      await expect(page.locator("[data-burn-status]"))
-        .not.toHaveAttribute("aria-busy", "true");
-      // Never blank, never half-filled.
-      await expect(page.locator("[data-row]")).toHaveCount(0);
-    });
-  }
-
-  test("removes the AQI href instead of leaving a dud href=\"#\" when linkUrl is null", async ({ page }) => {
-    await page.route(ENDPOINT, (route) =>
-      route.fulfill({ json: { ...PAYLOAD, airQuality: { ...PAYLOAD.airQuality, linkUrl: null } } })
-    );
+  test("shows the fallback notice when the widget script can't load", async ({ page }) => {
+    await page.route("**/widget/v1.js", (route) => route.abort());
     await page.goto("/");
 
-    const link = page.locator("[data-aqi-link]");
-    await expect(link).toBeVisible();
-    expect(await link.getAttribute("href")).toBeNull();
+    const notice = page.locator("[data-burn-fallback]");
+    await expect(notice).toBeVisible();
+    await expect(notice).toContainText("Live fire status unavailable");
+    await expect(notice.locator('a[href="tel:+13603785334"]')).toBeVisible();
+    await expect(notice.locator(`a[href="${site.permits_url}"]`)).toBeVisible();
   });
 
-  test("never writes a javascript: URL from the API into the AQI href", async ({ page }) => {
-    await page.route(ENDPOINT, (route) =>
-      route.fulfill({
-        json: {
-          ...PAYLOAD,
-          airQuality: { ...PAYLOAD.airQuality, linkUrl: "javascript:alert(document.cookie)" },
-        },
-      })
-    );
+  test("keeps the fallback notice hidden when the widget loads", async ({ page }) => {
+    await page.route(API, (route) => route.fulfill({ json: PAYLOAD }));
     await page.goto("/");
 
-    const link = page.locator("[data-aqi-link]");
-    await expect(link).toBeVisible();
-    expect(await link.getAttribute("href")).toBeNull();
+    await expect(page.locator("burn-status").getByText("Can I have a fire today?")).toBeVisible();
+    await expect(page.locator("[data-burn-fallback]")).toBeHidden();
+  });
+
+  test("preconnects to both embed hosts only on widget pages", async ({ page }) => {
+    await page.route(API, (route) => route.fulfill({ json: PAYLOAD }));
+    const scriptOrigin = new URL(WIDGET.script).origin;
+
+    await page.goto("/");
+    await expect(page.locator(`head link[rel=preconnect][href="${scriptOrigin}"]`)).toHaveCount(1);
+    await expect(page.locator('head link[rel=preconnect][href="https://api.stationworks.app"]')).toHaveCount(1);
+
+    await page.goto("/contact/");
+    await expect(page.locator("burn-status")).toHaveCount(0);
+    await expect(page.locator(`head link[rel=preconnect][href="${scriptOrigin}"]`)).toHaveCount(0);
+  });
+
+  test("homepage Burn Permits quick link goes to the permits portal", async ({ page }) => {
+    await page.route(API, (route) => route.fulfill({ json: PAYLOAD }));
+    await page.goto("/");
+    await expect(
+      page.locator(".quick-actions-box__body a", { hasText: "Burn Permits" })
+    ).toHaveAttribute("href", site.permits_url);
   });
 });
 
@@ -135,75 +97,12 @@ test.describe("Fire Safety widget, JavaScript disabled", () => {
   test("shows the static no-JS fallback with a working phone and permits link", async ({ page }) => {
     await page.goto("/");
 
-    const notice = page.locator(".widget__notice--burn-status");
+    // The <noscript> copy; the [data-burn-fallback] one stays hidden with JS off.
+    const notice = page.locator(".widget__notice:not([data-burn-fallback])", {
+      hasText: "Live fire status unavailable",
+    });
     await expect(notice).toBeVisible();
-    await expect(notice).toContainText("Live fire status unavailable");
     await expect(notice.locator('a[href="tel:+13603785334"]')).toBeVisible();
-    await expect(notice.locator('a[href="/services/burn-permits/"]')).toBeVisible();
-
-    // The un-patched table is still there, but nothing claims to be busy --
-    // no JS ran, so nothing ever set aria-busy in the first place.
-    await expect(page.locator("[data-burn-status]"))
-      .not.toHaveAttribute("aria-busy", "true");
-  });
-});
-
-test.describe("Head-started request", () => {
-  // Both pages that render the widget. /services/burn-permits/ goes through the
-  // layout: page -> layout: base chain, which is the case the head snippet's
-  // gating can silently miss.
-  for (const target of PAGES) {
-    test(`starts the request before the deferred script on the ${target.name}`, async ({ page }) => {
-      let apiCalls = 0;
-      await page.route(ENDPOINT, (route) => {
-        apiCalls += 1;
-        return route.fulfill({ json: PAYLOAD });
-      });
-
-      await page.goto(target.path, { waitUntil: "load" });
-
-      // The real claim: the request starts before /js/burn-status.js has even
-      // finished downloading. Comparing against DOMContentLoaded proves nothing
-      // -- deferred scripts already run before DCL, so that assertion holds
-      // even with the head snippet deleted.
-      const timing = await page.evaluate((endpoint) => {
-        const r = performance.getEntriesByType("resource");
-        const api = r.find((e) => e.name === endpoint);
-        const js = r.find((e) => e.name.includes("burn-status.js"));
-        return api && js ? { apiStart: api.startTime, jsEnd: js.responseEnd } : null;
-      }, BURN_STATUS_API);
-      expect(timing, "expected both the API request and the script").not.toBeNull();
-      expect(
-        timing.apiStart,
-        "API request must start before burn-status.js finishes loading"
-      ).toBeLessThan(timing.jsEnd);
-
-      // Exactly one request: the head snippet's, reused by the script.
-      expect(apiCalls, "head-started request must be reused, not duplicated").toBe(1);
-
-      await expect(
-        page.locator(`head link[rel=preconnect][href="${API_ORIGIN}"]`)
-      ).toHaveCount(1);
-      await expect(page.locator('[data-row="fire-danger"]')).toHaveText("Very High");
-    });
-  }
-
-  test("omits the head snippet on pages without the widget", async ({ page }) => {
-    let apiCalls = 0;
-    await page.route(ENDPOINT, (route) => {
-      apiCalls += 1;
-      return route.fulfill({ json: PAYLOAD });
-    });
-
-    await page.goto("/contact/");
-
-    await expect(page.locator("[data-burn-status]")).toHaveCount(0);
-    await expect(
-      page.locator('head link[rel=preconnect][href*="permits.stationworks"]')
-    ).toHaveCount(0);
-    expect(
-      await page.evaluate(() => window.__burnStatusFetch === undefined)
-    ).toBe(true);
-    expect(apiCalls, "a page without the widget must not call the API").toBe(0);
+    await expect(notice.locator(`a[href="${site.permits_url}"]`)).toBeVisible();
   });
 });

@@ -2,7 +2,7 @@
 title: San Juan Island Fire and Rescue
 permalink: /
 layout: base
-# Signals base.liquid to preconnect and start the burn-status fetch in <head>.
+# Signals base.liquid to preconnect to the burn-status embed's hosts.
 # The homepage renders the widget directly (below) rather than via page.liquid,
 # so it needs the flag set explicitly; layout: base means this cannot
 # double-render the widget the way it would under layout: page.
@@ -16,7 +16,7 @@ scripts: '<script src="/js/carousel.js" defer></script>'
       <h2>Quick Links</h2>
     </header>
     <nav class="quick-actions-box__body" aria-label="Quick links">
-      <a href="/services/burn-permits/" class="btn btn-primary">
+      <a href="{{ site.permits_url }}" class="btn btn-primary">
         <svg><use xlink:href="#flame"></use></svg>
         Burn Permits
       </a>
@@ -112,7 +112,7 @@ scripts: '<script src="/js/carousel.js" defer></script>'
 
   <aside class="l-grid__sidebar">
     <div class="sidebar-block">
-      {% render "burn-status-widget.liquid", page: page %}
+      {% render "burn-status-widget.liquid", site: site %}
     </div>
     <div class="sidebar-block">
       {% render "call-stats-widget.liquid", stats: stats, page: page %}

@@ -1320,14 +1320,6 @@ body {
   background-color: var(--lt-gray);
 }
 
-/* Burn-status widget stripes by position among *visible* rows -- the Air
-   Quality row stays in the DOM with [hidden] rather than being removed, and
-   plain :nth-of-type counts it regardless of visibility, which would leave
-   two adjacent visible rows sharing a background when it's hidden. */
-.widget--burn-status .widget__body tr:nth-child(odd of :not([hidden])) {
-  background-color: var(--lt-gray);
-}
-
 .widget__body th,
 .widget__body td {
   border-bottom: 1px solid #d1d5d9;
@@ -1359,118 +1351,40 @@ body {
   font-weight: 300;
 }
 
-.widget--burn-status .widget__body th {
-  padding: 15px 15px 15px 5px;
+/* Fire Safety widget: our .widget card and header around the StationWorks
+   <burn-status> embed. The embed renders in a shadow root, so these custom
+   properties are the only styling that reaches it. */
+.widget--burn-status {
+  overflow: hidden;
+  background-color: #fff;
 }
 
-.widget__body .level {
-  font-weight: 600;
-}
-
-.widget__body .level--low,
-.widget__body .level--open {
-  background-color: #cee8ce;
-  color: #206220;
-}
-
-.widget__body .level--moderate {
-  background-color: #fff3cd;
-  color: #856404;
-}
-
-.widget__body .level--high,
-.widget__body .level--very-high,
-.widget__body .level--restricted,
-.widget__body .level--closed {
-  background-color: #ffe0e0;
-  color: var(--bright-red);
-}
-
-.widget__body .level--extreme {
-  background-color: black;
-  color: white;
-}
-
-/* EPA AQI categories (air quality / smoke) */
-.widget__body .level--aqi-good {
-  background-color: #cee8ce;
-  color: #206220;
-}
-
-.widget__body .level--aqi-moderate {
-  background-color: #fff3cd;
-  color: #856404;
-}
-
-.widget__body .level--aqi-unhealthy-for-sensitive-groups {
-  background-color: #ffe3c2;
-  color: #8a4b00;
-}
-
-.widget__body .level--aqi-unhealthy {
-  background-color: #ffe0e0;
-  color: var(--bright-red);
-}
-
-.widget__body .level--aqi-very-unhealthy {
-  background-color: #e7d5f0;
-  color: #6b2a86;
-}
-
-.widget__body .level--aqi-hazardous {
-  background-color: #4a0d18;
-  color: white;
-}
-
-/* Placeholder shown before the live fetch resolves */
-.widget__body .level--unknown {
-  background-color: #f0f0f0;
-  color: #6b6b6b;
-  font-weight: 400;
-}
-
-/* Shown when the live status API is unreachable */
-.widget__body .widget__warning {
-  padding: 15px 5px;
-  font-size: 0.9em;
-  line-height: 1.4;
-  color: #6b6b6b;
-  text-align: left;
-  text-transform: none;
-}
-
-.widget__body .widget__warning a {
+.widget--burn-status .widget__title {
   color: inherit;
-  text-decoration: underline;
 }
 
-.widget__body .level a {
-  color: inherit;
-  text-decoration: none;
+.widget--burn-status .widget__notice {
+  margin: 15px;
 }
 
-.widget__body .level a:hover .level__score,
-.widget__body .level a:focus .level__score {
-  text-decoration: underline;
-}
-
-.widget__nowrap {
-  white-space: nowrap;
-}
-
-.widget__body .level__score {
+burn-status {
   display: block;
-  font-size: 26px;
-  font-weight: 700;
-  line-height: 1.1;
-}
 
-.widget__body .level__label {
-  display: block;
-  margin-top: 2px;
-  font-size: 0.62rem;
-  font-weight: 600;
-  letter-spacing: 0.03em;
+  /* The embed draws its own bordered, rounded card. Square it off and pull
+     it 1px past every edge so the clipped wrapper hides that outer border
+     and the embed sits flush under our header. Its inner dividers stay. */
+  margin: -1px;
+
+  --burn-status-font-family: var(--ff-sans);
+  --burn-status-color-text: var(--black);
+  --burn-status-color-bg: #fff;
+  --burn-status-color-border: var(--rule-gray);
+  --burn-status-radius: 0;
+  --burn-status-color-accent: var(--blue);
+  --burn-status-color-open: #206220;
+  --burn-status-color-closed: var(--bright-red);
+  --burn-status-color-restricted: #856404;
+  --burn-status-color-redflag-text: var(--bright-red);
 }
 
 .widget__foot td {
