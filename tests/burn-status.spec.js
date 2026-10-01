@@ -55,6 +55,25 @@ test.describe("Fire Safety widget", () => {
     });
   }
 
+  test("shows the fallback notice when the widget script can't load", async ({ page }) => {
+    await page.route("**/widget/v1.js", (route) => route.abort());
+    await page.goto("/");
+
+    const notice = page.locator("[data-burn-fallback]");
+    await expect(notice).toBeVisible();
+    await expect(notice).toContainText("Live fire status unavailable");
+    await expect(notice.locator('a[href="tel:+13603785334"]')).toBeVisible();
+    await expect(notice.locator(`a[href="${site.permits_url}"]`)).toBeVisible();
+  });
+
+  test("keeps the fallback notice hidden when the widget loads", async ({ page }) => {
+    await page.route(API, (route) => route.fulfill({ json: PAYLOAD }));
+    await page.goto("/");
+
+    await expect(page.locator("burn-status").getByText("Can I have a fire today?")).toBeVisible();
+    await expect(page.locator("[data-burn-fallback]")).toBeHidden();
+  });
+
   test("preconnects to both embed hosts only on widget pages", async ({ page }) => {
     await page.route(API, (route) => route.fulfill({ json: PAYLOAD }));
     const scriptOrigin = new URL(WIDGET.script).origin;
@@ -83,7 +102,10 @@ test.describe("Fire Safety widget, JavaScript disabled", () => {
   test("shows the static no-JS fallback with a working phone and permits link", async ({ page }) => {
     await page.goto("/");
 
-    const notice = page.locator(".widget__notice", { hasText: "Live fire status unavailable" });
+    // The <noscript> copy; the [data-burn-fallback] one stays hidden with JS off.
+    const notice = page.locator(".widget__notice:not([data-burn-fallback])", {
+      hasText: "Live fire status unavailable",
+    });
     await expect(notice).toBeVisible();
     await expect(notice.locator('a[href="tel:+13603785334"]')).toBeVisible();
     await expect(notice.locator(`a[href="${site.permits_url}"]`)).toBeVisible();

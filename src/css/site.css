@@ -1367,7 +1367,11 @@ burn-status {
   --burn-status-color-closed: var(--bright-red);
   --burn-status-color-restricted: #856404;
   --burn-status-color-redflag-text: var(--bright-red);
+}
 
+/* Only once the script has defined the element -- if it never loads, an
+   empty shadowed box would sit above the fallback notice. */
+burn-status:defined {
   box-shadow: 2px 2px 8px rgb(0, 0, 0, 0.2);
   border-radius: 12px;
 }

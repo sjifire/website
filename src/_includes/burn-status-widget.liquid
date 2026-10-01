@@ -4,18 +4,28 @@
   reach in -- theme it only through the --burn-status-* variables in site.css.
   Config (script, agency id, publishable key) lives in site.json burn_widget.
   The key is a publishable pk_live_ key: it identifies the site, grants nothing.
+
+  Once the script loads, the widget handles its own API failures. The fallback
+  notice covers the cases it can't: the script itself failing to load (portal
+  down, content blocker) via onerror, and JavaScript off via <noscript>.
 {%- endcomment -%}
+{%- capture burn_fallback -%}
+  &#9888; Live fire status unavailable. Call
+  <a href="tel:+13603785334">(360) 378-5334</a>
+  or see
+  <a href="{{ site.permits_url }}">Burn Permits &rsaquo;</a>
+{%- endcapture -%}
 <burn-status
   agency-id="{{ site.burn_widget.agency_id }}"
   key="{{ site.burn_widget.key }}"
   layout="compact"
 ></burn-status>
+<p class="widget__notice" data-burn-fallback hidden>{{ burn_fallback }}</p>
 <noscript>
-  <p class="widget__notice">
-    &#9888; Live fire status unavailable. Call
-    <a href="tel:+13603785334">(360) 378-5334</a>
-    or see
-    <a href="{{ site.permits_url }}">Burn Permits &rsaquo;</a>
-  </p>
+  <p class="widget__notice">{{ burn_fallback }}</p>
 </noscript>
-<script async src="{{ site.burn_widget.script }}"></script>
+<script
+  async
+  src="{{ site.burn_widget.script }}"
+  onerror="document.querySelectorAll('[data-burn-fallback]').forEach(function (el) { el.hidden = false; })"
+></script>
