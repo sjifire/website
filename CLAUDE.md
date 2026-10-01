@@ -164,14 +164,19 @@ are made in the widget itself, not in this repo.
 - `src/_data/site.json` - `burn_widget` (`script`, `agency_id`, `key`) and
   `permits_url`. The key is a publishable `pk_live_` key: safe in page source,
   grants nothing. Keys are created/revoked in the console under Agency › API.
-- `src/_includes/burn-status-widget.liquid` - the embed markup plus a `<noscript>`
-  fallback. Uses `layout="compact"` (the sidebar layout, ~260px); drop it for
-  the full card if the widget ever goes in a main column. Rendered with `{% render ..., site: site %}` (render isolates scope).
+- `src/_includes/burn-status-widget.liquid` - our `.widget` card with the blue
+  "Fire Safety" header (same classes as the Response Statistics widget), the
+  embed inside it, and the script-failure / `<noscript>` fallbacks. Uses
+  `layout="compact"` (the sidebar layout, ~260px); drop it for the full card if
+  the widget ever goes in a main column. Rendered with
+  `{% render ..., site: site %}` (render isolates scope).
 - `src/_includes/base.liquid` - preconnects to the script host and
   `https://api.stationworks.app` on pages with `include_burn_widget`.
 - `src/css/site.css` - `burn-status { --burn-status-* }` theme. The widget draws
   in a shadow root, so these custom properties are the **only** styling that
-  reaches it; ordinary selectors do nothing.
+  reaches it; ordinary selectors do nothing. Its own card is squared off
+  (`--burn-status-radius: 0`) and pulled 1px past the clipped `.widget` wrapper
+  so its outer border disappears and it sits flush under our header.
 - `staticwebapp.config.json` - CSP `script-src` must list the script origin and
   `connect-src` must list `https://api.stationworks.app` (the widget's built-in
   API endpoint).
@@ -184,7 +189,10 @@ statically against `site.json`.
 The widget handles its own failure states ("Burn status is temporarily
 unavailable", or "not set up correctly" for a bad id/key, with the reason logged
 to the console). Smoke and carousel specs stub `**/widget/v1.js`;
-`tests/burn-status.spec.js` loads the real script and mocks only the API.
+`tests/burn-status.spec.js` loads the real script and mocks only the API, with a
+recorded real response (`tests/fixtures/burn-status.json`). The widget rejects
+payloads that don't match its contract, so if a widget update makes that spec
+show "temporarily unavailable", re-record the fixture from the live API.
 
 ## Azure Key Vault
 

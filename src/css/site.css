@@ -1351,29 +1351,40 @@ body {
   font-weight: 300;
 }
 
-/* Fire Safety widget: the StationWorks <burn-status> embed renders in a
-   shadow root, so these custom properties are the only styling that reaches
-   it. Matched to the other sidebar widgets (blue header, red flame). */
+/* Fire Safety widget: our .widget card and header around the StationWorks
+   <burn-status> embed. The embed renders in a shadow root, so these custom
+   properties are the only styling that reaches it. */
+.widget--burn-status {
+  overflow: hidden;
+  background-color: #fff;
+}
+
+.widget--burn-status .widget__title {
+  color: inherit;
+}
+
+.widget--burn-status .widget__notice {
+  margin: 15px;
+}
+
 burn-status {
   display: block;
+
+  /* The embed draws its own bordered, rounded card. Square it off and pull
+     it 1px past every edge so the clipped wrapper hides that outer border
+     and the embed sits flush under our header. Its inner dividers stay. */
+  margin: -1px;
 
   --burn-status-font-family: var(--ff-sans);
   --burn-status-color-text: var(--black);
   --burn-status-color-bg: #fff;
   --burn-status-color-border: var(--rule-gray);
-  --burn-status-radius: 12px;
+  --burn-status-radius: 0;
   --burn-status-color-accent: var(--blue);
   --burn-status-color-open: #206220;
   --burn-status-color-closed: var(--bright-red);
   --burn-status-color-restricted: #856404;
   --burn-status-color-redflag-text: var(--bright-red);
-}
-
-/* Only once the script has defined the element -- if it never loads, an
-   empty shadowed box would sit above the fallback notice. */
-burn-status:defined {
-  box-shadow: 2px 2px 8px rgb(0, 0, 0, 0.2);
-  border-radius: 12px;
 }
 
 .widget__foot td {

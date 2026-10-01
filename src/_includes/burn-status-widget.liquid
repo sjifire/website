@@ -1,7 +1,9 @@
 {%- comment -%}
-  Fire Safety widget: the StationWorks <burn-status> embed, rendered and kept
-  live by permits.sjifire.org. It draws in a shadow root, so site.css cannot
-  reach in -- theme it only through the --burn-status-* variables in site.css.
+  Fire Safety widget: our own card header around the StationWorks
+  <burn-status> embed, rendered and kept live by permits.sjifire.org. The embed
+  draws in a shadow root, so site.css cannot reach in -- theme it only through
+  the --burn-status-* variables in site.css, which also strip its own card
+  chrome so it sits flush under our header.
   Config (script, agency id, publishable key) lives in site.json burn_widget.
   The key is a publishable pk_live_ key: it identifies the site, grants nothing.
 
@@ -15,15 +17,25 @@
   or see
   <a href="{{ site.permits_url }}">Burn Permits &rsaquo;</a>
 {%- endcapture -%}
-<burn-status
-  agency-id="{{ site.burn_widget.agency_id }}"
-  key="{{ site.burn_widget.key }}"
-  layout="compact"
-></burn-status>
-<p class="widget__notice" data-burn-fallback hidden>{{ burn_fallback }}</p>
-<noscript>
-  <p class="widget__notice">{{ burn_fallback }}</p>
-</noscript>
+<section class="widget widget--burn-status" aria-labelledby="fire-safety-title">
+  <div class="widget__header">
+    <div class="flex">
+      <svg aria-hidden="true"><use xlink:href='#flame' /></svg>
+      <div>
+        <h2 class="widget__title" id="fire-safety-title">Fire Safety</h2>
+      </div>
+    </div>
+  </div>
+  <burn-status
+    agency-id="{{ site.burn_widget.agency_id }}"
+    key="{{ site.burn_widget.key }}"
+    layout="compact"
+  ></burn-status>
+  <p class="widget__notice" data-burn-fallback hidden>{{ burn_fallback }}</p>
+  <noscript>
+    <p class="widget__notice">{{ burn_fallback }}</p>
+  </noscript>
+</section>
 <script
   async
   src="{{ site.burn_widget.script }}"

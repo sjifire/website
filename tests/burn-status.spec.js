@@ -13,18 +13,13 @@ const WIDGET = site.burn_widget;
 // call is mocked, so these tests prove our embed markup actually boots it.
 const API = "https://api.stationworks.app/v1/permits/agencies/**";
 
-const PAYLOAD = {
-  agency: { id: WIDGET.agency_id, name: "San Juan Island Fire & Rescue", url: site.permits_url },
-  verdict: { value: "open_limited", label: "Yes-Limited" },
-  season: { start: "2026-10-12", end: "2027-06-01" },
-  fireDanger: "moderate",
-  statuses: [
-    { id: "a", label: "Residential Burn Permits", state: "closed", kind: "permit", heading: null, linkUrl: null },
-    { id: "b", label: "DNR lands", state: "open", kind: "informational", heading: "Recreational fires", linkUrl: null },
-  ],
-  airQuality: null,
-  fireWeather: null,
-};
+// A recorded real response, not a hand-written one: the widget validates the
+// payload and renders "temporarily unavailable" for anything short of the
+// real contract, which a hand-written mock drifts from as the API grows.
+// Re-record with: curl "<api>/v1/permits/agencies/<id>/status?key=<key>"
+const PAYLOAD = JSON.parse(
+  fs.readFileSync(path.join(__dirname, "fixtures/burn-status.json"), "utf-8")
+);
 
 // The widget renders on the homepage and in the sidebar of any page with
 // include_burn_widget; the homepage is the only page that sets it today.
