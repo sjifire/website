@@ -92,10 +92,12 @@ test.describe("Fire Safety widget", () => {
     const widget = page.locator("burn-status");
     await expect(widget.getByText("Can I have a fire today?")).toBeVisible();
     await expect(widget.getByRole("link", { name: /See burn permits and rules|Get a burn permit/ })).toHaveCount(0);
-    // more-info-href must be absolute, so it is always the production URL.
+    // more-info-href must be absolute; it uses the serving origin, so previews
+    // and local dev link to their own copy of the page.
+    const origin = new URL(page.url()).origin;
     await expect(widget.getByRole("link", { name: "More information" })).toHaveAttribute(
       "href",
-      `${site.prodUrl}/services/burn-permits/`
+      `${origin}/services/burn-permits/`
     );
   });
 
