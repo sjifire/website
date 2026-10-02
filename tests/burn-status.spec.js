@@ -22,8 +22,11 @@ const PAYLOAD = JSON.parse(
 );
 
 // The widget renders on the homepage and in the sidebar of any page with
-// include_burn_widget; the homepage is the only page that sets it today.
-const PAGES = [{ path: "/", name: "homepage" }];
+// include_burn_widget.
+const PAGES = [
+  { path: "/", name: "homepage" },
+  { path: "/services/burn-permits/", name: "Burn Information page" },
+];
 
 test.describe("Fire Safety widget", () => {
   for (const target of PAGES) {
@@ -80,6 +83,22 @@ test.describe("Fire Safety widget", () => {
     await page.goto("/contact/");
     await expect(page.locator("burn-status")).toHaveCount(0);
     await expect(page.locator(`head link[rel=preconnect][href="${scriptOrigin}"]`)).toHaveCount(0);
+  });
+
+  test("Burn Information page links to the permits portal", async ({ page }) => {
+    await page.route(API, (route) => route.fulfill({ json: PAYLOAD }));
+    await page.goto("/services/burn-permits/");
+    await expect(
+      page.locator(".l-grid__main a", { hasText: "Get a Permit Now" }).first()
+    ).toHaveAttribute("href", site.permits_url);
+  });
+
+  test("Services menu links to the Burn Information page", async ({ page }) => {
+    await page.route(API, (route) => route.fulfill({ json: PAYLOAD }));
+    await page.goto("/");
+    await expect(
+      page.locator('nav a[href="/services/burn-permits/"]', { hasText: "Burn Information" }).first()
+    ).toBeAttached();
   });
 
   test("homepage Burn Permits quick link goes to the permits portal", async ({ page }) => {

@@ -37,12 +37,11 @@ describe("Fire Safety widget config", () => {
     assert.ok(directive("connect-src").includes("https://api.stationworks.app"));
   });
 
-  it("redirects the retired burn page to the permits portal", () => {
-    // One rule covers both /services/burn-permits and its trailing-slash form.
-    const rule = swa.routes.find((r) => r.route === "/services/burn-permits");
-    assert.ok(rule, "no route for /services/burn-permits");
-    assert.strictEqual(rule.redirect, site.permits_url);
-    assert.strictEqual(rule.statusCode, 301);
+  it("does not redirect the Burn Information page away", () => {
+    // The page was briefly retired in favor of the portal; a leftover redirect
+    // would hide it.
+    const rule = swa.routes.find((r) => r.route.startsWith("/services/burn-permits"));
+    assert.strictEqual(rule, undefined);
   });
 });
 

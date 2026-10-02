@@ -97,11 +97,6 @@
       "statusCode": 301
     },
     {
-      "route": "/services/burn-permits",
-      "redirect": "https://permits.sjifire.org",
-      "statusCode": 301
-    },
-    {
       "route": "/firewise",
       "redirect": "/services/firewise/",
       "statusCode": 301
