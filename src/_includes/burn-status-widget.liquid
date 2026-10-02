@@ -7,10 +7,16 @@
   Config (script, agency id, publishable key) lives in site.json burn_widget.
   The key is a publishable pk_live_ key: it identifies the site, grants nothing.
 
+  The embed's button goes to the portal and only shows while a permit is on
+  sale; all year its "More information" link points at our Burn Information
+  page. That link is left off the Burn Information page itself.
+  more-info-href must be absolute, so it always points at production.
+
   Once the script loads, the widget handles its own API failures. The fallback
   notice covers the cases it can't: the script itself failing to load (portal
   down, content blocker) via onerror, and JavaScript off via <noscript>.
 {%- endcomment -%}
+{%- assign burn_info_path = '/services/burn-permits/' -%}
 {%- capture burn_fallback -%}
   &#9888; Live fire status unavailable. Call
   <a href="tel:+13603785334">(360) 378-5334</a>
@@ -30,6 +36,10 @@
     agency-id="{{ site.burn_widget.agency_id }}"
     key="{{ site.burn_widget.key }}"
     layout="compact"
+    button="when-on-sale"
+    {%- if page.url != burn_info_path %}
+    more-info-href="{{ site.prodUrl }}{{ burn_info_path }}"
+    {%- endif %}
   ></burn-status>
   <p class="widget__notice" data-burn-fallback hidden>{{ burn_fallback }}</p>
   <noscript>

@@ -112,7 +112,7 @@ scripts: '<script src="/js/carousel.js" defer></script>'
 
   <aside class="l-grid__sidebar">
     <div class="sidebar-block">
-      {% render "burn-status-widget.liquid", site: site %}
+      {% render "burn-status-widget.liquid", site: site, page: page %}
     </div>
     <div class="sidebar-block">
       {% render "call-stats-widget.liquid", stats: stats, page: page %}

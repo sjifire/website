@@ -85,6 +85,28 @@ test.describe("Fire Safety widget", () => {
     await expect(page.locator(`head link[rel=preconnect][href="${scriptOrigin}"]`)).toHaveCount(0);
   });
 
+  test("hides the portal button off-sale and links More information to our burn page", async ({ page }) => {
+    // The recorded fixture has no permit on sale.
+    await page.route(API, (route) => route.fulfill({ json: PAYLOAD }));
+    await page.goto("/");
+    const widget = page.locator("burn-status");
+    await expect(widget.getByText("Can I have a fire today?")).toBeVisible();
+    await expect(widget.getByRole("link", { name: /See burn permits and rules|Get a burn permit/ })).toHaveCount(0);
+    // more-info-href must be absolute, so it is always the production URL.
+    await expect(widget.getByRole("link", { name: "More information" })).toHaveAttribute(
+      "href",
+      `${site.prodUrl}/services/burn-permits/`
+    );
+  });
+
+  test("leaves the More information link off the Burn Information page itself", async ({ page }) => {
+    await page.route(API, (route) => route.fulfill({ json: PAYLOAD }));
+    await page.goto("/services/burn-permits/");
+    const widget = page.locator("burn-status");
+    await expect(widget.getByText("Can I have a fire today?")).toBeVisible();
+    await expect(widget.getByRole("link", { name: "More information" })).toHaveCount(0);
+  });
+
   test("Burn Information page links to the permits portal", async ({ page }) => {
     await page.route(API, (route) => route.fulfill({ json: PAYLOAD }));
     await page.goto("/services/burn-permits/");
