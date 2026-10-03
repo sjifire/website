@@ -1387,6 +1387,9 @@ burn-status {
   margin: -1px;
 
   --burn-status-font-family: var(--ff-sans);
+
+  /* Match the sidebar's 0.9rem text; the embed's spacing scales with it. */
+  --burn-status-font-size: 0.9rem;
   --burn-status-color-text: var(--black);
   --burn-status-color-bg: #fff;
   --burn-status-color-border: var(--rule-gray);
