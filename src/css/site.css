@@ -1094,6 +1094,10 @@ body {
     grid-template-areas:
       "quicklinks sidebar"
       "main sidebar";
+
+    /* The sidebar spans both rows; when it's the taller column, give its
+       extra height to the news row so Quick Links doesn't stretch. */
+    grid-template-rows: auto 1fr;
   }
 
   .l-grid--auto {

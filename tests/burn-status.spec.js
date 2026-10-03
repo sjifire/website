@@ -22,8 +22,11 @@ const PAYLOAD = JSON.parse(
 );
 
 // The widget renders on the homepage and in the sidebar of any page with
-// include_burn_widget; the homepage is the only page that sets it today.
-const PAGES = [{ path: "/", name: "homepage" }];
+// include_burn_widget.
+const PAGES = [
+  { path: "/", name: "homepage" },
+  { path: "/services/burn-permits/", name: "Burn Information page" },
+];
 
 test.describe("Fire Safety widget", () => {
   for (const target of PAGES) {
@@ -80,6 +83,46 @@ test.describe("Fire Safety widget", () => {
     await page.goto("/contact/");
     await expect(page.locator("burn-status")).toHaveCount(0);
     await expect(page.locator(`head link[rel=preconnect][href="${scriptOrigin}"]`)).toHaveCount(0);
+  });
+
+  test("hides the portal button off-sale and links More information to our burn page", async ({ page }) => {
+    // The recorded fixture has no permit on sale.
+    await page.route(API, (route) => route.fulfill({ json: PAYLOAD }));
+    await page.goto("/");
+    const widget = page.locator("burn-status");
+    await expect(widget.getByText("Can I have a fire today?")).toBeVisible();
+    await expect(widget.getByRole("link", { name: /See burn permits and rules|Get a burn permit/ })).toHaveCount(0);
+    // more-info-href must be absolute; it uses the serving origin, so previews
+    // and local dev link to their own copy of the page.
+    const origin = new URL(page.url()).origin;
+    await expect(widget.getByRole("link", { name: "More information" })).toHaveAttribute(
+      "href",
+      `${origin}/services/burn-permits/`
+    );
+  });
+
+  test("leaves the More information link off the Burn Information page itself", async ({ page }) => {
+    await page.route(API, (route) => route.fulfill({ json: PAYLOAD }));
+    await page.goto("/services/burn-permits/");
+    const widget = page.locator("burn-status");
+    await expect(widget.getByText("Can I have a fire today?")).toBeVisible();
+    await expect(widget.getByRole("link", { name: "More information" })).toHaveCount(0);
+  });
+
+  test("Burn Information page links to the permits portal", async ({ page }) => {
+    await page.route(API, (route) => route.fulfill({ json: PAYLOAD }));
+    await page.goto("/services/burn-permits/");
+    await expect(
+      page.locator(".l-grid__main a", { hasText: "Get a Permit Now" }).first()
+    ).toHaveAttribute("href", site.permits_url);
+  });
+
+  test("Services menu links to the Burn Information page", async ({ page }) => {
+    await page.route(API, (route) => route.fulfill({ json: PAYLOAD }));
+    await page.goto("/");
+    await expect(
+      page.locator('nav a[href="/services/burn-permits/"]', { hasText: "Burn Information" }).first()
+    ).toBeAttached();
   });
 
   test("homepage Burn Permits quick link goes to the permits portal", async ({ page }) => {
