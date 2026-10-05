@@ -13,7 +13,7 @@
     "@octokit/auth-app": "^8.3.1",
     "@octokit/rest": "^22.0.1",
     "@tinacms/datalayer": "^2.0.30",
-    "dotenv": "^18.0.3",
+    "dotenv": "^18.0.5",
     "mongodb-level": "^0.0.4",
     "uuid": "^14.0.1"
   }
