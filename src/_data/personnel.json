@@ -1,10 +1,10 @@
 {
-  "count": 65,
+  "count": 64,
   "counts": {
     "fullTimeFirefighters": 12,
     "partTimeFirefighters": 7,
     "administrativeStaff": 2,
-    "volunteerFirefighters": 30,
+    "volunteerFirefighters": 29,
     "volunteerSupport": 13
   },
   "personnel": [
@@ -656,18 +656,6 @@
         "Marine Crew"
       ],
       "photo": "/assets/media/personnel_imgs/matthew_wickey.jpg"
-    },
-    {
-      "first_name": "Max",
-      "last_name": "Mattox",
-      "rank": null,
-      "title": null,
-      "employee_type": "volunteer",
-      "staff_type": "Volunteer",
-      "roles": [
-        "Firefighter"
-      ],
-      "photo": null
     },
     {
       "first_name": "Maxwell",
