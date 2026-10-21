@@ -8,13 +8,13 @@
   },
   "dependencies": {
     "@azure/functions": "^4.16.5",
-    "@azure/identity": "^4.13.3",
+    "@azure/identity": "^4.14.0",
     "@microsoft/microsoft-graph-client": "^3.0.7",
     "@octokit/auth-app": "^8.3.1",
     "@octokit/rest": "^22.0.1",
     "@tinacms/datalayer": "^2.0.30",
-    "dotenv": "^18.0.3",
+    "dotenv": "^18.0.8",
     "mongodb-level": "^0.0.4",
-    "uuid": "^14.0.1"
+    "uuid": "^14.0.3"
   }
 }
