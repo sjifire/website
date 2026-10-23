@@ -1,11 +1,11 @@
 {
-  "count": 64,
+  "count": 58,
   "counts": {
     "fullTimeFirefighters": 12,
     "partTimeFirefighters": 7,
     "administrativeStaff": 2,
-    "volunteerFirefighters": 29,
-    "volunteerSupport": 13
+    "volunteerFirefighters": 26,
+    "volunteerSupport": 10
   },
   "personnel": [
     {
@@ -273,18 +273,6 @@
       "photo": null
     },
     {
-      "first_name": "Erin",
-      "last_name": "Graham",
-      "rank": "Captain",
-      "title": null,
-      "employee_type": "volunteer",
-      "staff_type": "Volunteer",
-      "roles": [
-        "Firefighter"
-      ],
-      "photo": "/assets/media/personnel_imgs/erin_graham.jpg"
-    },
-    {
       "first_name": "Adam",
       "last_name": "Greene",
       "rank": "Lieutenant",
@@ -386,18 +374,6 @@
         "Support"
       ],
       "photo": "/assets/media/personnel_imgs/bonnie_stanger.jpg"
-    },
-    {
-      "first_name": "Bruce",
-      "last_name": "Becker",
-      "rank": null,
-      "title": null,
-      "employee_type": "volunteer",
-      "staff_type": "Volunteer",
-      "roles": [
-        "Support"
-      ],
-      "photo": null
     },
     {
       "first_name": "Bryan",
@@ -526,18 +502,6 @@
       "photo": null
     },
     {
-      "first_name": "Gilbert",
-      "last_name": "Venegas",
-      "rank": null,
-      "title": null,
-      "employee_type": "volunteer",
-      "staff_type": "Volunteer",
-      "roles": [
-        "Firefighter"
-      ],
-      "photo": "/assets/media/personnel_imgs/gilbert_venegas.jpg"
-    },
-    {
       "first_name": "Hella",
       "last_name": "Cascorbi",
       "rank": null,
@@ -647,19 +611,6 @@
       "photo": null
     },
     {
-      "first_name": "Matthew",
-      "last_name": "Wickey",
-      "rank": null,
-      "title": null,
-      "employee_type": "volunteer",
-      "staff_type": "Volunteer",
-      "roles": [
-        "Firefighter",
-        "Marine Crew"
-      ],
-      "photo": "/assets/media/personnel_imgs/matthew_wickey.jpg"
-    },
-    {
       "first_name": "Maxwell",
       "last_name": "Field",
       "rank": null,
@@ -693,18 +644,6 @@
       "roles": [
         "Apparatus Operator",
         "Firefighter"
-      ],
-      "photo": null
-    },
-    {
-      "first_name": "Olivia",
-      "last_name": "Monin",
-      "rank": null,
-      "title": null,
-      "employee_type": "volunteer",
-      "staff_type": "Volunteer",
-      "roles": [
-        "Support"
       ],
       "photo": null
     },
@@ -756,18 +695,6 @@
       "roles": [
         "Apparatus Operator",
         "Firefighter"
-      ],
-      "photo": null
-    },
-    {
-      "first_name": "Ted",
-      "last_name": "Stonebridge",
-      "rank": null,
-      "title": null,
-      "employee_type": "volunteer",
-      "staff_type": "Volunteer",
-      "roles": [
-        "Support"
       ],
       "photo": null
     },
