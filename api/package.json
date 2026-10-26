@@ -12,7 +12,7 @@
     "@microsoft/microsoft-graph-client": "^3.0.7",
     "@octokit/auth-app": "^8.3.1",
     "@octokit/rest": "^22.0.1",
-    "@tinacms/datalayer": "^2.0.30",
+    "@tinacms/datalayer": "^3.0.0",
     "dotenv": "^18.0.9",
     "mongodb-level": "^0.0.4",
     "uuid": "^14.0.3"
