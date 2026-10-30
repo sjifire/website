@@ -364,6 +364,18 @@
       "photo": "/assets/media/personnel_imgs/asta_roseway.jpg"
     },
     {
+      "first_name": "Ben",
+      "last_name": "Duncan",
+      "rank": null,
+      "title": null,
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [
+        "Firefighter"
+      ],
+      "photo": null
+    },
+    {
       "first_name": "Bonnie",
       "last_name": "Stanger",
       "rank": null,
@@ -434,18 +446,6 @@
       "staff_type": "Volunteer",
       "roles": [
         "Apparatus Operator",
-        "Firefighter"
-      ],
-      "photo": null
-    },
-    {
-      "first_name": "Drew",
-      "last_name": "Loura",
-      "rank": null,
-      "title": null,
-      "employee_type": "volunteer",
-      "staff_type": "Volunteer",
-      "roles": [
         "Firefighter"
       ],
       "photo": null
