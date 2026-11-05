@@ -1,10 +1,10 @@
 {
   "count": 58,
   "counts": {
-    "fullTimeFirefighters": 12,
+    "fullTimeFirefighters": 11,
     "partTimeFirefighters": 7,
     "administrativeStaff": 2,
-    "volunteerFirefighters": 26,
+    "volunteerFirefighters": 27,
     "volunteerSupport": 10
   },
   "personnel": [
@@ -256,18 +256,6 @@
       "staff_type": "PT Line Staff",
       "roles": [
         "Apparatus Operator",
-        "Firefighter"
-      ],
-      "photo": null
-    },
-    {
-      "first_name": "Stewart",
-      "last_name": "Bell",
-      "rank": null,
-      "title": null,
-      "employee_type": "staff",
-      "staff_type": "Day Staff",
-      "roles": [
         "Firefighter"
       ],
       "photo": null
@@ -694,6 +682,18 @@
       "staff_type": "Volunteer",
       "roles": [
         "Apparatus Operator",
+        "Firefighter"
+      ],
+      "photo": null
+    },
+    {
+      "first_name": "Stewart",
+      "last_name": "Bell",
+      "rank": null,
+      "title": null,
+      "employee_type": "volunteer",
+      "staff_type": "Volunteer",
+      "roles": [
         "Firefighter"
       ],
       "photo": null
