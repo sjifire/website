@@ -1,10 +1,10 @@
 {
-  "count": 58,
+  "count": 57,
   "counts": {
     "fullTimeFirefighters": 11,
     "partTimeFirefighters": 7,
     "administrativeStaff": 2,
-    "volunteerFirefighters": 27,
+    "volunteerFirefighters": 26,
     "volunteerSupport": 10
   },
   "personnel": [
@@ -589,18 +589,6 @@
     {
       "first_name": "Mason",
       "last_name": "Smith",
-      "rank": null,
-      "title": null,
-      "employee_type": "volunteer",
-      "staff_type": "Volunteer",
-      "roles": [
-        "Firefighter"
-      ],
-      "photo": null
-    },
-    {
-      "first_name": "Maxwell",
-      "last_name": "Field",
       "rank": null,
       "title": null,
       "employee_type": "volunteer",
